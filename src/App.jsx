@@ -12,8 +12,9 @@ import DrawerMenu from "./layouts/DrawerMenu"
 import SignIn from "./views/SignIn"
 import Home from "./views/Home"
 
-const App = () =>
-    <Box sx={{display: 'flex'}}>
+
+const App = () => {
+    return <Box sx={{display: 'flex'}}>
         <CssBaseline/>
         <AppBar position="fixed" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
             <ToolBar/>
@@ -30,5 +31,5 @@ const App = () =>
             </Routes>
         </Box>
     </Box>
-
+}
 export default App

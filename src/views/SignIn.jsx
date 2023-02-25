@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import {useTranslation} from "react-i18next"
 
 const SignIn = () => {
     const handleSubmit = (event) => {
@@ -21,7 +22,7 @@ const SignIn = () => {
             password: data.get('password'),
         })
     }
-
+    const {t} = useTranslation()
     return <Container component="main" maxWidth="xs">
         <CssBaseline/>
         <Box
@@ -35,8 +36,14 @@ const SignIn = () => {
             <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                 <LockOutlinedIcon/>
             </Avatar>
-            <Typography component="h1" variant="h5">
-                Вход
+            <Typography
+                component="h1"
+                variant="h5"
+                sx={{
+                    '&::first-letter': {textTransform: 'uppercase'}
+                }}
+            >
+                {t("авторизация")}
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
                 <TextField
@@ -54,7 +61,7 @@ const SignIn = () => {
                     required
                     fullWidth
                     name="password"
-                    label="Password"
+                    label={t("Пароль")}
                     type="password"
                     id="password"
                     autoComplete="current-password"
@@ -69,7 +76,7 @@ const SignIn = () => {
                     variant="contained"
                     sx={{mt: 3, mb: 2}}
                 >
-                    Sign In
+                    {t("вход")}
                 </Button>
                 <Grid container>
                     <Grid item xs>

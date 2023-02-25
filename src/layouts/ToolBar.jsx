@@ -8,6 +8,7 @@ import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import * as React from "react"
 import {useNavigate} from "react-router-dom"
+import LanguageSelect from "../components/Lang"
 
 const ToolBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null)
@@ -24,7 +25,7 @@ const ToolBar = () => {
         <Toolbar>
             <Box component="img" alt="logo"
                  sx={{maxHeight: 44, md: 'flex'}}
-                 src={process.env.PUBLIC_URL + '/img/apple-icon-180.png'}
+                 src={'./img/apple-icon-180.png'}
             />
             <Typography
                 variant="h5"
@@ -42,6 +43,12 @@ const ToolBar = () => {
                 BotsWork
             </Typography>
             <Box sx={{flexGrow: 1, display: {xs: 'flex'}}}>
+            </Box>
+            <Box sx={{
+                mr: 2,
+                flexGrow: 0
+            }}>
+                <LanguageSelect/>
             </Box>
             <Box sx={{flexGrow: 0}}>
                 <Tooltip title="подсказка">
