@@ -11,6 +11,7 @@ import ToolBar from "./layouts/ToolBar"
 import DrawerMenu from "./layouts/DrawerMenu"
 import SignIn from "./views/SignIn"
 import Home from "./views/Home"
+import ResetPassword from "./views/ResetPassword"
 
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
                 <Route path={'/'} element={<Home/>}/>
                 <Route path={'/signup'} element={<SignUp/>}/>
                 <Route path={'/signin'} element={<SignIn/>}/>
+                <Route path={'/reset'} element={<ResetPassword/>}/>
                 <Route path={'/profile'} element={<Profile/>}/>
                 <Route path={'/contacts'} element={<Contacts/>}/>
             </Routes>

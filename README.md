@@ -12,4 +12,9 @@ npx pwa-asset-generator src/images/logo.svg public/img \
   -b "transparent" \
   -o false 
 ```
-#  --path "%PUBLIC_URL%" \
+
+### i18next
+
+```bash
+https://api.i18nexus.com/project_resources/translations/de/default.json?api_key=mWraj9wt4Y4906lt2iFujQ
+```

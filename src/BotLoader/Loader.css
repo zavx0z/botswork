@@ -1,0 +1,50 @@
+svg {
+    width: 100px;
+    height: 100px;
+}
+
+circle {
+    stroke-width: 5px;
+    stroke-dasharray: 157 502;
+    stroke-dashoffset: 0;
+    animation: loader 1.5s linear infinite;
+}
+
+@keyframes loader {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: 502;
+    }
+}
+
+.Mui-focused {
+    outline: none;
+}
+
+#rightLeg {
+    animation: right-leg-animation 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes right-leg-animation {
+    from {
+        transform: translate(5.1769485px, 11.17839px);
+    }
+    to {
+        transform: translate(5.1769485px, 10.1px);
+    }
+}
+
+#leftLeg {
+    animation: left-leg-animation 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes left-leg-animation {
+    from {
+        transform: translate(0.06870126px, 10.1px);
+    }
+    to {
+        transform: translate(0.06870126px, 11.17839px);
+    }
+}

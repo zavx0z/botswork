@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import {useTranslation} from "react-i18next"
+import {Link as RouterLink} from 'react-router-dom'
 
 const SignIn = () => {
     const handleSubmit = (event) => {
@@ -22,7 +23,7 @@ const SignIn = () => {
             password: data.get('password'),
         })
     }
-    const {t} = useTranslation()
+    const {t} = useTranslation('авторизация')
     return <Container component="main" maxWidth="xs">
         <CssBaseline/>
         <Box
@@ -39,9 +40,7 @@ const SignIn = () => {
             <Typography
                 component="h1"
                 variant="h5"
-                sx={{
-                    '&::first-letter': {textTransform: 'uppercase'}
-                }}
+                // sx={{'&::first-letter': {textTransform: 'uppercase'}}}
             >
                 {t("авторизация")}
             </Typography>
@@ -51,7 +50,7 @@ const SignIn = () => {
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
+                    label={t("email")}
                     name="email"
                     autoComplete="email"
                     autoFocus
@@ -61,14 +60,14 @@ const SignIn = () => {
                     required
                     fullWidth
                     name="password"
-                    label={t("Пароль")}
+                    label={t("пароль")}
                     type="password"
                     id="password"
                     autoComplete="current-password"
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary"/>}
-                    label="Remember me"
+                    label={t("запомнить")}
                 />
                 <Button
                     type="submit"
@@ -80,13 +79,21 @@ const SignIn = () => {
                 </Button>
                 <Grid container>
                     <Grid item xs>
-                        <Link href="#" variant="body2">
-                            Forgot password?
+                        <Link
+                            component={RouterLink}
+                            to={"/reset"}
+                            variant="body2"
+                        >
+                            {t("забыл_пароль")}
                         </Link>
                     </Grid>
                     <Grid item>
-                        <Link href="#" variant="body2">
-                            {"Don't have an account? Sign Up"}
+                        <Link
+                            component={RouterLink}
+                            to={"/signup"}
+                            variant="body2"
+                        >
+                            {t("нет_аккаунта")}
                         </Link>
                     </Grid>
                 </Grid>

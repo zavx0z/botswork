@@ -11,10 +11,12 @@ import Divider from "@mui/material/Divider"
 import ContactsIcon from "@mui/icons-material/Contacts"
 import * as React from "react"
 import {useNavigate} from "react-router-dom"
+import {useTranslation} from "react-i18next"
 
 const drawerWidth = 240
 
 const DrawerMenu = () => {
+    const {t} = useTranslation('меню')
     const navigate = useNavigate()
     return <>
         <Drawer
@@ -35,7 +37,7 @@ const DrawerMenu = () => {
                             <ListItemIcon>
                                 <HomeIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Главная"/>
+                            <ListItemText primary={t("главная")}/>
                         </ListItemButton>
                     </ListItem>
                 </List>
@@ -48,7 +50,7 @@ const DrawerMenu = () => {
                             <ListItemIcon>
                                 <ContactsIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Контакты"/>
+                            <ListItemText primary={t("контакты")}/>
                         </ListItemButton>
                     </ListItem>
                 </List>

@@ -11,6 +11,8 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import {useTranslation} from "react-i18next"
+import {Link as RouterLink} from 'react-router-dom'
 
 const SignUp = () => {
     const handleSubmit = (event) => {
@@ -21,7 +23,7 @@ const SignUp = () => {
             password: data.get('password'),
         })
     }
-
+    const {t} = useTranslation('авторизация')
     return <Container component="main" maxWidth="xs">
         <CssBaseline/>
         <Box
@@ -36,7 +38,7 @@ const SignUp = () => {
                 <LockOutlinedIcon/>
             </Avatar>
             <Typography component="h1" variant="h5">
-                Регистрация
+                {t("регистрация")}
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                 <Grid container spacing={2}>
@@ -47,7 +49,7 @@ const SignUp = () => {
                             required
                             fullWidth
                             id="firstName"
-                            label="First Name"
+                            label={t('имя')}
                             autoFocus
                         />
                     </Grid>
@@ -56,7 +58,7 @@ const SignUp = () => {
                             required
                             fullWidth
                             id="lastName"
-                            label="Last Name"
+                            label={t('фамилия')}
                             name="lastName"
                             autoComplete="family-name"
                         />
@@ -66,7 +68,7 @@ const SignUp = () => {
                             required
                             fullWidth
                             id="email"
-                            label="Email Address"
+                            label={t("email")}
                             name="email"
                             autoComplete="email"
                         />
@@ -76,7 +78,7 @@ const SignUp = () => {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label={t("пароль")}
                             type="password"
                             id="password"
                             autoComplete="new-password"
@@ -85,7 +87,7 @@ const SignUp = () => {
                     <Grid item xs={12}>
                         <FormControlLabel
                             control={<Checkbox value="allowExtraEmails" color="primary"/>}
-                            label="I want to receive inspiration, marketing promotions and updates via email."
+                            label={t('подписка')}
                         />
                     </Grid>
                 </Grid>
@@ -95,12 +97,16 @@ const SignUp = () => {
                     variant="contained"
                     sx={{mt: 3, mb: 2}}
                 >
-                    Зарегистрироваться
+                    {t('регистрация')}
                 </Button>
                 <Grid container justifyContent="flex-end">
                     <Grid item>
-                        <Link href="#" variant="body2">
-                            Already have an account? Sign in
+                        <Link
+                            component={RouterLink}
+                            to={"/signin"}
+                            variant="body2"
+                        >
+                            {t('войти_уже')}
                         </Link>
                     </Grid>
                 </Grid>
