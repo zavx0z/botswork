@@ -6,7 +6,9 @@ const rootStore = root
     .create({value: 4})
 
 addMiddleware(rootStore, (call, next) => {
-    const {name, args, context} = call
+    const {name,
+        // args, context
+    } = call
     switch (name) {
         case 'incrementValue':
             console.log('incrementValue')

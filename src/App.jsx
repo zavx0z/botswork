@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {Route, Routes} from "react-router-dom"
-import Profile from "./views/Profile"
+import ProfilePage from "./views/Profile"
 import Contacts from "./views/Contacts"
 import SignUp from "./views/SignUp"
 import CssBaseline from '@mui/material/CssBaseline'
@@ -12,6 +12,7 @@ import DrawerMenu from "./layouts/DrawerMenu"
 import SignIn from "./views/SignIn"
 import Home from "./views/Home"
 import ResetPassword from "./views/ResetPassword"
+import PrivateRoute from "./routes/PrivateRoute"
 
 
 const App = () => {
@@ -26,9 +27,9 @@ const App = () => {
             <Routes>
                 <Route path={'/'} element={<Home/>}/>
                 <Route path={'/signup'} element={<SignUp/>}/>
-                <Route path={'/signin'} element={<SignIn/>}/>
+                <Route path={'/login'} element={<SignIn/>}/>
                 <Route path={'/reset'} element={<ResetPassword/>}/>
-                <Route path={'/profile'} element={<Profile/>}/>
+                <Route path={'/profile'} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
                 <Route path={'/contacts'} element={<Contacts/>}/>
             </Routes>
         </Box>

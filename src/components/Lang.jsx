@@ -2,8 +2,7 @@ import React, {useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
-import ModalBotLoader from "../BotLoader/ModalBotLoader"
-import {useTheme} from "@mui/material"
+import ModalBotLoader from "./BotLoader/ModalBotLoader"
 
 const LanguageSelect = () => {
     const {i18n} = useTranslation()
@@ -15,7 +14,6 @@ const LanguageSelect = () => {
         await i18n.changeLanguage(event.target.value)
         setIsLoading(false)
     }
-    const theme = useTheme()
     return <>
         <ModalBotLoader isLoading={isLoading}/>
         <Select

@@ -104,7 +104,7 @@ const SignUp = () => {
                     <Grid item>
                         <Link
                             component={RouterLink}
-                            to={"/signin"}
+                            to={"/login"}
                             variant="body2"
                         >
                             {t('войти_уже')}

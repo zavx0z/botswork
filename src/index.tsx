@@ -10,6 +10,9 @@ import './i18n.js'
 import i18next from "i18next"
 import {ThemeProvider} from "@mui/material/styles"
 import theme from "./theme/theme"
+import userStore from "./stores/userStore"
+import {SnackbarProvider} from "notistack"
+import {SnackbarUtilsConfigurator} from "./utils/SnackbarUtils"
 
 i18next.on('languageChanged', (lng) => {
     document.documentElement.setAttribute('lang', lng)
@@ -21,9 +24,15 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <Router>
-            <Provider root={rootStore}>
+            <Provider root={rootStore} user={userStore}>
                 <ThemeProvider theme={theme}>
-                    <App/>
+                    <SnackbarProvider anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}>
+                        <SnackbarUtilsConfigurator/>
+                        <App/>
+                    </SnackbarProvider>
                 </ThemeProvider>
             </Provider>
         </Router>

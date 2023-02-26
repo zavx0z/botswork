@@ -53,13 +53,3 @@ const select = {
     },
 }
 export default select
-// const select = {
-//     MuiSelect: {
-//         styleOverrides: {
-//             icon: {
-//                 color: themeColor.palette.primary.light,
-//             },
-//         },
-//     },
-
-// }
