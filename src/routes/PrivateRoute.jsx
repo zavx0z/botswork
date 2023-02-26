@@ -3,6 +3,7 @@ import {inject} from "mobx-react"
 import {useSnackbar} from "notistack"
 import {useEffect, useRef} from "react"
 import {useTranslation} from "react-i18next"
+import routes from "./routes"
 
 const PrivateRoute = ({children, user: {isAuthenticated}}) => {
     const {enqueueSnackbar} = useSnackbar()
@@ -16,7 +17,7 @@ const PrivateRoute = ({children, user: {isAuthenticated}}) => {
             snackbarDisplayedRef.current = false
         }
     }, [isAuthenticated, enqueueSnackbar, t])
-    return isAuthenticated ? children : <Navigate to="/login"/>
+    return isAuthenticated ? children : <Navigate to={routes.login}/>
 }
 
 export default inject("user")(PrivateRoute)

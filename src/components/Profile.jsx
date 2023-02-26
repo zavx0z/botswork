@@ -6,8 +6,10 @@ import Typography from "@mui/material/Typography"
 import * as React from "react"
 import {useNavigate} from "react-router-dom"
 import {useTranslation} from "react-i18next"
+import routes from "../routes/routes"
+import {inject, observer} from "mobx-react"
 
-const Profile = () => {
+const Profile = ({user: {logOut, isAuthenticated}}) => {
     const navigate = useNavigate()
     const [anchorElUser, setAnchorElUser] = React.useState(null)
     const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget)
@@ -27,24 +29,30 @@ const Profile = () => {
             id="menu-appbar"
             anchorEl={anchorElUser}
             anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: 'top', horizontal: 'right',
             }}
             keepMounted
             transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: 'top', horizontal: 'right',
             }}
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
         >
-            <MenuItem onClick={() => handleCloseUserMenu('signin')}>
-                <Typography textAlign="center">{t('авторизация')}</Typography>
-            </MenuItem>
-            <MenuItem onClick={() => handleCloseUserMenu('signup')}>
-                <Typography textAlign="center">{t('регистрация')}</Typography>
-            </MenuItem>
+            {isAuthenticated ?
+                <MenuItem onClick={() => handleCloseUserMenu(routes.logout)}>
+                    <Typography textAlign="center">{t('выход')}</Typography>
+                </MenuItem>
+                :
+                <>
+                    <MenuItem onClick={() => handleCloseUserMenu(routes.login)}>
+                        <Typography textAlign="center">{t('авторизация')}</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={() => handleCloseUserMenu(routes.join)}>
+                        <Typography textAlign="center">{t('регистрация')}</Typography>
+                    </MenuItem>
+                </>
+            }
         </Menu>
     </>
 }
-export default Profile
+export default inject('user')(observer(Profile))

@@ -10,9 +10,9 @@ import './i18n.js'
 import i18next from "i18next"
 import {ThemeProvider} from "@mui/material/styles"
 import theme from "./theme/theme"
-import userStore from "./stores/userStore"
 import {SnackbarProvider} from "notistack"
 import {SnackbarUtilsConfigurator} from "./utils/SnackbarUtils"
+import userStore from "./features/secure/stores/userStore"
 
 i18next.on('languageChanged', (lng) => {
     document.documentElement.setAttribute('lang', lng)
