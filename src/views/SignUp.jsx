@@ -94,6 +94,7 @@ const SignUp = () => {
                 <Button
                     type="submit"
                     fullWidth
+                    color={"primary"}
                     variant="contained"
                     sx={{mt: 3, mb: 2}}
                 >

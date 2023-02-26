@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import App from './App'
@@ -8,6 +8,8 @@ import rootStore from "./stores/rootStore"
 import {Provider} from "mobx-react"
 import './i18n.js'
 import i18next from "i18next"
+import {ThemeProvider} from "@mui/material/styles"
+import theme from "./theme"
 
 i18next.on('languageChanged', (lng) => {
     document.documentElement.setAttribute('lang', lng)
@@ -20,7 +22,9 @@ root.render(
     <React.StrictMode>
         <Router>
             <Provider root={rootStore}>
-                <App/>
+                <ThemeProvider theme={theme}>
+                    <App/>
+                </ThemeProvider>
             </Provider>
         </Router>
     </React.StrictMode>

@@ -22,8 +22,9 @@ const LanguageSelect = () => {
             value={i18n.language}
             onChange={handleLanguageChange}
             variant={"outlined"}
+            color={'info'}
             sx={{
-                // color: "inherit"
+                color: "inherit"
             }}
         >
             <MenuItem value="en">English</MenuItem>
