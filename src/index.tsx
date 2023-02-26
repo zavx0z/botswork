@@ -9,7 +9,7 @@ import {Provider} from "mobx-react"
 import './i18n.js'
 import i18next from "i18next"
 import {ThemeProvider} from "@mui/material/styles"
-import theme from "./theme"
+import theme from "./theme/theme"
 
 i18next.on('languageChanged', (lng) => {
     document.documentElement.setAttribute('lang', lng)
