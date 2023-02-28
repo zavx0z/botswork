@@ -9,11 +9,23 @@ import {useTranslation} from "react-i18next"
 import routes from "../routes/routes"
 import {inject, observer} from "mobx-react"
 
+const menuItems = [
+    {
+        title: "авторизация",
+        route: routes.login
+    },
+    {
+        title: "регистрация",
+        route: routes.join
+    }
+]
+
 const Profile = ({user: {logOut, isAuthenticated}}) => {
     const navigate = useNavigate()
     const [anchorElUser, setAnchorElUser] = React.useState(null)
     const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget)
     const handleCloseUserMenu = (path) => {
+        // console.log(isAuthenticated)
         setAnchorElUser(null)
         navigate(path)
     }
@@ -42,15 +54,11 @@ const Profile = ({user: {logOut, isAuthenticated}}) => {
                 <MenuItem onClick={() => handleCloseUserMenu(routes.logout)}>
                     <Typography textAlign="center">{t('выход')}</Typography>
                 </MenuItem>
-                :
-                <>
-                    <MenuItem onClick={() => handleCloseUserMenu(routes.login)}>
-                        <Typography textAlign="center">{t('авторизация')}</Typography>
+                : menuItems.map((item, idx) =>
+                    <MenuItem key={idx} onClick={() => handleCloseUserMenu(item.route)}>
+                        <Typography textAlign="center">{t(item.title)}</Typography>
                     </MenuItem>
-                    <MenuItem onClick={() => handleCloseUserMenu(routes.join)}>
-                        <Typography textAlign="center">{t('регистрация')}</Typography>
-                    </MenuItem>
-                </>
+                )
             }
         </Menu>
     </>

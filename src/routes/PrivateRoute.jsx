@@ -1,5 +1,5 @@
 import {Navigate} from "react-router-dom"
-import {inject} from "mobx-react"
+import {inject, observer} from "mobx-react"
 import {useSnackbar} from "notistack"
 import {useEffect, useRef} from "react"
 import {useTranslation} from "react-i18next"
@@ -10,6 +10,7 @@ const PrivateRoute = ({children, user: {isAuthenticated}}) => {
     const snackbarDisplayedRef = useRef(false)
     const {t} = useTranslation('авторизация')
     useEffect(() => {
+        // console.log(isAuthenticated)
         if (!isAuthenticated && !snackbarDisplayedRef.current) {
             enqueueSnackbar(t("не_авторизован"), {variant: 'warning', key: 'auth-snackbar'})
             snackbarDisplayedRef.current = true
@@ -20,4 +21,4 @@ const PrivateRoute = ({children, user: {isAuthenticated}}) => {
     return isAuthenticated ? children : <Navigate to={routes.login}/>
 }
 
-export default inject("user")(PrivateRoute)
+export default inject("user")(observer(PrivateRoute))

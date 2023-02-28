@@ -18,7 +18,7 @@ import {useSnackbar} from "notistack"
 import {inject, observer} from "mobx-react"
 import PasswordInput from "../components/InputPassword"
 
-const Login = ({user: {loading, login}, redirect}) => {
+const Login = ({user: {loading, login, username: us}, redirect}) => {
     const {t} = useTranslation('авторизация')
     const navigate = useNavigate()
     const {enqueueSnackbar} = useSnackbar()
@@ -29,6 +29,7 @@ const Login = ({user: {loading, login}, redirect}) => {
         username && password &&
         login(username, password)
             .then(() => enqueueSnackbar(t('привет'), {variant: "success"}))
+            .then(() => console.log(us))
             .then(() => navigate(redirect, {replace: true}))
             .catch(() => enqueueSnackbar(t('не_верный_логин_пароль'), {variant: "error"}))
         // .catch(e => enqueueSnackbar(e, {variant: "error"})) // todo на сервере завести ошибки и в i18n

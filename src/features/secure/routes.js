@@ -1,5 +1,5 @@
 const routes = {
-    auth: "/auth*",
+    auth: "/auth/*",
     login: "/auth/login",
     logout: "/auth/logout",
     join: "/auth/join",
