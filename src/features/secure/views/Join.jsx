@@ -15,16 +15,17 @@ import {Link as RouterLink, useNavigate} from 'react-router-dom'
 import {useSnackbar} from "notistack"
 import {inject, observer} from "mobx-react"
 import PasswordInput from "../components/InputPassword"
+import routes from "../routes"
 
 const Join = ({user: {join, loading}, redirect}) => {
     const {t} = useTranslation('авторизация')
     const navigate = useNavigate()
     const {enqueueSnackbar} = useSnackbar()
 
-    const [login, setLogin] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const handleSubmit = () => {
-        login && password && join(login, password)
+        username && password && join(username, password)
             .then(() => enqueueSnackbar(t('зарегистрирован'), {variant: "success"}))
             .then(() => navigate(redirect, {replace: true}))
             .catch(e => enqueueSnackbar(e, {variant: "error"})) // todo на сервере завести ошибки и в i18n
@@ -45,21 +46,16 @@ const Join = ({user: {join, loading}, redirect}) => {
                         <TextField
                             required
                             fullWidth
-                            id="login"
+                            id="username"
                             label={t("login")}
-                            name="login"
-                            onChange={(e) => setLogin(e.target.value)}
+                            name="username"
+                            onChange={(e) => setUsername(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <PasswordInput
-                            required
                             fullWidth
-                            name="password"
                             label={t("пароль")}
-                            type="password"
-                            id="password"
-                            autoComplete="new-password"
                             onKeyDown={handleKeyPress}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -78,7 +74,7 @@ const Join = ({user: {join, loading}, redirect}) => {
                 </Button>
                 <Grid container justifyContent="flex-end">
                     <Grid item>
-                        <Link component={RouterLink} to={"/login"} variant="body2">
+                        <Link component={RouterLink} to={routes.login} variant="body2">
                             {t('войти_уже')}
                         </Link>
                     </Grid>

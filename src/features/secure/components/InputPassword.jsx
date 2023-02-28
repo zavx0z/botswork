@@ -28,6 +28,7 @@ const PasswordInput = (props) => {
         </InputLabel>
         <OutlinedInput
             inputRef={inputRef}
+            autoComplete={"on"}
             required
             id="outlined-adornment-password"
             type={show ? 'text' : 'password'}

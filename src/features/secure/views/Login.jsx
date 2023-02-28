@@ -18,16 +18,16 @@ import {useSnackbar} from "notistack"
 import {inject, observer} from "mobx-react"
 import PasswordInput from "../components/InputPassword"
 
-const Login = ({user: {loading, signin}, redirect}) => {
+const Login = ({user: {loading, login}, redirect}) => {
     const {t} = useTranslation('авторизация')
     const navigate = useNavigate()
     const {enqueueSnackbar} = useSnackbar()
 
-    const [login, setLogin] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const handleSubmit = () => {
-        login && password &&
-        signin(login, password)
+        username && password &&
+        login(username, password)
             .then(() => enqueueSnackbar(t('привет'), {variant: "success"}))
             .then(() => navigate(redirect, {replace: true}))
             .catch(() => enqueueSnackbar(t('не_верный_логин_пароль'), {variant: "error"}))
@@ -55,16 +55,15 @@ const Login = ({user: {loading, signin}, redirect}) => {
                     margin="normal"
                     required
                     fullWidth
-                    id="login"
+                    id="username"
                     label={t("login")}
-                    onChange={(e) => setLogin(e.target.value)}
-                    name="login"
+                    onChange={(e) => setUsername(e.target.value)}
+                    name="username"
                     autoFocus
                 />
                 <PasswordInput
                     fullWidth
                     label={t("пароль")}
-                    autoComplete="new-password"
                     onKeyDown={handleKeyPress}
                     onChange={(e) => setPassword(e.target.value)}
                 />

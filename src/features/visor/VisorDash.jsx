@@ -1,30 +1,12 @@
 import React from 'react'
-import Grid from "@material-ui/core/Grid"
-import {
-    Fullscreen,
-    FullscreenExit,
-    LastPage,
-    Pause,
-    PlayArrow,
-    Stop,
-    TouchApp,
-    Visibility,
-    VisibilityOff
-} from "@material-ui/icons"
 import {inject, observer} from "mobx-react"
-import Paper from "@material-ui/core/Paper"
 import ButtonToolTipIcon from "../../components/ButtonToolTipIcon"
-import makeStyles from "@material-ui/core/styles/makeStyles"
-
-const useStyles = makeStyles((theme) => ({
-    noOver: {
-        overflow: "hidden",
-        flexGrow: 1,
-        height: "100%",
-        backdropFilter: 'blur(10px)',
-        backgroundColor: "transparent"
-    }
-}))
+import Stop from "@mui/icons-material/Stop"
+import Grid from "@mui/material/Grid"
+import {Paper} from "@mui/material"
+import {Fullscreen, FullscreenExit, LastPage, Pause, PlayArrow, TouchApp} from "@mui/icons-material"
+import Visibility from "@mui/icons-material/Visibility"
+import VisibilityOff from "@mui/icons-material/VisibilityOff"
 
 const VisorDash = ({root: {task}, taskActions, direction}) => {
     const {status, taskSetRestart} = task
@@ -35,13 +17,18 @@ const VisorDash = ({root: {task}, taskActions, direction}) => {
     const {visibility, taskChangeVisibility} = task
     const {interactive, taskSetInteractive} = task
     const {fullScreen, taskSetFullScreen} = task
-    const classes = useStyles()
     return <>
         <Grid container
               direction={direction}
               justify={"space-between"}
               component={Paper}
-              className={classes.noOver}
+              sx={{
+                  overflow: "hidden",
+                  flexGrow: 1,
+                  height: "100%",
+                  backdropFilter: 'blur(10px)',
+                  backgroundColor: "transparent"
+              }}
         >
             <Grid item>
                 <Grid item container justify={"center"} direction={direction}>

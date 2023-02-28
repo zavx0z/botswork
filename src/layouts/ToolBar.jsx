@@ -6,9 +6,11 @@ import LanguageSelect from "../components/Lang"
 import Profile from "../components/Profile"
 
 const Logo = () => <>
-    <Box component="img" alt="logo"
-         sx={{maxHeight: 44, md: "flex"}}
-         src={"./img/apple-icon-180.png"}
+    <Box
+        component="img"
+        alt="logo"
+        sx={{maxHeight: 44, md: "flex"}}
+        src={process.env.PUBLIC_URL + "/img/apple-icon-180.png"}
     />
     <Typography
         variant="h5"

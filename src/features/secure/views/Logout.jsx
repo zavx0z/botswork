@@ -18,6 +18,6 @@ const Logout = ({user: {logOut, isAuthenticated}, redirect}) => {
             snackbarDisplayedRef.current = false
         }
         navigate(redirect)
-    }, [redirect, logOut, navigate, t, enqueueSnackbar])
+    }, [redirect, logOut, navigate, t, enqueueSnackbar, isAuthenticated])
 }
 export default inject('user')(Logout)

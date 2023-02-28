@@ -1,5 +1,10 @@
+import axios from "axios"
+
+axios.defaults.baseURL = process.env.REACT_APP_HOST + "/api.v1"
+axios.defaults.withCredentials = true
+
 const api = {
-    root: `${process.env.REACT_APP_HOST}/api`,
+    root: `${process.env.REACT_APP_HOST + "/api.v1"}`,
     get runTask() {
         return `${this.root}/task`
     },

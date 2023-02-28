@@ -1,108 +1,131 @@
-import {applySnapshot, flow, types} from "mobx-state-tree"
-import join from "../request/api/join"
-import loginPassword from "../request/api/loginPassword"
-import loginToken from "../request/api/loginToken"
+import {applySnapshot, types} from "mobx-state-tree"
+import axios from "axios"
+
+axios.defaults.baseURL = process.env.REACT_APP_HOST + "/api.v1"
+
 
 const preprocessor = (snapshot) => {
-    return {id: snapshot.id, login: snapshot.login}
+    return {id: snapshot.id, username: snapshot.username}
 }
+
 export default types
     .model({
         id: types.maybe(types.number),
-        login: types.maybe(types.string),
+        username: types.maybe(types.string),
     })
     .preProcessSnapshot(preprocessor)
-    .volatile(self => ({
+    .volatile((self) => ({
         loading: false,
         password: types.maybe(types.string),
     }))
-    .actions(self => ({
+    .actions((self) => ({
         afterCreate() {
-            self.tokenStore && self.reLogin()
+            const {accessToken, getUser} = self
+            accessToken && getUser()
         },
-        setLogin(login) {
-            self.login = login
+        setUsername(username) {
+            self.username = username
         },
         setPassword(password) {
             self.password = password
         },
-        setLoading(bool) {
-            self.loading = bool
-        },
         toggleLoading() {
             self.loading = !self.loading
         },
-        signin: flow(function* (login, password) {
-            self.toggleLoading()
+        async login(username, password) {
+            const {toggleLoading, setAccessToken, setRefreshToken} = self
+            toggleLoading()
             try {
-                const data = yield loginPassword(login, password)
-                const {user, token, expiration} = data
-                applySnapshot(self, user)
-                self.setToken(token)
-                self.setExpiration(expiration)
-                self.setLoading(false)
+                const response = await axios.post('/login', {
+                    username: username,
+                    password: password,
+                })
+                const {userID, accessToken, refreshToken} = response.data
+                console.log(userID, username)
+                applySnapshot(self, {id: userID, username: username})
+                setAccessToken(accessToken)
+                setRefreshToken(refreshToken)
+                toggleLoading()
             } catch (e) {
-                self.toggleLoading()
+                toggleLoading()
                 return Promise.reject(e)
             }
-        }),
-        reLogin: flow(function* () {
-            self.toggleLoading()
+        },
+        async getUser() {
+            const {accessToken, toggleLoading} = self
+            console.log('token')
+            toggleLoading()
             try {
-                const data = yield loginToken()
-                const {user, token, expiration} = data
-                applySnapshot(self, user)
-                self.setToken(token)
-                self.setExpiration(expiration)
-                self.toggleLoading()
+                const response = await axios.get('/user', {
+                    headers: {Authorization: `Bearer ${self.accessToken}`},
+                })
+                console.log(response.data)
+                const {userID, username} = response.data
+                applySnapshot(self, {id: userID, username: username})
+                toggleLoading()
+            } catch (error) {
+                toggleLoading()
+                return Promise.reject(error)
+            }
+        },
+        async refresh() {
+            const {toggleLoading, setAccessToken, setRefreshToken} = self
+            toggleLoading()
+            try {
+                const response = await axios.get('/refresh')
+                const {accessToken, refreshToken} = response.data
+                setAccessToken(accessToken)
+                setRefreshToken(refreshToken)
+                toggleLoading()
+            } catch (error) {
+                toggleLoading()
+                return Promise.reject(error)
+            }
+        },
+        async join(username, password) {
+            const {toggleLoading, setAccessToken, setRefreshToken, id} = self
+            toggleLoading()
+            try {
+                const response = await axios.post('/join', {
+                    username: username,
+                    password: password,
+                })
+                const {user, accessToken, refreshToken} = response.data
+                applySnapshot(id, user)
+                setAccessToken(accessToken)
+                setRefreshToken(refreshToken)
+                toggleLoading()
             } catch (e) {
-                self.toggleLoading()
+                toggleLoading()
                 return Promise.reject(e)
             }
-        }),
-        join: flow(function* (login, password) {
-            self.toggleLoading()
-            try {
-                const data = yield join({login: login, password: password})
-                console.log(data)
-                const {user, token, expiration} = data
-                applySnapshot(self, user)
-                self.setToken(token)
-                self.setExpiration(expiration)
-                self.toggleLoading()
-            } catch (e) {
-                console.log(e)
-                self.toggleLoading()
-                return Promise.reject(e)
-            }
-        }),
+        },
         logOut() {
-            self.setLogin('')
-            self.setPassword('')
-            self.removeToken()
-            self.removeExpiration()
+            const {setUsername, setPassword, removeAccessToken, removeRefreshToken} = self
+            setUsername('')
+            setPassword('')
+            removeAccessToken()
+            removeRefreshToken()
         },
-        setToken(token) {
-            localStorage.setItem('token', token)
+        setAccessToken(accessToken) {
+            localStorage.setItem('accessToken', accessToken)
         },
-        removeToken() {
-            localStorage.removeItem('token')
+        removeAccessToken() {
+            localStorage.removeItem('accessToken')
         },
-        setExpiration(expiration) {
-            localStorage.setItem('expiration', expiration)
+        setRefreshToken(refreshToken) {
+            localStorage.setItem('refreshToken', refreshToken)
         },
-        removeExpiration() {
-            localStorage.removeItem('expiration')
+        removeRefreshToken() {
+            localStorage.removeItem('refreshToken')
         },
     }))
-    .views(self => ({
-        get tokenStore() {
-            return localStorage.getItem('token')
-        },
-        get expirationStore() {
-            return localStorage.getItem('expiration')
+    .views((self) => ({
+        get accessToken() {
+            return localStorage.getItem('accessToken')
         },
         get isAuthenticated() {
-            return !!(self.login && self.tokenStore)
+            console.log(self.username, localStorage.getItem('accessToken'))
+            return !!self.username && !!self.accessToken
         },
     }))
