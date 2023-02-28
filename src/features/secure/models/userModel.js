@@ -72,14 +72,15 @@ export default types
             }).finally(toggleLoading)
         },
         async join(username, password) {
-            const {toggleLoading, setAccessToken, setRefreshToken, id} = self
+            const {toggleLoading, setAccessToken, setRefreshToken, setAuthenticate} = self
             toggleLoading()
             await axios.post('/join', {
                 username: username,
                 password: password,
             }).then((response) => {
+                setAuthenticate(true)
                 const {userID, accessToken, refreshToken} = response.data
-                applySnapshot(userID, username)
+                applySnapshot(self, {id: userID, username: username})
                 setAccessToken(accessToken)
                 setRefreshToken(refreshToken)
             }).finally(toggleLoading)

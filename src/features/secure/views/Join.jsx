@@ -28,7 +28,7 @@ const Join = ({user: {join, loading}, redirect}) => {
         username && password && join(username, password)
             .then(() => enqueueSnackbar(t('зарегистрирован'), {variant: "success"}))
             .then(() => navigate(redirect, {replace: true}))
-            .catch(e => enqueueSnackbar(e, {variant: "error"})) // todo на сервере завести ошибки и в i18n
+            .catch(e => enqueueSnackbar(t(e.response.data.detail), {variant: "error"}))
     }
     const handleKeyPress = (e) => e.key === "Enter" && handleSubmit()
     return <Container component="main" maxWidth="xs">

@@ -10,7 +10,7 @@ const Auth = () =>
     <Routes>
         <Route path={'/' + routes.join.split('/').slice(-1)} element={<Join redirect={routes.profile}/>}/>
         <Route path={'/' + routes.login.split('/').slice(-1)} element={<Login redirect={routes.profile}/>}/>
-        <Route path={'/' + routes.logout.split('/').slice(-1)} element={<Logout redirect={routes.home}/>}/>
+        <Route path={'/' + routes.logout.split('/').slice(-1)} element={<Logout redirect={routes.login}/>}/>
         <Route path={'/' + routes.reset.split('/').slice(-1)} element={<ResetPassword/>}/>
     </Routes>
 export default Auth
