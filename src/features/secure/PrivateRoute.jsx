@@ -3,14 +3,13 @@ import {inject, observer} from "mobx-react"
 import {useSnackbar} from "notistack"
 import {useEffect, useRef} from "react"
 import {useTranslation} from "react-i18next"
-import routes from "./routes"
+import routes from "../../routes/routes"
 
 const PrivateRoute = ({children, user: {isAuthenticated}}) => {
     const {enqueueSnackbar} = useSnackbar()
     const snackbarDisplayedRef = useRef(false)
     const {t} = useTranslation('авторизация')
     useEffect(() => {
-        // console.log(isAuthenticated)
         if (!isAuthenticated && !snackbarDisplayedRef.current) {
             enqueueSnackbar(t("не_авторизован"), {variant: 'warning', key: 'auth-snackbar'})
             snackbarDisplayedRef.current = true

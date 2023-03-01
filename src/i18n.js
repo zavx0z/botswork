@@ -13,7 +13,7 @@ i18next
     .init({
         fallbackLng: "ru",
 
-        ns: ["авторизация", "меню"],
+        ns: ["авторизация", "меню", "network"],
         defaultNS: "меню",
 
         supportedLngs: ["ru", "en", "de"],

@@ -9,7 +9,7 @@ import AppBar from "@mui/material/AppBar"
 import ToolBar from "./layouts/ToolBar"
 import DrawerMenu from "./layouts/DrawerMenu"
 import Home from "./views/Home"
-import PrivateRoute from "./routes/PrivateRoute"
+import PrivateRoute from "./features/secure/PrivateRoute"
 import routes from "./routes/routes"
 import Auth from "./features/secure/Auth"
 

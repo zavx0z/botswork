@@ -15,24 +15,24 @@ import Container from '@mui/material/Container'
 import {useTranslation} from "react-i18next"
 import {Link as RouterLink, useNavigate} from 'react-router-dom'
 import {useSnackbar} from "notistack"
-import {inject, observer} from "mobx-react"
 import PasswordInput from "../components/InputPassword"
+import routes from "../routes"
 
-const Login = ({user: {loading, login, username: us}, redirect}) => {
+const Login = ({submit, redirect}) => {
     const {t} = useTranslation('авторизация')
     const navigate = useNavigate()
     const {enqueueSnackbar} = useSnackbar()
-
+    const [loading, setLoading] = useState(false)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [remember, setRemember] = useState(true)
     const handleSubmit = () => {
-        username && password &&
-        login(username, password)
-            .then(() => enqueueSnackbar(t('привет'), {variant: "success"}))
-            .then(() => console.log(us))
-            .then(() => navigate(redirect, {replace: true}))
-            .catch(() => enqueueSnackbar(t('не_верный_логин_пароль'), {variant: "error"}))
-        // .catch(e => enqueueSnackbar(e, {variant: "error"})) // todo на сервере завести ошибки и в i18n
+        if (username && password) {
+            submit(username, password, remember)
+                .then(() => enqueueSnackbar(t('привет'), {variant: "success"}))
+                .then(() => navigate(redirect, {replace: true}))
+                .finally(setLoading(false))
+        }
     }
     const handleKeyPress = (e) => e.key === "Enter" && handleSubmit()
     return <Container component="main" maxWidth="xs">
@@ -69,7 +69,13 @@ const Login = ({user: {loading, login, username: us}, redirect}) => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <FormControlLabel
-                    control={<Checkbox value="remember" color="primary"/>}
+                    control={
+                        <Checkbox
+                            value="remember"
+                            color="primary"
+                            checked={remember}
+                            onChange={(e) => setRemember(!remember)}
+                        />}
                     label={t("запомнить")}
                 />
                 <Button
@@ -84,20 +90,12 @@ const Login = ({user: {loading, login, username: us}, redirect}) => {
                 </Button>
                 <Grid container>
                     <Grid item xs>
-                        <Link
-                            component={RouterLink}
-                            to={"/reset"}
-                            variant="body2"
-                        >
+                        <Link component={RouterLink} to={routes.reset} variant="body2">
                             {t("забыл_пароль")}
                         </Link>
                     </Grid>
                     <Grid item>
-                        <Link
-                            component={RouterLink}
-                            to={"/signup"}
-                            variant="body2"
-                        >
+                        <Link component={RouterLink} to={routes.join} variant="body2">
                             {t("нет_аккаунта")}
                         </Link>
                     </Grid>
@@ -106,4 +104,4 @@ const Login = ({user: {loading, login, username: us}, redirect}) => {
         </Box>
     </Container>
 }
-export default inject('user')(observer(Login))
+export default Login

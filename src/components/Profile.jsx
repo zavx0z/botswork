@@ -25,7 +25,6 @@ const Profile = ({user: {logOut, isAuthenticated}}) => {
     const [anchorElUser, setAnchorElUser] = React.useState(null)
     const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget)
     const handleCloseUserMenu = (path) => {
-        // console.log(isAuthenticated)
         setAnchorElUser(null)
         navigate(path)
     }

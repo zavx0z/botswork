@@ -13,22 +13,24 @@ import Container from '@mui/material/Container'
 import {useTranslation} from "react-i18next"
 import {Link as RouterLink, useNavigate} from 'react-router-dom'
 import {useSnackbar} from "notistack"
-import {inject, observer} from "mobx-react"
 import PasswordInput from "../components/InputPassword"
 import routes from "../routes"
 
-const Join = ({user: {join, loading}, redirect}) => {
+const Join = ({submit, redirect}) => {
     const {t} = useTranslation('авторизация')
     const navigate = useNavigate()
     const {enqueueSnackbar} = useSnackbar()
-
+    const [loading, setLoading] = useState(false)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const handleSubmit = () => {
-        username && password && join(username, password)
-            .then(() => enqueueSnackbar(t('зарегистрирован'), {variant: "success"}))
-            .then(() => navigate(redirect, {replace: true}))
-            .catch(e => enqueueSnackbar(t(e.response.data.detail), {variant: "error"}))
+        if (username && password) {
+            setLoading(true)
+            submit(username, password)
+                .then(() => enqueueSnackbar(t('зарегистрирован'), {variant: "success"}))
+                .then(() => navigate(redirect, {replace: true}))
+                .finally(setLoading(false))
+        }
     }
     const handleKeyPress = (e) => e.key === "Enter" && handleSubmit()
     return <Container component="main" maxWidth="xs">
@@ -83,4 +85,4 @@ const Join = ({user: {join, loading}, redirect}) => {
         </Box>
     </Container>
 }
-export default inject('user')(observer(Join))
+export default Join

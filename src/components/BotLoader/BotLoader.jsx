@@ -1,9 +1,10 @@
 import React from "react"
 import "./Loader.css"
 
-const BotLoader = () =>
+const BotLoader = ({scale = 1}) =>
     <svg
-        viewBox="0 0 22 22"
+        viewBox={"0 0 22 22"}
+        transform={`scale(${scale})`}
         xmlns="http://www.w3.org/2000/svg">
         <defs
             id="defs2">

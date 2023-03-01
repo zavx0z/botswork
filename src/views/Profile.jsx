@@ -1,20 +1,20 @@
 import React from "react"
-import {Button, Typography} from "@mui/material"
+import {Typography} from "@mui/material"
 import {inject, observer} from "mobx-react"
+import BotLoader from "../components/BotLoader/BotLoader"
+import Box from "@mui/material/Box"
 
-const ProfilePage = ({root: {value, incrementValue, decrementValue}}) => <>
+const ProfilePage = ({user: {username}}) => <>
     <Typography>
-        Личный кабинет {value}
+        Пользователь: {username}
     </Typography>
-    <Button
-        onClick={incrementValue}
-    >
-        Увеличить
-    </Button>
-    <Button
-        onClick={decrementValue}
-    >
-        Уменьшить
-    </Button>
+    <Box sx={{
+        display: "flex",
+        width: "100%",
+        justifyContent: "center",
+        height: 500
+    }}>
+        <BotLoader/>
+    </Box>
 </>
-export default inject("root")(observer(ProfilePage))
+export default inject("user")(observer(ProfilePage))
