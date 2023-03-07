@@ -13,6 +13,7 @@ import theme from "./theme/theme"
 import {SnackbarProvider} from "notistack"
 import userStore from "./features/secure/userStore"
 import {middlewareNetworkError} from "./middleware/network"
+import {isMobile} from "react-device-detect"
 
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 
@@ -25,8 +26,8 @@ root.render(
         <Router>
             <ThemeProvider theme={theme}>
                 <SnackbarProvider anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
+                    vertical: isMobile ? 'top' : 'bottom',
+                    horizontal: isMobile ? 'center' : 'left',
                 }}>
                     <Provider root={rootStore} user={userStore}>
                         <App/>

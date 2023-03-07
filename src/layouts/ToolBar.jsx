@@ -3,8 +3,8 @@ import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import * as React from "react"
 import LanguageSelect from "../components/Lang"
-import Profile from "../components/Profile"
-import {BrowserView, isMobile} from "react-device-detect"
+import Profile, {MobileProfile} from "../components/Profile"
+import {BrowserView, isMobile, MobileView} from "react-device-detect"
 
 const Logo = () => {
     return <>
@@ -29,7 +29,7 @@ const Logo = () => {
                 fontWeight: 400,
                 color: "inherit",
                 textDecoration: "none",
-                fontSize: isMobile ? 22 : 24,
+                fontSize: isMobile ? 19 : 24,
                 letterSpacing: '0.01em',
                 fontFamily: 'monospace'
             }}
@@ -51,7 +51,12 @@ const ToolBar = () => {
             </BrowserView>
         </Box>
         <Box sx={{flexGrow: 0}}>
-            <Profile/>
+            <MobileView>
+                <MobileProfile/>
+            </MobileView>
+            <BrowserView>
+                <Profile/>
+            </BrowserView>
         </Box>
     </Toolbar>
 }
