@@ -1,4 +1,4 @@
-import {AccountBox, AppRegistration, Close as CloseIcon, Login, Logout} from "@mui/icons-material"
+import {AccountBox, AppRegistration, Close as CloseIcon, Login, Logout, Settings} from "@mui/icons-material"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
@@ -47,7 +47,6 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
         <IconButton
             size={'small'}
             onClick={handleOpen}
-            sx={{p: 0}}
         >
             <AccountBox
                 fontSize={'medium'}
@@ -72,7 +71,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
             <Slide direction="up" in={open} mountOnEnter unmountOnExit>
                 <div sx={{height: '100vh', width: '100%'}}>
                     <IconButton
-                        size={'large'}
+                        aria-label="close"
                         onClick={handleClose}
                     >
                         <CloseIcon/>
@@ -86,6 +85,12 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                                         <Avatar alt={username} /* src={logo} *//>
                                     </ListItemAvatar>
                                     <ListItemText primary={username}/>
+                                </ListItemButton>
+                                <ListItemButton divider onClick={() => handleNavigate(routes.settings)}>
+                                    <ListItemIcon>
+                                        <Settings/>
+                                    </ListItemIcon>
+                                    <ListItemText primary={t('Настройки')}/>
                                 </ListItemButton>
                                 <ListItemButton divider onClick={() => handleNavigate(routes.logout)}>
                                     <ListItemIcon>

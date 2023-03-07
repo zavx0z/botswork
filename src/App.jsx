@@ -12,6 +12,7 @@ import Auth from "./features/secure/Auth"
 import BottomNavigation from "./layouts/BottomBar"
 import {BrowserView, isBrowser, MobileView} from "react-device-detect"
 import DrawerMenu from "./layouts/DrawerMenu"
+import Settings from "./views/Settings"
 
 
 const App = () => {
@@ -43,6 +44,7 @@ const App = () => {
                 <Route path={routes.auth} element={<Auth/>}/>
                 <Route path={routes.profile} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
                 <Route path={'/'} element={<Contacts/>}/>
+                <Route path={routes.settings} element={<Settings/>}/>
             </Routes>
         </Box>
         <MobileView>
