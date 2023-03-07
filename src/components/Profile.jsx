@@ -1,5 +1,5 @@
 import IconButton from "@mui/material/IconButton"
-import Avatar from "@mui/material/Avatar"
+import AccountBox from "@mui/icons-material/AccountBox"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom"
 import {useTranslation} from "react-i18next"
 import routes from "../routes/routes"
 import {inject, observer} from "mobx-react"
+import {useState} from "react"
 
 const menuItems = [
     {
@@ -22,7 +23,7 @@ const menuItems = [
 
 const Profile = ({user: {logOut, isAuthenticated}}) => {
     const navigate = useNavigate()
-    const [anchorElUser, setAnchorElUser] = React.useState(null)
+    const [anchorElUser, setAnchorElUser] = useState(null)
     const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget)
     const handleCloseUserMenu = (path) => {
         setAnchorElUser(null)
@@ -30,8 +31,15 @@ const Profile = ({user: {logOut, isAuthenticated}}) => {
     }
     const {t} = useTranslation('авторизация')
     return <>
-        <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-            <Avatar alt="Remy Sharp"
+        <IconButton
+            size={'small'}
+            onClick={handleOpenUserMenu}
+            sx={{p: 0}}
+        >
+            <AccountBox
+                fontSize={'medium'}
+                alt="Profile"
+                color={"secondary"}
                 // src={logo}
             />
         </IconButton>

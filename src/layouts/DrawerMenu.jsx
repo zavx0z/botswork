@@ -12,6 +12,7 @@ import ContactsIcon from "@mui/icons-material/Contacts"
 import * as React from "react"
 import {useNavigate} from "react-router-dom"
 import {useTranslation} from "react-i18next"
+import routes from "../routes/routes"
 
 const drawerWidth = 240
 
@@ -19,22 +20,19 @@ const DrawerMenu = () => {
     const {t} = useTranslation('меню')
     const navigate = useNavigate()
     return <>
-        <Drawer
-            variant="permanent"
-            sx={{
-                display: {sm: 'none', md: 'flex'},
-                width: drawerWidth,
-                flexShrink: 0,
-                [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'},
-            }}
+        <Drawer variant="permanent"
+                sx={{
+                    display: {xs: 'none', md: 'flex'},
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'},
+                }}
         >
             <Toolbar/>
             <Box sx={{overflow: 'auto'}}>
                 <List>
                     <ListItem disablePadding>
-                        <ListItemButton
-                            onClick={() => navigate('/')}
-                        >
+                        <ListItemButton onClick={() => navigate('/')}>
                             <ListItemIcon>
                                 <HomeIcon/>
                             </ListItemIcon>
@@ -45,9 +43,7 @@ const DrawerMenu = () => {
                 <Divider/>
                 <List>
                     <ListItem disablePadding>
-                        <ListItemButton
-                            onClick={() => navigate('contacts')}
-                        >
+                        <ListItemButton onClick={() => navigate(routes.contacts)}>
                             <ListItemIcon>
                                 <ContactsIcon/>
                             </ListItemIcon>
