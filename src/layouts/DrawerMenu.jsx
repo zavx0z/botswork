@@ -22,6 +22,7 @@ const DrawerMenu = () => {
         <Drawer
             variant="permanent"
             sx={{
+                display: {sm: 'none', md: 'flex'},
                 width: drawerWidth,
                 flexShrink: 0,
                 [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'},
