@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {BottomNavigation as MuiBottomNavigation, BottomNavigationAction} from '@mui/material'
-import {Favorite as FavoriteIcon, Home as HomeIcon, Person as PersonIcon} from '@mui/icons-material'
+import { Home as HomeIcon} from '@mui/icons-material'
 import {Link, useLocation} from 'react-router-dom'
 import {useTranslation} from "react-i18next"
 import routes from "../routes/routes"

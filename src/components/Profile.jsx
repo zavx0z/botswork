@@ -29,7 +29,8 @@ const menuItems = [
 
 export const MobileProfile = inject('user')(observer(({user: {logOut, username, isAuthenticated}}) => {
     const {t} = useTranslation('авторизация')
-    const namigate = useNavigate()
+    const {t: tm} = useTranslation('меню')
+    const navigate = useNavigate()
     const [open, setOpen] = useState(false)
 
     const handleOpen = () => {
@@ -37,7 +38,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
     }
     const handleNavigate = (rout) => {
         setOpen(false)
-        namigate(rout)
+        navigate(rout)
     }
     const handleClose = () => {
         setOpen(false)
@@ -90,7 +91,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                                     <ListItemIcon>
                                         <Settings/>
                                     </ListItemIcon>
-                                    <ListItemText primary={t('Настройки')}/>
+                                    <ListItemText primary={tm('настройки')}/>
                                 </ListItemButton>
                                 <ListItemButton divider onClick={() => handleNavigate(routes.logout)}>
                                     <ListItemIcon>

@@ -4,7 +4,7 @@ import BotLoader from "./BotLoader"
 import {useEffect, useState} from "react"
 
 
-const ModalBotLoader = ({isLoading, setLoading, children}) => {
+const ModalBotLoader = ({isLoading, setLoading, children, onClose}) => {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
@@ -17,6 +17,8 @@ const ModalBotLoader = ({isLoading, setLoading, children}) => {
                 if (!isLoading) {
                     clearInterval(intervalId)
                     timerId = setTimeout(() => {
+                        if (typeof onClose !== "undefined" && open)
+                            onClose()
                         setOpen(false)
                     }, 1000)
                 }
@@ -27,7 +29,7 @@ const ModalBotLoader = ({isLoading, setLoading, children}) => {
             clearTimeout(timerId)
             clearInterval(intervalId)
         }
-    }, [isLoading])
+    }, [isLoading, onClose, open])
     return (
         <Modal open={open}>
             <Box
