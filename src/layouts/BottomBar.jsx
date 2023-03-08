@@ -21,6 +21,7 @@ const BottomNavigation = () => {
 
     return (
         <MuiBottomNavigation
+            showLabels
             value={value}
             onChange={handleChange}
             sx={{
@@ -30,7 +31,13 @@ const BottomNavigation = () => {
                 pb: isIOS ? .5 : 0
             }}
         >
-            <BottomNavigationAction label={t("главная")} value={routes.home} icon={<HomeIcon/>} component={Link} to="/"/>
+            <BottomNavigationAction
+                label={t("главная")}
+                value={routes.home}
+                icon={<HomeIcon/>}
+                component={Link}
+                to={routes.home}
+            />
             {/*<BottomNavigationAction label={t("профиль")} value={routes.profile} icon={<PersonIcon/>} component={Link} to="/profile"/>*/}
         </MuiBottomNavigation>
     )
