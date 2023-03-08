@@ -88,10 +88,15 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                                     divider
                                     onClick={() => handleNavigate(routes.profile)}
                                 >
-                                    <ListItemAvatar sx={{ml:1}}>
+                                    <ListItemAvatar
+                                        sx={{ml:1}}
+                                    >
                                         <Avatar alt={username} /* src={logo} *//>
                                     </ListItemAvatar>
-                                    <ListItemText primary={username}/>
+                                    <ListItemText
+                                        sx={{ml:1}}
+                                        primary={username}
+                                    />
                                 </ListItemButton>
                                 <ListItemButton
                                     divider
