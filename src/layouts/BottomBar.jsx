@@ -4,6 +4,7 @@ import {Home as HomeIcon} from '@mui/icons-material'
 import {Link, useLocation} from 'react-router-dom'
 import {useTranslation} from "react-i18next"
 import routes from "../routes/routes"
+import {isIOS} from "react-device-detect"
 
 const BottomNavigation = () => {
     const location = useLocation()
@@ -26,7 +27,7 @@ const BottomNavigation = () => {
                 borderTopColor: '#0c1f3c',
                 borderTopStyle: 'solid',
                 borderTopWidth: 'thin',
-                pb: .5
+                pb: isIOS ? .5 : 0
             }}
         >
             <BottomNavigationAction label={t("главная")} value={routes.home} icon={<HomeIcon/>} component={Link} to="/"/>
