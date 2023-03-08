@@ -30,8 +30,9 @@ const Settings = () => {
             onClose={handleClose}
             slotProps={{backdrop: {style: {opacity: 1, backgroundColor: '#fff'}}}}
         >
-            <Box sx={{height: '100vh', width: '100%'}}>
+            <Box sx={{height: '100vh', width: '100%', p: 1}}>
                 <IconButton
+                    size={'large'}
                     aria-label="back"
                     onClick={() => handleClose()}
                 >

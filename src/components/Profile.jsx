@@ -13,6 +13,7 @@ import Divider from "@mui/material/Divider"
 import Avatar from "@mui/material/Avatar"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
+import Box from "@mui/material/Box"
 
 const menuItems = [
     {
@@ -70,8 +71,9 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
             }}
         >
             <Slide direction="up" in={open} mountOnEnter unmountOnExit>
-                <div sx={{height: '100vh', width: '100%'}}>
+                <Box sx={{height: '100vh', width: '100%', p:1}}>
                     <IconButton
+                        size={'large'}
                         aria-label="close"
                         onClick={handleClose}
                     >
@@ -81,19 +83,29 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                         <Divider/>
                         {isAuthenticated ?
                             <>
-                                <ListItemButton divider onClick={() => handleNavigate(routes.profile)}>
-                                    <ListItemAvatar>
+                                <ListItemButton
+                                    disableGutters
+                                    divider
+                                    onClick={() => handleNavigate(routes.profile)}
+                                >
+                                    <ListItemAvatar sx={{ml:1}}>
                                         <Avatar alt={username} /* src={logo} *//>
                                     </ListItemAvatar>
                                     <ListItemText primary={username}/>
                                 </ListItemButton>
-                                <ListItemButton divider onClick={() => handleNavigate(routes.settings)}>
+                                <ListItemButton
+                                    divider
+                                    onClick={() => handleNavigate(routes.settings)}
+                                >
                                     <ListItemIcon>
                                         <Settings/>
                                     </ListItemIcon>
                                     <ListItemText primary={tm('настройки')}/>
                                 </ListItemButton>
-                                <ListItemButton divider onClick={() => handleNavigate(routes.logout)}>
+                                <ListItemButton
+                                    divider
+                                    onClick={() => handleNavigate(routes.logout)}
+                                >
                                     <ListItemIcon>
                                         <Logout/>
                                     </ListItemIcon>
@@ -114,7 +126,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                             )
                         }
                     </List>
-                </div>
+                </Box>
             </Slide>
         </Modal>
     </>

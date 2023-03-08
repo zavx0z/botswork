@@ -22,8 +22,9 @@ export const MobileLanguageSelect = ({closeModal}) => {
         await i18n.changeLanguage(event.target.value)
         setIsLoading(false)
     }
-    return <Box sx={{height: '100vh', width: '100%'}}>
+    return <Box sx={{height: '100vh', width: '100%', p: 1}}>
         <IconButton
+            size={'large'}
             aria-label="close"
             onClick={closeModal}
         >
