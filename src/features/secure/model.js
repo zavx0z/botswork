@@ -30,12 +30,12 @@ export default types
         },
         async join(username, password) {
             await axios
-                .post('/join', {username: username, password: password})
+                .post('/join', {username: username.trim(), password: password.trim()})
                 .then((response) => applySnapshot(self, response.data))
         },
         async login(username, password) {
             await axios
-                .post('/login', {username: username, password: password})
+                .post('/login', {username: username.trim(), password: password.trim()})
                 .then(response => applySnapshot(self, response.data))
         },
         async user() {
