@@ -12,7 +12,7 @@ const ProfilePage = ({user: {username}}) => <>
         display: "flex",
         width: "100%",
         justifyContent: "center",
-        height: 500
+        // height: 500
     }}>
         <BotLoader/>
     </Box>

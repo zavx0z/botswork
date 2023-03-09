@@ -36,7 +36,6 @@ const App = () => {
             overflowX: "hidden",
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
             p: 1,
         }}>
             <Routes>
