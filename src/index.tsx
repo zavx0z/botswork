@@ -1,25 +1,24 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
+import './theme/index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import {BrowserRouter as Router} from "react-router-dom"
-import rootStore from "./stores/rootStore"
 import {Provider} from "mobx-react"
 import './i18n.js'
 import i18next from "i18next"
 import {ThemeProvider} from "@mui/material/styles"
 import theme from "./theme/theme"
 import {SnackbarProvider} from "notistack"
-import userStore from "./features/secure/userStore"
 import {middlewareNetworkError} from "./middleware/network"
 import {isMobile} from "react-device-detect"
+import userStore from "./stores/userStore"
 
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
-middlewareNetworkError(rootStore)
+middlewareNetworkError(userStore)
 
 root.render(
     <React.StrictMode>
@@ -29,7 +28,7 @@ root.render(
                     vertical: isMobile ? 'top' : 'bottom',
                     horizontal: isMobile ? 'center' : 'left',
                 }}>
-                    <Provider root={rootStore} user={userStore}>
+                    <Provider user={userStore}>
                         <App/>
                     </Provider>
                 </SnackbarProvider>

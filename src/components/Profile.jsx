@@ -71,7 +71,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
             }}
         >
             <Slide direction="up" in={open} mountOnEnter unmountOnExit>
-                <Box sx={{height: '100vh', width: '100%', p:1}}>
+                <Box sx={{height: '100vh', width: '100%', p: 1}}>
                     <IconButton
                         size={'large'}
                         aria-label="close"
@@ -89,12 +89,12 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                                     onClick={() => handleNavigate(routes.profile)}
                                 >
                                     <ListItemAvatar
-                                        sx={{ml:1}}
+                                        sx={{ml: 1}}
                                     >
                                         <Avatar alt={username} /* src={logo} *//>
                                     </ListItemAvatar>
                                     <ListItemText
-                                        sx={{ml:1}}
+                                        sx={{ml: 1}}
                                         primary={username}
                                     />
                                 </ListItemButton>
@@ -138,7 +138,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
 }))
 
 
-const Profile = ({user: {logOut, isAuthenticated}}) => {
+const Profile = ({user: {logOut, isAuthenticated, username}}) => {
     const navigate = useNavigate()
     const [anchorElUser, setAnchorElUser] = useState(null)
     const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget)
@@ -147,11 +147,19 @@ const Profile = ({user: {logOut, isAuthenticated}}) => {
         navigate(path)
     }
     const {t} = useTranslation('авторизация')
-    return <>
+    return <Box sx={{
+        display: 'flex'
+    }}>
+        <Typography variant={"body1"}>
+            {username}
+        </Typography>
         <IconButton
             size={'small'}
             onClick={handleOpenUserMenu}
-            sx={{p: 0}}
+            sx={{
+                p: 0,
+                ml: 1
+            }}
         >
             <AccountBox
                 fontSize={'medium'}
@@ -185,6 +193,6 @@ const Profile = ({user: {logOut, isAuthenticated}}) => {
                 )
             }
         </Menu>
-    </>
+    </Box>
 }
 export default inject('user')(observer(Profile))

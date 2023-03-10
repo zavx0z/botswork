@@ -1,11 +1,10 @@
 import {addMiddleware} from "mobx-state-tree"
 import {enqueueSnackbar} from "notistack"
 import i18next from "i18next"
-import userStore from "../features/secure/userStore"
 
 const {t} = i18next
 export const middlewareNetworkError = (store) => {
-    addMiddleware(userStore, (call, next) => {
+    addMiddleware(store, (call, next) => {
             return next(call, result => {
                     if (Promise.resolve(result) === result)
                         return result.catch(error => {
