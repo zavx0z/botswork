@@ -11,7 +11,7 @@ const PrivateRoute = ({children, user: {isAuthenticated}}) => {
     const {t} = useTranslation('авторизация')
     useEffect(() => {
         if (!isAuthenticated && !snackbarDisplayedRef.current) {
-            enqueueSnackbar(t("не_авторизован"), {variant: 'warning', key: 'auth-snackbar'})
+            enqueueSnackbar(t("не_авторизован"), {variant: 'warning'})
             snackbarDisplayedRef.current = true
         } else {
             snackbarDisplayedRef.current = false

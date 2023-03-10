@@ -13,6 +13,8 @@ import BottomNavigation from "./layouts/BottomBar"
 import {BrowserView, isBrowser, MobileView} from "react-device-detect"
 import DrawerMenu from "./layouts/DrawerMenu"
 import Settings from "./views/Settings"
+import Viewer from "./views/Viewer"
+import Chat from "./features/chat/Chat"
 
 
 const App = () => {
@@ -41,9 +43,11 @@ const App = () => {
             <Routes>
                 <Route path={routes.home} element={<Home/>}/>
                 <Route path={routes.auth} element={<Auth/>}/>
-                <Route path={routes.profile} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
                 <Route path={'/'} element={<Contacts/>}/>
                 <Route path={routes.settings} element={<Settings/>}/>
+                <Route path={routes.viewer} element={<Viewer/>}/>
+                <Route path={routes.profile} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
+                <Route path={routes.chat} element={<PrivateRoute><Chat/></PrivateRoute>}/>
             </Routes>
         </Box>
         <MobileView>

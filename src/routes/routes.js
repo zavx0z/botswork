@@ -6,5 +6,7 @@ const routes = {
     profile: "/profile",
     contacts: "/contacts",
     settings: "/settings",
+    viewer: "/viewer",
+    chat: "/chat",
 }
 export default routes
