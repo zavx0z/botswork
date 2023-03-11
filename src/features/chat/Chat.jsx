@@ -43,9 +43,8 @@ const Chat = ({user}) => {
                     value={message}
                     onChange={handleMessageChange}
                     onKeyDown={handleKeyPress}
-                    sx={{
-                        flexGrow: 1
-                    }}
+                    autoComplete={'off'}
+                    sx={{flexGrow: 1}}
                 />
                 <IconButton
                     variant="contained"

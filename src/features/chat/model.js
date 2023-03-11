@@ -1,5 +1,4 @@
-import {types} from 'mobx-state-tree'
-import io from 'socket.io-client'
+import {getEnv, types} from 'mobx-state-tree'
 
 const Message = types.model({
     id: types.identifierNumber,
@@ -13,13 +12,9 @@ const chatModel = types
         messages: types.array(Message),
     })
     .actions((self) => {
-        let socket
+        const {socket} = getEnv(self)
         return {
             afterCreate() {
-                socket = io(process.env.REACT_APP_HOST, {transports: ['polling']})
-                    .on("connect", socket => {
-                        console.log("Connected")
-                    })
                 socket.on('message', (data) => {
                     self.addMessage(data)
                 })
