@@ -18,6 +18,9 @@ export default types
         email: types.maybe(types.string),
         phone: types.maybe(types.string),
     })
+    .volatile(self => ({
+        sio: undefined,
+    }))
     .preProcessSnapshot((snapshot) => {
         setTokens(snapshot)
         return snapshot

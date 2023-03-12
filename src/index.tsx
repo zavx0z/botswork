@@ -21,7 +21,6 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 middlewareNetworkError(userStore)
 
 root.render(
-    <React.StrictMode>
         <Router>
             <ThemeProvider theme={theme}>
                 <SnackbarProvider anchorOrigin={{
@@ -34,6 +33,5 @@ root.render(
                 </SnackbarProvider>
             </ThemeProvider>
         </Router>
-    </React.StrictMode>
 )
 reportWebVitals()

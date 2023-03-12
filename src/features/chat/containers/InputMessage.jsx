@@ -3,17 +3,11 @@ import {IconButton, TextField} from "@mui/material"
 import {Telegram} from "@mui/icons-material"
 import React, {useState} from "react"
 import {inject, observer} from "mobx-react"
-import {useParams} from "react-router-dom"
 
-const InputMessage = ({user: {getClient}}) => {
-    const {clientId} = useParams()
-
+const InputMessage = ({user: {sendMessage}}) => {
     const [message, setMessage] = useState('')
-    const handleMessageChange = (event) => {
-        setMessage(event.target.value)
-    }
+    const handleMessageChange = (event) => setMessage(event.target.value)
     const handleSendMessage = () => {
-        const {sendMessage} = getClient(clientId)
         sendMessage(message)
         setMessage('')
     }
