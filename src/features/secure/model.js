@@ -1,10 +1,8 @@
 import {applySnapshot, types} from "mobx-state-tree"
 import axios from "axios"
+import {ACCESS_TOKEN, REFRESH_TOKEN} from "./const"
 
 axios.defaults.baseURL = process.env.REACT_APP_HOST + "/api.v1"
-
-const ACCESS_TOKEN = 'at'
-const REFRESH_TOKEN = 'rt'
 
 const setTokens = ({accessToken, refreshToken}) => {
     if (typeof accessToken !== "undefined")

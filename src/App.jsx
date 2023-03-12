@@ -14,7 +14,7 @@ import {BrowserView, isBrowser, MobileView} from "react-device-detect"
 import DrawerMenu from "./layouts/DrawerMenu"
 import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
-import Chat from "./features/chat/Chat"
+import Chat from "./features/chat/Support"
 
 
 const App = () => {

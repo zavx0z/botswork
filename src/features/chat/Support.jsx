@@ -1,12 +1,11 @@
 import {inject, observer} from "mobx-react"
 import React, {useState} from 'react'
-import {Container, IconButton, List, TextField} from "@mui/material"
-import ListItem from "@mui/material/ListItem"
-import Avatar from "@mui/material/Avatar"
+import {Container, IconButton, TextField} from "@mui/material"
 import Box from "@mui/material/Box"
 import {Telegram} from "@mui/icons-material"
+import Chat from "./containers/Chat"
 
-const Chat = ({user}) => {
+const Support = ({user}) => {
     const [message, setMessage] = useState('')
     const handleMessageChange = (event) => {
         setMessage(event.target.value)
@@ -22,16 +21,7 @@ const Chat = ({user}) => {
         flexDirection: 'column',
     }}>
         <Box sx={{flexGrow: 1}}>
-            <List>
-                {user.messages.map(({id, senderName, text}) => (
-                    <ListItem key={id} sx={{display: 'flex', alignItems: 'center'}}>
-                        <Avatar color={"red"} sx={{marginRight: 1}}>
-                            {senderName[0]}
-                        </Avatar>
-                        {text}
-                    </ListItem>
-                ))}
-            </List>
+            <Chat/>
         </Box>
         <Box>
             <Box sx={{
@@ -44,7 +34,9 @@ const Chat = ({user}) => {
                     onChange={handleMessageChange}
                     onKeyDown={handleKeyPress}
                     autoComplete={'off'}
-                    sx={{flexGrow: 1}}
+                    sx={{
+                        flexGrow: 1
+                    }}
                 />
                 <IconButton
                     variant="contained"
@@ -62,4 +54,4 @@ const Chat = ({user}) => {
         </Box>
     </Box>
 }
-export default inject('user')(observer(Chat))
+export default inject('user')(observer(Support))
