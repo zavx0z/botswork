@@ -19,7 +19,7 @@ const InputMessage = ({user: {sendMessage}}) => {
     }
     return <Box sx={{display: 'flex', alignItems: 'center'}}>
         <TextField
-            label="Type a message"
+            label="Написать сообщение"
             multiline
             value={message}
             onChange={handleMessageChange}

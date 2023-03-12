@@ -9,7 +9,7 @@ export const messageModel = types.model({
 })
     .views(self => ({
         get date() {
-            return moment(self['created']).format('DD.MM.YYYY HH:mm:ss')
+            return moment(self['created']).format('DD.MM.YY HH:mm')
         },
         get senderName() {
             const {id, username} = getRoot(self)

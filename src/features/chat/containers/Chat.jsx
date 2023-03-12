@@ -1,4 +1,4 @@
-import {List, ListItemAvatar, ListItemText, Typography} from "@mui/material"
+import {Chip, List, ListItemAvatar, ListItemText, Typography} from "@mui/material"
 import ListItem from "@mui/material/ListItem"
 import Avatar from "@mui/material/Avatar"
 import React, {useEffect, useRef} from "react"
@@ -31,21 +31,9 @@ const Chat = ({user: {messages, getMessages}}) => {
     }
     return <List ref={listRef} sx={list}>
         {messages.map(({id, text, date, senderName}) => (
-            <ListItem
-                divider
-                key={id}
-                sx={listItem}
-                secondaryAction={
-                    <Typography variant={"caption"}>
-                        {date}
-                    </Typography>
-                }
-            >
+            <ListItem key={id} sx={listItem} divider secondaryAction={<Chip label={date}/>}>
                 <ListItemAvatar>
-                    <Avatar
-                        color={"red"}
-                        sx={{marginRight: 1}}
-                    >
+                    <Avatar sx={{marginRight: 1}}>
                         {senderName}
                     </Avatar>
                 </ListItemAvatar>
