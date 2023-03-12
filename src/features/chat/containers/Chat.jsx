@@ -1,24 +1,42 @@
 import {List, ListItemAvatar, ListItemText, Typography} from "@mui/material"
 import ListItem from "@mui/material/ListItem"
 import Avatar from "@mui/material/Avatar"
-import React, {useEffect} from "react"
+import React, {useEffect, useRef} from "react"
 import {inject, observer} from "mobx-react"
 
+const list = {
+    flexGrow: 1,
+    overflow: 'auto'
+}
+const listItem = {
+    display: 'flex',
+    alignItems: 'center',
+    // backgroundColor: "#e3f6f6"
+}
 const Chat = ({user: {messages, getMessages}}) => {
     useEffect(() => {
         getMessages()
     }, [getMessages])
 
-    return <List>
+    useEffect(() => {
+        scrollDown()
+    }, [messages.length])
+    const listRef = useRef(null)
+    const scrollDown = () => {
+        const myElement = listRef.current
+        myElement.scrollTo({
+            top: myElement.scrollHeight - myElement.clientHeight,
+            behavior: 'smooth'
+        })
+    }
+    return <List ref={listRef} sx={list}>
         {messages.map(({id, text, date, senderName}) => (
             <ListItem
+                divider
                 key={id}
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center'
-                }}
+                sx={listItem}
                 secondaryAction={
-                    <Typography>
+                    <Typography variant={"caption"}>
                         {date}
                     </Typography>
                 }
@@ -31,9 +49,13 @@ const Chat = ({user: {messages, getMessages}}) => {
                         {senderName}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText>
-                    {text}
-                </ListItemText>
+                <ListItemText
+                    primary={text}
+                    sx={{
+                        whiteSpace: 'break-spaces',
+                        wordWrap: "break-word"
+                    }}
+                />
             </ListItem>
         ))}
     </List>

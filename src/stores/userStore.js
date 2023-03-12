@@ -16,11 +16,13 @@ addMiddleware(userStore, (call, next) => {
                     let {id, accessToken} = args[0]
                     accessToken = typeof accessToken !== "undefined" ? accessToken : localStorage.getItem(ACCESS_TOKEN)
                     context['sio'] = connectSIO(id, accessToken)
-                    context['sio'].on('support', context['addMessage'])
+                        .on('support', (data) => {
+                            context['addMessage'](data)
+                        })
                 }
                 break
             case "logout":
-                context['sio'].disconnect()
+                context['sio'].off().disconnect().close()
                 context['sio'] = undefined
                 break
             default:

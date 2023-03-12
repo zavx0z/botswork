@@ -8,13 +8,19 @@ const InputMessage = ({user: {sendMessage}}) => {
     const [message, setMessage] = useState('')
     const handleMessageChange = (event) => setMessage(event.target.value)
     const handleSendMessage = () => {
-        sendMessage(message)
-        setMessage('')
+        if (message.length) {
+            sendMessage(message)
+            setMessage('')
+        }
     }
-    const handleKeyPress = (e) => e.key === "Enter" && handleSendMessage()
+    const handleKeyPress = (e) => {
+        if (e.keyCode === 13 && e.ctrlKey)
+            handleSendMessage()
+    }
     return <Box sx={{display: 'flex', alignItems: 'center'}}>
         <TextField
             label="Type a message"
+            multiline
             value={message}
             onChange={handleMessageChange}
             onKeyDown={handleKeyPress}

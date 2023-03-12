@@ -50,6 +50,8 @@ export default types
                 .then((response) => setTokens(response.data))
         },
         logout() {
+            localStorage.removeItem(ACCESS_TOKEN)
+            localStorage.removeItem(REFRESH_TOKEN)
             applySnapshot(self, {
                 id: undefined,
                 username: undefined,
