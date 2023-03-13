@@ -1,5 +1,8 @@
 import io from "socket.io-client"
+import {enqueueSnackbar} from "notistack"
+import i18next from "i18next"
 
+const {t} = i18next
 const connectSIO = (userId, accessToken) => {
     const sio = io(
         process.env.REACT_APP_HOST, {
@@ -26,7 +29,8 @@ const connectSIO = (userId, accessToken) => {
         console.log("Disconnected")
     })
     sio.on("error", (error) => {
-        console.log("Error", error)
+        const {message, type} = error
+        setTimeout(() => enqueueSnackbar(t(message, {'ns': 'network'}), {variant: type}), [200])
     })
     sio.on("reconnect", (attempt) => {
         console.log("Reconnecting", attempt)
