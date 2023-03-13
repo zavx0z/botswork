@@ -15,14 +15,14 @@ import DrawerMenu from "./layouts/DrawerMenu"
 import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
 import Chat from "./features/chat/Support"
-
+import useVH from 'react-viewport-height'
 
 const App = () => {
-
+    const vh = useVH()
     return <Box sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: "100%",
+        height: `${100 * vh}px`,
         overflow: "hidden"
     }}>
         <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>

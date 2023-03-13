@@ -1,7 +1,7 @@
 import * as React from "react"
 import {useState} from "react"
 import {List, ListItemText, Modal} from "@mui/material"
-import {ArrowBack, Language} from "@mui/icons-material"
+import {ArrowBack, Language, Update} from "@mui/icons-material"
 import IconButton from "@mui/material/IconButton"
 import Box from "@mui/material/Box"
 import {useNavigate} from "react-router-dom"
@@ -10,6 +10,8 @@ import ListItemButton from "@mui/material/ListItemButton"
 import {useTranslation} from "react-i18next"
 import Divider from "@mui/material/Divider"
 import {MobileLanguageSelect} from "../components/Lang"
+import {useServiceWorkerUpdate} from "../serviceWorkerUpdate"
+import Typography from "@mui/material/Typography"
 
 const Settings = () => {
     const {t} = useTranslation('меню')
@@ -23,7 +25,7 @@ const Settings = () => {
     const handleOpenLang = () => {
         setLangOpen(true)
     }
-
+    const handleUpdateClick = useServiceWorkerUpdate()
     return <>
         <Modal
             open={open}
@@ -45,6 +47,16 @@ const Settings = () => {
                             <Language/>
                         </ListItemIcon>
                         <ListItemText primary={t('язык')}/>
+                    </ListItemButton>
+                    <ListItemButton
+                        divider
+                        onClick={handleUpdateClick}
+                        secondaryAction={<Typography variant={'caption'}>v{process.env.REACT_APP_VERSION}</Typography>}
+                    >
+                        <ListItemIcon>
+                            <Update/>
+                        </ListItemIcon>
+                        <ListItemText primary={t('Проверка обновлений')}/>
                     </ListItemButton>
                 </List>
             </Box>

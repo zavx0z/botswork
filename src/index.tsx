@@ -13,6 +13,9 @@ import {SnackbarProvider} from "notistack"
 import {middlewareNetworkError} from "./middleware/network"
 import {isMobile} from "react-device-detect"
 import userStore from "./stores/userStore"
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+// serviceWorkerRegistration.unregister()
+serviceWorkerRegistration.register()
 
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 
@@ -21,17 +24,17 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 middlewareNetworkError(userStore)
 
 root.render(
-        <Router>
-            <ThemeProvider theme={theme}>
-                <SnackbarProvider anchorOrigin={{
-                    vertical: isMobile ? 'top' : 'bottom',
-                    horizontal: isMobile ? 'center' : 'left',
-                }}>
-                    <Provider user={userStore}>
-                        <App/>
-                    </Provider>
-                </SnackbarProvider>
-            </ThemeProvider>
-        </Router>
+    <Router>
+        <ThemeProvider theme={theme}>
+            <SnackbarProvider anchorOrigin={{
+                vertical: isMobile ? 'top' : 'bottom',
+                horizontal: isMobile ? 'center' : 'left',
+            }}>
+                <Provider user={userStore}>
+                    <App/>
+                </Provider>
+            </SnackbarProvider>
+        </ThemeProvider>
+    </Router>
 )
 reportWebVitals()

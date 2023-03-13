@@ -18,3 +18,5 @@ npx pwa-asset-generator src/images/logo.svg public/img \
 ```bash
 https://api.i18nexus.com/project_resources/translations/de/default.json?api_key=mWraj9wt4Y4906lt2iFujQ
 ```
+### PWA
+[blog](https://blog.logrocket.com/pwa-create-react-app-service-workers/)
