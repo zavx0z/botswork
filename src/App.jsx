@@ -25,7 +25,7 @@ const App = () => {
         height: "100%",
         overflow: "hidden"
     }}>
-        <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
+        <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>
             <ToolBar/>
         </AppBar>
         <BrowserView>

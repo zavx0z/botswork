@@ -28,7 +28,8 @@ const BottomNavigation = () => {
                 borderTopColor: '#0c1f3c',
                 borderTopStyle: 'solid',
                 borderTopWidth: 'thin',
-                pb: isIOS ? .5 : 0
+                pb: isIOS ? .5 : 0,
+                overflow: 'hidden',
             }}
         >
             <BottomNavigationAction
