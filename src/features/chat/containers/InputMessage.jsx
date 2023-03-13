@@ -14,12 +14,15 @@ const InputMessage = ({user: {sendMessage}}) => {
         }
     }
     const handleKeyPress = (e) => {
-        if (e.keyCode === 13 && e.ctrlKey)
+        if ((e.keyCode === 13 && e.ctrlKey))
+            setMessage(message + '\n')
+        else if (e.keyCode === 13 && e.shiftKey) {
+        } else if (e.key === 'Enter')
             handleSendMessage()
     }
     return <Box sx={{display: 'flex', alignItems: 'center'}}>
         <TextField
-            label="Написать сообщение"
+            label={"Написать сообщение..."}
             multiline
             value={message}
             onChange={handleMessageChange}
