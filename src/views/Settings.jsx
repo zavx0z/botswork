@@ -10,8 +10,8 @@ import ListItemButton from "@mui/material/ListItemButton"
 import {useTranslation} from "react-i18next"
 import Divider from "@mui/material/Divider"
 import {MobileLanguageSelect} from "../components/Lang"
-import {useServiceWorkerUpdate} from "../serviceWorkerUpdate"
 import Typography from "@mui/material/Typography"
+import {useServiceWorkerUpdate} from "../serviceWorkerUpdate"
 
 const Settings = () => {
     const {t} = useTranslation('меню')
@@ -25,7 +25,7 @@ const Settings = () => {
     const handleOpenLang = () => {
         setLangOpen(true)
     }
-    const handleUpdateClick = useServiceWorkerUpdate()
+    const {handleUpdateClick, loading} = useServiceWorkerUpdate()
     return <>
         <Modal
             open={open}
@@ -51,12 +51,13 @@ const Settings = () => {
                     <ListItemButton
                         divider
                         onClick={handleUpdateClick}
-                        secondaryAction={<Typography variant={'caption'}>v{process.env.REACT_APP_VERSION}</Typography>}
+                        disabled={loading}
                     >
                         <ListItemIcon>
                             <Update/>
                         </ListItemIcon>
                         <ListItemText primary={t('Проверка обновлений')}/>
+                        <Typography variant={'caption'}>v{process.env.REACT_APP_VERSION}</Typography>
                     </ListItemButton>
                 </List>
             </Box>
