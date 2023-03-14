@@ -6,21 +6,9 @@ const {t} = i18next
 const connectSIO = (userId, accessToken) => {
     const sio = io(
         process.env.REACT_APP_HOST, {
-            auth: {
-                token: accessToken
-            },
-            query: {
-                userId: userId
-            },
-            transportOptions: {
-                polling: {
-                    extraHeaders: {
-                        'Authorization': 'Bearer ' + accessToken
-                    }
-                }
-            },
-            transports: ['polling']
-
+            auth: {token: accessToken},
+            transportOptions: {polling: {extraHeaders: {'Authorization': 'Bearer ' + accessToken}}},
+            transports: ['websocket']
         })
     sio.on("connect", socket => {
         console.log("Connected")

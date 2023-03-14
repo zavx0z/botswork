@@ -26,7 +26,15 @@ registerRoute(({url}) => url.origin === self.location.origin && url.pathname.end
 const fileExtensionRegexp = new RegExp('/[^/?]+\.[^/]+$')
 registerRoute(({request, url}) => {
         if (request.mode !== 'navigate') {
-            if (!request.url.startsWith(process.env.REACT_APP_HOST + '/socket.io'))
+            if (request.url.startsWith(process.env.REACT_APP_HOST + '/socket.io'))
+                console.log('[WB]: request socket.io')
+            else if (request.url.startsWith(process.env.REACT_APP_HOST + '/api.v1'))
+                console.log('[WB]: request api.v1')
+            else if (request.url.startsWith('https://api.i18nexus.com' + '/api.v1'))
+                console.log('[WB]: request i18next')
+            else if (request.url.startsWith(process.env.PUBLIC_URL))
+                console.log('[WB]: request botswork.ru')
+            else
                 console.log('Workbox: Данный запрос не является навигацией. Пропущен.', request)
             return false
         }
