@@ -4,6 +4,8 @@ import Box from "@mui/material/Box"
 import {BrowserView, MobileView} from "react-device-detect"
 import img from '../images/gpt.png'
 import MobileCard from "../components/MobileCard"
+import {Fab} from "@mui/material"
+import {Add} from "@mui/icons-material"
 
 const items = [
     {
@@ -34,6 +36,18 @@ const MobileProject = () =>
                 img={img}
             />
         )}
+        <Fab
+            sx={{
+                bottom: 70,
+                right: 10,
+                position: 'absolute',
+            }}
+            size="small"
+            color="secondary"
+            aria-label="add"
+        >
+            <Add/>
+        </Fab>
     </Box>
 const BrowserProject = () =>
     <Box
@@ -54,6 +68,18 @@ const BrowserProject = () =>
                 img={img}
             />
         )}
+        <Fab
+            sx={{
+                bottom: 55,
+                right: 55,
+                position: 'absolute',
+            }}
+            size="large"
+            color="secondary"
+            aria-label="add"
+        >
+            <Add/>
+        </Fab>
     </Box>
 const Projects = () => {
     return <>
