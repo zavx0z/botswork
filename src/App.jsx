@@ -43,12 +43,12 @@ const App = () => {
             <Routes>
                 <Route path={routes.home} element={<Home/>}/>
                 <Route path={routes.auth} element={<Auth/>}/>
-                <Route path={'/'} element={<Contacts/>}/>
+                <Route path={routes.contacts} element={<Contacts/>}/>
                 <Route path={routes.settings} element={<Settings/>}/>
                 <Route path={routes.viewer} element={<Viewer/>}/>
                 <Route path={routes.profile} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
                 <Route path={routes.chat} element={<PrivateRoute><Chat/></PrivateRoute>}/>
-                <Route path={routes.bots} element={<PrivateRoute><Projects/></PrivateRoute>}/>
+                <Route path={routes.projects} element={<PrivateRoute><Projects/></PrivateRoute>}/>
             </Routes>
         </Box>
         <BrowserView>
@@ -67,7 +67,7 @@ const App = () => {
                     // },
                     {
                         text: "Проекты",
-                        route: routes.bots,
+                        route: routes.projects,
                         itemIcon: <BotsWorkIcon/>
                     },
                     {
@@ -93,7 +93,7 @@ const App = () => {
                     },
                     {
                         title: 'Проекты',
-                        route: routes.bots,
+                        route: routes.projects,
                         icon: <BotsWorkIcon/>
                     },
                     {
