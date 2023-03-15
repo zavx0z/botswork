@@ -14,6 +14,7 @@ import Avatar from "@mui/material/Avatar"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import Box from "@mui/material/Box"
+import ProfileButtonIcon from "./ProfileButtonIcon"
 
 const menuItems = [
     {
@@ -46,17 +47,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
     }
 
     return <>
-        <IconButton
-            size={'small'}
-            onClick={handleOpen}
-        >
-            <AccountBox
-                fontSize={'medium'}
-                alt="Profile"
-                color={"secondary"}
-                // src={logo}
-            />
-        </IconButton>
+        <ProfileButtonIcon handleOpen={handleOpen} isAuthenticated={isAuthenticated}/>
         <Modal
             open={open}
             onClose={handleClose}
@@ -153,21 +144,14 @@ const Profile = ({user: {logOut, isAuthenticated, username}}) => {
         <Typography variant={"body1"}>
             {username}
         </Typography>
-        <IconButton
-            size={'small'}
-            onClick={handleOpenUserMenu}
+        <ProfileButtonIcon
+            handleOpen={handleOpenUserMenu}
+            isAuthenticated={isAuthenticated}
             sx={{
                 p: 0,
                 ml: 1
             }}
-        >
-            <AccountBox
-                fontSize={'medium'}
-                alt="Profile"
-                color={"secondary"}
-                // src={logo}
-            />
-        </IconButton>
+        />
         <Menu
             sx={{mt: '45px'}}
             id="menu-appbar"
