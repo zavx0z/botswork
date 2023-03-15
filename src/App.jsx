@@ -16,7 +16,7 @@ import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
 import Chat from "./features/chat/Support"
 import useVH from 'react-viewport-height'
-import Bots from "./views/Bots"
+import Projects from "./views/Projects"
 import {Home as HomeIcon, QuestionAnswer} from '@mui/icons-material'
 import BotsWorkIcon from "./icons/BotsWorkIcon"
 import ContactsIcon from "@mui/icons-material/Contacts"
@@ -39,7 +39,6 @@ const App = () => {
             overflowX: "hidden",
             display: 'flex',
             flexDirection: 'column',
-            p: 1,
         }}>
             <Routes>
                 <Route path={routes.home} element={<Home/>}/>
@@ -49,12 +48,12 @@ const App = () => {
                 <Route path={routes.viewer} element={<Viewer/>}/>
                 <Route path={routes.profile} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
                 <Route path={routes.chat} element={<PrivateRoute><Chat/></PrivateRoute>}/>
-                <Route path={routes.bots} element={<PrivateRoute><Bots/></PrivateRoute>}/>
+                <Route path={routes.bots} element={<PrivateRoute><Projects/></PrivateRoute>}/>
             </Routes>
         </Box>
         <BrowserView>
             <DrawerMenu
-                width={240}
+                width={222}
                 items={[
                     {
                         text: "главная",
@@ -67,7 +66,7 @@ const App = () => {
                     //     itemIcon: <Avatar/>
                     // },
                     {
-                        text: "Боты",
+                        text: "Проекты",
                         route: routes.bots,
                         itemIcon: <BotsWorkIcon/>
                     },
@@ -93,7 +92,7 @@ const App = () => {
                         icon: <HomeIcon/>
                     },
                     {
-                        title: 'Боты',
+                        title: 'Проекты',
                         route: routes.bots,
                         icon: <BotsWorkIcon/>
                     },

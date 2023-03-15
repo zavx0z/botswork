@@ -8,6 +8,6 @@ const routes = {
     settings: "/settings",
     viewer: "/viewer",
     chat: "/chat",
-    bots: "/bots"
+    bots: "/projects"
 }
 export default routes
