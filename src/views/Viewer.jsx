@@ -6,8 +6,8 @@ const App = () => {
 
     return (
         <VncScreen
-            // url="ws://194.67.104.130:80/websockify"
-            url="ws://192.168.88.44:8080/websockify"
+            url={`${process.env.REACT_APP_HOST_WSS}/ws/213.189.201.210`}
+            // url="ws://192.168.88.44:8080/websockify"
             scaleViewport
             // showDotCursor
             background="#fff"

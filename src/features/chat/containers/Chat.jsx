@@ -7,11 +7,6 @@ const list = {
     flexGrow: 1,
     overflow: 'auto'
 }
-const listItem = {
-    display: 'flex',
-    alignItems: 'center',
-    // backgroundColor: "#e3f6f6"
-}
 const Chat = ({user: {id: userId, messages, getMessages}}) => {
     useEffect(() => {
         getMessages()
