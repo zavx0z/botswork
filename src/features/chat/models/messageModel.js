@@ -1,5 +1,6 @@
 import {getRoot, types} from "mobx-state-tree"
-import moment from "moment/moment"
+import moment from "moment-timezone"
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 export const messageModel = types.model({
     id: types.identifierNumber,
@@ -9,7 +10,7 @@ export const messageModel = types.model({
 })
     .views(self => ({
         get date() {
-            return moment(self['created']).format('HH:mm')
+            return moment.utc(self['created']).tz(timezone).format('HH:mm')
         },
         get senderName() {
             const {id, username} = getRoot(self)

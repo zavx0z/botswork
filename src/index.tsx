@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './theme/index.css'
 import App from './App'
-import reportWebVitals from './reportWebVitals'
 import {BrowserRouter as Router} from "react-router-dom"
 import {Provider} from "mobx-react"
 import './i18n.js'
@@ -14,7 +13,6 @@ import {middlewareNetworkError} from "./middleware/network"
 import {isMobile} from "react-device-detect"
 import userStore from "./stores/userStore"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-// serviceWorkerRegistration.unregister()
 serviceWorkerRegistration.register()
 
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
@@ -37,4 +35,3 @@ root.render(
         </ThemeProvider>
     </Router>
 )
-reportWebVitals()
