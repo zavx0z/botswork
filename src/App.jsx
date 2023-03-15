@@ -16,6 +16,10 @@ import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
 import Chat from "./features/chat/Support"
 import useVH from 'react-viewport-height'
+import Bots from "./views/Bots"
+import {Home as HomeIcon, QuestionAnswer} from '@mui/icons-material'
+import BotsWorkIcon from "./icons/BotsWorkIcon"
+import ContactsIcon from "@mui/icons-material/Contacts"
 
 const App = () => {
     const vh = useVH()
@@ -28,9 +32,6 @@ const App = () => {
         <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>
             <ToolBar/>
         </AppBar>
-        <BrowserView>
-            <DrawerMenu/>
-        </BrowserView>
         <Box component="main" sx={{
             ml: {md: isBrowser ? "240px" : 0},
             flexGrow: 1,
@@ -48,10 +49,60 @@ const App = () => {
                 <Route path={routes.viewer} element={<Viewer/>}/>
                 <Route path={routes.profile} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
                 <Route path={routes.chat} element={<PrivateRoute><Chat/></PrivateRoute>}/>
+                <Route path={routes.bots} element={<PrivateRoute><Bots/></PrivateRoute>}/>
             </Routes>
         </Box>
+        <BrowserView>
+            <DrawerMenu
+                width={240}
+                items={[
+                    {
+                        text: "главная",
+                        route: routes.home,
+                        itemIcon: <HomeIcon/>
+                    },
+                    // {
+                    //     text: "профиль",
+                    //     route: routes.profile,
+                    //     itemIcon: <Avatar/>
+                    // },
+                    {
+                        text: "Боты",
+                        route: routes.bots,
+                        itemIcon: <BotsWorkIcon/>
+                    },
+                    {
+                        text: "чат",
+                        route: routes.chat,
+                        itemIcon: <QuestionAnswer/>
+                    },
+                    {
+                        text: "контакты",
+                        route: routes.contacts,
+                        itemIcon: <ContactsIcon/>
+                    },
+
+                ]}/>
+        </BrowserView>
         <MobileView>
-            <BottomNavigation/>
+            <BottomNavigation
+                items={[
+                    {
+                        title: 'главная',
+                        route: routes.home,
+                        icon: <HomeIcon/>
+                    },
+                    {
+                        title: 'Боты',
+                        route: routes.bots,
+                        icon: <BotsWorkIcon/>
+                    },
+                    {
+                        title: 'чат',
+                        route: routes.chat,
+                        icon: <QuestionAnswer/>
+                    },
+                ]}/>
         </MobileView>
     </Box>
 }

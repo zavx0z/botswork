@@ -4,37 +4,12 @@ import Box from "@mui/material/Box"
 import List from "@mui/material/List"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
-import HomeIcon from "@mui/icons-material/Home"
 import ListItemText from "@mui/material/ListItemText"
-import ContactsIcon from "@mui/icons-material/Contacts"
 import * as React from "react"
 import {useLocation, useNavigate} from "react-router-dom"
 import {useTranslation} from "react-i18next"
-import routes from "../routes/routes"
-import {QuestionAnswer} from "@mui/icons-material"
 
-const drawerWidth = 240
-
-const items = [
-    {
-        text: "главная",
-        route: routes.home,
-        itemIcon: <HomeIcon/>
-    },
-    {
-        text: "чат",
-        route: routes.chat,
-        itemIcon: <QuestionAnswer/>
-    },
-    {
-        text: "контакты",
-        route: routes.contacts,
-        itemIcon: <ContactsIcon/>
-    },
-
-]
-
-const DrawerMenu = () => {
+const DrawerMenu = ({items, width}) => {
     const {t} = useTranslation('меню')
     const navigate = useNavigate()
     const location = useLocation()
@@ -42,9 +17,9 @@ const DrawerMenu = () => {
         variant="permanent"
         sx={{
             display: {xs: 'none', md: 'flex'},
-            width: drawerWidth,
+            width: width,
             flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'},
+            [`& .MuiDrawer-paper`]: {width: width, boxSizing: 'border-box'},
         }}
     >
         <Toolbar/>

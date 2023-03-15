@@ -1,12 +1,11 @@
 import React, {useLayoutEffect, useState} from 'react'
 import {BottomNavigation as MuiBottomNavigation, BottomNavigationAction} from '@mui/material'
-import {Home as HomeIcon, QuestionAnswer} from '@mui/icons-material'
 import {Link, useLocation} from 'react-router-dom'
 import {useTranslation} from "react-i18next"
-import routes from "../routes/routes"
 import {isIOS} from "react-device-detect"
 
-const BottomNavigation = () => {
+
+const BottomNavigation = ({items}) => {
     const location = useLocation()
     const [value, setValue] = useState(location.pathname)
     const {t} = useTranslation('меню')
@@ -32,20 +31,16 @@ const BottomNavigation = () => {
                 overflow: 'hidden',
             }}
         >
-            <BottomNavigationAction
-                label={t("главная")}
-                value={routes.home}
-                icon={<HomeIcon/>}
-                component={Link}
-                to={routes.home}
-            />
-            <BottomNavigationAction
-                label={t("чат")}
-                value={routes.chat}
-                icon={<QuestionAnswer/>}
-                component={Link}
-                to={routes.chat}
-            />
+            {items.map(({title, route, icon}) =>
+                <BottomNavigationAction
+                    key={route}
+                    label={t(title)}
+                    value={route}
+                    icon={icon}
+                    component={Link}
+                    to={route}
+                />
+            )}
         </MuiBottomNavigation>
     )
 }
