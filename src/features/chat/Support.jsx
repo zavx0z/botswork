@@ -1,19 +1,22 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Box from "@mui/material/Box"
-import Chat from "./containers/Chat"
-import InputMessage from "./containers/InputMessage"
+import Chat from "./components/Chat"
+import InputMessage from "./components/InputMessage"
+import {inject} from "mobx-react"
 
-const Support = ({user}) =>
-    <Box
+const Support = ({user: {id, messages, getMessages, sendMessage}}) => {
+    useEffect(() => {
+        getMessages()
+    }, [getMessages])
+    return <Box
         sx={{
-            height: '100vh',
+            height: '100%',
             display: "flex",
             flexDirection: 'column',
             overflow: 'hidden',
         }}>
-        <Chat/>
-        <Box>
-            <InputMessage/>
-        </Box>
+        <Chat userId={id} messages={messages}/>
+        <InputMessage sendMessage={sendMessage}/>
     </Box>
-export default Support
+}
+export default inject('user')(Support)

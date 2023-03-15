@@ -2,9 +2,8 @@ import Box from "@mui/material/Box"
 import {IconButton, TextField} from "@mui/material"
 import {Telegram} from "@mui/icons-material"
 import React, {useState} from "react"
-import {inject, observer} from "mobx-react"
 
-const InputMessage = ({user: {sendMessage}}) => {
+const InputMessage = ({sendMessage}) => {
     const [message, setMessage] = useState('')
     const handleMessageChange = (event) => setMessage(event.target.value)
     const handleSendMessage = () => {
@@ -17,8 +16,10 @@ const InputMessage = ({user: {sendMessage}}) => {
         if ((e.keyCode === 13 && e.ctrlKey))
             setMessage(message + '\n')
         else if (e.keyCode === 13 && e.shiftKey) {
-        } else if (e.key === 'Enter')
+        } else if (e.key === 'Enter') {
+            e.preventDefault()
             handleSendMessage()
+        }
     }
     return <Box sx={{display: 'flex', alignItems: 'center'}}>
         <TextField
@@ -41,4 +42,4 @@ const InputMessage = ({user: {sendMessage}}) => {
         </IconButton>
     </Box>
 }
-export default inject('user')(observer(InputMessage))
+export default InputMessage
