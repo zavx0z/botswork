@@ -10,10 +10,12 @@ const Support = ({user: {id, messages, getMessages, sendMessage}}) => {
     }, [getMessages])
     return <Box
         sx={{
-            height: '100%',
             display: "flex",
+            flexGrow: 1,
             flexDirection: 'column',
             overflow: 'hidden',
+            touchAction: 'none',
+            // backgroundColor: 'yellow',
         }}>
         <Chat userId={id} messages={messages}/>
         <InputMessage sendMessage={sendMessage}/>

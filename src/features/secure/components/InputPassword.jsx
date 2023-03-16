@@ -9,14 +9,11 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 const PasswordInput = (props) => {
     const [show, setShow] = useState(false)
-    const handleClickShowPassword = () => {
-        setShow(!show)
-        console.log(show)
-    }
+    const handleClickShowPassword = () => setShow(!show)
     const handleMouseDownPassword = (event) => event.preventDefault()
     const inputRef = useRef(null)
     useEffect(() => {
-        if (inputRef.current) {
+        if (inputRef.current && inputRef.current.value.length) {
             setTimeout(() => {
                 inputRef.current.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length)
             }, 0)

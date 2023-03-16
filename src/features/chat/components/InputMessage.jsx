@@ -1,45 +1,65 @@
 import Box from "@mui/material/Box"
-import {IconButton, TextField} from "@mui/material"
+import {Fade, FilledInput, IconButton} from "@mui/material"
 import {Telegram} from "@mui/icons-material"
-import React, {useState} from "react"
+import React, {useRef, useState} from "react"
+import InputAdornment from "@mui/material/InputAdornment"
+import {isBrowser} from "react-device-detect"
 
 const InputMessage = ({sendMessage}) => {
+    const inputRef = useRef(null)
     const [message, setMessage] = useState('')
     const handleMessageChange = (event) => setMessage(event.target.value)
     const handleSendMessage = () => {
         if (message.length) {
             sendMessage(message)
             setMessage('')
+            inputRef.current.focus()
         }
     }
     const handleKeyPress = (e) => {
         if ((e.keyCode === 13 && e.ctrlKey))
             setMessage(message + '\n')
         else if (e.keyCode === 13 && e.shiftKey) {
-        } else if (e.key === 'Enter') {
+        } else if (isBrowser && e.key === 'Enter') {
             e.preventDefault()
             handleSendMessage()
         }
     }
-    return <Box sx={{display: 'flex', alignItems: 'center'}}>
-        <TextField
-            label={"Написать сообщение..."}
+    const isMultiline = message.search('\n') > 0
+    return <Box sx={{
+        display: 'flex',
+        touchAction: 'none',
+    }}>
+        <FilledInput
+            sx={isMultiline ? {alignItems: "end"} : {}}
+            inputRef={inputRef}
+            placeholder={"Написать сообщение..."}
+            fullWidth
             multiline
             value={message}
             onChange={handleMessageChange}
             onKeyDown={handleKeyPress}
             autoComplete={'off'}
-            sx={{flexGrow: 1}}
+            disableUnderline
+            hiddenLabel
+            endAdornment={
+                <InputAdornment position="end">
+                    <Fade in={!!message.length}>
+                        <div style={{display: "flex"}}>
+                            <IconButton
+                                sx={{pb: isMultiline ? 4 : 0}}
+                                variant="contained"
+                                color="primary"
+                                onClick={handleSendMessage}
+                                edge="end"
+                            >
+                                <Telegram color={"action"} fontSize={'large'}/>
+                            </IconButton>
+                        </div>
+                    </Fade>
+                </InputAdornment>
+            }
         />
-        <IconButton
-            variant="contained"
-            color="primary"
-            size={"large"}
-            onClick={handleSendMessage}
-            sx={{marginLeft: 1}}
-        >
-            <Telegram color={"action"} fontSize={'large'}/>
-        </IconButton>
     </Box>
 }
 export default InputMessage

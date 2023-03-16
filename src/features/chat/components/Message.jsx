@@ -12,6 +12,8 @@ const Message = ({author, content, isSentByMe, sentTime}) => {
             display: 'flex',
             alignItems: 'flex-end',
             mb: 2,
+            // overflow: "hidden",
+            // touchAction: "none",
             ...position(isSentByMe),
         }}
     >
@@ -21,6 +23,7 @@ const Message = ({author, content, isSentByMe, sentTime}) => {
                     width: 32,
                     height: 32,
                     mr: 2,
+                    ml: 2,
                     bgcolor: colorAvatar(isSentByMe),
                 }}>
                 {avatarLetter}

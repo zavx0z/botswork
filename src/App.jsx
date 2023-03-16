@@ -15,31 +15,41 @@ import DrawerMenu from "./layouts/DrawerMenu"
 import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
 import Chat from "./features/chat/Support"
-import useVH from 'react-viewport-height'
 import Projects from "./views/Projects"
 import {Home as HomeIcon, QuestionAnswer} from '@mui/icons-material'
 import BotsWorkIcon from "./icons/BotsWorkIcon"
 import ContactsIcon from "@mui/icons-material/Contacts"
+import useViewportHeight from "./layouts/hooks/useViewportHeight"
+
 
 const App = () => {
-    const vh = useVH()
-    return <Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: `${100 * vh}px`,
-        overflow: "hidden"
-    }}>
-        <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>
-            <ToolBar/>
-        </AppBar>
-        <Box component="main" sx={{
-            ml: {md: isBrowser ? "240px" : 0},
-            flexGrow: 1,
-            overflowY: "auto",
-            overflowX: "hidden",
+    const {viewportHeight, isKeyboardOpen} = useViewportHeight()
+    const drawerWidth = 222
+    return <Box
+        sx={{
+            height: viewportHeight,
             display: 'flex',
             flexDirection: 'column',
+            overflow: "hidden",
+            position: 'relative',
+            touchAction: 'none',
+            overscrollBehavior: "contain",
+            // backgroundColor: "red"
         }}>
+            <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>
+                <ToolBar/>
+            </AppBar>
+        <Box component="main" sx={{
+            ml: {md: isBrowser ? drawerWidth + 'px' : 0},
+            flexGrow: 1,
+            overflow: "hidden",
+            touchAction: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            overscrollBehavior: "contain",
+            // backgroundColor: 'dark',
+        }}>
+            {/*<Console style={{maxHeight: 200}} input theme="dark"/>*/}
             <Routes>
                 <Route path={routes.home} element={<Home/>}/>
                 <Route path={routes.auth} element={<Auth/>}/>
@@ -83,26 +93,28 @@ const App = () => {
 
                 ]}/>
         </BrowserView>
-        <MobileView>
-            <BottomNavigation
-                items={[
-                    {
-                        title: 'главная',
-                        route: routes.home,
-                        icon: <HomeIcon/>
-                    },
-                    {
-                        title: 'Проекты',
-                        route: routes.projects,
-                        icon: <BotsWorkIcon/>
-                    },
-                    {
-                        title: 'чат',
-                        route: routes.chat,
-                        icon: <QuestionAnswer/>
-                    },
-                ]}/>
-        </MobileView>
+        {!isKeyboardOpen &&
+            <MobileView>
+                <BottomNavigation
+                    items={[
+                        {
+                            title: 'главная',
+                            route: routes.home,
+                            icon: <HomeIcon/>
+                        },
+                        {
+                            title: 'Проекты',
+                            route: routes.projects,
+                            icon: <BotsWorkIcon/>
+                        },
+                        {
+                            title: 'чат',
+                            route: routes.chat,
+                            icon: <QuestionAnswer/>
+                        },
+                    ]}/>
+            </MobileView>
+        }
     </Box>
 }
 export default App
