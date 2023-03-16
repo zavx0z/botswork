@@ -12,8 +12,6 @@ const Message = ({author, content, isSentByMe, sentTime}) => {
             display: 'flex',
             alignItems: 'flex-end',
             mb: 2,
-            // overflow: "hidden",
-            // touchAction: "none",
             ...position(isSentByMe),
         }}
     >
@@ -51,7 +49,8 @@ const Message = ({author, content, isSentByMe, sentTime}) => {
             <Typography
                 sx={{
                     color: 'text.primary',
-                    wordWrap: 'break-word',
+                    whiteSpace: 'break-spaces',
+                    wordWrap: "break-word"
                 }}
                 variant="body1"
             >
