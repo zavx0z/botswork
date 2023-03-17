@@ -1,4 +1,4 @@
-import {AccountBox, AppRegistration, Close as CloseIcon, Login, Logout, Settings} from "@mui/icons-material"
+import {AppRegistration, Close as CloseIcon, Login, Logout, Settings} from "@mui/icons-material"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"

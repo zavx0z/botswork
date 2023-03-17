@@ -3,30 +3,15 @@ import {isIOS} from "react-device-detect"
 
 const useKeyboardAndViewport = (threshold = 0.7) => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
-  const [viewportHeight, setViewportHeight] = useState(
-      window.visualViewport?.height ?? window.innerHeight
-  )
-
+  const [viewportHeight, setViewportHeight] = useState(window.visualViewport?.height ?? window.innerHeight)
   const handleResize = useCallback(() => {
-    let height
-    if (window.visualViewport)
-      height = window.visualViewport.height
-    else
-      height = window.innerHeight
-    // console.log(window.visualViewport.height, window.innerHeight, document.body.clientHeight)
-    const thresholdInPx = threshold > 1 ? threshold : window.screen.height * threshold
-    const isKeyboard = height < thresholdInPx
+    const height = window.visualViewport?.height ?? window.innerHeight
     setViewportHeight(height)
-    setIsKeyboardOpen(isKeyboard)
-    // if (isIOS && isKeyboard) window.scrollTo(0, 0)
-
+    const thresholdInPx = threshold > 1 ? threshold : window.screen.height * threshold
+    setIsKeyboardOpen(height < thresholdInPx)
   }, [threshold])
 
-  const scrollTop = () => {
-    // if (isKeyboardOpen)
-      window.scrollTo(0, 0)
-  }
-
+  const scrollTop = () => window.scrollTo(0, 0)
   useEffect(() => {
     if (isIOS) {
       window.addEventListener('touchmove', scrollTop)
@@ -45,7 +30,6 @@ const useKeyboardAndViewport = (threshold = 0.7) => {
       window.visualViewport.removeEventListener('resize', handleResize)
     }
   }, [handleResize])
-
   return {isKeyboardOpen, viewportHeight}
 }
 
