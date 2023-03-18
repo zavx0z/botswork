@@ -1,8 +1,9 @@
-import {Box, Typography} from '@mui/material'
+import {Box, Typography, useTheme} from '@mui/material'
 import Avatar from "@mui/material/Avatar"
 import {BrowserView, isMobile} from "react-device-detect"
+import {Done, DoneAll} from "@mui/icons-material"
 
-const Message = ({author, content, isSentByMe, sentTime}) => {
+const Message = ({author, content, isSentByMe, sentTime, isRead}) => {
     const avatarLetter = author.charAt(0).toUpperCase()
     const colorAvatar = (isSentByMe) => isSentByMe ? 'grey.600' : 'grey.400'
     const colorMessage = (isSentByMe) => isSentByMe ? 'grey.300' : 'grey.100'
@@ -13,6 +14,7 @@ const Message = ({author, content, isSentByMe, sentTime}) => {
             alignItems: 'flex-end',
             mb: 2,
             ...position(isSentByMe),
+            position: 'relative'
         }}
     >
         <BrowserView>
@@ -34,6 +36,7 @@ const Message = ({author, content, isSentByMe, sentTime}) => {
                 py: 1.5,
                 px: 2,
                 maxWidth: '75%',
+                position: 'relative',
             }}
         >
             <Typography
@@ -56,6 +59,23 @@ const Message = ({author, content, isSentByMe, sentTime}) => {
             >
                 {content}
             </Typography>
+            <Box
+                sx={{
+                    position: 'absolute',
+                    right: 1,
+                    bottom: 0
+                }}
+
+            >
+                {isSentByMe &&
+                    <>
+                        {isRead ?
+                            <DoneAll sx={{color: "primary.light"}} fontSize={'small'}/>
+                            :
+                            <Done sx={{color: "primary.light"}} fontSize={'small'}/>}
+                    </>
+                }
+            </Box>
         </Box>
     </Box>
 }

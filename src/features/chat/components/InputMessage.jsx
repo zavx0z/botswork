@@ -5,7 +5,7 @@ import React, {useRef, useState} from "react"
 import InputAdornment from "@mui/material/InputAdornment"
 import {isBrowser} from "react-device-detect"
 
-const InputMessage = ({sendMessage}) => {
+const InputMessage = ({sendMessage, readMessages}) => {
     const inputRef = useRef(null)
     const [message, setMessage] = useState('')
     const handleMessageChange = (event) => setMessage(event.target.value)
@@ -42,6 +42,7 @@ const InputMessage = ({sendMessage}) => {
             autoComplete={'off'}
             disableUnderline
             hiddenLabel
+            onFocus={readMessages}
             endAdornment={
                 <InputAdornment position="end">
                     <Fade in={!!message.length}>

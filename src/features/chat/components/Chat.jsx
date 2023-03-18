@@ -32,13 +32,14 @@ const Chat = ({userId, messages}) => {
             overflowY: 'scroll',
         }}
     >
-        {messages.map(({id, text, date, senderName, senderId}) =>
+        {messages.map(({id, text, date, senderName, senderId, read}) =>
             <Message
                 key={id}
                 author={senderName}
                 content={text}
                 isSentByMe={senderId === userId}
                 sentTime={date}
+                isRead={read}
             />)}
     </Box>
 }

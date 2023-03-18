@@ -4,7 +4,7 @@ import Chat from "./components/Chat"
 import InputMessage from "./components/InputMessage"
 import {inject} from "mobx-react"
 
-const Support = ({user: {id, messages, getMessages, sendMessage}}) => {
+const Support = ({user: {id, messages, getMessages, sendMessage, readMessages}}) => {
     useEffect(() => {
         getMessages()
     }, [getMessages])
@@ -18,7 +18,7 @@ const Support = ({user: {id, messages, getMessages, sendMessage}}) => {
             // backgroundColor: 'yellow',
         }}>
         <Chat userId={id} messages={messages}/>
-        <InputMessage sendMessage={sendMessage}/>
+        <InputMessage sendMessage={sendMessage} readMessages={readMessages}/>
     </Box>
 }
 export default inject('user')(Support)
