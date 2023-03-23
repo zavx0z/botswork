@@ -57,7 +57,7 @@ const BottomNavigation = ({items}) => {
                     key={route}
                     label={t(title)}
                     value={route}
-                    icon={title == 'чат' ? <Chat icon={icon}/> : icon}
+                    icon={title === 'чат' ? <Chat icon={icon}/> : icon}
                     component={Link}
                     to={route}
                 />

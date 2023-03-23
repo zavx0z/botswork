@@ -13,12 +13,17 @@ import {middlewareNetworkError} from "./middleware/network"
 import {isMobile} from "react-device-detect"
 import userStore from "./stores/userStore"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import {sioConnect} from "./middleware/sioMiddleware"
+import chatStore from "./features/chat/chatStore"
+
 serviceWorkerRegistration.register()
 
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
+sioConnect(userStore)
+chatStore(userStore)
 middlewareNetworkError(userStore)
 
 root.render(

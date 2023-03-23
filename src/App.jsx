@@ -14,7 +14,7 @@ import {BrowserView, isBrowser, MobileView} from "react-device-detect"
 import DrawerMenu from "./layouts/DrawerMenu"
 import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
-import Chat from "./features/chat/Support"
+import Chat from "./features/chat/containers/SupportClient"
 import Projects from "./views/Projects"
 import {Home as HomeIcon, QuestionAnswer} from '@mui/icons-material'
 import BotsWorkIcon from "./icons/BotsWorkIcon"
