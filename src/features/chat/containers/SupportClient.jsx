@@ -12,6 +12,7 @@ const Supports = ({user: {id, dialogLeave, dialogJoin, joinedDialog, dialogs}}) 
     return <Box sx={{
         display: "flex",
         flexGrow: 1,
+        flexWrap: 'none',
         flexDirection: 'column',
         overflow: 'hidden',
         touchAction: 'none',

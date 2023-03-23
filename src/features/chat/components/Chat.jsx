@@ -8,6 +8,8 @@ import Box from "@mui/material/Box"
 import MessageList from "./MessageList"
 import {useGesture} from "@use-gesture/react"
 
+let timeoutId
+
 const Chat = ({userId, messages, readMessage}) => {
     const listRef = useRef(null)
     const {isKeyboardOpen} = useViewportHeight()
@@ -24,21 +26,30 @@ const Chat = ({userId, messages, readMessage}) => {
         setTimeout(() => scrollDown(), 4)
     }, [messages.length, scrollDown])
     const [isScrollDown, setIsScrollDown] = useState(false)
+    const [isScrolled, setIsScrolled] = useState(false)
     const bind = useGesture({
         onScroll: ({xy: [x, y], target, delta: [dx, dy]}) => {
+            setIsScrolled(true)
+            clearTimeout(timeoutId)
+            // для кнопки
             const {scrollHeight, clientHeight} = target
             const bottomPosition = scrollHeight - (y + clientHeight)
             if (!bottomPosition)
                 setIsScrollDown(false)
             else if (Math.abs(dy) > Math.abs(dx))
                 setIsScrollDown(dy > 0 && bottomPosition > 400)
+
+            timeoutId = setTimeout(() => {
+                setIsScrolled(false)
+                timeoutId = null
+            }, 1000)
         }
     })
     return <Box sx={{
         width: '100%',
         position: "relative",
-        height: '100%',
         display: "flex",
+        overflowY: "inherit",
     }}>
         <List
             {...bind()}
@@ -55,7 +66,7 @@ const Chat = ({userId, messages, readMessage}) => {
             component="nav"
             aria-label="message list"
         >
-            <MessageList userId={userId} messages={messages}/>
+            <MessageList userId={userId} messages={messages} sticked={!isScrolled}/>
         </List>
         <Slide in={isScrollDown} direction={'up'}>
             <Fab
