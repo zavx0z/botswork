@@ -3,6 +3,7 @@ import {ACCESS_TOKEN} from "../features/secure/const"
 import io from "socket.io-client"
 import {enqueueSnackbar} from "notistack"
 import i18next from "i18next"
+import {deviceDetect, parseUserAgent} from "react-device-detect"
 
 const {t} = i18next
 
@@ -16,7 +17,10 @@ export const sioConnect = store => {
                 accessToken = typeof accessToken !== "undefined" ? accessToken : localStorage.getItem(ACCESS_TOKEN)
 
                 call.tree.sio = io(process.env.REACT_APP_HOST, {
-                    auth: {token: accessToken},
+                    auth: {
+                        token: accessToken,
+                        device: deviceDetect()
+                    },
                     transportOptions: {polling: {extraHeaders: {'Authorization': 'Bearer ' + accessToken}}},
                     transports: ['websocket']
                 })
