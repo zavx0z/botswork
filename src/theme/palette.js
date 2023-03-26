@@ -7,6 +7,12 @@ export const themeColor = createTheme({
         },
         secondary: {
             main: "#7ebbf3"
+        },
+        error: {
+            main: "#ff6c6c"
+        },
+        info:{
+            main: "#7888c5"
         }
     },
 })

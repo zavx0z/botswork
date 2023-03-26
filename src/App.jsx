@@ -4,18 +4,20 @@ import ProfilePage from "./views/Profile"
 import Contacts from "./views/Contacts"
 import Box from '@mui/material/Box'
 import AppBar from "@mui/material/AppBar"
-import ToolBar from "./layouts/ToolBar"
 import Home from "./views/Home"
 import PrivateRoute from "./features/secure/PrivateRoute"
 import routes from "./routes/routes"
 import Auth from "./features/secure/Auth"
 import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
-import Projects from "./views/Projects"
 import useViewportHeight from "./layouts/hooks/useViewportHeight"
-import Supports from "./features/chat/views/ChatView"
-import MobileToolbar from "./features/chat/layout/MobileToolbar"
+import ChatView from "./features/chat/views/ChatView"
+import ToolbarMobileDialog from "./features/chat/layout/ToolbarMobileDialog"
 import {isMobile} from "react-device-detect"
+import {MobileProject} from "./views/MobileProject"
+import {BrowserProject} from "./views/BrowserProject"
+import MobileToolBar from "./layouts/MobileToolBar"
+import BrowserToolBar from "./layouts/BrowserToolBar"
 
 
 const App = () => {
@@ -33,7 +35,9 @@ const App = () => {
         }}>
         <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>
             <Routes>
-                <Route path={routes.chat + '/*'} element={isMobile ? <MobileToolbar/> : <ToolBar/>}/>
+                <Route path={routes.projects} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
+                <Route path={routes.chat} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
+                <Route path={routes.chat + '/*'} element={isMobile ? <ToolbarMobileDialog/> : <BrowserToolBar/>}/>
             </Routes>
         </AppBar>
         <Box component="main" sx={{
@@ -49,10 +53,11 @@ const App = () => {
                 <Route path={routes.auth} element={<Auth/>}/>
                 <Route path={routes.contacts} element={<Contacts/>}/>
                 <Route path={routes.settings} element={<Settings/>}/>
-                <Route path={routes.chat + '/*'} element={<PrivateRoute><Supports/></PrivateRoute>}/>
+
+                <Route path={routes.chat + '/*'} element={<PrivateRoute><ChatView/></PrivateRoute>}/>
 
                 <Route path={routes.profile} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
-                <Route path={routes.projects} element={<PrivateRoute><Projects/></PrivateRoute>}/>
+                <Route path={routes.projects} element={<PrivateRoute>{isMobile ? <MobileProject/> : <BrowserProject/>}</PrivateRoute>}/>
 
 
                 <Route path={routes.viewer} element={<Viewer/>}/>
