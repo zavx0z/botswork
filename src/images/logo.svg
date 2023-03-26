@@ -9,7 +9,7 @@
    id="svg5"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    sodipodi:docname="logo.svg"
-   inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo_square.png"
+   inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -19,30 +19,31 @@
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
      id="namedview7"
-     pagecolor="#ffffff"
+     pagecolor="#0c1f3c"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageshadow="2"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0"
      inkscape:pagecheckerboard="0"
      inkscape:document-units="px"
      showgrid="false"
-     inkscape:zoom="5.12"
-     inkscape:cx="-25.390625"
-     inkscape:cy="14.257813"
-     inkscape:window-width="3440"
+     inkscape:zoom="3.6203867"
+     inkscape:cx="200.80728"
+     inkscape:cy="61.319416"
+     inkscape:window-width="2930"
      inkscape:window-height="1403"
      inkscape:window-x="0"
      inkscape:window-y="1080"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer2"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:snap-object-midpoints="true"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0">
+     fit-margin-bottom="0"
+     showborder="false">
     <inkscape:grid
        type="xygrid"
        id="grid26701"
@@ -77,12 +78,32 @@
        orientation="0,-1"
        id="guide26715" />
     <sodipodi:guide
-       position="13.778589,1.3956205"
+       position="13.595161,2.3485495"
        orientation="0,-1"
        id="guide26717" />
+    <sodipodi:guide
+       position="15.934248,16.003303"
+       orientation="0,-1"
+       id="guide32909" />
+    <sodipodi:guide
+       position="15.934248,5.9966974"
+       orientation="0,-1"
+       id="guide32911" />
   </sodipodi:namedview>
   <defs
      id="defs2">
+    <rect
+       x="115.94362"
+       y="1.1611462"
+       width="127.52817"
+       height="51.361719"
+       id="rect41319" />
+    <rect
+       x="-61.172104"
+       y="-31.174779"
+       width="167.83311"
+       height="154.0549"
+       id="rect36909" />
     <linearGradient
        inkscape:collect="always"
        id="dark">
@@ -195,13 +216,13 @@
        id="path26699"
        style="fill:#87ceeb;fill-opacity:1;stroke-width:0.264583"
        d="m 105.41015,163.99026 v 2.11357 h -2.21847 v 2.72644 h -2.11253 v -4.84001 h 2.11253 z"
-       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo_square.png"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <g
        id="g26270"
        transform="translate(4.9821065)"
-       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo_square.png"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
       <path
@@ -220,7 +241,7 @@
     <g
        id="g26320"
        transform="translate(5.1769485,11.17839)"
-       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo_square.png"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
       <path
@@ -238,7 +259,10 @@
     </g>
     <g
        id="g989"
-       transform="translate(0,-0.23244215)">
+       transform="translate(0,-0.23244215)"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <path
          id="rect26348"
          style="fill:#87ceeb;fill-opacity:1;stroke-width:0.264583"
@@ -371,7 +395,7 @@
     <g
        id="g32606"
        transform="translate(0.06870126,11.17839)"
-       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo_square.png"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
       <path
@@ -387,5 +411,84 @@
          y="170.72417"
          ry="0.12654358" />
     </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="BotsWork"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:50.2876px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.261916"
+       x="25.385597"
+       y="18.819527"
+       id="text11451"
+       transform="scale(0.92286887,1.0835776)"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan11449"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.3657px;font-family:Play;-inkscape-font-specification:'Play, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.261916"
+         x="25.385597"
+         y="18.819527">BotsWork </tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="g26804"
+     inkscape:label="Копия BotsWork"
+     style="display:none">
+    <text
+       xml:space="preserve"
+       style="font-size:50.2876px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:#ffffff;stroke-width:0.261916"
+       x="25.385597"
+       y="18.819527"
+       id="text26802"
+       transform="scale(0.92286887,1.0835776)"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan26800"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.3657px;font-family:Play;-inkscape-font-specification:'Play, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:0.261916"
+         x="25.385597"
+         y="18.819527">BotsWork </tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Admin"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.6898px;line-height:1.25;font-family:'Russo One';-inkscape-font-specification:'Russo One, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:0.312931"
+       x="25.963938"
+       y="18.550503"
+       id="text23883"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="scale(0.99965741,1.0003427)"><tspan
+         sodipodi:role="line"
+         id="tspan23881"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.6898px;font-family:'Russo One';-inkscape-font-specification:'Russo One, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:0.312931"
+         x="25.963938"
+         y="18.550503">BotsWork</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.3524513,0,0,0.31841824,-5.7789942,-0.58506982)"
+       id="text36907"
+       style="font-size:8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';white-space:pre;shape-inside:url(#rect36909)"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.3524513,0,0,0.31841824,-5.7789942,-0.58506982)"
+       id="text41317"
+       style="font-size:8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';white-space:pre;shape-inside:url(#rect41319)"
+       inkscape:export-filename="/home/zavx0z/projects/botswork/src/images/logo.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
 </svg>

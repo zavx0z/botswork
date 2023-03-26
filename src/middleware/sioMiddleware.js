@@ -15,7 +15,6 @@ export const sioConnect = store => {
             if (call.name === "@APPLY_SNAPSHOT" && isAuthenticatedSnapshot(call)) {
                 let {accessToken} = call.args[0]
                 accessToken = typeof accessToken !== "undefined" ? accessToken : localStorage.getItem(ACCESS_TOKEN)
-
                 call.tree.sio = io(process.env.REACT_APP_HOST, {
                     auth: {
                         token: accessToken,
