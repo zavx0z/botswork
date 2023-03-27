@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {useEffect} from 'react'
 import {Route, Routes} from "react-router-dom"
 import ProfilePage from "./views/Profile"
 import Contacts from "./views/Contacts"
@@ -22,6 +23,9 @@ import BrowserToolBar from "./layouts/BrowserToolBar"
 
 const App = () => {
     const {viewportHeight} = useViewportHeight()
+    useEffect(() => {
+        console.log(isMobile)
+    }, [isMobile])
     return <Box
         sx={{
             height: viewportHeight,
@@ -35,6 +39,8 @@ const App = () => {
         }}>
         <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>
             <Routes>
+                <Route path={routes.home} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
+                <Route path={routes.profile} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
                 <Route path={routes.projects} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
                 <Route path={routes.chat} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
                 <Route path={routes.chat + '/*'} element={isMobile ? <ToolbarMobileDialog/> : <BrowserToolBar/>}/>
