@@ -40,6 +40,7 @@ const App = () => {
         <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>
             <Routes>
                 <Route path={routes.home} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
+                <Route path={routes.auth} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
                 <Route path={routes.profile} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
                 <Route path={routes.projects} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
                 <Route path={routes.chat} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>

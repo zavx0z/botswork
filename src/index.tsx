@@ -30,7 +30,7 @@ root.render(
     <Router>
         <ThemeProvider theme={theme}>
             <SnackbarProvider anchorOrigin={{
-                vertical: isMobile ? 'top' : 'bottom',
+                vertical:  'bottom',
                 horizontal: isMobile ? 'center' : 'left',
             }}>
                 <Provider user={userStore}>
