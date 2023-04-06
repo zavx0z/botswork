@@ -3,166 +3,153 @@ import Button from "@mui/material/Button"
 import routes from "../routes/routes"
 import {useNavigate} from "react-router-dom"
 import Box from "@mui/material/Box"
-import {IconButton, ListItemText, styled, useTheme} from "@mui/material"
-import List from "@mui/material/List"
-import {ChevronLeft, ChevronRight, Laptop, Public} from "@mui/icons-material"
-import Drawer from "@mui/material/Drawer"
-import React, {useState} from "react"
-import ListItemButton from "@mui/material/ListItemButton"
+import {ListItem, ListItemText, Step, StepContent, StepLabel, Stepper, useTheme} from "@mui/material"
+import {KeyboardArrowRight} from "@mui/icons-material"
+import React from "react"
 import ListItemIcon from "@mui/material/ListItemIcon"
-
-const ListItemList = ({children, iconButton, open}) =>
-    <ListItemButton
-        sx={{
-            minHeight: 48,
-            justifyContent: open ? 'initial' : 'center',
-            px: 2.5,
-        }}
-    >
-        <ListItemIcon
-            sx={{
-                minWidth: 0,
-                mr: open ? 3 : 'auto',
-                justifyContent: 'center',
-            }}
-        >
-            {iconButton}
-        </ListItemIcon>
-        <ListItemText primary={children} sx={{opacity: open ? 1 : 0}}/>
-    </ListItemButton>
+import List from "@mui/material/List"
 
 
-const listItems = [
-    {
-        title: 'интернет',
-        iconButton: <Public/>
-    },
-    {
-        title: 'десктоп приложения',
-        iconButton: <Laptop/>
-    }
+const advantage = [
+    'Симбиоз IT навыков и накопленных многолетних экспертных знаний',
+    'Уникальность платформы, не имеющей аналогов во всем Мире',
+    'Онлайн поддержка на каждом этапе реализации проекта',
+    'Безопасность платформы и обмена данными',
 ]
-
-const drawerWidth = 240
-
-const openedMixin = (theme) => ({
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-})
-
-const closedMixin = (theme) => ({
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up('sm')]: {
-        width: `calc(${theme.spacing(8)} + 1px)`,
-    },
-})
-
-const LeftPanel = styled(Drawer, {shouldForwardProp: (prop) => prop !== 'open'})(
-    ({theme, open}) => ({
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-        boxSizing: 'border-box',
-        ...(open && {
-            ...openedMixin(theme),
-            '& .MuiDrawer-paper': openedMixin(theme),
-        }),
-        ...(!open && {
-            ...closedMixin(theme),
-            '& .MuiDrawer-paper': closedMixin(theme),
-        }),
-    }),
-)
-const DrawerHeader = styled('div')(({theme}) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-}))
 const Home = () => {
-    const [open, setOpen] = useState(false)
     const theme = useTheme()
-    const handleDrawerOpen = () => setOpen(true)
-    const handleDrawerClose = () => setOpen(false)
     const navigate = useNavigate()
     return <Box sx={{
         display: 'flex',
         height: "100%"
     }}
     >
-        <Box
-            sx={{
-                display: 'flex',
-            }}
-        >
-            <LeftPanel variant="permanent" open={open}>
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRight/> : <ChevronLeft/>}
-                    </IconButton>
-                </DrawerHeader>
-                <List
-                    disablePadding
-                    dense
-                    // subheader={
-                    //     <ListSubheader
-                    //         color={"primary"}
-                    //     >
-                    //         <Typography
-                    //             variant={"subtitle2"}
-                    //         >
-                    //             Поддерживаемый список на текущий момент:
-                    //         </Typography>
-                    //     </ListSubheader>
-                    // }
-                >
-                    {listItems.map(item =>
-                        <ListItemList
-                            open={open}
-                            key={item.title}
-                            iconButton={item.iconButton}
-                        >
-                            {item.title}
-                        </ListItemList>
-                    )}
-                </List>
-            </LeftPanel>
-        </Box>
+
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
             height: "100%",
             flexGrow: 1,
-            justifyContent: 'space-around',
+            overflowY: 'auto',
+            justifyContent: 'flex-start',
             alignContent: "center",
             alignItems: "center",
         }}>
-            <Typography>
-                с легкостью:
+            <Typography
+                variant={'h6'}
+                variantMapping={{h6: 'h1'}}
+                align="center"
+            >
+                Предвосхищая потребность клиента
             </Typography>
             <Typography
-
+                variant={'subtitle1'}
+                align={'center'}
+                paragraph
             >
-                создай свои правила!
+                BotsWork - платформа, созданная для решения...
             </Typography>
-            <Box>
+            <Typography
+                variant={'h6'}
+                align={'center'}
+            >
+                Наши преимущества
+            </Typography>
+            <List>
+                {advantage.map((item, idx) =>
+                    <ListItem
+                        key={idx}
+                    >
+                        <ListItemIcon><KeyboardArrowRight/></ListItemIcon>
+                        <ListItemText
+                            primary={item}
+                        />
+                    </ListItem>
+                )}
+            </List>
+            <Typography
+                variant={'h6'}
+                align={'center'}
+            >
+                Наши процессы
+            </Typography>
+            <Stepper
+                sx={{ml: 1}}
+                orientation={'vertical'}
+            >
+                <Step
+                    active={true}
+                >
+                    <StepLabel>
+                        <Typography>
+                            Запрос
+                        </Typography>
+                    </StepLabel>
+                    <StepContent>
+                        <Typography>
+                            Вы направляете требования по вашему проекту: тех. требования, сроки, бюджет.
+                        </Typography>
+                    </StepContent>
+                </Step>
+                <Step
+                    active={true}
+                >
+                    <StepLabel>
+                        <Typography>
+                            24 часа
+                        </Typography>
+                    </StepLabel>
+                    <StepContent>
+                        <Typography>
+                            Мы предоставляем варианты решения
+                        </Typography>
+                        <List disablePadding>
+                            <ListItem disablePadding><ListItemText primary={"- Готовый ресурс"}/></ListItem>
+                            <ListItem disablePadding><ListItemText primary={"- Разработка индивидуального проекта"}/></ListItem>
+                        </List>
+                    </StepContent>
+                </Step>
+                <Step
+                    active={true}
+                >
+                    <StepLabel>
+                        <Typography>
+                            Согласование
+                        </Typography>
+                    </StepLabel>
+                    <StepContent>
+                        <Typography>
+                            Согласовываем выбранный вариант и вы направляете аванс
+                        </Typography>
+                    </StepContent>
+                </Step>
+                <Step
+                    active={true}
+                >
+                    <StepLabel>
+                        <Typography>
+                            Результат
+                        </Typography>
+                    </StepLabel>
+                    <StepContent>
+                        <Typography>
+                            Предоставляем результат. Вы оплачиваете 100% стоимости.
+                        </Typography>
+                    </StepContent>
+                </Step>
+            </Stepper>
+            <Box
+                sx={{
+                    p: 2
+                }}
+            >
                 <Button
                     // fullWidth
-                    variant={"outlined"}
+                    variant={"contained"}
+
                     onClick={() => navigate(routes.chat)}
                 >
-                    перейти в чат
+                    связаться
                 </Button>
             </Box>
         </Box>

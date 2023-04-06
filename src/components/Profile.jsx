@@ -1,4 +1,4 @@
-import {AppRegistration, Close as CloseIcon, Login, Logout, Settings} from "@mui/icons-material"
+import {AppRegistration, Close as CloseIcon, Login, Logout, Settings, Update} from "@mui/icons-material"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
@@ -15,6 +15,7 @@ import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import Box from "@mui/material/Box"
 import ProfileButtonIcon from "./ProfileButtonIcon"
+import {useServiceWorkerUpdate} from "../serviceWorkerUpdate"
 
 const menuItems = [
     {
@@ -45,7 +46,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
     const handleClose = () => {
         setOpen(false)
     }
-
+    const {handleUpdateClick, loading} = useServiceWorkerUpdate()
     return <>
         <ProfileButtonIcon handleOpen={handleOpen} isAuthenticated={isAuthenticated}/>
         <Modal
@@ -121,6 +122,17 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                                 </ListItemButton>
                             )
                         }
+                        <ListItemButton
+                            divider
+                            onClick={handleUpdateClick}
+                            disabled={loading}
+                        >
+                            <ListItemIcon>
+                                <Update/>
+                            </ListItemIcon>
+                            <ListItemText primary={t('Проверка обновлений')}/>
+                            <Typography variant={'caption'}>v{process.env.REACT_APP_VERSION}</Typography>
+                        </ListItemButton>
                     </List>
                 </Box>
             </Slide>
