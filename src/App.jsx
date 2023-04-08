@@ -1,5 +1,4 @@
 import * as React from 'react'
-import {useEffect} from 'react'
 import {Route, Routes} from "react-router-dom"
 import ProfilePage from "./views/Profile"
 import Contacts from "./views/Contacts"
@@ -24,9 +23,6 @@ import AnonRoute from "./features/secure/routes/AnonRoute"
 
 const App = () => {
     const {viewportHeight} = useViewportHeight()
-    useEffect(() => {
-        console.log(isMobile)
-    }, [isMobile])
     return <Box
         sx={{
             height: viewportHeight,
