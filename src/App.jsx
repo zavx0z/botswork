@@ -32,7 +32,6 @@ const App = () => {
             flexDirection: 'column',
             overflow: "hidden",
             position: 'relative',
-            touchAction: 'none',
             overscrollBehavior: "contain",
             // backgroundColor: "red"
         }}>
@@ -49,7 +48,6 @@ const App = () => {
         <Box component="main" sx={{
             flexGrow: 1,
             overflow: "hidden",
-            touchAction: 'none',
             display: 'flex',
             flexDirection: 'column',
             overscrollBehavior: "contain",
