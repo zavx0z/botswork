@@ -32,8 +32,6 @@ const App = () => {
             flexDirection: 'column',
             overflow: "hidden",
             position: 'relative',
-            overscrollBehavior: "contain",
-            // backgroundColor: "red"
         }}>
         <AppBar position="static" sx={{zIndex: (theme) => theme.zIndex.drawer + 1, overflow: 'hidden'}}>
             <Routes>
@@ -50,7 +48,6 @@ const App = () => {
             overflow: "hidden",
             display: 'flex',
             flexDirection: 'column',
-            overscrollBehavior: "contain",
         }}>
             <Routes>
                 <Route path={routes.home} element={<AnonRoute redirectRoute={routes.chat}><Home/></AnonRoute>}/>

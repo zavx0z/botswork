@@ -31,27 +31,27 @@ body {
 /*}*/
 
 /* Отключение выделения текста на элементах */
-* {
+img {
   -webkit-user-select: none;
   user-select: none;
 }
 
 /* Отключение контуров выделения на элементах */
-:focus {
-  outline: none;
-}
+/*:focus {*/
+/*  outline: none;*/
+/*}*/
 
-/* Отключение анимации на клик */
-* {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
+/*!* Отключение анимации на клик *!*/
+/** {*/
+/*  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
+/*}*/
 
 #root {
   overflow: hidden;
-  touch-action: none;
+  /*touch-action: none;*/
   width: 100%;
   position: fixed;
-  overscroll-behavior: contain;
+  /*overscroll-behavior: contain;*/
 }
 
 code {
