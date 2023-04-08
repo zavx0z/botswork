@@ -6,7 +6,7 @@ import Contacts from "./views/Contacts"
 import Box from '@mui/material/Box'
 import AppBar from "@mui/material/AppBar"
 import Home from "./views/Home"
-import PrivateRoute from "./features/secure/PrivateRoute"
+import PrivateRoute from "./features/secure/routes/PrivateRoute"
 import routes from "./routes/routes"
 import Auth from "./features/secure/Auth"
 import Settings from "./views/Settings"
@@ -19,6 +19,7 @@ import {MobileProject} from "./views/MobileProject"
 import {BrowserProject} from "./views/BrowserProject"
 import MobileToolBar from "./layouts/MobileToolBar"
 import BrowserToolBar from "./layouts/BrowserToolBar"
+import AnonRoute from "./features/secure/routes/AnonRoute"
 
 
 const App = () => {
@@ -56,7 +57,7 @@ const App = () => {
             overscrollBehavior: "contain",
         }}>
             <Routes>
-                <Route path={routes.home} element={<Home/>}/>
+                <Route path={routes.home} element={<AnonRoute redirectRoute={routes.chat}><Home/></AnonRoute>}/>
                 <Route path={routes.auth} element={<Auth/>}/>
                 <Route path={routes.contacts} element={<Contacts/>}/>
                 <Route path={routes.settings} element={<Settings/>}/>

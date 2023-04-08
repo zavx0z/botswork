@@ -3,7 +3,7 @@ import {inject, observer} from "mobx-react"
 import {useSnackbar} from "notistack"
 import {useEffect, useRef} from "react"
 import {useTranslation} from "react-i18next"
-import routes from "../../routes/routes"
+import routes from "../../../routes/routes"
 
 const PrivateRoute = ({children, user: {isAuthenticated}}) => {
     const {enqueueSnackbar} = useSnackbar()
