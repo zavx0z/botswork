@@ -19,12 +19,12 @@ import {BrowserProject} from "./views/BrowserProject"
 import MobileToolBar from "./layouts/MobileToolBar"
 import BrowserToolBar from "./layouts/BrowserToolBar"
 import AnonRoute from "./features/secure/routes/AnonRoute"
-import useWakeLock from "./hooks/WakeLoc"
+// import useWakeLock from "./hooks/WakeLoc"
 
 
 const App = () => {
     const {viewportHeight} = useViewportHeight()
-    useWakeLock()
+    // useWakeLock()
     return <Box
         sx={{
             height: viewportHeight,

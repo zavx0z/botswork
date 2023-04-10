@@ -3,7 +3,7 @@ import Button from "@mui/material/Button"
 import routes from "../routes/routes"
 import {useNavigate} from "react-router-dom"
 import Box from "@mui/material/Box"
-import {ListItem, ListItemText, Step, StepContent, StepLabel, Stepper, useTheme} from "@mui/material"
+import {ListItem, ListItemText, Step, StepContent, StepLabel, Stepper} from "@mui/material"
 import {KeyboardArrowRight} from "@mui/icons-material"
 import React from "react"
 import ListItemIcon from "@mui/material/ListItemIcon"
@@ -17,7 +17,7 @@ const advantage = [
     'Безопасность платформы и обмена данными',
 ]
 const Home = () => {
-    const theme = useTheme()
+    // const theme = useTheme()
     const navigate = useNavigate()
     return <Box sx={{
         display: 'flex',

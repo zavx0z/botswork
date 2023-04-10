@@ -16,11 +16,17 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {sioConnect} from "./middleware/sioMiddleware"
 import chatStore from "./features/chat/chatStore"
 
-serviceWorkerRegistration.register()
+const onUpdate = (registration) => {
+    console.log('ServiceWorker registration successful with scope: ', registration)
+}
+const config = {
+    onUpdate: onUpdate
+}
+serviceWorkerRegistration.register(config)
 
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+const root = ReactDOM.createRoot(document.getElementById('root'))
 
 sioConnect(userStore)
 chatStore(userStore)
