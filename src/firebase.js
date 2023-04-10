@@ -4,6 +4,7 @@ import {getMessaging, getToken, onMessage} from "firebase/messaging"
 import {deviceDetect} from "react-device-detect"
 import axios from "axios"
 import {ACCESS_TOKEN} from "./features/secure/const"
+import icon from './images/icon.png'
 
 const firebaseConfig = {
     apiKey: "AIzaSyDI9fxdrgYBoPJfFLzH3tgD1pbm7gSzVjE",
@@ -41,5 +42,11 @@ export const sendTokenFCM = () => {
 }
 
 onMessage(messaging, (payload) => {
+    if ("Notification" in window)
+        new Notification("Заголовок уведомления", {
+            body: payload.notification.body,
+            icon: icon,
+        })
+
     console.log('Message received. ', payload)
 })
