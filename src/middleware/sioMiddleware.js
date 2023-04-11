@@ -15,10 +15,11 @@ export const sioConnect = store => {
             if (call.name === "@APPLY_SNAPSHOT" && isAuthenticatedSnapshot(call)) {
                 let {accessToken} = call.args[0]
                 accessToken = typeof accessToken !== "undefined" ? accessToken : localStorage.getItem(ACCESS_TOKEN)
+
                 call.tree.sio = io(process.env.REACT_APP_HOST, {
                     auth: {
                         token: accessToken,
-                        device: {...deviceDetect(window.navigator.userAgent), tz: Intl.DateTimeFormat().resolvedOptions().timeZone}
+                        device: deviceDetect()
                     },
                     transportOptions: {polling: {extraHeaders: {'Authorization': 'Bearer ' + accessToken}}},
                     transports: ['websocket']
@@ -103,7 +104,7 @@ export const sioMiddleware = (store, actionsCallbacks) => {
                     if (typeof action.after === 'function') {
                         // console.log("item.after")
                         return next(call, result => {
-                            action.after({sio: tree.sio, store: tree, args: result, instance: context})
+                            action.after({sio: tree.sio, store: tree, result: result, instance: context})
                             return result
                         })
                     }
