@@ -72,7 +72,7 @@ export const sioAfterCreate = (store, callback) => {
         }
     )
 }
-export const sioReConnect = (store, callback) => {
+export const sioAfterConnect = (store, callback) => {
     addMiddleware(store, (call, next) => {
         const {name, tree} = call
         if (name === "@APPLY_SNAPSHOT" && isAuthenticatedSnapshot(call)) {
