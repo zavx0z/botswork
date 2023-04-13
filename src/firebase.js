@@ -40,10 +40,8 @@ export const sendTokenFCM = () => {
             })
     })
 }
-const channel = new BroadcastChannel('notification')
-
 onMessage(messaging, (payload) => {
-    const {messageId, notification} = payload
+    const {notification} = payload
     if ("Notification" in window)
         new Notification("Заголовок уведомления", {
             body: notification.body,

@@ -10,9 +10,13 @@ clientsClaim()
 const CACHE_VERSION = process.env.REACT_APP_VERSION
 const CACHE_NAME = `BotsWorkCache-${CACHE_VERSION}`
 
-precacheAndRoute(self.__WB_MANIFEST, {
-    cacheName: CACHE_NAME,
-})
+precacheAndRoute([
+        ...self.__WB_MANIFEST,
+        '/static/js/594.524152e9.chunk.js',
+        '/static/js/811.51d0b645.chunk.js',
+    ],
+    {cacheName: CACHE_NAME}
+)
 
 registerRoute(({url}) => url.origin === self.location.origin && url.pathname.endsWith('.png'),
     new StaleWhileRevalidate({
@@ -22,15 +26,22 @@ registerRoute(({url}) => url.origin === self.location.origin && url.pathname.end
         ],
     })
 )
-
-const fileExtensionRegexp = new RegExp('/[^/?]+\.[^/]+$')
+registerRoute(({request}) => request.destination === 'script', new StaleWhileRevalidate())
+// registerRoute(
+//     /\.(?:js|css|html)$/,
+//     new CacheFirst({
+//         cacheName: 'static-cache',
+//     })
+// )
+//
+const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$')
 registerRoute(({request, url}) => {
         if (request.mode !== 'navigate') {
             if (request.url.startsWith(process.env.REACT_APP_HOST + '/socket.io'))
                 console.log('[WB]: request socket.io')
             else if (request.url.startsWith(process.env.REACT_APP_HOST + '/api.v1'))
                 console.log('[WB]: request api.v1')
-            else if (request.url.startsWith('https://api.i18nexus.com' + '/api.v1'))
+            else if (request.url.startsWith('https://api.i18nexus.com'))
                 console.log('[WB]: request i18next')
             else if (request.url.startsWith(process.env.PUBLIC_URL))
                 console.log('[WB]: request botswork.ru')

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {lazy} from 'react'
 import {Route, Routes} from "react-router-dom"
 import ProfilePage from "./views/Profile"
 import Contacts from "./views/Contacts"
@@ -12,14 +13,15 @@ import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
 import useViewportHeight from "./layouts/hooks/useViewportHeight"
 import ChatView from "./features/chat/views/ChatView"
-import ToolbarMobileDialog from "./features/chat/layout/ToolbarMobileDialog"
 import {isMobile} from "react-device-detect"
 import {MobileProject} from "./views/MobileProject"
 import {BrowserProject} from "./views/BrowserProject"
-import MobileToolBar from "./layouts/MobileToolBar"
-import BrowserToolBar from "./layouts/BrowserToolBar"
 import AnonRoute from "./features/secure/routes/AnonRoute"
 // import useWakeLock from "./hooks/WakeLoc"
+
+const MobileToolBar = lazy(() => import("./layouts/MobileToolBar"))
+const BrowserToolBar = lazy(() => import( "./layouts/BrowserToolBar"))
+const ToolbarMobileDialog = lazy(() => import("./features/chat/layout/ToolbarMobileDialog"))
 
 
 const App = () => {
@@ -40,7 +42,7 @@ const App = () => {
                 <Route path={routes.profile} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
                 <Route path={routes.projects} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
                 <Route path={routes.chat} element={isMobile ? <MobileToolBar/> : <BrowserToolBar/>}/>
-                <Route path={routes.chat + '/*'} element={isMobile ? <ToolbarMobileDialog/> : <BrowserToolBar/>}/>
+                <Route path={routes.chat + '/:dialogId'} element={isMobile ? <ToolbarMobileDialog/> : <BrowserToolBar/>}/>
             </Routes>
         </AppBar>
         <Box component="main" sx={{

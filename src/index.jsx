@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Suspense} from 'react'
 import ReactDOM from 'react-dom/client'
 import './theme/index.css'
 import App from './App'
@@ -15,14 +15,15 @@ import userStore from "./stores/userStore"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {sioConnect} from "./middleware/sioMiddleware"
 import chatStore from "./features/chat/chatStore"
+import BotLoader from "./components/BotLoader/BotLoader"
+import Box from "@mui/material/Box"
+import pwaStore from "./features/pwa/pwaStore"
+import PWA from "./features/pwa/PWA"
 
 const onUpdate = (registration) => {
-    console.log('ServiceWorker registration successful with scope: ', registration)
+    pwaStore.setNewVersionExist(registration)
 }
-const config = {
-    onUpdate: onUpdate
-}
-serviceWorkerRegistration.register(config)
+serviceWorkerRegistration.register({onUpdate: onUpdate})
 
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 
@@ -32,17 +33,41 @@ sioConnect(userStore)
 chatStore(userStore)
 middlewareNetworkError(userStore)
 
-root.render(
-    <Router>
-        <ThemeProvider theme={theme}>
-            <SnackbarProvider anchorOrigin={{
-                vertical:  'bottom',
-                horizontal: isMobile ? 'center' : 'left',
-            }}>
-                <Provider user={userStore}>
-                    <App/>
-                </Provider>
-            </SnackbarProvider>
-        </ThemeProvider>
-    </Router>
-)
+const Index = () => {
+    return <>
+        <Suspense fallback={
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    bgcolor: "rgba(255, 255, 255, 0.8)",
+                    borderRadius: "8px",
+                    p: 2,
+                }}
+            >
+                <BotLoader/>
+            </Box>
+        }>
+            <Router>
+                <ThemeProvider theme={theme}>
+                    <SnackbarProvider anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: isMobile ? 'center' : 'left',
+                    }}>
+                        <Provider user={userStore} pwa={pwaStore}>
+                            <PWA/>
+                            <App/>
+                        </Provider>
+                    </SnackbarProvider>
+                </ThemeProvider>
+            </Router>
+        </Suspense>
+    </>
+}
+
+root.render(<Index/>)
