@@ -20,3 +20,12 @@ https://api.i18nexus.com/project_resources/translations/de/default.json?api_key=
 ```
 ### PWA
 [blog](https://blog.logrocket.com/pwa-create-react-app-service-workers/)
+
+
+### Установка сертификата
+```shell
+sudo apt install libnss3-tools -y
+sudo apt install mkcert
+mkcert -install
+
+```

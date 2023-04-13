@@ -9,14 +9,10 @@ clientsClaim()
 
 const CACHE_VERSION = process.env.REACT_APP_VERSION
 const CACHE_NAME = `BotsWorkCache-${CACHE_VERSION}`
-
-precacheAndRoute([
-        ...self.__WB_MANIFEST,
-        '/static/js/594.524152e9.chunk.js',
-        '/static/js/811.51d0b645.chunk.js',
-    ],
-    {cacheName: CACHE_NAME}
-)
+// console.log(self.__WB_MANIFEST)
+const manifest = [...self.__WB_MANIFEST]
+console.log(manifest)
+precacheAndRoute(manifest, {})
 
 registerRoute(({url}) => url.origin === self.location.origin && url.pathname.endsWith('.png'),
     new StaleWhileRevalidate({
