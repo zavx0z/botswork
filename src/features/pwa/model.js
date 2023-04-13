@@ -9,6 +9,9 @@ const pwaModel = types
         serviceWorker: null
     }))
     .actions(self => ({
+        afterCreate() {
+            navigator.serviceWorker.ready.then(self['setServiceWorker'])
+        },
         setServiceWorker(value) {
             console.log('[sw] получен')
             self.serviceWorker = value

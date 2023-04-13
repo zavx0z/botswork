@@ -19,14 +19,21 @@ import BotLoader from "./components/BotLoader/BotLoader"
 import Box from "@mui/material/Box"
 import pwaStore from "./features/pwa/pwaStore"
 import PWA from "./features/pwa/PWA"
+import logStore, {logSioMiddleware} from "./features/remoteLogClient/logStore"
 
-serviceWorkerRegistration.register({onUpdate: pwaStore.setNewVersionExist, onSuccess: pwaStore.setServiceWorker})
+
+const config = {
+    onUpdate: (serviceWorker) => pwaStore.setNewVersionExist(serviceWorker),
+    onSuccess: (serviceWorker) => pwaStore.setServiceWorker(serviceWorker)
+}
+serviceWorkerRegistration.register(config)
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 sioConnect(userStore)
 chatStore(userStore)
 middlewareNetworkError(userStore)
+logSioMiddleware(userStore)
 
 const Index = () => {
     return <>
@@ -54,7 +61,7 @@ const Index = () => {
                         vertical: 'bottom',
                         horizontal: isMobile ? 'center' : 'left',
                     }}>
-                        <Provider user={userStore} pwa={pwaStore}>
+                        <Provider user={userStore} pwa={pwaStore} log={logStore}>
                             <PWA/>
                             <App/>
                         </Provider>
