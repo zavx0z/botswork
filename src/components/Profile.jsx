@@ -15,7 +15,7 @@ import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import Box from "@mui/material/Box"
 import ProfileButtonIcon from "./ProfileButtonIcon"
-import {useServiceWorkerUpdate} from "../serviceWorkerUpdate"
+import pwaStore from "../features/pwa/pwaStore"
 
 const menuItems = [
     {
@@ -43,10 +43,11 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
         setOpen(false)
         navigate(rout)
     }
-    const handleClose = () => {
-        setOpen(false)
+    const handleClose = () => setOpen(false)
+    const handleUpdateVersion = () => {
+        pwaStore.updateVersion()
+        handleClose()
     }
-    const {handleUpdateClick, loading} = useServiceWorkerUpdate()
     return <>
         <ProfileButtonIcon handleOpen={handleOpen} isAuthenticated={isAuthenticated}/>
         <Modal
@@ -124,8 +125,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                         }
                         <ListItemButton
                             divider
-                            onClick={handleUpdateClick}
-                            disabled={loading}
+                            onClick={handleUpdateVersion}
                         >
                             <ListItemIcon>
                                 <Update/>

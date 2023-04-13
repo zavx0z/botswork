@@ -20,13 +20,8 @@ import Box from "@mui/material/Box"
 import pwaStore from "./features/pwa/pwaStore"
 import PWA from "./features/pwa/PWA"
 
-const onUpdate = (registration) => {
-    pwaStore.setNewVersionExist(registration)
-}
-serviceWorkerRegistration.register({onUpdate: onUpdate})
-
+serviceWorkerRegistration.register({onUpdate: pwaStore.setNewVersionExist, onSuccess: pwaStore.setServiceWorker})
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
-
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 sioConnect(userStore)

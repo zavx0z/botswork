@@ -1,6 +1,7 @@
 import {types} from "mobx-state-tree"
+import {enqueueSnackbar} from "notistack"
 
- const pwaModel = types
+const pwaModel = types
     .model({
         newVersionExist: false
     })
@@ -8,12 +9,21 @@ import {types} from "mobx-state-tree"
         serviceWorker: null
     }))
     .actions(self => ({
+        setServiceWorker(value) {
+            console.log('[sw] получен')
+            self.serviceWorker = value
+        },
         setNewVersionExist(value) {
             console.log('newServiceWorker', value)
             self.newVersionExist = true
-            self.serviceWorker = value
+            this.setServiceWorker(value)
         },
         updateVersion() {
+            if (!self.serviceWorker) {
+                console.log('[sw] отсутствует')
+                enqueueSnackbar('Приложение не установлено', {variant: "info"})
+                return
+            }
             const worker = self.serviceWorker.waiting
             if (!worker) {
                 window.location.reload()
@@ -21,9 +31,8 @@ import {types} from "mobx-state-tree"
             }
             worker.postMessage({type: 'SKIP_WAITING'})
             worker.addEventListener('statechange', (e) => {
-                if (e.target.state === 'activated') {
+                if (e.target.state === 'activated')
                     window.location.reload()
-                }
             })
         }
     }))

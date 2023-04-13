@@ -11,7 +11,7 @@ import {useTranslation} from "react-i18next"
 import Divider from "@mui/material/Divider"
 import {MobileLanguageSelect} from "../components/Lang"
 import Typography from "@mui/material/Typography"
-import {useServiceWorkerUpdate} from "../serviceWorkerUpdate"
+import pwaStore from "../features/pwa/pwaStore"
 
 const Settings = () => {
     const {t} = useTranslation('меню')
@@ -22,10 +22,11 @@ const Settings = () => {
         setOpen(false)
         navigate(-1)
     }
-    const handleOpenLang = () => {
-        setLangOpen(true)
+    const handleOpenLang = () => setLangOpen(true)
+    const handleUpdateVersion = () => {
+        pwaStore.updateVersion()
+        handleClose()
     }
-    const {handleUpdateClick, loading} = useServiceWorkerUpdate()
     return <>
         <Modal
             open={open}
@@ -50,8 +51,7 @@ const Settings = () => {
                     </ListItemButton>
                     <ListItemButton
                         divider
-                        onClick={handleUpdateClick}
-                        disabled={loading}
+                        onClick={handleUpdateVersion}
                     >
                         <ListItemIcon>
                             <Update/>
