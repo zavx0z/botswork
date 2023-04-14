@@ -11,6 +11,11 @@ const logsModel = types
         originalLog: console.log,
     }))
     .actions(self => ({
+        afterCreate() {
+            localStorage.getItem('logon') === 'true' ?
+                this.onRemoteLog() :
+                this.offRemoteLog()
+        },
         onRemoteLog() {
             const {addLog, originalLog, itemLength, nameLength} = self
             console.log = function (...args) {
@@ -32,9 +37,11 @@ const logsModel = types
                 originalLog.apply(console, [string])
                 addLog(string)
             }
+            localStorage.setItem('logon', 'true')
         },
         offRemoteLog() {
             console.log = self['originalLog']
+            localStorage.setItem('logon', 'false')
         },
         addLog(payload) {
         }
