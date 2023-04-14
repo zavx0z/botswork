@@ -9,6 +9,7 @@ const {t} = i18next
 
 export const isAuthenticatedSnapshot = (call) => !call.parentId && typeof call.args[0]['id'] !== 'undefined'
 
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 export const sioConnect = store => {
     addMiddleware(store, (call, next) => {
@@ -19,7 +20,13 @@ export const sioConnect = store => {
                 call.tree.sio = io(process.env.REACT_APP_HOST, {
                     auth: {
                         token: accessToken,
-                        device:  deviceDetect(window.navigator.userAgent)
+                        device: {
+                            ...deviceDetect(window.navigator.userAgent),
+                            tz: timezone,
+                            width: window.screen.width,
+                            height: window.screen.height,
+                            resolution: window.devicePixelRatio
+                        }
                     },
                     transportOptions: {polling: {extraHeaders: {'Authorization': 'Bearer ' + accessToken}}},
                     transports: ['websocket']
