@@ -7,8 +7,8 @@ import usersModel from "../features/users/models/modelUsers"
 const userStore = types
     .compose(
         userModel,
-        chatModel,
         usersModel,
+        chatModel,
     )
     .named("user")
     .create({})

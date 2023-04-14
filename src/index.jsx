@@ -20,6 +20,7 @@ import Box from "@mui/material/Box"
 import pwaStore from "./features/pwa/pwaStore"
 import PWA from "./features/pwa/PWA"
 import logStore, {logSioMiddleware} from "./features/remoteLogClient/logStore"
+import usersStore from "./features/users/usersStore"
 
 
 const config = {
@@ -32,6 +33,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 
 sioConnect(userStore)
 chatStore(userStore)
+usersStore(userStore)
 middlewareNetworkError(userStore)
 logSioMiddleware(userStore)
 
