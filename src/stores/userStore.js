@@ -2,11 +2,13 @@ import userModel from "../features/secure/model"
 import {types} from "mobx-state-tree"
 import {sioMiddleware} from "../middleware/sioMiddleware"
 import chatModel from "../features/chat/models/chatModel"
+import usersModel from "../features/users/models/modelUsers"
 
 const userStore = types
     .compose(
         userModel,
-        chatModel
+        chatModel,
+        usersModel,
     )
     .named("user")
     .create({})
