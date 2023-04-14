@@ -19,7 +19,7 @@ export const sioConnect = store => {
                 call.tree.sio = io(process.env.REACT_APP_HOST, {
                     auth: {
                         token: accessToken,
-                        device: deviceDetect()
+                        device:  deviceDetect(window.navigator.userAgent)
                     },
                     transportOptions: {polling: {extraHeaders: {'Authorization': 'Bearer ' + accessToken}}},
                     transports: ['websocket']
