@@ -1,6 +1,6 @@
 import {addMiddleware, types} from "mobx-state-tree"
-import {sioAfterConnect} from "../../middleware/sioMiddleware"
 import {alignString} from "./string"
+import {sioAfterConnect} from "../sio/sioMiddleware"
 
 const logsModel = types
     .model({

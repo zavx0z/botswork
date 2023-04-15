@@ -13,7 +13,6 @@ import {middlewareNetworkError} from "./middleware/network"
 import {isMobile} from "react-device-detect"
 import rootStore from "./stores/rootStore"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import {sioConnect} from "./middleware/sioMiddleware"
 import chatStore from "./features/chat/chatStore"
 import BotLoader from "./components/BotLoader/BotLoader"
 import Box from "@mui/material/Box"
@@ -21,6 +20,7 @@ import pwaStore from "./features/pwa/pwaStore"
 import PWA from "./features/pwa/PWA"
 import logStore, {logSioMiddleware} from "./features/remoteLogClient/logStore"
 import usersStore from "./features/users/usersStore"
+import {sioConnect} from "./features/sio/sioMiddleware"
 
 
 const config = {
