@@ -11,7 +11,7 @@ import theme from "./theme/theme"
 import {SnackbarProvider} from "notistack"
 import {middlewareNetworkError} from "./middleware/network"
 import {isMobile} from "react-device-detect"
-import userStore from "./stores/userStore"
+import rootStore from "./stores/rootStore"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {sioConnect} from "./middleware/sioMiddleware"
 import chatStore from "./features/chat/chatStore"
@@ -31,11 +31,11 @@ serviceWorkerRegistration.register(config)
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
-sioConnect(userStore)
-chatStore(userStore)
-usersStore(userStore)
-middlewareNetworkError(userStore)
-logSioMiddleware(userStore)
+sioConnect(rootStore)
+chatStore(rootStore)
+usersStore(rootStore)
+middlewareNetworkError(rootStore)
+logSioMiddleware(rootStore)
 
 const Index = () => {
     return <>
@@ -63,7 +63,7 @@ const Index = () => {
                         vertical: 'bottom',
                         horizontal: isMobile ? 'center' : 'left',
                     }}>
-                        <Provider user={userStore} pwa={pwaStore} log={logStore}>
+                        <Provider root={rootStore} pwa={pwaStore} log={logStore}>
                             <PWA/>
                             <App/>
                         </Provider>

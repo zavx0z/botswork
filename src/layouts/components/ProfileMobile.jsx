@@ -1,36 +1,22 @@
-import {AppRegistration, Close as CloseIcon, Login, Logout, Settings, Update} from "@mui/icons-material"
-import Menu from "@mui/material/Menu"
-import MenuItem from "@mui/material/MenuItem"
-import Typography from "@mui/material/Typography"
+import {inject, observer} from "mobx-react"
+import {useTranslation} from "react-i18next"
+import {useNavigate} from "react-router-dom"
 import * as React from "react"
 import {useState} from "react"
-import {useNavigate} from "react-router-dom"
-import {useTranslation} from "react-i18next"
-import routes from "../routes/routes"
-import {inject, observer} from "mobx-react"
-import {IconButton, List, ListItemAvatar, ListItemText, Modal, Slide} from '@mui/material'
-import Divider from "@mui/material/Divider"
-import Avatar from "@mui/material/Avatar"
-import ListItemButton from "@mui/material/ListItemButton"
-import ListItemIcon from "@mui/material/ListItemIcon"
+import pwaStore from "../../features/pwa/pwaStore"
+import ProfileButtonIcon from "../../components/ProfileButtonIcon"
+import {IconButton, List, ListItemAvatar, ListItemText, Modal, Slide} from "@mui/material"
 import Box from "@mui/material/Box"
-import ProfileButtonIcon from "./ProfileButtonIcon"
-import pwaStore from "../features/pwa/pwaStore"
+import {Close as CloseIcon, Logout, Settings, Update} from "@mui/icons-material"
+import Divider from "@mui/material/Divider"
+import ListItemButton from "@mui/material/ListItemButton"
+import routes from "../../routes/routes"
+import Avatar from "@mui/material/Avatar"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import Typography from "@mui/material/Typography"
+import profileMenu from "../profileMenu"
 
-const menuItems = [
-    {
-        title: "войти_уже",
-        route: routes.login,
-        itemIcon: <Login/>
-    },
-    {
-        title: "нет_аккаунта",
-        route: routes.join,
-        itemIcon: <AppRegistration/>
-    }
-]
-
-export const MobileProfile = inject('user')(observer(({user: {logOut, username, isAuthenticated}}) => {
+export const MobileProfile = ({root: {logOut, username, isAuthenticated}}) => {
     const {t} = useTranslation('авторизация')
     const {t: tm} = useTranslation('меню')
     const navigate = useNavigate()
@@ -110,7 +96,7 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
                                     <ListItemText primary={t('выход')}/>
                                 </ListItemButton>
                             </>
-                            : menuItems.map(({route, title, itemIcon}, key) =>
+                            : profileMenu.map(({route, title, itemIcon}, key) =>
                                 <ListItemButton
                                     divider
                                     key={key}
@@ -138,58 +124,6 @@ export const MobileProfile = inject('user')(observer(({user: {logOut, username, 
             </Slide>
         </Modal>
     </>
-}))
-
-
-const Profile = ({user: {logOut, isAuthenticated, username}}) => {
-    const navigate = useNavigate()
-    const [anchorElUser, setAnchorElUser] = useState(null)
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget)
-    }
-    const handleCloseUserMenu = (path) => {
-        setAnchorElUser(null)
-        navigate(path)
-    }
-    const {t} = useTranslation('авторизация')
-
-    return (
-        <Box sx={{display: 'flex'}}>
-            <Typography
-                sx={{cursor: 'pointer'}}
-                onClick={handleOpenUserMenu}
-                variant="body1"
-            >
-                {username}
-            </Typography>
-            <ProfileButtonIcon
-                handleOpen={handleOpenUserMenu}
-                isAuthenticated={isAuthenticated}
-                sx={{p: 0, ml: 1}}
-            />
-            <Menu
-                sx={{mt: '45px'}}
-                id="menu-appbar"
-                anchorEl={anchorElUser || undefined}
-                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-                keepMounted
-                transformOrigin={{vertical: 'top', horizontal: 'right'}}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-            >
-                {isAuthenticated ?
-                    <MenuItem onClick={() => handleCloseUserMenu(routes.logout)}>
-                        <Typography textAlign="center">{t('выход')}</Typography>
-                    </MenuItem>
-                    :
-                    menuItems.map((item, idx) => (
-                        <MenuItem key={idx} onClick={() => handleCloseUserMenu(item.route)}>
-                            <Typography textAlign="center">{t(item.title)}</Typography>
-                        </MenuItem>
-                    ))
-                }
-            </Menu>
-        </Box>
-    )
 }
-export default inject('user')(observer(Profile))
+
+export default inject('root')(observer(MobileProfile))

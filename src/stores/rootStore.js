@@ -1,22 +1,22 @@
-import userModel from "../features/secure/model"
+import ssoModel from "../features/secure/ssoModel"
 import {types} from "mobx-state-tree"
 import {sioMiddleware} from "../middleware/sioMiddleware"
 import chatModel from "../features/chat/models/chatModel"
 import usersModel from "../features/users/models/modelUsers"
 import sioModel from "../features/sio/sioModel"
 
-const userStore = types
+const rootStore = types
     .compose(
-        userModel,
+        ssoModel,
         sioModel,
         usersModel,
         chatModel,
     )
-    .named("user")
+    .named("root")
     .create({})
-export default userStore
+export default rootStore
 
-sioMiddleware(userStore, [
+sioMiddleware(rootStore, [
     {
         action: 'sendMessage',
         cb: ({args}) => console.log(args[0])

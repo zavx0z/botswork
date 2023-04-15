@@ -1,9 +1,9 @@
 import Toolbar from "@mui/material/Toolbar"
 import Box from "@mui/material/Box"
 import {Logo} from "./elements/Logo"
-import {MobileProfile} from "../components/Profile"
 import * as React from "react"
 import {Fade} from "@mui/material"
+import ProfileMobile from "./components/ProfileMobile"
 // import {Slide} from "@mui/material"
 
 const MobileToolBar = () =>
@@ -17,7 +17,7 @@ const MobileToolBar = () =>
             </Box>
             <Box sx={{flexGrow: 1, display: {xs: 'flex'}}}>
             </Box>
-            <MobileProfile/>
+            <ProfileMobile/>
         </Toolbar>
     </Fade>
 export default MobileToolBar

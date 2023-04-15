@@ -4,7 +4,7 @@ import {inject, observer} from "mobx-react"
 import BotLoader from "../components/BotLoader/BotLoader"
 import Box from "@mui/material/Box"
 
-const ProfilePage = ({user: {username}}) => {
+const ProfilePage = ({root: {username}}) => {
     return <>
         <Typography>
             Пользователь: {username}
@@ -21,4 +21,4 @@ const ProfilePage = ({user: {username}}) => {
 
 }
 
-export default inject("user")(observer(ProfilePage))
+export default inject("root")(observer(ProfilePage))

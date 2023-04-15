@@ -6,7 +6,7 @@ import {isIOS} from "react-device-detect"
 import Box from "@mui/material/Box"
 import {inject, observer} from "mobx-react"
 
-const Chat = inject('user')(observer(({user: {unreadMessages}, icon}) => {
+const Chat = inject("root')(observer(({root: {unreadMessages}, icon}) => {
         return <Box sx={{position: 'relative'}}>
             {icon}
             {unreadMessages > 0 &&
