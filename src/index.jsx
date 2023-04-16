@@ -18,7 +18,7 @@ import BotLoader from "./components/BotLoader/BotLoader"
 import Box from "@mui/material/Box"
 import pwaStore from "./features/pwa/pwaStore"
 import PWA from "./features/pwa/PWA"
-import logStore, {logSioMiddleware} from "./features/remoteLogClient/logStore"
+import loggingStore, {logSioMiddleware} from "./features/logging/loggingStore"
 import usersStore from "./features/users/usersStore"
 import {sioConnect} from "./features/sio/sioMiddleware"
 
@@ -63,7 +63,7 @@ const Index = () => {
                         vertical: 'bottom',
                         horizontal: isMobile ? 'center' : 'left',
                     }}>
-                        <Provider root={rootStore} pwa={pwaStore} log={logStore}>
+                        <Provider root={rootStore} pwa={pwaStore} log={loggingStore}>
                             <PWA/>
                             <App/>
                         </Provider>
