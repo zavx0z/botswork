@@ -16,12 +16,12 @@ import * as serviceWorkerRegistration from './features/pwa/serviceWorkerRegistra
 import chatStore from "./features/chat/chatStore"
 import BotLoader from "./components/BotLoader/BotLoader"
 import Box from "@mui/material/Box"
-import pwaStore from "./features/pwa/pwaStore"
 import PWA from "./features/pwa/PWA"
 import loggingStore, {logSioMiddleware} from "./features/logging/loggingStore"
 import usersStore from "./features/users/usersStore"
 import {sioConnect} from "./features/sio/sioMiddleware"
-
+import pwaModel from "./features/pwa/pwaModel"
+import icon from './images/icon.png'
 
 const config = {
     onUpdate: (serviceWorker) => pwaStore.setNewVersionExist(serviceWorker),
@@ -30,6 +30,8 @@ const config = {
 serviceWorkerRegistration.register(config)
 i18next.on('languageChanged', (lng) => void document.documentElement.setAttribute('lang', lng))
 const root = ReactDOM.createRoot(document.getElementById('root'))
+
+export const pwaStore = pwaModel.create({iconMessage: icon})
 
 sioConnect(rootStore)
 chatStore(rootStore)

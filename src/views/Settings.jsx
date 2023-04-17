@@ -11,9 +11,9 @@ import {useTranslation} from "react-i18next"
 import Divider from "@mui/material/Divider"
 import {MobileLanguageSelect} from "../components/Lang"
 import Typography from "@mui/material/Typography"
-import pwaStore from "../features/pwa/pwaStore"
+import {inject, observer} from "mobx-react"
 
-const Settings = () => {
+const Settings = ({pwa: {updateVersion}}) => {
     const {t} = useTranslation('меню')
     const [open, setOpen] = useState(true)
     const [langOpen, setLangOpen] = useState(false)
@@ -24,7 +24,7 @@ const Settings = () => {
     }
     const handleOpenLang = () => setLangOpen(true)
     const handleUpdateVersion = () => {
-        pwaStore.updateVersion()
+        updateVersion()
         handleClose()
     }
     return <>
@@ -74,4 +74,4 @@ const Settings = () => {
     </>
 }
 
-export default Settings
+export default inject('pwa')(observer(Settings))

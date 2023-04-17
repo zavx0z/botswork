@@ -3,7 +3,6 @@ import {useTranslation} from "react-i18next"
 import {useNavigate} from "react-router-dom"
 import * as React from "react"
 import {useState} from "react"
-import pwaStore from "../../features/pwa/pwaStore"
 import ProfileButtonIcon from "../../components/ProfileButtonIcon"
 import {IconButton, List, ListItemAvatar, ListItemText, Modal, Slide} from "@mui/material"
 import Box from "@mui/material/Box"
@@ -16,7 +15,7 @@ import ListItemIcon from "@mui/material/ListItemIcon"
 import Typography from "@mui/material/Typography"
 import profileMenu from "../profileMenu"
 
-export const MobileProfile = ({root: {logOut, username, isAuthenticated}}) => {
+export const MobileProfile = ({root: {logOut, username, isAuthenticated}, pwa: {updateVersion}}) => {
     const {t} = useTranslation('авторизация')
     const {t: tm} = useTranslation('меню')
     const navigate = useNavigate()
@@ -31,7 +30,7 @@ export const MobileProfile = ({root: {logOut, username, isAuthenticated}}) => {
     }
     const handleClose = () => setOpen(false)
     const handleUpdateVersion = () => {
-        pwaStore.updateVersion()
+        updateVersion()
         handleClose()
     }
     return <>
@@ -126,4 +125,4 @@ export const MobileProfile = ({root: {logOut, username, isAuthenticated}}) => {
     </>
 }
 
-export default inject('root')(observer(MobileProfile))
+export default inject('root', 'pwa')(observer(MobileProfile))
