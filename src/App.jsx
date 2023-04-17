@@ -14,8 +14,6 @@ import Viewer from "./views/Viewer"
 import useViewportHeight from "./layouts/hooks/useViewportHeight"
 import ChatView from "./features/chat/views/ChatView"
 import {isMobile} from "react-device-detect"
-import {MobileProject} from "./views/MobileProject"
-import {BrowserProject} from "./views/BrowserProject"
 import AnonRoute from "./features/secure/routes/AnonRoute"
 // import useWakeLock from "./hooks/WakeLoc"
 
@@ -60,9 +58,6 @@ const App = () => {
                 <Route path={routes.chat + '/*'} element={<PrivateRoute><ChatView/></PrivateRoute>}/>
 
                 <Route path={routes.profile} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
-                <Route path={routes.projects} element={<PrivateRoute>{isMobile ? <MobileProject/> : <BrowserProject/>}</PrivateRoute>}/>
-
-
                 <Route path={routes.viewer} element={<Viewer/>}/>
             </Routes>
         </Box>
