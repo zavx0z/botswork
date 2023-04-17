@@ -12,7 +12,7 @@ import {SnackbarProvider} from "notistack"
 import {middlewareNetworkError} from "./middleware/network"
 import {isMobile} from "react-device-detect"
 import rootStore from "./stores/rootStore"
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import * as serviceWorkerRegistration from './features/pwa/serviceWorkerRegistration'
 import chatStore from "./features/chat/chatStore"
 import BotLoader from "./components/BotLoader/BotLoader"
 import Box from "@mui/material/Box"
