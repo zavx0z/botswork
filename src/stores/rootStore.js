@@ -1,9 +1,9 @@
-import ssoModel from "../features/secure/ssoModel"
+import ssoModel from "../shared/secure/ssoModel"
 import {types} from "mobx-state-tree"
-import chatModel from "../features/chat/models/chatModel"
-import usersModel from "../features/users/models/modelUsers"
-import sioModel from "../features/sio/sioModel"
-import {sioMiddleware} from "../features/sio/sioMiddleware"
+import chatModel from "../shared/chat/models/chatModel"
+import usersModel from "../shared/users/models/modelUsers"
+import sioModel from "../shared/sio/sioModel"
+import {sioMiddleware} from "../shared/sio/sioMiddleware"
 
 const rootStore = types
     .compose(

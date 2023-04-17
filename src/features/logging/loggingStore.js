@@ -1,5 +1,5 @@
 import {addMiddleware} from "mobx-state-tree"
-import {sioAfterConnect} from "../sio/sioMiddleware"
+import {sioAfterConnect} from "../../shared/sio/sioMiddleware"
 import loggingModel from "./loggingModel"
 
 

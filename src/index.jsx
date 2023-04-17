@@ -9,18 +9,18 @@ import i18next from "i18next"
 import {ThemeProvider} from "@mui/material/styles"
 import theme from "./theme/theme"
 import {SnackbarProvider} from "notistack"
-import middlewareNetworkError from "./features/secure/middleware/network"
+import middlewareNetworkError from "./shared/secure/middleware/network"
 import {isMobile} from "react-device-detect"
 import rootStore from "./stores/rootStore"
-import * as serviceWorkerRegistration from './features/pwa/serviceWorkerRegistration'
-import chatStore from "./features/chat/chatStore"
+import * as serviceWorkerRegistration from './shared/pwa/serviceWorkerRegistration'
+import chatStore from "./shared/chat/chatStore"
 import BotLoader from "./components/BotLoader/BotLoader"
 import Box from "@mui/material/Box"
-import PWA from "./features/pwa/PWA"
+import PWA from "./shared/pwa/PWA"
 import loggingStore, {logSioMiddleware} from "./features/logging/loggingStore"
-import usersStore from "./features/users/usersStore"
-import {sioConnect} from "./features/sio/sioMiddleware"
-import pwaModel from "./features/pwa/pwaModel"
+import usersStore from "./shared/users/usersStore"
+import {sioConnect} from "./shared/sio/sioMiddleware"
+import pwaModel from "./shared/pwa/pwaModel"
 import icon from './images/icon.png'
 
 const config = {

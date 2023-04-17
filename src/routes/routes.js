@@ -1,4 +1,4 @@
-import authenticate from "../features/secure/routes"
+import authenticate from "../shared/secure/routes"
 
 const routes = {
     ...authenticate,

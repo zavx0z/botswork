@@ -6,20 +6,20 @@ import Contacts from "./views/Contacts"
 import Box from '@mui/material/Box'
 import AppBar from "@mui/material/AppBar"
 import Home from "./views/Home"
-import PrivateRoute from "./features/secure/routes/PrivateRoute"
+import PrivateRoute from "./shared/secure/routes/PrivateRoute"
 import routes from "./routes/routes"
-import Auth from "./features/secure/Auth"
+import Auth from "./shared/secure/Auth"
 import Settings from "./views/Settings"
 import Viewer from "./views/Viewer"
 import useViewportHeight from "./layouts/hooks/useViewportHeight"
-import ChatView from "./features/chat/views/ChatView"
+import ChatView from "./shared/chat/views/ChatView"
 import {isMobile} from "react-device-detect"
-import AnonRoute from "./features/secure/routes/AnonRoute"
+import AnonRoute from "./shared/secure/routes/AnonRoute"
 // import useWakeLock from "./hooks/WakeLoc"
 
 const MobileToolBar = lazy(() => import("./layouts/MobileToolBar"))
 const BrowserToolBar = lazy(() => import( "./layouts/BrowserToolBar"))
-const ToolbarMobileDialog = lazy(() => import("./features/chat/layout/ToolbarMobileDialog"))
+const ToolbarMobileDialog = lazy(() => import("./shared/chat/layout/ToolbarMobileDialog"))
 
 
 const App = () => {
