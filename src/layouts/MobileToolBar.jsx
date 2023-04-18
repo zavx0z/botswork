@@ -3,7 +3,7 @@ import Box from "@mui/material/Box"
 import {Logo} from "./elements/Logo"
 import * as React from "react"
 import {Fade} from "@mui/material"
-import ProfileMobile from "./components/ProfileMobile"
+import ProfileMobile from "../shared/layout/profile/ProfileMobile"
 // import {Slide} from "@mui/material"
 
 const MobileToolBar = () =>

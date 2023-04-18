@@ -3,7 +3,7 @@ import Box from "@mui/material/Box"
 import {Logo} from "./elements/Logo"
 import LanguageSelect from "../components/Lang"
 import * as React from "react"
-import ProfileBrowser from "./components/ProfileBrowser"
+import ProfileBrowser from "../shared/layout/profile/ProfileBrowser"
 
 const BrowserToolBar = () =>
     <Toolbar sx={{

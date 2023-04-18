@@ -1,24 +1,104 @@
-import React from "react"
-import {Typography} from "@mui/material"
+import React, {useState} from "react"
+import {IconButton, List, ListItemAvatar, ListItemText, Modal, Typography} from "@mui/material"
 import {inject, observer} from "mobx-react"
-import BotLoader from "../components/BotLoader/BotLoader"
 import Box from "@mui/material/Box"
+import {Close as CloseIcon, Logout, Settings, Update} from "@mui/icons-material"
+import Divider from "@mui/material/Divider"
+import ListItemButton from "@mui/material/ListItemButton"
+import routes from "../routes/routes"
+import Avatar from "@mui/material/Avatar"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import {useTranslation} from "react-i18next"
+import {useNavigate} from "react-router-dom"
 
-const ProfilePage = ({root: {username}}) => {
-    return <>
-        <Typography>
-            Пользователь: {username}
-        </Typography>
-        <Box sx={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "center",
-            // height: 500
-        }}>
-            <BotLoader/>
-        </Box>
-    </>
-
+const modalProps = {
+    backdrop: {
+        style: {
+            opacity: 1,
+            backgroundColor: '#fff'
+        },
+    },
 }
 
-export default inject("root")(observer(ProfilePage))
+const ProfilePage = ({root: {logOut, username, isAuthenticated}, pwa: {updateVersion}}) => {
+    const {t} = useTranslation('авторизация')
+    const {t: tm} = useTranslation('меню')
+    const [open, setOpen] = useState(true)
+
+    const handleClose = () => navigate(-1)
+
+    const navigate = useNavigate()
+    const handleNavigate = rout => {
+        setOpen(false)
+        navigate(rout)
+    }
+    const handleUpdateVersion = () => {
+        updateVersion()
+        handleClose()
+    }
+    return <Modal
+        open={open}
+        mountOnEnter
+        onClose={handleClose}
+        closeAfterTransition
+        slotProps={modalProps}
+    >
+        <Box sx={{height: '100vh', width: '100%', p: 1}}>
+            <IconButton
+                size={'large'}
+                aria-label="close"
+                onClick={handleClose}
+            >
+                <CloseIcon/>
+            </IconButton>
+            <List>
+                <Divider/>
+                <ListItemButton
+                    disableGutters
+                    divider
+                    onClick={() => handleNavigate(routes.profile)}
+                >
+                    <ListItemAvatar
+                        sx={{ml: 1}}
+                    >
+                        <Avatar alt={username} /* src={logo} *//>
+                    </ListItemAvatar>
+                    <ListItemText
+                        sx={{ml: 1}}
+                        primary={username}
+                    />
+                </ListItemButton>
+                <ListItemButton
+                    divider
+                    onClick={() => handleNavigate(routes.settings)}
+                >
+                    <ListItemIcon>
+                        <Settings/>
+                    </ListItemIcon>
+                    <ListItemText primary={tm('настройки')}/>
+                </ListItemButton>
+                <ListItemButton
+                    divider
+                    onClick={() => handleNavigate(routes.logout)}
+                >
+                    <ListItemIcon>
+                        <Logout/>
+                    </ListItemIcon>
+                    <ListItemText primary={t('выход')}/>
+                </ListItemButton>
+                <ListItemButton
+                    divider
+                    onClick={handleUpdateVersion}
+                >
+                    <ListItemIcon>
+                        <Update/>
+                    </ListItemIcon>
+                    <ListItemText primary={t('Проверка обновлений')}/>
+                    <Typography variant={'caption'}>v{process.env.REACT_APP_VERSION}</Typography>
+                </ListItemButton>
+            </List>
+        </Box>
+    </Modal>
+}
+
+export default inject('root', 'pwa')(observer(ProfilePage))
