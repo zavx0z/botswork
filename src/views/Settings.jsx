@@ -15,21 +15,12 @@ import {inject, observer} from "mobx-react"
 
 const Settings = ({pwa: {updateVersion}}) => {
     const {t} = useTranslation('меню')
-    const [open, setOpen] = useState(true)
     const [langOpen, setLangOpen] = useState(false)
     const navigate = useNavigate()
-    const handleClose = () => {
-        setOpen(false)
-        navigate(-1)
-    }
-    const handleOpenLang = () => setLangOpen(true)
-    const handleUpdateVersion = () => {
-        updateVersion()
-        handleClose()
-    }
+    const handleClose = () => navigate(-1)
     return <>
         <Modal
-            open={open}
+            open={true}
             onClose={handleClose}
             slotProps={{backdrop: {style: {opacity: 1, backgroundColor: '#fff'}}}}
         >
@@ -37,13 +28,13 @@ const Settings = ({pwa: {updateVersion}}) => {
                 <IconButton
                     size={'large'}
                     aria-label="back"
-                    onClick={() => handleClose()}
+                    onClick={handleClose}
                 >
                     <ArrowBack/>
                 </IconButton>
                 <List>
                     <Divider/>
-                    <ListItemButton divider onClick={handleOpenLang}>
+                    <ListItemButton divider onClick={() => setLangOpen(true)}>
                         <ListItemIcon>
                             <Language/>
                         </ListItemIcon>
@@ -51,7 +42,7 @@ const Settings = ({pwa: {updateVersion}}) => {
                     </ListItemButton>
                     <ListItemButton
                         divider
-                        onClick={handleUpdateVersion}
+                        onClick={() => updateVersion()}
                     >
                         <ListItemIcon>
                             <Update/>

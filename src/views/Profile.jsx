@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React from "react"
 import {IconButton, List, ListItemAvatar, ListItemText, Modal, Typography} from "@mui/material"
 import {inject, observer} from "mobx-react"
 import Box from "@mui/material/Box"
@@ -19,28 +19,37 @@ const modalProps = {
         },
     },
 }
+const ListItemUser = inject('root')(observer(({root: {username}, onClick}) =>
+    <ListItemButton
+        disableGutters
+        divider
+        onClick={onClick}
+    >
+        <ListItemAvatar
+            sx={{ml: 1}}
+        >
+            <Avatar alt={username} /* src={logo} *//>
+        </ListItemAvatar>
+        <ListItemText
+            sx={{ml: 1}}
+            primary={username}
+        />
+    </ListItemButton>
+))
 
-const ProfilePage = ({root: {logOut, username, isAuthenticated}, pwa: {updateVersion}}) => {
+
+const ProfilePage = ({root: {username}, pwa: {updateVersion}}) => {
     const {t} = useTranslation('авторизация')
     const {t: tm} = useTranslation('меню')
-    const [open, setOpen] = useState(true)
-
     const handleClose = () => navigate(-1)
-
     const navigate = useNavigate()
-    const handleNavigate = rout => {
-        setOpen(false)
-        navigate(rout)
-    }
     const handleUpdateVersion = () => {
         updateVersion()
         handleClose()
     }
     return <Modal
-        open={open}
-        mountOnEnter
+        open={true}
         onClose={handleClose}
-        closeAfterTransition
         slotProps={modalProps}
     >
         <Box sx={{height: '100vh', width: '100%', p: 1}}>
@@ -53,24 +62,10 @@ const ProfilePage = ({root: {logOut, username, isAuthenticated}, pwa: {updateVer
             </IconButton>
             <List>
                 <Divider/>
-                <ListItemButton
-                    disableGutters
-                    divider
-                    onClick={() => handleNavigate(routes.profile)}
-                >
-                    <ListItemAvatar
-                        sx={{ml: 1}}
-                    >
-                        <Avatar alt={username} /* src={logo} *//>
-                    </ListItemAvatar>
-                    <ListItemText
-                        sx={{ml: 1}}
-                        primary={username}
-                    />
-                </ListItemButton>
+                <ListItemUser/>
                 <ListItemButton
                     divider
-                    onClick={() => handleNavigate(routes.settings)}
+                    onClick={() => navigate(routes.settings)}
                 >
                     <ListItemIcon>
                         <Settings/>
@@ -79,7 +74,7 @@ const ProfilePage = ({root: {logOut, username, isAuthenticated}, pwa: {updateVer
                 </ListItemButton>
                 <ListItemButton
                     divider
-                    onClick={() => handleNavigate(routes.logout)}
+                    onClick={() => navigate(routes.logout)}
                 >
                     <ListItemIcon>
                         <Logout/>

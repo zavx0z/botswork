@@ -20,6 +20,7 @@ import usersStore from "./shared/users/usersStore"
 import {sioConnect} from "./shared/sio/sioMiddleware"
 import pwaModel from "./shared/pwa/pwaModel"
 import icon from './images/icon.png'
+import pwaNotificationMiddleware from "./shared/pwa/pwaStore"
 
 i18next.on('languageChanged', lng => void document.documentElement.setAttribute('lang', lng))
 
@@ -34,6 +35,7 @@ chatStore(rootStore)
 usersStore(rootStore)
 middlewareNetworkError(rootStore)
 logSioMiddleware(rootStore)
+pwaNotificationMiddleware(rootStore)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <Router>
