@@ -1,15 +1,27 @@
 import {Route, Routes} from "react-router-dom"
 import routes from "./routes"
-import {Container, Skeleton} from "@mui/material"
+import {Skeleton} from "@mui/material"
 import Box from "@mui/material/Box"
 import {isMobile} from "react-device-detect"
 import Typography from "@mui/material/Typography"
+import Container from "@mui/material/Container"
+import useAspectRatio from "../../shared/layout/hooks/useAspectRatio"
+import {useRef} from "react"
+
+
+const Banner = () => {
+    const ref = useRef(null)
+    const [width, height] = useAspectRatio(ref)
+    return (
+        <Box ref={ref} sx={{...styles, justifyContent: "center"}}>
+            <Skeleton variant="rounded" width={width} height={height}/>
+        </Box>
+    )
+}
 
 const Posts = () =>
     <Container sx={{display: "flex", flexDirection: "column"}}>
-        <Box sx={{...styles, justifyContent: "center"}}>
-            <Skeleton variant="rounded" sx={{width: "100%", paddingTop: "56.25%"}}/>
-        </Box>
+        <Banner/>
         <Box sx={{...styles}}>
             <Routes>
                 <Route path={routes.post} element={<Description>
@@ -43,6 +55,12 @@ const Posts = () =>
         </Box>
     </Container>
 
-const styles = {display: "flex", height: "50%", flexDirection: "column", mt: 2}
+const styles = {
+    display: "flex",
+    height: "50%",
+    flexDirection: "column",
+    alignItems: "center",
+    mt: 2
+}
 const Description = ({children}) => <Typography variant={isMobile ? 'body2' : 'body1'}>{children}</Typography>
 export default Posts
