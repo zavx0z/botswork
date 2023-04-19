@@ -44,7 +44,8 @@ const App = () =>
         <Body>
             <LeftPanel>
                 <Routes>
-                    <Route path={'*'} element={<PostsLeftPanel/>}/>
+                    <Route path={routes.post + '*'} element={<PostsLeftPanel/>}/>
+                    <Route path={routes.auth + '*'} element={<div/>}/>
                     <Route path={routes.chat} element={<DialogList/>}/>
                     <Route path={routes.chat + '/:dialogId'} element={isBrowser && <DialogList/>}/>
                 </Routes>
