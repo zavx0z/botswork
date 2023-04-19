@@ -48,7 +48,7 @@ const Settings = ({pwa: {updateVersion}}) => {
                             <Update/>
                         </ListItemIcon>
                         <ListItemText primary={t('Проверка обновлений')}/>
-                        <Typography variant={'caption'}>v{process.env.REACT_APP_VERSION}</Typography>
+                        <Typography variant={'caption'}>V{process.env.REACT_APP_VERSION}</Typography>
                     </ListItemButton>
                 </List>
             </Box>
