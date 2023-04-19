@@ -19,12 +19,12 @@ import loggingStore, {logSioMiddleware} from "./features/logging/loggingStore"
 import usersStore from "./shared/users/usersStore"
 import {sioConnect} from "./shared/sio/sioMiddleware"
 import pwaModel from "./shared/pwa/pwaModel"
-import icon from './images/icon.png'
+import logo from './images/logo.png'
 import pwaNotificationMiddleware from "./shared/pwa/pwaStore"
 
 i18next.on('languageChanged', lng => void document.documentElement.setAttribute('lang', lng))
 
-export const pwaStore = pwaModel.create({iconMessage: icon})
+export const pwaStore = pwaModel.create({iconMessage: logo})
 serviceWorkerRegistration.register({
     onUpdate: (serviceWorker) => pwaStore.setNewVersionExist(serviceWorker),
     onSuccess: (serviceWorker) => pwaStore.setServiceWorker(serviceWorker)
