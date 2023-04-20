@@ -17,6 +17,7 @@ import DialogList from "./shared/chat/views/DialogList"
 import PostsLeftPanel from "./features/posts/PostsLeftPanel"
 import Wordmark from "./shared/layout/components/ButtonWordMark"
 import {ButtonLogo} from "./shared/layout/components/ButtonLogo"
+import Companion from "./shared/chat/layout/Companion"
 
 
 const App = () =>
@@ -32,6 +33,8 @@ const App = () =>
                 <Routes>
                     <Route path={"/*"} element={<Wordmark fullWidth={isMobile} to={routes.home}/>}/>
                     <Route path={routes.auth + '/*'} element={<Wordmark fullWidth={isMobile} to={routes.home}/>}/>
+                    <Route path={routes.chat + '/:dialogId'} element={isMobile && <Companion/>}/>
+
                 </Routes>
             </CenterBar>
             <RightBar>
