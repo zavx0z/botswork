@@ -13,7 +13,7 @@ import middlewareNetworkError from "./shared/secure/middleware/network"
 import {isMobile} from "react-device-detect"
 import rootStore from "./stores/rootStore"
 import * as serviceWorkerRegistration from './shared/pwa/serviceWorkerRegistration'
-import chatStore from "./shared/chat/chatStore"
+import dialogsStore from "./shared/chat/dialogsStore"
 import PWA from "./shared/pwa/PWA"
 import loggingStore, {logSioMiddleware} from "./features/logging/loggingStore"
 import usersStore from "./shared/users/usersStore"
@@ -31,7 +31,7 @@ serviceWorkerRegistration.register({
 })
 
 sioConnect(rootStore)
-chatStore(rootStore)
+dialogsStore(rootStore)
 usersStore(rootStore)
 middlewareNetworkError(rootStore)
 logSioMiddleware(rootStore)

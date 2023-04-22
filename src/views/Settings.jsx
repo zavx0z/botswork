@@ -1,4 +1,3 @@
-import * as React from "react"
 import {useState} from "react"
 import {List, ListItemText, Modal} from "@mui/material"
 import {ArrowBack, Language, Update} from "@mui/icons-material"
@@ -9,7 +8,7 @@ import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemButton from "@mui/material/ListItemButton"
 import {useTranslation} from "react-i18next"
 import Divider from "@mui/material/Divider"
-import {MobileLanguageSelect} from "../components/Lang"
+import {MobileLanguageSelect} from "../elements/Lang"
 import Typography from "@mui/material/Typography"
 import {inject, observer} from "mobx-react"
 

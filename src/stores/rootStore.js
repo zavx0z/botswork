@@ -1,24 +1,39 @@
 import ssoModel from "../shared/secure/ssoModel"
 import {types} from "mobx-state-tree"
-import chatModel from "../shared/chat/models/chatModel"
+import dialogsModel from "../shared/chat/models/dialogsModel"
 import usersModel from "../shared/users/models/modelUsers"
 import sioModel from "../shared/sio/sioModel"
-import {sioMiddleware} from "../shared/sio/sioMiddleware"
+import {interEntanglement, supportAtom} from "../atom/atomsModel"
+import {dialogProtons, intraEntanglement, messageProtons, userProtons} from "../proton/protonsModel"
+
+const protons = types.compose(
+    userProtons,
+    dialogProtons,
+    messageProtons,
+).named('proton')
+
+const atoms = types
+    .model('atom', {
+        support: types.maybeNull(supportAtom),
+    })
 
 const rootStore = types
     .compose(
+        types.model('atom', {atom: atoms}),
+        types.model('proton', {proton: protons}),
+
         ssoModel,
         sioModel,
         usersModel,
-        chatModel,
+        dialogsModel,
     )
     .named("root")
-    .create({})
-export default rootStore
+    .create({
+        atom: atoms.create({}),
+        proton: protons.create({support: {}}),
+    })
 
-sioMiddleware(rootStore, [
-    {
-        action: 'sendMessage',
-        cb: ({args}) => console.log(args[0])
-    }
-])
+intraEntanglement(rootStore)
+interEntanglement(rootStore)
+
+export default rootStore
