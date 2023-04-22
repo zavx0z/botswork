@@ -11,3 +11,4 @@ const messageProton = types
         dialogId: types.integer
     })
 export default messageProton
+export const messageProtons = types.model({message: types.maybeNull(types.map(messageProton))})

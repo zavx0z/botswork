@@ -1,21 +1,25 @@
 import ssoModel from "../shared/secure/ssoModel"
-import {types} from "mobx-state-tree"
+import {applyPatch, types} from "mobx-state-tree"
 import dialogsModel from "../shared/chat/models/dialogsModel"
 import usersModel from "../shared/users/models/modelUsers"
 import sioModel from "../shared/sio/sioModel"
-import {interEntanglement, supportAtom} from "../atom/atomsModel"
-import {dialogProtons, intraEntanglement, messageProtons, userProtons} from "../proton/protonsModel"
+import {supportAtom} from "../atom/support/supportAtom"
+import {messageProtons} from "../core/proton/messageProton"
+import {dialogProtons} from "../core/proton/dialogProton"
+import {userProtons} from "../core/proton/userProton"
+import {interEntanglement} from "../atom/support/entanglement"
+import {sioAfterConnect} from "../shared/sio/sioMiddleware"
+import channel from "../shared/chat/channels"
 
 const protons = types.compose(
     userProtons,
     dialogProtons,
     messageProtons,
-).named('proton')
+)
 
-const atoms = types
-    .model('atom', {
-        support: types.maybeNull(supportAtom),
-    })
+const atoms = types.model({
+    support: types.maybeNull(supportAtom),
+})
 
 const rootStore = types
     .compose(
@@ -28,12 +32,17 @@ const rootStore = types
         dialogsModel,
     )
     .named("root")
-    .create({
-        atom: atoms.create({}),
-        proton: protons.create({support: {}}),
-    })
+    .create({})
 
-intraEntanglement(rootStore)
 interEntanglement(rootStore)
+
+sioAfterConnect(rootStore, (sio, store) => {
+    sio.emitWithAck(channel.USERS, {})
+        .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/user'}))
+    sio.emitWithAck(channel.DIALOG, {})
+        .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/dialog'}))
+    sio.emitWithAck(channel.MESSAGE, {})
+        .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/message'}))
+})
 
 export default rootStore

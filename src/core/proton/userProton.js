@@ -6,3 +6,4 @@ const userProton = types
         name: types.string,
     })
 export default userProton
+export const userProtons = types.model({user: types.map(userProton)})
