@@ -1,7 +1,4 @@
-import authenticate from "../shared/secure/routes"
-
 const routes = {
-    ...authenticate,
     home: "/",
     profile: "/profile",
     contacts: "/contacts",

@@ -1,8 +1,5 @@
-import ssoModel from "../shared/secure/ssoModel"
+import ssoModel from "../shared/sso/ssoModel"
 import {applyPatch, types} from "mobx-state-tree"
-import dialogsModel from "../shared/chat/models/dialogsModel"
-import usersModel from "../shared/users/models/modelUsers"
-import sioModel from "../shared/sio/sioModel"
 import {supportAtom} from "../atom/support/supportAtom"
 import {messageProtons} from "../core/proton/messageProton"
 import {dialogProtons} from "../core/proton/dialogProton"
@@ -22,24 +19,25 @@ const atoms = types.model({
 })
 
 const neutrons = types.model({
-    user: ssoModel,
+    sso: types.maybeNull(ssoModel),
 })
 
-const rootStore = types
-    .compose(
-        types.model('atom', {atom: atoms}),
-        types.model('proton', {proton: protons}),
-        // types.model('neutron', {neutron: neutrons}),
+const quantumModel = types
+    .model("root", {
+        atom: atoms,
+        proton: protons,
+        neutron: neutrons,
+    })
 
-        ssoModel,
-        sioModel,
-        usersModel,
-        dialogsModel,
-    )
-    .named("root")
-    .create({})
+const rootStore = quantumModel.create({
+    proton: {},
+    atom: {},
+    neutron: {sso: {}},
+})
 
 interEntanglement(rootStore)
+
+// sioModel,
 
 sioAfterConnect(rootStore, (sio, store) => {
     sio.emitWithAck(channel.USERS, {})
