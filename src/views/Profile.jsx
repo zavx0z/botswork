@@ -96,4 +96,4 @@ const ProfilePage = ({root: {username}, pwa: {updateVersion}}) => {
     </Modal>
 }
 
-export default inject('root', 'pwa')(observer(ProfilePage))
+export default ProfilePage
