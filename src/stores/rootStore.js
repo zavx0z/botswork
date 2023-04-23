@@ -21,10 +21,15 @@ const atoms = types.model({
     support: types.maybeNull(supportAtom),
 })
 
+const neutrons = types.model({
+    user: ssoModel,
+})
+
 const rootStore = types
     .compose(
         types.model('atom', {atom: atoms}),
         types.model('proton', {proton: protons}),
+        // types.model('neutron', {neutron: neutrons}),
 
         ssoModel,
         sioModel,

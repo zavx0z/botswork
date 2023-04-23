@@ -5,6 +5,7 @@ import {Root} from "../shared/layout/AppLayout"
 import PWA from "../shared/pwa/PWA"
 import {Outlet} from "react-router-dom"
 import postRoutes from "../molecule/posts/routes"
+import {ssoRoutes} from "../shared/secure/routes"
 
 export const rootRouter = {
     element:
@@ -31,6 +32,7 @@ export const rootRouter = {
             path: "/profile",
             Component: inject('root', 'pwa')(observer(Profile))
         },
+        ssoRoutes,
         postRoutes,
     ]
 }
