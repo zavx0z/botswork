@@ -1,7 +1,7 @@
 import {applyPatch, onPatch, resolvePath, types} from "mobx-state-tree"
-import dialogProton from "../../core/proton/dialogProton"
-import {messageProtons} from "../../core/proton/messageProton"
-import {userProtons} from "../../core/proton/userProton"
+import dialogProton from "../core/proton/dialogProton"
+import {messageProtons} from "../core/proton/messageProton"
+import {userProtons} from "../core/proton/userProton"
 import {matchPath} from "react-router-dom"
 
 const coreProton = types

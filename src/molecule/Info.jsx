@@ -3,9 +3,15 @@ import Box from "@mui/material/Box"
 import {isMobile} from "react-device-detect"
 import Typography from "@mui/material/Typography"
 import React, {useRef} from "react"
-import useAspectRatio from "../../shared/layout/hooks/useAspectRatio"
+import useAspectRatio from "../shared/layout/hooks/useAspectRatio"
 import Container from "@mui/material/Container"
 
+export const MainInfo = () =>
+    <Container>
+        <Typography variant={'h6'}>
+            Платформа ботов
+        </Typography>
+    </Container>
 
 const Info = ({children}) => {
     const ref = useRef(null)

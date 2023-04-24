@@ -9,16 +9,16 @@ import theme from "./shared/layout/theme/theme"
 import {SnackbarProvider} from "notistack"
 import middlewareNetworkError from "./shared/sso/middleware/network"
 import {isMobile} from "react-device-detect"
-import store from "./store"
+import quantum from "./store"
 import * as serviceWorkerRegistration from './shared/pwa/serviceWorkerRegistration'
 import dialogsStore from "./shared/chat/dialogsStore"
-import loggingStore, {logSioMiddleware} from "./features/logging/loggingStore"
 import usersStore from "./shared/users/usersStore"
 import {sioConnect} from "./shared/sio/sioMiddleware"
 import pwaModel from "./shared/pwa/pwaModel"
 import logo from './media/images/logo.png'
 import pwaNotificationMiddleware from "./shared/pwa/pwaStore"
 import App from "./App"
+import loggingStore, {logSioMiddleware} from "./feature/logging/loggingStore"
 
 i18next.on('languageChanged', lng => void document.documentElement.setAttribute('lang', lng))
 
@@ -28,17 +28,17 @@ serviceWorkerRegistration.register({
     onSuccess: (serviceWorker) => pwaStore.setServiceWorker(serviceWorker)
 })
 
-sioConnect(store)
-dialogsStore(store)
-usersStore(store)
-middlewareNetworkError(store)
-logSioMiddleware(store)
-pwaNotificationMiddleware(store)
+sioConnect(quantum)
+dialogsStore(quantum)
+usersStore(quantum)
+middlewareNetworkError(quantum)
+logSioMiddleware(quantum)
+pwaNotificationMiddleware(quantum)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <ThemeProvider theme={theme}>
         <SnackbarProvider anchorOrigin={{vertical: 'bottom', horizontal: isMobile ? 'center' : 'left'}}>
-            <Provider root={store} pwa={pwaStore} log={loggingStore}>
+            <Provider root={quantum} pwa={pwaStore} log={loggingStore}>
                 <App/>
             </Provider>
         </SnackbarProvider>
