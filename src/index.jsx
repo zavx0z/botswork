@@ -8,7 +8,7 @@ import i18next from "i18next"
 import {ThemeProvider} from "@mui/material/styles"
 import theme from "./theme/theme"
 import {SnackbarProvider} from "notistack"
-import middlewareNetworkError from "./shared/secure/middleware/network"
+import middlewareNetworkError from "./shared/sso/middleware/network"
 import {isMobile} from "react-device-detect"
 import rootStore from "./stores/rootStore"
 import * as serviceWorkerRegistration from './shared/pwa/serviceWorkerRegistration'

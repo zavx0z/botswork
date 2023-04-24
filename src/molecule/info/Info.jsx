@@ -4,12 +4,13 @@ import {isMobile} from "react-device-detect"
 import Typography from "@mui/material/Typography"
 import React, {useRef} from "react"
 import useAspectRatio from "../../shared/layout/hooks/useAspectRatio"
+import Container from "@mui/material/Container"
 
 
-export const Post = ({children}) => {
+const Info = ({children}) => {
     const ref = useRef(null)
     const [width, height] = useAspectRatio(ref)
-    return <>
+    return <Container>
         <Box
             ref={ref}
             sx={{
@@ -36,5 +37,6 @@ export const Post = ({children}) => {
                 </Typography>
             </Box>
         </Fade>
-    </>
+    </Container>
 }
+export default Info

@@ -1,7 +1,8 @@
-import {types} from "mobx-state-tree"
+import {applyPatch, onPatch, resolvePath, types} from "mobx-state-tree"
 import dialogProton from "../../core/proton/dialogProton"
 import {messageProtons} from "../../core/proton/messageProton"
 import {userProtons} from "../../core/proton/userProton"
+import {matchPath} from "react-router-dom"
 
 const coreProton = types
     .model({
@@ -30,3 +31,12 @@ export const supportAtom = types
         sender: types.maybeNull(senderElectron),
     })
 
+export const interEntanglement = store => onPatch(store, snapshot => {
+    let match
+    match = matchPath('/proton/dialog/:id', snapshot.path)
+    if (match && snapshot.value.name === 'support') {
+        const item = resolvePath(store, match.pathname)
+        applyPatch(store, {op: 'replace', path: '/atom/support', value: {core: {dialog: item}}})
+    }
+
+})

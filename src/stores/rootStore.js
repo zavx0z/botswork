@@ -4,7 +4,7 @@ import {supportAtom} from "../atom/support/supportAtom"
 import {messageProtons} from "../core/proton/messageProton"
 import {dialogProtons} from "../core/proton/dialogProton"
 import {userProtons} from "../core/proton/userProton"
-import {interEntanglement} from "../atom/support/entanglement"
+import {interEntanglement} from "../atom/support/supportAtom"
 import {sioAfterConnect} from "../shared/sio/sioMiddleware"
 import channel from "../shared/chat/channels"
 
