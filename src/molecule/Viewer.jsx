@@ -10,7 +10,7 @@ const App = () => {
             // url="ws://192.168.88.44:8080/websockify"
             scaleViewport
             // showDotCursor
-            background="#fff"
+            background="src/views#fff"
             style={{
                 width: '100%',
                 height: '75vh',

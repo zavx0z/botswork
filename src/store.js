@@ -1,12 +1,12 @@
-import ssoModel from "../shared/sso/ssoModel"
+import ssoModel from "./shared/sso/ssoModel"
 import {applyPatch, types} from "mobx-state-tree"
-import {supportAtom} from "../atom/support/supportAtom"
-import {messageProtons} from "../core/proton/messageProton"
-import {dialogProtons} from "../core/proton/dialogProton"
-import {userProtons} from "../core/proton/userProton"
-import {interEntanglement} from "../atom/support/supportAtom"
-import {sioAfterConnect} from "../shared/sio/sioMiddleware"
-import channel from "../shared/chat/channels"
+import {supportAtom} from "./atom/support/supportAtom"
+import {messageProtons} from "./core/proton/messageProton"
+import {dialogProtons} from "./core/proton/dialogProton"
+import {userProtons} from "./core/proton/userProton"
+import {interEntanglement} from "./atom/support/supportAtom"
+import {sioAfterConnect} from "./shared/sio/sioMiddleware"
+import channel from "./shared/chat/channels"
 
 const protons = types.compose(
     userProtons,
@@ -29,17 +29,17 @@ const quantumModel = types
         neutron: neutrons,
     })
 
-const rootStore = quantumModel.create({
+const store = quantumModel.create({
     proton: {},
     atom: {},
     neutron: {sso: {}},
 })
 
-interEntanglement(rootStore)
+interEntanglement(store)
 
 // sioModel,
 
-sioAfterConnect(rootStore, (sio, store) => {
+sioAfterConnect(store, (sio, store) => {
     sio.emitWithAck(channel.USERS, {})
         .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/user'}))
     sio.emitWithAck(channel.DIALOG, {})
@@ -48,4 +48,4 @@ sioAfterConnect(rootStore, (sio, store) => {
         .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/message'}))
 })
 
-export default rootStore
+export default store

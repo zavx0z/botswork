@@ -1,71 +1,178 @@
-import {Route, Routes} from "react-router-dom"
-import ProfileView from "./views/Profile"
-import PrivateRoute from "./shared/secure/routes/PrivateRoute"
-import routes from "./routes/routes"
-import Auth from "./shared/secure/Auth"
-import Settings from "./views/Settings"
-import ChatView from "./shared/chat/views/ChatView"
-import AnonRoute from "./shared/secure/routes/AnonRoute"
-import Posts from "./features/posts/Posts"
-import ButtonBackHistory from "./shared/layout/components/ButtonBackHistory"
-import ProfileButton from "./shared/layout/components/ProfileButton"
-import {isBrowser, isMobile} from "react-device-detect"
-import NetworkStatusCompanion from "./shared/chat/layout/NetworkStatusCompanion"
-import {Body, CenterBar, Content, LeftBar, LeftPanel, RightBar, Root, TopBar} from "./shared/layout/AppLayout"
-import React from "react"
-import DialogList from "./shared/chat/views/DialogList"
-import PostsLeftPanel from "./features/posts/PostsLeftPanel"
-import Wordmark from "./shared/layout/components/ButtonWordMark"
+import {createBrowserRouter, Outlet, redirect, RouterProvider, useLoaderData, useMatches} from "react-router-dom"
+import React, {useMemo} from "react"
+import {AccountBox, Api, Chat, Computer, Feed, Public, Smartphone, Workspaces} from "@mui/icons-material"
+import quantum from "./store"
+import {Body, CenterBar, Content, LeftBar, RightBar, Root, TopBar} from "./shared/layout/AppLayout"
+import PWA from "./shared/pwa/PWA"
 import {ButtonLogo} from "./shared/layout/components/ButtonLogo"
-import Companion from "./shared/chat/layout/Companion"
+import Wordmark from "./shared/layout/components/ButtonWordMark"
+import ButtonProfile from "./shared/layout/components/ButtonProfile"
+import ButtonLogin from "./shared/layout/components/ButtonLogIn"
+import LeftMenu from "./shared/layout/containers/LeftMenu"
+import {isMobile} from "react-device-detect"
+import {ssoRoutes} from "./shared/sso/routes"
+import infoRoutes from "./molecule/info/routes"
 
+const Home = () => {
+    return <>Home</>
+}
+const ProfilePage = () => <>ProfilePage</>
+const anonymousMenu = [[
+    {
+        title: 'Браузер',
+        route: 'info/browser',
+        Icon: Public,
+    },
+    {
+        title: 'Десктоп',
+        route: 'info/desktop',
+        Icon: Computer,
+    },
+    {
+        title: 'Мобильный',
+        route: 'info/mobile',
+        Icon: Smartphone,
+    },
+    {
+        title: 'Окружение',
+        route: 'info/workspace',
+        Icon: Workspaces,
+    },
+    {
+        title: 'Интеграция',
+        route: 'info/api',
+        Icon: Api,
+    }
+]]
+const userMenu = [[
+    {
+        title: 'Профиль',
+        route: '/',
+        Icon: AccountBox,
+    },
+    {
+        title: 'Окружение',
+        route: 'workspace',
+        Icon: Workspaces,
+    },
+], [
+    {
+        title: 'Поддержка',
+        route: 'support',
+        Icon: Chat,
+    },
+    {
+        title: 'Новости',
+        route: 'updates',
+        Icon: Feed,
+    }
+]]
+const findMatchWithHandleKey = (matches, key) => {
+    for (let i = matches.length - 1; i >= 0; i--) {
+        const match = matches[i]
+        if (match.handle && key in match.handle) {
+            return match.handle[key]
+        }
+    }
+    return null
+}
 
-const App = () =>
-    <Root>
-        <TopBar>
-            <LeftBar>
-                <Routes>
-                    <Route path={"/*"} element={<ButtonLogo/>}/>
-                    <Route path={routes.chat + '/:dialogId'} element={isMobile ? <ButtonBackHistory/> : <ButtonLogo/>}/>
-                </Routes>
-            </LeftBar>
-            <CenterBar>
-                <Routes>
-                    <Route path={"/*"} element={<Wordmark fullWidth={isMobile} to={routes.home}/>}/>
-                    <Route path={routes.auth + '/*'} element={<Wordmark fullWidth={isMobile} to={routes.home}/>}/>
-                    <Route path={routes.chat + '/:dialogId'} element={isMobile && <Companion/>}/>
+const App = () => <RouterProvider router={createBrowserRouter([{
+    loader: async () => quantum.neutron.sso.isAuth(),
+    Component: () => {
+        const isAuth = useLoaderData()
+        const match = useMatches()
+        // useEffect(() => console.log(match), [match])
+        const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
+        const menuItems = useMemo(() => {
+            const handleMenu = findMatchWithHandleKey(match, 'menuItems')
+            if (handleMenu && isAuth)
+                return handleMenu
+            else if (handleMenu)
+                return anonymousMenu
+            else return null
+        }, [isAuth, match])
+        return <Root>
+            <PWA/>
+            <TopBar>
+                <LeftBar>
+                    <ButtonLogo to={routeLogo}/>
+                </LeftBar>
+                <CenterBar>
+                    <Wordmark to={routeLogo}/>
+                </CenterBar>
+                <RightBar>
+                    {isAuth ? <ButtonProfile to={'/'}/> : <ButtonLogin/>}
+                </RightBar>
+            </TopBar>
+            <Body>
+                {menuItems && <LeftMenu items={menuItems} opened={!isMobile} visibleCloseButton={!isMobile}/>}
+                <Content>
+                    <Outlet/>
+                </Content>
+            </Body>
+        </Root>
+    },
+    children: [
+        {
+            path: '/',
+            handle: {
+                routeLogo: 'info',
+                menuItems: userMenu,
+            },
+            children: [
+                {
+                    index: true,
+                    loader: async () => quantum.neutron.sso.isAuth(),
+                    Component: () => useLoaderData() ? <ProfilePage/> : <Home/>,
+                },
+                {
+                    path: 'support',
+                    loader: async () => quantum.neutron.sso.isAuth().then(user => {
+                        !Boolean(user) && redirect('/')
+                        return {user}
+                    }),
+                    Component: () => <>Support</>
+                },
+                {
+                    path: 'workspace',
+                    loader: async () => quantum.neutron.sso.isAuth().then(user => {
+                        !Boolean(user) && redirect('/')
+                        return {user}
+                    }),
+                    Component: () => <>Workspace</>
+                },
+                {
+                    path: 'updates',
+                    loader: async () => quantum.neutron.sso.isAuth().then(user => {
+                        !Boolean(user) && redirect('/')
+                        return {user}
+                    }),
+                    Component: () => <>News</>
+                },
+            ],
+        },
+        {
+            path: 'auth',
+            ...ssoRoutes,
+            element: <Outlet/>
+        },
+        {
+            path: 'info',
+            handle: {
+                routeLogo: '/info',
+                menuItems: anonymousMenu,
+            },
+            children: [...infoRoutes,
+                {
+                    index: true,
+                    element: <Home/>
+                }
+            ]
+        },
+    ]
+}])}/>
 
-                </Routes>
-            </CenterBar>
-            <RightBar>
-                <Routes>
-                    <Route path={"/*"} element={<ProfileButton/>}/>
-                    <Route path={routes.auth + '/*'} element={<div/>}/>
-                    <Route path={routes.chat + '/:dialogId'} element={isMobile ? <NetworkStatusCompanion/> : <ProfileButton/>}/>
-                </Routes>
-            </RightBar>
-        </TopBar>
-        <Body>
-            <LeftPanel>
-                <Routes>
-                    <Route path={'*'} element={<PostsLeftPanel/>}/>
-                    <Route path={routes.auth + '/*'} element={<div/>}/>
-                    <Route path={routes.post} element={<PostsLeftPanel/>}/>
-                    <Route path={routes.chat} element={<DialogList/>}/>
-                    <Route path={routes.chat + '/:dialogId'} element={isBrowser && <DialogList/>}/>
-                </Routes>
-            </LeftPanel>
-            <Content>
-                <Routes>
-                    <Route path={routes.post + '*'} element={<AnonRoute redirect={routes.chat}><Posts/></AnonRoute>}/>
-                    <Route path={routes.auth + '/*'} element={<Auth/>}/>
-                    <Route path={routes.settings} element={<PrivateRoute><Settings/></PrivateRoute>}/>
-                    <Route path={routes.chat + '/*'} element={<PrivateRoute><ChatView/></PrivateRoute>}/>
-                    <Route path={routes.profile} element={<PrivateRoute><ProfileView/></PrivateRoute>}/>
-                </Routes>
-            </Content>
-        </Body>
-    </Root>
 
 export default App
 
