@@ -1,13 +1,33 @@
-import {types} from "mobx-state-tree"
+import {Api, Computer, Public, Smartphone, Workspaces} from "@mui/icons-material"
 
-export const infoAtom = types
-    .model('info', {
-        path: types.identifier,
-        description: types.string
-    })
-
-export const infoAtoms = types.map(infoAtom)
-export const infoData = {
+export const infoOrg = [[
+    {
+        title: 'Браузер',
+        route: 'info/browser',
+        Icon: Public,
+    },
+    {
+        title: 'Десктоп',
+        route: 'info/desktop',
+        Icon: Computer,
+    },
+    {
+        title: 'Мобильный',
+        route: 'info/mobile',
+        Icon: Smartphone,
+    },
+    {
+        title: 'Окружение',
+        route: 'info/workspace',
+        Icon: Workspaces,
+    },
+    {
+        title: 'Интеграция',
+        route: 'info/api',
+        Icon: Api,
+    }
+]]
+export const organismInfo = {
     'browser': {
         path: 'browser',
         description: `

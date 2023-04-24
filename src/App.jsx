@@ -1,6 +1,5 @@
 import {createBrowserRouter, Outlet, redirect, RouterProvider, useLoaderData, useMatches} from "react-router-dom"
 import React, {useMemo} from "react"
-import {AccountBox, Api, Chat, Computer, Feed, Public, Smartphone, Workspaces} from "@mui/icons-material"
 import {Body, CenterBar, Content, LeftBar, RightBar, Root, TopBar} from "./shared/layout/AppLayout"
 import PWA from "./shared/pwa/PWA"
 import {ButtonLogo} from "./shared/layout/components/ButtonLogo"
@@ -12,66 +11,10 @@ import {isMobile} from "react-device-detect"
 import {ssoRoutes} from "./shared/sso/routes"
 import Info, {MainInfo} from "./molecule/Info"
 import quantum from "./store"
-
-const anonymousMenu = [[
-    {
-        title: 'Браузер',
-        route: 'info/browser',
-        Icon: Public,
-    },
-    {
-        title: 'Десктоп',
-        route: 'info/desktop',
-        Icon: Computer,
-    },
-    {
-        title: 'Мобильный',
-        route: 'info/mobile',
-        Icon: Smartphone,
-    },
-    {
-        title: 'Окружение',
-        route: 'info/workspace',
-        Icon: Workspaces,
-    },
-    {
-        title: 'Интеграция',
-        route: 'info/api',
-        Icon: Api,
-    }
-]]
-const userMenu = [[
-    {
-        title: 'Профиль',
-        route: '/',
-        Icon: AccountBox,
-    },
-    {
-        title: 'Окружение',
-        route: 'workspace',
-        Icon: Workspaces,
-    },
-], [
-    {
-        title: 'Поддержка',
-        route: 'support',
-        Icon: Chat,
-    },
-    {
-        title: 'Новости',
-        route: 'updates',
-        Icon: Feed,
-    }
-]]
-const findMatchWithHandleKey = (matches, key) => {
-    for (let i = matches.length - 1; i >= 0; i--) {
-        const match = matches[i]
-        if (match.handle && key in match.handle) {
-            return match.handle[key]
-        }
-    }
-    return null
-}
+import {infoOrg} from "./organism/info"
+import {findMatchWithHandleKey} from "./shared/layout/utils/route"
+import {userMenu} from "./organism/user"
+import Profile from "./molecule/Profile"
 
 const App = () => <RouterProvider router={createBrowserRouter([{
     loader: async () => quantum.neutron.sso.isAuth(),
@@ -85,7 +28,7 @@ const App = () => <RouterProvider router={createBrowserRouter([{
             if (handleMenu && isAuth)
                 return handleMenu
             else if (handleMenu)
-                return anonymousMenu
+                return infoOrg
             else return null
         }, [isAuth, match])
         return <Root>
@@ -120,7 +63,7 @@ const App = () => <RouterProvider router={createBrowserRouter([{
                 {
                     index: true,
                     loader: async () => quantum.neutron.sso.isAuth(),
-                    Component: () => useLoaderData() ? <>ProfilePage</> : <MainInfo/>,
+                    Component: () => useLoaderData() ? <Profile atom={quantum.atom.profile}/> : <MainInfo/>,
                 },
                 {
                     path: 'support',
@@ -151,7 +94,7 @@ const App = () => <RouterProvider router={createBrowserRouter([{
             path: 'info',
             handle: {
                 routeLogo: '/info',
-                menuItems: anonymousMenu,
+                menuItems: infoOrg,
             },
             children: [
                 {

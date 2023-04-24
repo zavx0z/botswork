@@ -5,7 +5,6 @@ import Box from "@mui/material/Box"
 import {Close as CloseIcon, Logout, Settings, Update} from "@mui/icons-material"
 import Divider from "@mui/material/Divider"
 import ListItemButton from "@mui/material/ListItemButton"
-import routes from "../routes/routes"
 import Avatar from "@mui/material/Avatar"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import {useTranslation} from "react-i18next"
@@ -19,7 +18,7 @@ const modalProps = {
         },
     },
 }
-const ListItemUser = inject('root')(observer(({root: {username}, onClick}) =>
+const ListItemUser = observer(({username, onClick}) =>
     <ListItemButton
         disableGutters
         divider
@@ -35,16 +34,16 @@ const ListItemUser = inject('root')(observer(({root: {username}, onClick}) =>
             primary={username}
         />
     </ListItemButton>
-))
+)
 
 
-const ProfilePage = ({root: {username}, pwa: {updateVersion}}) => {
+const Profile = ({atom}) => {
     const {t} = useTranslation('авторизация')
     const {t: tm} = useTranslation('меню')
     const handleClose = () => navigate(-1)
     const navigate = useNavigate()
     const handleUpdateVersion = () => {
-        updateVersion()
+        // updateVersion()
         handleClose()
     }
     return <Modal
@@ -62,10 +61,10 @@ const ProfilePage = ({root: {username}, pwa: {updateVersion}}) => {
             </IconButton>
             <List>
                 <Divider/>
-                <ListItemUser/>
+                <ListItemUser username={atom.username} />
                 <ListItemButton
                     divider
-                    onClick={() => navigate(routes.settings)}
+                    onClick={() => navigate('settings')}
                 >
                     <ListItemIcon>
                         <Settings/>
@@ -74,7 +73,7 @@ const ProfilePage = ({root: {username}, pwa: {updateVersion}}) => {
                 </ListItemButton>
                 <ListItemButton
                     divider
-                    onClick={() => navigate(routes.logout)}
+                    onClick={() => navigate('logout')}
                 >
                     <ListItemIcon>
                         <Logout/>
@@ -96,4 +95,4 @@ const ProfilePage = ({root: {username}, pwa: {updateVersion}}) => {
     </Modal>
 }
 
-export default ProfilePage
+export default observer(Profile)

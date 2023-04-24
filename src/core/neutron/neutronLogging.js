@@ -1,12 +1,36 @@
-import {types} from "mobx-state-tree"
-import {alignString} from "./utils/string"
+import {addMiddleware, types} from "mobx-state-tree"
+import {sioAfterConnect} from "../../shared/sio/sioMiddleware"
 
+const alignString = (str, minLength, alignment = 'left') => {
+    const spacesToAdd = minLength - str.length
+    let spacesToAddLeft, spacesToAddRight
+    if (spacesToAdd < 0)
+        return str
+    switch (alignment) {
+        case "left":
+            spacesToAddLeft = 0
+            spacesToAddRight = spacesToAdd
+            break
+        case "right":
+            spacesToAddLeft = spacesToAdd
+            spacesToAddRight = 0
+            break
+        case "center":
+            spacesToAddLeft = Math.floor(spacesToAdd / 2)
+            spacesToAddRight = spacesToAdd - spacesToAddLeft
+            break
+        default:
+            throw new Error("Invalid alignment type: " + alignment)
+    }
+
+    return " ".repeat(spacesToAddLeft) + str + " ".repeat(spacesToAddRight)
+}
 const LogMode = {
     OFF: 'off',
     CONSOLE: 'console',
     REMOTE: 'remote'
 }
-const loggingModel = types
+export const neutronLogging = types
     .model({
         nameLength: types.integer,
         itemLength: types.integer,
@@ -79,7 +103,7 @@ const loggingModel = types
             window.onerror = self['originalOnError']
             localStorage.setItem('log', LogMode.OFF)
         },
-        onConsoleLog(){
+        onConsoleLog() {
             console.log('log', 'logsModel', 'Локально в devtools')
             console.log = self['originalLog']
             window.onerror = self['originalOnError']
@@ -87,11 +111,38 @@ const loggingModel = types
             console.log('log', 'logsModel', 'Локально в devtools')
         },
         offConsoleLog() {
-            console.log = function (){}
+            console.log = function () {
+            }
             window.onerror = self['originalOnError']
             localStorage.setItem('log', LogMode.OFF)
         },
         addLog(payload) {
         },
     }))
-export default loggingModel
+
+export const logSioMiddleware = store => sioAfterConnect(store, (sio, store) => {
+    sio.on('remoteLog', payload => {
+        switch (payload.type) {
+            case 'console':
+                store.neutron.logging.onConsoleLog()
+                break
+            case 'remote':
+                store.neutron.logging.onRemoteLog()
+                break
+            case 'off':
+                store.neutron.logging.offRemoteLog()
+                store.neutron.logging.offConsoleLog()
+                break
+            default:
+                store.neutron.logging.onConsoleLog()
+                break
+        }
+    })
+    addMiddleware(store.neutron.logging, (call, next) => {
+        const {name, args} = call
+        if (name === 'addLog')
+            sio.emit('remoteLog', args[0])
+        return next(call)
+    })
+})
+

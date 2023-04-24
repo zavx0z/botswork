@@ -1,6 +1,6 @@
 import {types} from "mobx-state-tree"
 
-const messageProton = types
+const protonMessage = types
     .model({
         id: types.identifierNumber,
         text: types.string,
@@ -10,5 +10,4 @@ const messageProton = types
         sent: types.maybe(types.boolean),
         dialogId: types.integer
     })
-export default messageProton
-export const messageProtons = types.model({message: types.maybeNull(types.map(messageProton))})
+export default  types.model({message: types.maybeNull(types.map(protonMessage))})

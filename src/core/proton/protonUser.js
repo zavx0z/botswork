@@ -1,9 +1,8 @@
 import {types} from "mobx-state-tree"
 
-const deviceProton = types
-    .model('device', {
+const protonUser = types
+    .model({
         id: types.identifierNumber,
         name: types.string,
-        ownerId: types.number,
     })
-export default deviceProton
+export default types.model({user: types.map(protonUser)})

@@ -18,7 +18,7 @@ import pwaModel from "./shared/pwa/pwaModel"
 import logo from './media/images/logo.png'
 import pwaNotificationMiddleware from "./shared/pwa/pwaStore"
 import App from "./App"
-import loggingStore, {logSioMiddleware} from "./feature/logging/loggingStore"
+import {logSioMiddleware} from "./core/neutron/neutronLogging"
 
 i18next.on('languageChanged', lng => void document.documentElement.setAttribute('lang', lng))
 
@@ -38,7 +38,7 @@ pwaNotificationMiddleware(quantum)
 ReactDOM.createRoot(document.getElementById('root')).render(
     <ThemeProvider theme={theme}>
         <SnackbarProvider anchorOrigin={{vertical: 'bottom', horizontal: isMobile ? 'center' : 'left'}}>
-            <Provider root={quantum} pwa={pwaStore} log={loggingStore}>
+            <Provider quantum={quantum} pwa={pwaStore}>
                 <App/>
             </Provider>
         </SnackbarProvider>

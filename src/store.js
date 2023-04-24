@@ -1,39 +1,50 @@
-import ssoModel from "./shared/sso/ssoModel"
 import {applyPatch, types} from "mobx-state-tree"
-import {interEntanglement, supportAtom} from "./atom/supportAtom"
-import {messageProtons} from "./core/proton/messageProton"
-import {dialogProtons} from "./core/proton/dialogProton"
-import {userProtons} from "./core/proton/userProton"
+import atomSupport, {entanglementSupport} from "./atom/atomSupport"
+import protonsMessage from "./core/proton/protonMessage"
+import protonsDialog from "./core/proton/protonDialog"
+import protonsUser from "./core/proton/protonUser"
 import {sioAfterConnect} from "./shared/sio/sioMiddleware"
 import channel from "./shared/chat/channels"
-import {infoAtoms, infoData} from "./atom/infoAtom"
+import {atomsInfo} from "./atom/atomInfo"
+import {neutronLogging} from "./core/neutron/neutronLogging"
+import {organismInfo} from "./organism/info"
+import neutronSSO from "./core/neutron/neutronSSO"
+import atomProfile, {entanglementProfile} from "./atom/atomProfile"
 
-const neutron = types.model('neutron', {
-    sso: types.maybeNull(ssoModel),
-})
-const proton = types.compose(
-    userProtons,
-    dialogProtons,
-    messageProtons,
-).named('proton')
-const atom = types.model('atom', {
-    support: types.maybeNull(supportAtom),
-    info: infoAtoms
-})
-const quantumModel = types.model("root", {
-    atom: atom,
-    proton: proton,
-    neutron: neutron
-})
-export const quantum = quantumModel.create({
-    atom: {
-        info: infoAtoms.create(infoData)
-    },
-    proton: {},
-    neutron: {sso: {}},
-})
-interEntanglement(quantum)
-// sioModel,
+const quantum = types
+    .model("quantum", {
+        atom: types.model('atom', {
+            support: types.maybeNull(atomSupport),
+            info: atomsInfo,
+            profile: types.maybeNull(atomProfile),
+        }),
+        proton: types.compose(
+            protonsUser,
+            protonsDialog,
+            protonsMessage,
+        ).named('proton'),
+        neutron: types.model('neutron', {
+            sso: neutronSSO,
+            logging: neutronLogging,
+        })
+    })
+    .create({
+        atom: {
+            info: atomsInfo.create(organismInfo),
+        },
+        proton: {},
+        neutron: {
+            sso: {},
+            logging: {
+                nameLength: 10,
+                itemLength: 15,
+            }
+        },
+    })
+
+entanglementSupport(quantum)
+entanglementProfile(quantum)
+
 sioAfterConnect(quantum, (sio, store) => {
     sio.emitWithAck(channel.USERS, {})
         .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/user'}))
