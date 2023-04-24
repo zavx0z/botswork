@@ -1,7 +1,7 @@
 import React, {useMemo} from "react"
 import {Body, CenterBar, Content, LeftBar, RightBar, Root, TopBar} from "../shared/layout/AppLayout"
 import PWA from "../shared/pwa/PWA"
-import {Outlet, useLoaderData, useMatches, useNavigate} from "react-router-dom"
+import {Outlet, redirect, useLoaderData, useMatches} from "react-router-dom"
 import infoRoutes from "../molecule/info/routes"
 import {ssoRoutes} from "../shared/sso/routes"
 import {ButtonLogo} from "../shared/layout/components/ButtonLogo"
@@ -9,8 +9,9 @@ import Wordmark from "../shared/layout/components/ButtonWordMark"
 import LeftMenu from "../shared/layout/containers/LeftMenu"
 import {isMobile} from "react-device-detect"
 import quantum from "../stores/rootStore"
-import {AccountBox, Api, Chat, Computer, Feed, Login, Public, Smartphone, Workspaces} from "@mui/icons-material"
-import IconButton from "@mui/material/IconButton"
+import {AccountBox, Api, Chat, Computer, Feed, Public, Smartphone, Workspaces} from "@mui/icons-material"
+import ButtonLogin from "../shared/layout/components/ButtonLogIn"
+import ButtonProfile from "../shared/layout/components/ButtonProfile"
 
 const Home = () => {
     return <>Home</>
@@ -63,7 +64,7 @@ const userMenu = [[
     },
     {
         title: 'Новости',
-        route: 'news',
+        route: 'updates',
         Icon: Feed,
     }
 ]]
@@ -79,14 +80,20 @@ const findMatchWithHandleKey = (matches, key) => {
 }
 
 export const rootRouter = {
-    loader: async () => quantum.neutron.sso.isAuth().then(() => true).catch(() => false),
+    loader: async () => quantum.neutron.sso.isAuth(),
     Component: () => {
         const isAuth = useLoaderData()
-        const navigate = useNavigate()
         const match = useMatches()
         // useEffect(() => console.log(match), [match])
         const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
-        const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
+        const menuItems = useMemo(() => {
+            const handleMenu = findMatchWithHandleKey(match, 'menuItems')
+            if (handleMenu && isAuth)
+                return handleMenu
+            else if (handleMenu)
+                return anonymousMenu
+            else return null
+        }, [isAuth, match])
         return <Root>
             <PWA/>
             <TopBar>
@@ -97,13 +104,11 @@ export const rootRouter = {
                     <Wordmark to={routeLogo}/>
                 </CenterBar>
                 <RightBar>
-                    <IconButton onClick={() => navigate('profile')}>
-                        {isAuth ? <AccountBox fontSize={'medium'} alt="Profile" color={"secondary"}/> : <Login color={"secondary"}/>}
-                    </IconButton>
+                    {isAuth ? <ButtonProfile to={'/'}/> : <ButtonLogin/>}
                 </RightBar>
             </TopBar>
             <Body>
-                <LeftMenu items={menuItems} opened={!isMobile} visibleCloseButton={!isMobile}/>
+                {menuItems && <LeftMenu items={menuItems} opened={!isMobile} visibleCloseButton={!isMobile}/>}
                 <Content>
                     <Outlet/>
                 </Content>
@@ -113,16 +118,39 @@ export const rootRouter = {
     children: [
         {
             path: '/',
-            loader: async () => quantum.neutron.sso.isAuth().then(() => true).catch(() => false),
-            Component: () => useLoaderData() ? <ProfilePage/> : <Home/>,
+            handle: {
+                routeLogo: 'info',
+                menuItems: userMenu,
+            },
             children: [
                 {
                     index: true,
-                    handle: {
-                        routeLogo: 'info/browser',
-                        menuItems: userMenu,
-                    },
-                    element: <Home/>
+                    loader: async () => quantum.neutron.sso.isAuth(),
+                    Component: () => useLoaderData() ? <ProfilePage/> : <Home/>,
+                },
+                {
+                    path: 'support',
+                    loader: async () => quantum.neutron.sso.isAuth().then(user => {
+                        !Boolean(user) && redirect('/')
+                        return {user}
+                    }),
+                    Component: () => <>Support</>
+                },
+                {
+                    path: 'workspace',
+                    loader: async () => quantum.neutron.sso.isAuth().then(user => {
+                        !Boolean(user) && redirect('/')
+                        return {user}
+                    }),
+                    Component: () => <>Workspace</>
+                },
+                {
+                    path: 'updates',
+                    loader: async () => quantum.neutron.sso.isAuth().then(user => {
+                        !Boolean(user) && redirect('/')
+                        return {user}
+                    }),
+                    Component: () => <>News</>
                 },
             ],
         },
@@ -134,9 +162,15 @@ export const rootRouter = {
         {
             path: 'info',
             handle: {
+                routeLogo: '/info',
                 menuItems: anonymousMenu,
             },
-            children: infoRoutes
+            children: [...infoRoutes,
+                {
+                    index: true,
+                    element: <Home/>
+                }
+            ]
         },
     ]
 }
