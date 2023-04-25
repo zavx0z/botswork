@@ -17,10 +17,11 @@ const RightButton = inject('quantum')(observer(({quantum}) => {
 }))
 
 const Menu = inject('quantum')(observer(({menuItems, quantum}) => {
-    return <LeftMenu items={menuItems && quantum.neutron.sso.isAuthenticated ? menuItems : infoOrg} opened={!isMobile} visibleCloseButton={!isMobile}/>
+    const open = useMemo(() => Boolean(!isMobile), [isMobile])
+    return <LeftMenu items={menuItems && quantum.neutron.sso.isAuthenticated ? menuItems : infoOrg} opened={open} visibleCloseButton={open}/>
 }))
 
-export const Organism = observer(() => {
+export const Organism = () => {
     const match = useMatches()
     const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
     const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
@@ -44,4 +45,4 @@ export const Organism = observer(() => {
             </Content>
         </Body>
     </Root>
-})
+}
