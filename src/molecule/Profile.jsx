@@ -1,98 +1,45 @@
 import React from "react"
-import {IconButton, List, ListItemAvatar, ListItemText, Modal, Typography} from "@mui/material"
-import {inject, observer} from "mobx-react"
+import {List, ListItemSecondaryAction, ListItemText} from "@mui/material"
+import {observer} from "mobx-react"
 import Box from "@mui/material/Box"
-import {Close as CloseIcon, Logout, Settings, Update} from "@mui/icons-material"
-import Divider from "@mui/material/Divider"
+import {Logout, Settings} from "@mui/icons-material"
 import ListItemButton from "@mui/material/ListItemButton"
 import Avatar from "@mui/material/Avatar"
-import ListItemIcon from "@mui/material/ListItemIcon"
 import {useTranslation} from "react-i18next"
-import {useNavigate} from "react-router-dom"
+import {matchPath, useLocation, useNavigate} from "react-router-dom"
+import Container from "@mui/material/Container"
 
-const modalProps = {
-    backdrop: {
-        style: {
-            opacity: 1,
-            backgroundColor: '#fff'
-        },
-    },
-}
-const ListItemUser = observer(({username, onClick}) =>
-    <ListItemButton
+const Item = ({title, to, icon}) => {
+    const navigate = useNavigate()
+    const {pathname} = useLocation()
+    const handleClick = () => !matchPath(to, pathname) && navigate(to)
+    return <ListItemButton
         disableGutters
-        divider
-        onClick={onClick}
+        onClick={handleClick}
     >
-        <ListItemAvatar
-            sx={{ml: 1}}
-        >
-            <Avatar alt={username} /* src={logo} *//>
-        </ListItemAvatar>
-        <ListItemText
-            sx={{ml: 1}}
-            primary={username}
-        />
+        <ListItemSecondaryAction>
+            <Box sx={theme => ({
+                display: 'flex',
+                width: theme.spacing(4),
+                justifyContent: 'center',
+            })}>
+                {React.cloneElement(icon, {color: 'action'})}
+            </Box>
+        </ListItemSecondaryAction>
+        <ListItemText primary={title}/>
     </ListItemButton>
-)
-
+}
 
 const Profile = ({atom}) => {
     const {t} = useTranslation('авторизация')
     const {t: tm} = useTranslation('меню')
-    const handleClose = () => navigate(-1)
-    const navigate = useNavigate()
-    const handleUpdateVersion = () => {
-        // updateVersion()
-        handleClose()
-    }
-    return <Modal
-        open={true}
-        onClose={handleClose}
-        slotProps={modalProps}
-    >
-        <Box sx={{height: '100vh', width: '100%', p: 1}}>
-            <IconButton
-                size={'large'}
-                aria-label="close"
-                onClick={handleClose}
-            >
-                <CloseIcon/>
-            </IconButton>
-            <List>
-                <Divider/>
-                <ListItemUser username={atom.username} />
-                <ListItemButton
-                    divider
-                    onClick={() => navigate('settings')}
-                >
-                    <ListItemIcon>
-                        <Settings/>
-                    </ListItemIcon>
-                    <ListItemText primary={tm('настройки')}/>
-                </ListItemButton>
-                <ListItemButton
-                    divider
-                    onClick={() => navigate('logout')}
-                >
-                    <ListItemIcon>
-                        <Logout/>
-                    </ListItemIcon>
-                    <ListItemText primary={t('выход')}/>
-                </ListItemButton>
-                <ListItemButton
-                    divider
-                    onClick={handleUpdateVersion}
-                >
-                    <ListItemIcon>
-                        <Update/>
-                    </ListItemIcon>
-                    <ListItemText primary={t('Проверка обновлений')}/>
-                    <Typography variant={'caption'}>V{process.env.REACT_APP_VERSION}</Typography>
-                </ListItemButton>
-            </List>
-        </Box>
-    </Modal>
+    return <Container sx={{pt: 1, pr: 2.6}}>
+        <List sx={{p: 0, width: '100%'}}>
+            <Item title={atom.username} to={'/'} icon={<Avatar/>}/>
+            <Item title={tm('настройки')} to={'settings'} icon={<Settings/>}/>
+            <Item title={t('выход')} to={'/auth/logout'} icon={<Logout/>}/>
+        </List>
+    </Container>
 }
 
 export default observer(Profile)

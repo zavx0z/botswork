@@ -1,5 +1,5 @@
 import {createBrowserRouter, Outlet, redirect, RouterProvider, useLoaderData, useMatches} from "react-router-dom"
-import React, {useMemo} from "react"
+import React, {useEffect, useMemo} from "react"
 import {Body, CenterBar, Content, LeftBar, RightBar, Root, TopBar} from "./shared/layout/AppLayout"
 import PWA from "./shared/pwa/PWA"
 import {ButtonLogo} from "./shared/layout/components/ButtonLogo"
@@ -15,43 +15,45 @@ import {infoOrg} from "./organism/info"
 import {findMatchWithHandleKey} from "./shared/layout/utils/route"
 import {userMenu} from "./organism/user"
 import Profile from "./molecule/Profile"
+import {observer} from "mobx-react"
 
+const Organism = observer(() => {
+    const user = useLoaderData()
+    const match = useMatches()
+    useEffect(() => console.log('isAuth'), [])
+    const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
+    const menuItems = useMemo(() => {
+        const handleMenu = findMatchWithHandleKey(match, 'menuItems')
+        if (handleMenu && user?.isAuthenticated)
+            return handleMenu
+        else if (handleMenu)
+            return infoOrg
+        else return null
+    }, [user, match])
+    return <Root>
+        <PWA/>
+        <TopBar>
+            <LeftBar>
+                <ButtonLogo to={routeLogo}/>
+            </LeftBar>
+            <CenterBar>
+                <Wordmark to={routeLogo}/>
+            </CenterBar>
+            <RightBar>
+                {user?.isAuthenticated ? <ButtonProfile to={'/'}/> : <ButtonLogin/>}
+            </RightBar>
+        </TopBar>
+        <Body>
+            {menuItems && <LeftMenu items={menuItems} opened={!isMobile} visibleCloseButton={!isMobile}/>}
+            <Content>
+                <Outlet/>
+            </Content>
+        </Body>
+    </Root>
+})
 const App = () => <RouterProvider router={createBrowserRouter([{
     loader: async () => quantum.neutron.sso.isAuth(),
-    Component: () => {
-        const isAuth = useLoaderData()
-        const match = useMatches()
-        // useEffect(() => console.log(match), [match])
-        const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
-        const menuItems = useMemo(() => {
-            const handleMenu = findMatchWithHandleKey(match, 'menuItems')
-            if (handleMenu && isAuth)
-                return handleMenu
-            else if (handleMenu)
-                return infoOrg
-            else return null
-        }, [isAuth, match])
-        return <Root>
-            <PWA/>
-            <TopBar>
-                <LeftBar>
-                    <ButtonLogo to={routeLogo}/>
-                </LeftBar>
-                <CenterBar>
-                    <Wordmark to={routeLogo}/>
-                </CenterBar>
-                <RightBar>
-                    {isAuth ? <ButtonProfile to={'/'}/> : <ButtonLogin/>}
-                </RightBar>
-            </TopBar>
-            <Body>
-                {menuItems && <LeftMenu items={menuItems} opened={!isMobile} visibleCloseButton={!isMobile}/>}
-                <Content>
-                    <Outlet/>
-                </Content>
-            </Body>
-        </Root>
-    },
+    element: <Organism/>,
     children: [
         {
             path: '/',
