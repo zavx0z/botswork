@@ -14,10 +14,10 @@ export const MainInfo = () =>
             SuperApp
         </Typography>
         <Typography variant={'subtitle1'} align={'center'}>
-            <b>MetaBot-platform</b>
+            MetaBot-platform
         </Typography>
         <Typography variant={'subtitle1'} paragraph align={'center'}>
-            <b>пространство ботов и людей</b>
+            пространство ботов и людей
         </Typography>
         <Typography align={'center'} variant={'subtitle2'}>
             <b>Разделяй, объединяй и властвуй!</b>

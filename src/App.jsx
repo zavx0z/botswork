@@ -1,59 +1,21 @@
-import {createBrowserRouter, Outlet, redirect, RouterProvider, useLoaderData, useMatches} from "react-router-dom"
-import React, {useEffect, useMemo} from "react"
-import {Body, CenterBar, Content, LeftBar, RightBar, Root, TopBar} from "./shared/layout/AppLayout"
-import PWA from "./shared/pwa/PWA"
-import {ButtonLogo} from "./shared/layout/components/ButtonLogo"
-import Wordmark from "./shared/layout/components/ButtonWordMark"
-import ButtonProfile from "./shared/layout/components/ButtonProfile"
-import ButtonLogin from "./shared/layout/components/ButtonLogIn"
-import LeftMenu from "./shared/layout/containers/LeftMenu"
-import {isMobile} from "react-device-detect"
+import {createBrowserRouter, Outlet, redirect, RouterProvider, useLoaderData} from "react-router-dom"
+import React from "react"
 import {ssoRoutes} from "./shared/sso/routes"
 import Info, {MainInfo} from "./molecule/Info"
 import quantum from "./store"
 import {infoOrg} from "./organism/info"
-import {findMatchWithHandleKey} from "./shared/layout/utils/route"
 import {userMenu} from "./organism/user"
 import Profile from "./molecule/Profile"
 import {observer} from "mobx-react"
 
-const Organism = observer(() => {
-    const user = useLoaderData()
-    const match = useMatches()
-    useEffect(() => console.log('isAuth'), [])
-    const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
-    const menuItems = useMemo(() => {
-        const handleMenu = findMatchWithHandleKey(match, 'menuItems')
-        if (handleMenu && user?.isAuthenticated)
-            return handleMenu
-        else if (handleMenu)
-            return infoOrg
-        else return null
-    }, [user, match])
-    return <Root>
-        <PWA/>
-        <TopBar>
-            <LeftBar>
-                <ButtonLogo to={routeLogo}/>
-            </LeftBar>
-            <CenterBar>
-                <Wordmark to={routeLogo}/>
-            </CenterBar>
-            <RightBar>
-                {user?.isAuthenticated ? <ButtonProfile to={'/'}/> : <ButtonLogin/>}
-            </RightBar>
-        </TopBar>
-        <Body>
-            {menuItems && <LeftMenu items={menuItems} opened={!isMobile} visibleCloseButton={!isMobile}/>}
-            <Content>
-                <Outlet/>
-            </Content>
-        </Body>
-    </Root>
-})
 const App = () => <RouterProvider router={createBrowserRouter([{
-    loader: async () => quantum.neutron.sso.isAuth(),
-    element: <Organism/>,
+    async lazy() {
+        let {Organism} = await import("./organism/Organism")
+        return {
+            loader: () => quantum.neutron.sso.isAuth(),
+            Component: Organism,
+        }
+    },
     children: [
         {
             path: '/',
