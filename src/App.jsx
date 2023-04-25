@@ -6,13 +6,12 @@ import quantum from "./store"
 import {infoOrg} from "./organism/info"
 import {userMenu} from "./organism/user"
 import Profile from "./molecule/Profile"
-import {observer} from "mobx-react"
 
 const App = () => <RouterProvider router={createBrowserRouter([{
     async lazy() {
         let {Organism} = await import("./organism/Organism")
         return {
-            loader: () => quantum.neutron.sso.isAuth(),
+            loader: quantum.neutron.sso.waitUser,
             Component: Organism,
         }
     },
@@ -26,24 +25,24 @@ const App = () => <RouterProvider router={createBrowserRouter([{
             children: [
                 {
                     index: true,
-                    loader: async () => quantum.neutron.sso.isAuth(),
+                    loader: async () => quantum.neutron.sso.waitUser(),
                     Component: () => useLoaderData() ? <Profile atom={quantum.atom.profile}/> : <MainInfo/>,
                 },
                 {
                     path: 'support',
-                    loader: async () => quantum.neutron.sso.isAuth()
+                    loader: async () => quantum.neutron.sso.waitUser()
                         .then(user => !Boolean(user) ? redirect('/') : {user}),
                     Component: () => <>Support</>
                 },
                 {
                     path: 'workspace',
-                    loader: async () => quantum.neutron.sso.isAuth()
+                    loader: async () => quantum.neutron.sso.waitUser()
                         .then(user => !Boolean(user) ? redirect('/') : {user}),
                     Component: () => <>Workspace</>
                 },
                 {
                     path: 'updates',
-                    loader: async () => quantum.neutron.sso.isAuth()
+                    loader: async () => quantum.neutron.sso.waitUser()
                         .then(user => !Boolean(user) ? redirect('/') : {user}),
                     Component: () => <>News</>
                 },
