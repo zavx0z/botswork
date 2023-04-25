@@ -15,7 +15,7 @@ import dialogsStore from "./shared/chat/dialogsStore"
 import usersStore from "./shared/users/usersStore"
 import {sioConnect} from "./shared/sio/sioMiddleware"
 import pwaModel from "./shared/pwa/pwaModel"
-import logo from './media/images/logo.png'
+import logo from './resource/images/logo.png'
 import pwaNotificationMiddleware from "./shared/pwa/pwaStore"
 import App from "./App"
 import {logSioMiddleware} from "./core/neutron/neutronLogging"
