@@ -1,6 +1,6 @@
 import {createBrowserRouter, Outlet, redirect, RouterProvider, useLoaderData} from "react-router-dom"
 import React from "react"
-import {ssoRoutes} from "./shared/sso/routes"
+import {ssoRoutes} from "./core/neutron/sso/routes"
 import Info, {MainInfo} from "./molecule/Info"
 import quantum from "./store"
 import {infoOrg} from "./organism/info"
@@ -26,7 +26,7 @@ const App = () => <RouterProvider router={createBrowserRouter([{
                 {
                     index: true,
                     loader: async () => quantum.neutron.sso.waitUser(),
-                    Component: () => useLoaderData() ? <Profile atom={quantum.atom.profile}/> : <MainInfo/>,
+                    Component: () => useLoaderData() ? <Profile/> : <MainInfo/>,
                 },
                 {
                     path: 'support',

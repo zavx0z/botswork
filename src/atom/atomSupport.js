@@ -5,7 +5,7 @@ import protonsUser from "../core/proton/protonUser"
 import {matchPath} from "react-router-dom"
 
 export default types
-    .model('support', {
+    .model('atomSupport', {
         core: types.model('supportCore', {
             dialog: types.safeReference(protonDialog),
             users: types.safeReference(protonsUser),

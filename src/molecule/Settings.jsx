@@ -64,4 +64,4 @@ const Settings = ({pwa: {updateVersion}}) => {
     </>
 }
 
-export default inject('pwa')(observer(Settings))
+export default inject('neutronPWA')(observer(Settings))

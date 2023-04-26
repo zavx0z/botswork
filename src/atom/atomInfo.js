@@ -1,7 +1,7 @@
 import {types} from "mobx-state-tree"
 
 export const atomInfo = types
-    .model('info', {
+    .model('atomInfo', {
         path: types.identifier,
         description: types.string
     })

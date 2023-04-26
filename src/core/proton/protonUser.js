@@ -1,7 +1,7 @@
 import {types} from "mobx-state-tree"
 
 const protonUser = types
-    .model({
+    .model('protonUser',{
         id: types.identifierNumber,
         name: types.string,
     })

@@ -1,7 +1,7 @@
 import {types} from "mobx-state-tree"
 
 export const protonDialog = types
-    .model({
+    .model('protonDialog', {
         id: types.identifierNumber,
         name: types.string,
         ownerId: types.number,

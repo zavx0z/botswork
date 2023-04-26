@@ -1,7 +1,7 @@
 import {types} from "mobx-state-tree"
 
 const protonMessage = types
-    .model({
+    .model('protonMessage', {
         id: types.identifierNumber,
         text: types.string,
         senderId: types.integer,

@@ -11,7 +11,7 @@ const CACHE_VERSION = process.env.REACT_APP_VERSION
 const CACHE_NAME = `BotsWorkCache-${CACHE_VERSION}`
 // console.log(self.__WB_MANIFEST)
 const manifest = [...self.__WB_MANIFEST]
-console.log(manifest)
+// console.log(manifest)
 precacheAndRoute(manifest, {})
 registerRoute(({url}) => url.origin === self.location.origin && url.pathname.endsWith('.png'),
     new StaleWhileRevalidate({
@@ -27,27 +27,27 @@ const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$')
 registerRoute(({request, url}) => {
         if (request.mode !== 'navigate') {
             if (request.url.startsWith(process.env.REACT_APP_HOST + '/socket.io'))
-                console.log('sw', 'request', 'socket.io')
+                console.log('neutronSW', 'request', 'socket.io')
             else if (request.url.startsWith(process.env.REACT_APP_HOST + '/api.v1'))
-                console.log('sw', 'request', 'api.v1')
+                console.log('neutronSW', 'request', 'api.v1')
             else if (request.url.startsWith('https://api.i18nexus.com'))
-                console.log('sw', 'request', 'i18next')
+                console.log('neutronSW', 'request', 'i18next')
             else if (request.url.startsWith(process.env.PUBLIC_URL))
-                console.log('sw', 'request', 'botswork.ru')
+                console.log('neutronSW', 'request', 'botswork.ru')
             else
-                console.log('sw', 'request', 'Данный запрос не является навигацией. Пропущен.' + request)
+                console.log('neutronSW', 'request', 'Данный запрос не является навигацией. Пропущен.' + request)
             return false
         }
         if (url.pathname.startsWith('/_')) {
-            console.log('sw', 'request', 'Данный запрос начинается с /_. Пропущен.' + url.pathname)
+            console.log('neutronSW', 'request', 'Данный запрос начинается с /_. Пропущен.' + url.pathname)
             return false
         }
 
         if (url.pathname.match(fileExtensionRegexp)) {
-            console.log('sw', 'request', 'Данный запрос содержит расширение файла. Пропущен.' + url.pathname)
+            console.log('neutronSW', 'request', 'Данный запрос содержит расширение файла. Пропущен.' + url.pathname)
             return false
         }
-        console.log('sw', 'request', 'Данный запрос будет обработан:' + url.pathname)
+        console.log('neutronSW', 'request', 'Данный запрос будет обработан:' + url.pathname)
         return true
     },
     createHandlerBoundToURL(`${process.env.PUBLIC_URL}/index.html`),
@@ -55,7 +55,7 @@ registerRoute(({request, url}) => {
 
 self.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
-        console.log('sw', 'message', 'Получено сообщение о пропуске ожидания.')
+        console.log('neutronSW', 'message', 'Получено сообщение о пропуске ожидания.')
         self.skipWaiting()
     }
 })
@@ -66,7 +66,7 @@ self.addEventListener('activate', (event) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheName.startsWith('BotsWorkCache-') && cacheName !== CACHE_NAME) {
-                        console.log('sw', 'activate', 'Удаление кэша')
+                        console.log('neutronSW', 'activate', 'Удаление кэша')
                         return caches.delete(cacheName)
                     }
                     return null

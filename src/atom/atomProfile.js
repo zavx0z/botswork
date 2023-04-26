@@ -1,9 +1,9 @@
 import {applyPatch, onAction, onPatch, types} from "mobx-state-tree"
-import neutronSSO from "../core/neutron/neutronSSO"
 import {matchPath} from "react-router-dom"
+import neutronSSO from "../core/neutron/sso/neutronSSO"
 
 export default types
-    .model({
+    .model('atomProfile',{
         core: types.model({
             sso: types.safeReference(neutronSSO),
         })

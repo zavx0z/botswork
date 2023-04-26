@@ -3,13 +3,14 @@ import atomSupport, {entanglementSupport} from "./atom/atomSupport"
 import protonsMessage from "./core/proton/protonMessage"
 import protonsDialog from "./core/proton/protonDialog"
 import protonsUser from "./core/proton/protonUser"
-import {sioAfterConnect} from "./shared/sio/sioMiddleware"
+import {sioAfterConnect} from "./core/neutron/sio/sioMiddleware"
 import channel from "./shared/chat/channels"
 import {atomsInfo} from "./atom/atomInfo"
 import {neutronLogging} from "./core/neutron/neutronLogging"
 import {organismInfo} from "./organism/info"
-import neutronSSO from "./core/neutron/neutronSSO"
+import neutronSSO from "./core/neutron/sso/neutronSSO"
 import atomProfile, {entanglementProfile} from "./atom/atomProfile"
+import neutronSIO from "./core/neutron/sio/neutronSIO"
 
 const quantum = types
     .model("quantum", {
@@ -23,10 +24,11 @@ const quantum = types
             protonsDialog,
             protonsMessage,
         ).named('proton'),
-        neutron: types.model('neutron', {
+        neutron: types.model({
             sso: neutronSSO,
             logging: neutronLogging,
-        })
+            sio: neutronSIO,
+        }),
     })
     .create({
         atom: {
@@ -34,6 +36,9 @@ const quantum = types
         },
         proton: {},
         neutron: {
+            sio: {
+                host: process.env.REACT_APP_HOST_WSS,
+            },
             sso: {},
             logging: {
                 nameLength: 10,

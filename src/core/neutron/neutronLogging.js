@@ -1,5 +1,5 @@
 import {addMiddleware, types} from "mobx-state-tree"
-import {sioAfterConnect} from "../../shared/sio/sioMiddleware"
+import {sioAfterConnect} from "./sio/sioMiddleware"
 
 const alignString = (str, minLength, alignment = 'left') => {
     const spacesToAdd = minLength - str.length
@@ -31,7 +31,7 @@ const LogMode = {
     REMOTE: 'remote'
 }
 export const neutronLogging = types
-    .model({
+    .model('neutronLogging',{
         nameLength: types.integer,
         itemLength: types.integer,
     })
@@ -120,25 +120,27 @@ export const neutronLogging = types
         },
     }))
 
-export const logSioMiddleware = store => sioAfterConnect(store, (sio, store) => {
+export const entanglement_Logging_SIO = quantum => sioAfterConnect(quantum, (sio, quantum) => {
     sio.on('remoteLog', payload => {
+        const {logging} = quantum.neutron
+        console.log()
         switch (payload.type) {
             case 'console':
-                store.neutron.logging.onConsoleLog()
+                logging.onConsoleLog()
                 break
             case 'remote':
-                store.neutron.logging.onRemoteLog()
+                logging.onRemoteLog()
                 break
             case 'off':
-                store.neutron.logging.offRemoteLog()
-                store.neutron.logging.offConsoleLog()
+                logging.offRemoteLog()
+                logging.offConsoleLog()
                 break
             default:
-                store.neutron.logging.onConsoleLog()
+                logging.onConsoleLog()
                 break
         }
     })
-    addMiddleware(store.neutron.logging, (call, next) => {
+    addMiddleware(quantum.neutron.logging, (call, next) => {
         const {name, args} = call
         if (name === 'addLog')
             sio.emit('remoteLog', args[0])
