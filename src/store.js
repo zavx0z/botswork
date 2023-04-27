@@ -12,7 +12,7 @@ import neutronSSO from "./core/neutron/sso/neutronSSO"
 import atomProfile, {entanglementProfile} from "./atom/atomProfile"
 import neutronSIO from "./core/neutron/sio/neutronSIO"
 
-const quantum = types
+const model = types
     .model("quantum", {
         atom: types.model('atom', {
             support: types.maybeNull(atomSupport),
@@ -30,17 +30,17 @@ const quantum = types
             sio: neutronSIO,
         }),
     })
-    .create({
-        atom: {
-            info: atomsInfo.create(organismInfo),
+const quantum = model.create({
+    atom: {
+        info: atomsInfo.create(organismInfo),
+    },
+    proton: {},
+    neutron: {
+        sio: {
+            host: process.env.REACT_APP_HOST_WSS,
         },
-        proton: {},
-        neutron: {
-            sio: {
-                host: process.env.REACT_APP_HOST_WSS,
-            },
-            sso: {},
-            logging: {
+        sso: {},
+        logging: {
                 nameLength: 10,
                 itemLength: 15,
             }

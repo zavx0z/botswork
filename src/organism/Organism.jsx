@@ -3,18 +3,13 @@ import {Outlet, useMatches} from "react-router-dom"
 import React, {useMemo} from "react"
 import {findMatchWithHandleKey} from "../shared/layout/utils/route"
 import {infoOrg} from "./info"
-import {Body, CenterBar, Content, LeftBar, RightBar, Root, TopBar} from "../shared/layout/AppLayout"
+import {Body, Content, Root, TopBar} from "../shared/layout/AppLayout"
 import PWA from "../shared/pwa/PWA"
-import {ButtonLogo} from "../shared/layout/components/ButtonLogo"
-import Wordmark from "../shared/layout/components/ButtonWordMark"
-import ButtonProfile from "../shared/layout/components/ButtonProfile"
-import ButtonLogin from "../shared/layout/components/ButtonLogIn"
 import LeftMenu from "../shared/layout/containers/LeftMenu"
 import {isMobile} from "react-device-detect"
-
-const RightButton = inject('quantum')(observer(({quantum}) => {
-    return quantum.neutron.sso.isAuthenticated ? <ButtonProfile to={'/'}/> : <ButtonLogin/>
-}))
+import Box from "@mui/material/Box"
+import {Canvas} from "@react-three/fiber"
+import {Model} from "../shared/3d/Model"
 
 const Menu = inject('quantum')(observer(({menuItems, quantum}) => {
     const open = useMemo(() => Boolean(!isMobile), [isMobile])
@@ -28,16 +23,30 @@ export const Organism = () => {
     return <Root>
         <PWA/>
         <TopBar>
-            <LeftBar>
-                <ButtonLogo to={routeLogo}/>
-            </LeftBar>
-            <CenterBar>
-                <Wordmark to={routeLogo}/>
-            </CenterBar>
-            <RightBar>
-                <RightButton/>
-            </RightBar>
+            <Box sx={theme => ({
+                zIndex: 444444,
+                height: theme.spacing(4.4),
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+            })}>
+                <Canvas>
+                    <ambientLight intensity={.44}/>
+                    <Model/>
+                </Canvas>
+            </Box>
         </TopBar>
+        {/*<TopBar>*/}
+        {/*    <LeftBar>*/}
+        {/*        <ButtonLogo to={routeLogo}/>*/}
+        {/*    </LeftBar>*/}
+        {/*    <CenterBar>*/}
+        {/*        <Wordmark to={routeLogo}/>*/}
+        {/*    </CenterBar>*/}
+        {/*    <RightBar>*/}
+        {/*        <RightButton/>*/}
+        {/*    </RightBar>*/}
+        {/*</TopBar>*/}
         <Body>
             <Menu menuItems={menuItems}/>
             <Content>
