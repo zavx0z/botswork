@@ -1,6 +1,6 @@
 import {applyPatch, types} from "mobx-state-tree"
 import atomSupport, {entanglementSupport} from "./atom/atomSupport"
-import protonsMessage from "./core/proton/protonMessage"
+import protonsMessage, {protonsMessagesInit} from "./core/proton/protonMessage"
 import protonsDialog from "./core/proton/protonDialog"
 import protonsUser from "./core/proton/protonUser"
 import {sioAfterConnect} from "./core/neutron/sio/sioMiddleware"
@@ -50,12 +50,43 @@ const quantum = types
 entanglementSupport(quantum)
 entanglementProfile(quantum)
 
-sioAfterConnect(quantum, (sio, store) => {
-    sio.emitWithAck(channel.USERS, {})
-        .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/user'}))
-    sio.emitWithAck(channel.DIALOG, {})
-        .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/dialog'}))
-    sio.emitWithAck(channel.MESSAGE, {})
-        .then(data => applyPatch(store, {op: 'replace', value: data, path: '/proton/message'}))
-})
+protonsMessagesInit(quantum)
+
+const protonsUsersInit = quantum => sioAfterConnect(quantum, sio => sio
+    .emitWithAck(
+        channel.USERS,
+        {}
+    )
+    .then(data =>
+        applyPatch(quantum, {
+            op: 'replace',
+            value: data,
+            path: '/proton/user'
+        }))
+    .then(count => console.log(
+        '/proton/message',
+        'replace',
+        `получено ${count} сообщени[е|й]`)
+    )
+    .catch(error => console.log(
+        '/proton/message',
+        'replace',
+        error
+    ))
+)
+
+const protonsDialogsInit = quantum => sioAfterConnect(quantum, sio => sio
+    .emitWithAck(
+        channel.DIALOG,
+        {}
+    )
+    .then(data => applyPatch(quantum, {
+        op: 'replace',
+        value: data,
+        path: '/proton/dialog'
+    }))
+    .then(channel.DIALOG)
+)
+protonsUsersInit(quantum)
+protonsDialogsInit(quantum)
 export default quantum
