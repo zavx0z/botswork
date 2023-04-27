@@ -12,13 +12,13 @@ import {Canvas} from "@react-three/fiber"
 import {Model} from "../shared/3d/Model"
 
 const Menu = inject('quantum')(observer(({menuItems, quantum}) => {
-    const open = useMemo(() => Boolean(!isMobile), [isMobile])
+    const open = useMemo(() => Boolean(!isMobile), [])
     return <LeftMenu items={menuItems && quantum.neutron.sso.isAuthenticated ? menuItems : infoOrg} opened={open} visibleCloseButton={open}/>
 }))
 
 export const Organism = () => {
     const match = useMatches()
-    const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
+    // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
     const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
     return <Root>
         <PWA/>
@@ -31,22 +31,10 @@ export const Organism = () => {
                 justifyContent: 'center',
             })}>
                 <Canvas>
-                    <ambientLight intensity={.44}/>
                     <Model/>
                 </Canvas>
             </Box>
         </TopBar>
-        {/*<TopBar>*/}
-        {/*    <LeftBar>*/}
-        {/*        <ButtonLogo to={routeLogo}/>*/}
-        {/*    </LeftBar>*/}
-        {/*    <CenterBar>*/}
-        {/*        <Wordmark to={routeLogo}/>*/}
-        {/*    </CenterBar>*/}
-        {/*    <RightBar>*/}
-        {/*        <RightButton/>*/}
-        {/*    </RightBar>*/}
-        {/*</TopBar>*/}
         <Body>
             <Menu menuItems={menuItems}/>
             <Content>

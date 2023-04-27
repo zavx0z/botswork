@@ -2,17 +2,11 @@ import {folder, Leva, useControls} from "leva"
 import {PerspectiveCamera, useGLTF} from "@react-three/drei"
 import {degToRad} from "three/src/math/MathUtils"
 import React from "react"
+import LightAppBar from "./LightAppBar"
 
 export const Model = props => {
-    const {
-        lamp1,
-        lamp2,
-        lamp1intensity,
-        lamp2intensity,
-        rotateY
-    } = useControls('Свет',
+    const {rotateY} = useControls(
         {
-
             'Ботик': folder({
                 rotateY: {
                     value: 161,
@@ -22,38 +16,11 @@ export const Model = props => {
                     label: 'Угол'
                 }
             }),
-            'Лампа 1': folder({
-                lamp1: {
-                    value: [-8, 2, 14.44],
-                    label: 'Свет1',
-                },
-                lamp1intensity: {
-                    value: .3,
-                    min: 0,
-                    max: 2,
-                    step: .01,
-                    joystick: true,
-                    label: 'мощность'
-                },
-            }),
-            'Лампа 2': folder({
-                lamp2: {
-                    value: [28.5, -2, -18],
-                    label: 'Свет2',
-                },
-                lamp2intensity: {
-                    value: .44,
-                    min: 0,
-                    max: 2,
-                    step: .01,
-                    joystick: true,
-                    label: 'мощность'
-                },
-            })
         })
     const {nodes, materials} = useGLTF("/logo..glb")
     return (
         <group {...props} dispose={null}>
+            <LightAppBar/>
             <Leva
                 hidden={true}
             />
@@ -64,16 +31,6 @@ export const Model = props => {
                 fov={8.65}
                 position={[20.26, 6.81, 74.04]}
                 rotation={[-0.02, -0.01, 0]}
-            />
-            <pointLight
-                intensity={lamp1intensity}
-                decay={2}
-                position={lamp1}
-            />
-            <pointLight
-                intensity={lamp2intensity}
-                decay={2}
-                position={lamp2}
             />
             <mesh
                 castShadow
