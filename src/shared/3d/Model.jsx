@@ -1,4 +1,4 @@
-import {folder, useControls} from "leva"
+import {folder, Leva, useControls} from "leva"
 import {PerspectiveCamera, useGLTF} from "@react-three/drei"
 import {degToRad} from "three/src/math/MathUtils"
 import React from "react"
@@ -54,6 +54,9 @@ export const Model = props => {
     const {nodes, materials} = useGLTF("/logo..glb")
     return (
         <group {...props} dispose={null}>
+            <Leva
+                hidden={true}
+            />
             <PerspectiveCamera
                 makeDefault={true}
                 far={443.7}
