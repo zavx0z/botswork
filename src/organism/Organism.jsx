@@ -9,7 +9,8 @@ import LeftMenu from "../shared/layout/containers/LeftMenu"
 import {isMobile} from "react-device-detect"
 import Box from "@mui/material/Box"
 import {Canvas} from "@react-three/fiber"
-import {Model} from "../shared/3d/Model"
+import {Scene} from "../shared/3d/Scene"
+import {ACESFilmicToneMapping, PCFSoftShadowMap} from "three"
 
 const Menu = inject('quantum')(observer(({menuItems, quantum}) => {
     const open = useMemo(() => Boolean(!isMobile), [])
@@ -30,8 +31,15 @@ export const Organism = () => {
                 display: 'flex',
                 justifyContent: 'center',
             })}>
-                <Canvas>
-                    <Model/>
+                <Canvas
+                    onCreated={({gl}) => {
+                        // Math.min(gl['setPixelRatio'](window.devicePixelRatio), 2)
+                        gl['shadowMap'].enabled = true
+                        gl['shadowMap'].type = PCFSoftShadowMap
+                        gl.toneMapping = ACESFilmicToneMapping
+                    }}
+                >
+                    <Scene/>
                 </Canvas>
             </Box>
         </TopBar>

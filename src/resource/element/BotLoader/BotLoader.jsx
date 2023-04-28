@@ -3,6 +3,7 @@ import "./Loader.css"
 
 const BotLoader = ({scale = 1}) =>
     <svg
+        id={'botik'}
         viewBox={"0 0 22 22"}
         transform={`scale(${scale})`}
         xmlns="http://www.w3.org/2000/svg">

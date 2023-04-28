@@ -1,17 +1,12 @@
 import React from "react"
 import {folder, useControls} from "leva"
+import LampBotswork from "./LampBotswork"
 
 const LightAppBar = () => {
-    const {
-        lamp1,
-        lamp2,
-        lamp1intensity,
-        lamp2intensity,
-        ambientLight,
-    } = useControls({
+    const {lamp1, lamp1intensity, ambientLight} = useControls({
         'Лампа 1': folder({
             lamp1: {
-                value: [-8, 2, 14.44],
+                value: [25, 1.5, 5],
                 label: 'Свет1',
             },
             lamp1intensity: {
@@ -22,40 +17,27 @@ const LightAppBar = () => {
                 joystick: true,
                 label: 'мощность'
             },
-        }),
-        'Лампа 2': folder({
-            lamp2: {
-                value: [28.5, -2, -18],
-                label: 'Свет2',
-            },
-            lamp2intensity: {
+            ambientLight: {
                 value: .44,
                 min: 0,
                 max: 2,
-                step: .01,
-                joystick: true,
-                label: 'мощность'
-            },
+                step: .01
+            }
         }),
-        ambientLight: {
-            value: .44,
-            min: 0,
-            max: 2,
-            step: .01
-        }
     })
     return <>
         <ambientLight intensity={ambientLight}/>
-        <pointLight
+        <directionalLight
+            // penumbra={1}
+            shadow-mapSize-width={2048} // Ширина карты теней
+            shadow-mapSize-height={2048} // Высота карты теней
+            castShadow={true}
             intensity={lamp1intensity}
             decay={2}
             position={lamp1}
         />
-        <pointLight
-            intensity={lamp2intensity}
-            decay={2}
-            position={lamp2}
-        />
+        {/*<Leva hidden={true}/>*/}
+        <LampBotswork/>
     </>
 }
 export default LightAppBar
