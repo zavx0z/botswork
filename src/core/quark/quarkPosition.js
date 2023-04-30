@@ -1,23 +1,26 @@
 import {types} from "mobx-state-tree"
-import configModel from "./configModel"
 import {config} from '@react-spring/three'
+import quarkSpring from "./quarkSpring"
 
-const positionModel = types
+const quarkPosition = types
     .model("position", {
         x: 0,
         y: 0,
         z: 0,
-        config: configModel,
+        config: quarkSpring,
     })
-    .preProcessSnapshot(snapshot => {
-        switch (snapshot) {
-            case undefined:
-                break
-            default:
-                snapshot['config'] = typeof snapshot.config === "undefined" ? configModel.create({config: {}}) : snapshot['config']
-                return snapshot
-        }
-    })
+    // .preProcessSnapshot(snapshot => {
+    //     console.log(snapshot)
+    //     switch (snapshot) {
+    //         case undefined:
+    //             break
+    //         default:
+    //             snapshot['config'] = typeof snapshot.config === "undefined" ?
+    //                 neutronPosition.create({config: {}}) :
+    //                 snapshot['config']
+    //             return snapshot
+    //     }
+    // })
     .volatile(self => ({
         api: null
     }))
@@ -106,4 +109,4 @@ const positionModel = types
             }
         }
     ))
-export default positionModel
+export default quarkPosition

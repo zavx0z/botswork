@@ -12,6 +12,7 @@ import neutronSSO from "./core/neutron/sso/neutronSSO"
 import atomProfile, {entanglementProfile} from "./atom/atomProfile"
 import neutronSIO from "./core/neutron/sio/neutronSIO"
 import neutronCanvas from "./core/neutron/canvas/neutronCanvas"
+import neutronCamera from "./core/neutron/camera/neutronCamera"
 
 const model = types
     .model("quantum", {
@@ -30,6 +31,7 @@ const model = types
             logging: neutronLogging,
             sio: neutronSIO,
             canvas: neutronCanvas,
+            camera: neutronCamera,
         }),
     })
 const quantum = model.create({
@@ -39,17 +41,27 @@ const quantum = model.create({
     proton: {},
     neutron: {
         canvas: {},
+        camera: {
+            far: 111,
+            near: 70,
+            fov: 3.61,
+            position: {
+                x: 0,
+                y: 2.21,
+                z: 74.44,
+                config: {}
+            }
+        },
         sio: {
             host: process.env.REACT_APP_HOST_WSS,
         },
         sso: {},
         logging: {
-                nameLength: 10,
-                itemLength: 15,
-            }
-        },
-    })
-
+            nameLength: 10,
+            itemLength: 15,
+        }
+    },
+})
 entanglementSupport(quantum)
 entanglementProfile(quantum)
 

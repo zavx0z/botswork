@@ -10,6 +10,7 @@ import {isMobile} from "react-device-detect"
 import Box from "@mui/material/Box"
 import {Scene} from "../shared/3d/Scene"
 import Canvas from "../core/neutron/canvas/Canvas"
+import Camera from "../core/neutron/camera/Camera"
 
 const Menu = inject('quantum')(observer(({menuItems, quantum}) => {
     const open = useMemo(() => Boolean(!isMobile), [])
@@ -32,6 +33,7 @@ export const Organism = inject('quantum')(({quantum: {neutron: {canvas}}}) => {
                 justifyContent: 'center',
             })}>
                 <Canvas store={canvas}>
+                    <Camera/>
                     <Scene/>
                 </Canvas>
             </Box>

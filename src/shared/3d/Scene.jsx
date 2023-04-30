@@ -9,16 +9,16 @@ export const Scene = props => {
         <group {...props} dispose={null}>
             <LightAppBar/>
             {/*<Human/>*/}
-            <PerspectiveCamera
-                far={111}
-                near={70}
-                fov={3.61}
-                position={[0, 2.21, 74.44]}
-                makeDefault={true}
-                shadowMap // Включение shadow map
-                shadowMapWidth={2048} // Ширина карты теней
-                shadowMapHeight={2048} // Высота карты теней
-            />
+            {/*<PerspectiveCamera*/}
+            {/*    far={111}*/}
+            {/*    near={70}*/}
+            {/*    fov={3.61}*/}
+            {/*    position={[0, 2.21, 74.44]}*/}
+            {/*    makeDefault={true}*/}
+            {/*    shadowMap // Включение shadow map*/}
+            {/*    shadowMapWidth={2048} // Ширина карты теней*/}
+            {/*    shadowMapHeight={2048} // Высота карты теней*/}
+            {/*/>*/}
             <mesh
                 castShadow
                 receiveShadow
