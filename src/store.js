@@ -11,6 +11,7 @@ import {organismInfo} from "./organism/info"
 import neutronSSO from "./core/neutron/sso/neutronSSO"
 import atomProfile, {entanglementProfile} from "./atom/atomProfile"
 import neutronSIO from "./core/neutron/sio/neutronSIO"
+import neutronCanvas from "./core/neutron/canvas/neutronCanvas"
 
 const model = types
     .model("quantum", {
@@ -28,6 +29,7 @@ const model = types
             sso: neutronSSO,
             logging: neutronLogging,
             sio: neutronSIO,
+            canvas: neutronCanvas,
         }),
     })
 const quantum = model.create({
@@ -36,6 +38,7 @@ const quantum = model.create({
     },
     proton: {},
     neutron: {
+        canvas: {},
         sio: {
             host: process.env.REACT_APP_HOST_WSS,
         },

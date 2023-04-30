@@ -8,37 +8,30 @@ import PWA from "../shared/pwa/PWA"
 import LeftMenu from "../shared/layout/containers/LeftMenu"
 import {isMobile} from "react-device-detect"
 import Box from "@mui/material/Box"
-import {Canvas} from "@react-three/fiber"
 import {Scene} from "../shared/3d/Scene"
-import {ACESFilmicToneMapping, PCFSoftShadowMap} from "three"
+import Canvas from "../core/neutron/canvas/Canvas"
 
 const Menu = inject('quantum')(observer(({menuItems, quantum}) => {
     const open = useMemo(() => Boolean(!isMobile), [])
     return <LeftMenu items={menuItems && quantum.neutron.sso.isAuthenticated ? menuItems : infoOrg} opened={open} visibleCloseButton={open}/>
 }))
 
-export const Organism = () => {
+export const Organism = inject('quantum')(({quantum: {neutron: {canvas}}}) => {
     const match = useMatches()
     // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
     const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
+    console.log(canvas)
     return <Root>
         <PWA/>
         <TopBar>
             <Box sx={theme => ({
                 zIndex: 444444,
-                height: theme.spacing(4.4),
+                height: theme.spacing(5),
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'center',
             })}>
-                <Canvas
-                    onCreated={({gl}) => {
-                        // Math.min(gl['setPixelRatio'](window.devicePixelRatio), 2)
-                        gl['shadowMap'].enabled = true
-                        gl['shadowMap'].type = PCFSoftShadowMap
-                        gl.toneMapping = ACESFilmicToneMapping
-                    }}
-                >
+                <Canvas store={canvas}>
                     <Scene/>
                 </Canvas>
             </Box>
@@ -50,4 +43,4 @@ export const Organism = () => {
             </Content>
         </Body>
     </Root>
-}
+})
