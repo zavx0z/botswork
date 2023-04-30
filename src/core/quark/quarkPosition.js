@@ -7,7 +7,7 @@ const quarkPosition = types
         x: 0,
         y: 0,
         z: 0,
-        config: quarkSpring,
+        config: types.optional(quarkSpring,{}),
     })
     // .preProcessSnapshot(snapshot => {
     //     console.log(snapshot)

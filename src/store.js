@@ -49,7 +49,6 @@ const quantum = model.create({
                 x: 0,
                 y: 2.21,
                 z: 74.44,
-                config: {}
             }
         },
         sio: {
