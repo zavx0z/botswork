@@ -58,6 +58,9 @@ const quarkSpring = types
         },
         get molasses() { // { mass: 1, tension: 280, friction: 120 }
             return config.molasses
+        },
+        get fast() {
+            return {mass: .01, tension: 444, friction: 14, delay: 1000}
         }
     }
 ))
