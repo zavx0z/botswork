@@ -9,7 +9,7 @@ import theme from "./shared/layout/theme/theme"
 import {SnackbarProvider} from "notistack"
 import middlewareNetworkError from "./core/neutron/sso/middleware/network"
 import {isMobile} from "react-device-detect"
-import quantum from "./store"
+import everything from "./store"
 import * as serviceWorkerRegistration from './shared/pwa/serviceWorkerRegistration'
 import {entanglement_SIO_SSO} from "./core/neutron/sio/sioMiddleware"
 import pwaModel from "./shared/pwa/pwaModel"
@@ -26,15 +26,15 @@ serviceWorkerRegistration.register({
     onSuccess: (serviceWorker) => pwaStore.setServiceWorker(serviceWorker)
 })
 
-entanglement_SIO_SSO(quantum)
-middlewareNetworkError(quantum)
-entanglement_Logging_SIO(quantum)
-pwaNotificationMiddleware(quantum)
+entanglement_SIO_SSO(everything)
+middlewareNetworkError(everything)
+entanglement_Logging_SIO(everything)
+pwaNotificationMiddleware(everything)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <ThemeProvider theme={theme}>
         <SnackbarProvider anchorOrigin={{vertical: 'bottom', horizontal: isMobile ? 'center' : 'left'}}>
-            <Provider quantum={quantum} pwa={pwaStore}>
+            <Provider everything={everything} pwa={pwaStore}>
                 <App/>
             </Provider>
         </SnackbarProvider>

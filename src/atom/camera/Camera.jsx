@@ -4,7 +4,7 @@ import React, {useEffect} from "react"
 import {animated, useSpring, useSpringRef} from "@react-spring/three"
 
 const AnimatedCamera = animated(PerspectiveCamera)
-const Camera = ({quantum:{neutron:{camera}}}) => {
+const Camera = ({everything: {atom: {camera}}}) => {
     const positionAPI = useSpringRef()
     const [{positionX, positionY, positionZ}] = useSpring(() => ({
         ref: positionAPI,
@@ -15,7 +15,7 @@ const Camera = ({quantum:{neutron:{camera}}}) => {
     }))
     useEffect(() => {
         camera.position.setAPI(positionAPI.current[0])
-    }, [positionAPI])
+    }, [camera.position, positionAPI])
     // useEffect(() => console.log(positionZ), [positionZ])
     return <>
         <AnimatedCamera
@@ -29,4 +29,4 @@ const Camera = ({quantum:{neutron:{camera}}}) => {
         />
     </>
 }
-export default inject('quantum')(observer(Camera))
+export default inject('everything')(observer(Camera))

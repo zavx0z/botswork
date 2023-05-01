@@ -1,6 +1,5 @@
-import {PerspectiveCamera, useGLTF} from "@react-three/drei"
+import {useGLTF} from "@react-three/drei"
 import React from "react"
-import Human from "./Human"
 import LightAppBar from "../light/LightAppBar"
 
 export const Scene = props => {
@@ -8,7 +7,6 @@ export const Scene = props => {
     return (
         <group {...props} dispose={null}>
             <LightAppBar/>
-            {/*<Human/>*/}
             <mesh
                 castShadow
                 receiveShadow

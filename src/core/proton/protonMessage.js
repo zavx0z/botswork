@@ -21,14 +21,14 @@ const protonsMessage = types
 const mstPath = '/proton/message'
 const op = 'replace'
 
-export const protonsMessagesInit = quantum => sioAfterConnect(quantum, sio => sio
+export const protonsMessagesInit = everything => sioAfterConnect(everything, sio => sio
     .emitWithAck(
         channel.MESSAGE,
         {}
     )
     .then(data => {
         if (data) {
-            applyPatch(quantum, {
+            applyPatch(everything, {
                 op: op,
                 value: data,
                 path: mstPath

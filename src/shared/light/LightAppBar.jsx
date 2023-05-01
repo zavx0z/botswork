@@ -1,5 +1,5 @@
 import React from "react"
-import {Leva, useControls} from "leva"
+import {useControls} from "leva"
 import LampBotswork from "./LampBotswork"
 import LampDirectional from "./LampDirectional"
 
@@ -14,7 +14,6 @@ const LightAppBar = () => {
         }
     })
     return <>
-        {/*<Leva hidden={true}/>*/}
         <ambientLight intensity={ambientLight}/>
         <LampBotswork/>
         <LampDirectional/>

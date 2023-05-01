@@ -2,7 +2,7 @@ import {createBrowserRouter, Outlet, redirect, RouterProvider, useLoaderData} fr
 import React from "react"
 import {ssoRoutes} from "./core/neutron/sso/routes"
 import Info, {MainInfo} from "./molecule/Info"
-import quantum from "./store"
+import everything from "./store"
 import {infoOrg} from "./organism/info"
 import {userMenu} from "./organism/user"
 import Profile from "./molecule/Profile"
@@ -11,7 +11,7 @@ const App = () => <RouterProvider router={createBrowserRouter([{
     async lazy() {
         let {Organism} = await import("./organism/Organism")
         return {
-            loader: quantum.neutron.sso.waitUser,
+            loader: everything.neutron.sso.waitUser,
             Component: Organism,
         }
     },
@@ -25,24 +25,24 @@ const App = () => <RouterProvider router={createBrowserRouter([{
             children: [
                 {
                     index: true,
-                    loader: async () => quantum.neutron.sso.waitUser(),
+                    loader: async () => everything.neutron.sso.waitUser(),
                     Component: () => useLoaderData() ? <Profile/> : <MainInfo/>,
                 },
                 {
                     path: 'support',
-                    loader: async () => quantum.neutron.sso.waitUser()
+                    loader: async () => everything.neutron.sso.waitUser()
                         .then(user => !Boolean(user) ? redirect('/') : {user}),
                     Component: () => <>Support</>
                 },
                 {
                     path: 'workspace',
-                    loader: async () => quantum.neutron.sso.waitUser()
+                    loader: async () => everything.neutron.sso.waitUser()
                         .then(user => !Boolean(user) ? redirect('/') : {user}),
                     Component: () => <>Workspace</>
                 },
                 {
                     path: 'updates',
-                    loader: async () => quantum.neutron.sso.waitUser()
+                    loader: async () => everything.neutron.sso.waitUser()
                         .then(user => !Boolean(user) ? redirect('/') : {user}),
                     Component: () => <>News</>
                 },
@@ -66,7 +66,7 @@ const App = () => <RouterProvider router={createBrowserRouter([{
                 },
                 {
                     path: ':electron',
-                    loader: ({params}) => quantum.atom['info'].get(params.electron),
+                    loader: ({params}) => everything.atom['info'].get(params.electron),
                     Component: () => {
                         const electron = useLoaderData()
                         return <Info>{electron.description}</Info>

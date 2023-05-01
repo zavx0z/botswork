@@ -8,7 +8,6 @@ import Avatar from "@mui/material/Avatar"
 import {useTranslation} from "react-i18next"
 import {matchPath, useLocation, useNavigate} from "react-router-dom"
 import Container from "@mui/material/Container"
-import quantum from "../store"
 
 const Item = ({title, to, icon}) => {
     const navigate = useNavigate()
@@ -31,16 +30,16 @@ const Item = ({title, to, icon}) => {
     </ListItemButton>
 }
 
-const Profile = ({quantum}) => {
+const Profile = ({everything}) => {
     const {t} = useTranslation('авторизация')
     const {t: tm} = useTranslation('меню')
     return <Container sx={{pt: 1, pr: 2.6}}>
         <List sx={{p: 0, width: '100%'}}>
-            <Item title={quantum.neutron.sso.username} to={'/'} icon={<Avatar/>}/>
+            <Item title={everything.neutron.sso.username} to={'/'} icon={<Avatar/>}/>
             <Item title={tm('настройки')} to={'settings'} icon={<Settings/>}/>
             <Item title={t('выход')} to={'/auth/logout'} icon={<Logout/>}/>
         </List>
     </Container>
 }
 
-export default inject('quantum')(observer(Profile))
+export default inject('everything')(observer(Profile))

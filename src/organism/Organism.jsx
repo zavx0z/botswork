@@ -8,20 +8,22 @@ import PWA from "../shared/pwa/PWA"
 import LeftMenu from "../shared/layout/containers/LeftMenu"
 import {isMobile} from "react-device-detect"
 import Box from "@mui/material/Box"
-import {Scene} from "../shared/3d/Scene"
 import Canvas from "../core/neutron/canvas/Canvas"
-import Camera from "../core/neutron/camera/Camera"
+import Camera from "../atom/camera/Camera"
+import Area from "../atom/area/Area"
+import LightAppBar from "../shared/light/LightAppBar"
+import {Leva} from "leva"
+import BotsWork from "../atom/BotsWork/BotsWork"
 
-const Menu = inject('quantum')(observer(({menuItems, quantum}) => {
+const Menu = inject('everything')(observer(({menuItems, everything}) => {
     const open = useMemo(() => Boolean(!isMobile), [])
-    return <LeftMenu items={menuItems && quantum.neutron.sso.isAuthenticated ? menuItems : infoOrg} opened={open} visibleCloseButton={open}/>
+    return <LeftMenu items={menuItems && everything.neutron.sso.isAuthenticated ? menuItems : infoOrg} opened={open} visibleCloseButton={open}/>
 }))
 
-export const Organism = inject('quantum')(({quantum: {neutron: {canvas}}}) => {
+export const Organism = () => {
     const match = useMatches()
     // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
     const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
-    console.log(canvas)
     return <Root>
         <PWA/>
         <TopBar>
@@ -32,9 +34,14 @@ export const Organism = inject('quantum')(({quantum: {neutron: {canvas}}}) => {
                 display: 'flex',
                 justifyContent: 'center',
             })}>
-                <Canvas store={canvas}>
+                <Canvas>
+                    <Leva hidden={true}/>
+                    <Area/>
+                    <BotsWork/>
                     <Camera/>
-                    <Scene/>
+                    <LightAppBar/>
+                    {/*<BotsWorkRoom/>*/}
+                    {/*<Scene/>*/}
                 </Canvas>
             </Box>
         </TopBar>
@@ -45,4 +52,4 @@ export const Organism = inject('quantum')(({quantum: {neutron: {canvas}}}) => {
             </Content>
         </Body>
     </Root>
-})
+}

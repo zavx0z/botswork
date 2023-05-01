@@ -120,9 +120,9 @@ export const neutronLogging = types
         },
     }))
 
-export const entanglement_Logging_SIO = quantum => sioAfterConnect(quantum, (sio, quantum) => {
+export const entanglement_Logging_SIO = everything => sioAfterConnect(everything, (sio, everything) => {
     sio.on('remoteLog', payload => {
-        const {logging} = quantum.neutron
+        const {logging} = everything.neutron
         console.log()
         switch (payload.type) {
             case 'console':
@@ -140,7 +140,7 @@ export const entanglement_Logging_SIO = quantum => sioAfterConnect(quantum, (sio
                 break
         }
     })
-    addMiddleware(quantum.neutron.logging, (call, next) => {
+    addMiddleware(everything.neutron.logging, (call, next) => {
         const {name, args} = call
         if (name === 'addLog')
             sio.emit('remoteLog', args[0])

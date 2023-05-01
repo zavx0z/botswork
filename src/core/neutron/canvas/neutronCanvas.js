@@ -1,18 +1,15 @@
 import {types} from "mobx-state-tree"
 
 const neutronCanvas = types
-    .model({})
+    .model('neutronCanvas', {
+        id: types.optional(types.identifier, 'canvas'),
+    })
     .volatile(self => ({
         _gl: null,
-        init: false
     }))
     .actions(self => ({
-        setInit() {
-            self.init = true
-        },
-        setGl(gl) {
+        init(gl) {
             self._gl = gl
-            !self.init && this.setInit()
         },
         setFrameLoop(status) {
             self._gl && self._gl().set({frameloop: status})

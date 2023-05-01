@@ -12,14 +12,18 @@ import neutronSSO from "./core/neutron/sso/neutronSSO"
 import atomProfile, {entanglementProfile} from "./atom/atomProfile"
 import neutronSIO from "./core/neutron/sio/neutronSIO"
 import neutronCanvas from "./core/neutron/canvas/neutronCanvas"
-import neutronCamera from "./core/neutron/camera/neutronCamera"
+import atomCamera from "./atom/camera/atomCamera"
+import atomArea from "./atom/area/atomArea"
+import superpositionArea from "./atom/area/superpositionArea"
 
 const model = types
-    .model("quantum", {
+    .model("everything", {
         atom: types.model('atom', {
             support: types.maybeNull(atomSupport),
             info: atomsInfo,
             profile: types.maybeNull(atomProfile),
+            camera: atomCamera,
+            area: atomArea,
         }),
         proton: types.compose(
             protonsUser,
@@ -31,18 +35,17 @@ const model = types
             logging: neutronLogging,
             sio: neutronSIO,
             canvas: neutronCanvas,
-            camera: neutronCamera,
         }),
     })
-const quantum = model.create({
+const canvas = neutronCanvas.create({})
+const everything = model.create({
     atom: {
         info: atomsInfo.create(organismInfo),
-    },
-    proton: {},
-    neutron: {
-        canvas: {},
         camera: {
-            far: 111,
+            core: {
+                canvas: canvas,
+            },
+            far: 120,
             near: 70,
             fov: 3.61,
             position: {
@@ -51,6 +54,15 @@ const quantum = model.create({
                 z: 74.44,
             }
         },
+        area: {
+            core: {
+                canvas: canvas,
+            },
+            path: '/glb/area.glb',
+        },
+    },
+    proton: {},
+    neutron: {
         sio: {
             host: process.env.REACT_APP_HOST_WSS,
         },
@@ -58,21 +70,24 @@ const quantum = model.create({
         logging: {
             nameLength: 10,
             itemLength: 15,
-        }
+        },
+        canvas: canvas
     },
 })
-entanglementSupport(quantum)
-entanglementProfile(quantum)
+superpositionArea(everything)
 
-protonsMessagesInit(quantum)
+entanglementSupport(everything)
+entanglementProfile(everything)
 
-const protonsUsersInit = quantum => sioAfterConnect(quantum, sio => sio
+protonsMessagesInit(everything)
+
+const protonsUsersInit = everything => sioAfterConnect(everything, sio => sio
     .emitWithAck(
         channel.USERS,
         {}
     )
     .then(data =>
-        applyPatch(quantum, {
+        applyPatch(everything, {
             op: 'replace',
             value: data,
             path: '/proton/user'
@@ -89,18 +104,18 @@ const protonsUsersInit = quantum => sioAfterConnect(quantum, sio => sio
     ))
 )
 
-const protonsDialogsInit = quantum => sioAfterConnect(quantum, sio => sio
+const protonsDialogsInit = everything => sioAfterConnect(everything, sio => sio
     .emitWithAck(
         channel.DIALOG,
         {}
     )
-    .then(data => applyPatch(quantum, {
+    .then(data => applyPatch(everything, {
         op: 'replace',
         value: data,
         path: '/proton/dialog'
     }))
     .then(channel.DIALOG)
 )
-protonsUsersInit(quantum)
-protonsDialogsInit(quantum)
-export default quantum
+protonsUsersInit(everything)
+protonsDialogsInit(everything)
+export default everything

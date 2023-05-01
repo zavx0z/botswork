@@ -1,14 +1,17 @@
 import {Canvas as FiberCanvas, useThree} from "@react-three/fiber"
 // import {ACESFilmicToneMapping, PCFSoftShadowMap} from "three"
 import {useEffect} from "react"
+import {inject} from "mobx-react"
 
 
-export const MobxGlProvider = ({store}) => {
+export const MobxGlProvider = inject('everything')(({everything: {neutron: {canvas: {init}}}}) => {
     const get = useThree((state) => state.get)
-    useEffect(() => store.setGl(get), [get])
+    useEffect(() => {
+        init(get)
+    }, [init, get])
     return <></>
-}
-const Canvas = ({onCreated, store, children, ...other}) =>
+})
+const Canvas = ({onCreated, children, ...other}) =>
     <FiberCanvas
         {...other}
         onCreated={({gl}) => {
@@ -19,7 +22,7 @@ const Canvas = ({onCreated, store, children, ...other}) =>
             // typeof onCreated !== "undefined" && onCreated()
         }}
     >
-        <MobxGlProvider store={store}/>
+        <MobxGlProvider/>
         {children}
     </FiberCanvas>
 export default Canvas

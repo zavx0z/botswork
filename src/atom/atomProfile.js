@@ -14,13 +14,13 @@ export default types
         }
     }))
 
-export const entanglementProfile = quantum => {
-    onPatch(quantum, snapshot => {
+export const entanglementProfile = everything => {
+    onPatch(everything, snapshot => {
 
     })
-    onAction(quantum, ({name, path, args}) => {
+    onAction(everything, ({name, path, args}) => {
         if (matchPath('/neutron/sso', path) && name === 'initialize') {
-            applyPatch(quantum, {op: 'replace', path: '/atom/profile', value: {core: {sso: quantum.neutron.sso}}})
+            applyPatch(everything, {op: 'replace', path: '/atom/profile', value: {core: {sso: everything.neutron.sso}}})
         }
     }, true)
 }

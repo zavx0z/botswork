@@ -21,12 +21,12 @@ export default types
         }))
     })
 
-export const entanglementSupport = quantum => onPatch(quantum, snapshot => {
+export const entanglementSupport = everything => onPatch(everything, snapshot => {
     let match
     match = matchPath('/proton/dialog/:id', snapshot.path)
     if (match && snapshot.value.name === 'support') {
-        const item = resolvePath(quantum, match.pathname)
-        applyPatch(quantum, {op: 'replace', path: '/atom/support', value: {core: {dialog: item}}})
+        const item = resolvePath(everything, match.pathname)
+        applyPatch(everything, {op: 'replace', path: '/atom/support', value: {core: {dialog: item}}})
     }
 
 })
