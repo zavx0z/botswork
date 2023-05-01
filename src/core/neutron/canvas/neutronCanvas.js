@@ -1,11 +1,12 @@
 import {types} from "mobx-state-tree"
 
 const neutronCanvas = types
-    .model('neutronCanvas', {
-        id: types.optional(types.identifier, 'canvas'),
+    .model("neutronCanvas", {
+        id: types.optional(types.identifier, "canvas"),
     })
     .volatile(self => ({
         _gl: null,
+        glPromise: null,
     }))
     .actions(self => ({
         init(gl) {
@@ -15,31 +16,38 @@ const neutronCanvas = types
             self._gl && self._gl().set({frameloop: status})
         },
         getVisibleSize(depth) {
-            // const vFOV = fov * Math.PI / 180
-            // const distance = position.z
-            // const height = 2 * Math.tan(vFOV / 2) * distance
-            // const x = (spaceX * height * aspect) / 2
-            // const y = (spaceY * height) / 2
             return [0, 0]
-        }
+        },
+        getGlPromise() {
+            if (self.glPromise) {
+                return self.glPromise
+            }
+            self.glPromise = new Promise(resolve => {
+                const checkForGl = () => {
+                    if (self._gl) {
+                        resolve(self._gl())
+                    } else {
+                        setTimeout(checkForGl, 100)
+                    }
+                }
+                checkForGl()
+            })
+            return self.glPromise
+        },
     }))
     .views(self => ({
         get gl() {
-            const {_gl} = self
-            return _gl ? _gl().gl : null
+            return self._gl ? self._gl().gl : null
         },
         get scene() {
-            const {_gl} = self
-            return _gl ? _gl().scene : null
+            return self._gl ? self._gl().scene : null
         },
         get viewport() {
-            const {_gl} = self
-            return _gl ? _gl().viewport : {width: 16, height: 9}
+            return self._gl ? self._gl().viewport : {width: 16, height: 9}
         },
         get camera() {
-            const {_gl} = self
-            return _gl ? _gl().camera : null
-        }
-
+            return self._gl ? self._gl().camera : null
+        },
     }))
+
 export default neutronCanvas
