@@ -18,7 +18,7 @@ const neutronCanvas = types
         getVisibleSize(depth) {
             return [0, 0]
         },
-        getGlPromise() {
+        getGl() {
             if (self.glPromise) {
                 return self.glPromise
             }

@@ -35,10 +35,6 @@ const atomCamera = types
             const vFOV = MathUtils.degToRad(camera.fov)
             return 2 * Math.tan(vFOV * 0.5) * Math.abs(depth)
         },
-        getVisibleWidth(depth) {
-            const {camera} = self['core'].canvas
-            return this.getVisibleHeight(depth) * camera.aspect
-        },
         computeDepth(fov, size) {
             return size / 2 / Math.tan(MathUtils.degToRad(fov) * 0.5)
         },

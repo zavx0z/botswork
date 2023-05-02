@@ -10,7 +10,6 @@ import {isMobile} from "react-device-detect"
 import Box from "@mui/material/Box"
 import Canvas from "../core/neutron/canvas/Canvas"
 import Camera from "../atom/camera/Camera"
-import Area from "../atom/area/Area"
 import LightAppBar from "../shared/light/LightAppBar"
 import {Leva} from "leva"
 import BotsWork from "../atom/BotsWork/BotsWork"
@@ -36,7 +35,7 @@ export const Organism = () => {
             })}>
                 <Canvas>
                     <Leva hidden={true}/>
-                    <Area/>
+                    {/*<Area/>*/}
                     <BotsWork/>
                     <Camera/>
                     <LightAppBar/>

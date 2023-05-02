@@ -1,20 +1,12 @@
 import confusion from "../../shared/middleware/confusion"
+import {fitObjectToView} from "../../shared/utils/fitObjectToView"
 
 const superpositionArea = everything => confusion(everything, [
     {
         particle: 'atomArea',
         action: 'setGLTF',
-        before: ({args, particle}) => {
-            const gltf = args[0]
-            const {boundingBox} = gltf.geometry
-            const depth = Math.abs(boundingBox.max.z) + Math.abs(boundingBox.min.z)
-            particle.core.canvas
-                .getGlPromise()
-                .then(gl => {
-                    const el = gl.scene.getObjectByProperty('uuid', gltf.uuid)
-                    el.scale.x = everything.atom.camera.getVisibleWidth(depth / 2 + gltf.position.z)
-                })
-        }
+        before: ({args, particle}) => particle.core.canvas.getGl()
+            .then(gl => gl.scene.add(fitObjectToView(gl.camera, args[0], 20)))
     }
 ])
 export default superpositionArea
