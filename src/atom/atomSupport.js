@@ -21,7 +21,7 @@ export default types
         }))
     })
 
-export const entanglementSupport = everything => onPatch(everything, snapshot => {
+export const superpositionSupport = everything => onPatch(everything, snapshot => {
     let match
     match = matchPath('/proton/dialog/:id', snapshot.path)
     if (match && snapshot.value.name === 'support') {

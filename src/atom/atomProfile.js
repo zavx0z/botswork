@@ -14,7 +14,7 @@ export default types
         }
     }))
 
-export const entanglementProfile = everything => {
+export const superpositionProfile = everything => {
     onPatch(everything, snapshot => {
 
     })

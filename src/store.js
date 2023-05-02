@@ -1,5 +1,5 @@
 import {applyPatch, types} from "mobx-state-tree"
-import atomSupport, {entanglementSupport} from "./atom/atomSupport"
+import atomSupport, {superpositionSupport} from "./atom/atomSupport"
 import protonsMessage, {protonsMessagesInit} from "./core/proton/protonMessage"
 import protonsDialog from "./core/proton/protonDialog"
 import protonsUser from "./core/proton/protonUser"
@@ -9,12 +9,11 @@ import {atomsInfo} from "./atom/atomInfo"
 import {neutronLogging} from "./core/neutron/neutronLogging"
 import {organismInfo} from "./organism/info"
 import neutronSSO from "./core/neutron/sso/neutronSSO"
-import atomProfile, {entanglementProfile} from "./atom/atomProfile"
+import atomProfile, {superpositionProfile} from "./atom/atomProfile"
 import neutronSIO from "./core/neutron/sio/neutronSIO"
 import neutronCanvas from "./core/neutron/canvas/neutronCanvas"
 import atomCamera from "./atom/camera/atomCamera"
-import atomArea from "./atom/area/atomArea"
-import superpositionArea from "./atom/area/superpositionArea"
+import atomArea from "./atom/atomArea"
 
 const model = types
     .model("everything", {
@@ -39,12 +38,20 @@ const model = types
     })
 const canvas = neutronCanvas.create({})
 const everything = model.create({
+    proton: {},
+    neutron: {
+        sio: {host: process.env.REACT_APP_HOST_WSS},
+        sso: {},
+        logging: {
+            nameLength: 10,
+            itemLength: 15,
+        },
+        canvas: canvas
+    },
     atom: {
         info: atomsInfo.create(organismInfo),
         camera: {
-            core: {
-                canvas: canvas,
-            },
+            core: {canvas},
             far: 120,
             near: 70,
             fov: 3.61,
@@ -55,32 +62,17 @@ const everything = model.create({
             }
         },
         area: {
-            core: {
-                canvas: canvas,
-            },
+            core: {canvas},
             path: '/glb/area.glb',
+            paddingX: 20,
         },
-    },
-    proton: {},
-    neutron: {
-        sio: {
-            host: process.env.REACT_APP_HOST_WSS,
-        },
-        sso: {},
-        logging: {
-            nameLength: 10,
-            itemLength: 15,
-        },
-        canvas: canvas
     },
 })
-superpositionArea(everything)
 
-entanglementSupport(everything)
-entanglementProfile(everything)
+superpositionSupport(everything)
+superpositionProfile(everything)
 
 protonsMessagesInit(everything)
-
 const protonsUsersInit = everything => sioAfterConnect(everything, sio => sio
     .emitWithAck(
         channel.USERS,
