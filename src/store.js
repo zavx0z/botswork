@@ -23,7 +23,6 @@ const model = types
             info: atomsInfo,
             profile: types.maybeNull(atomProfile),
             camera: atomCamera,
-
             area: atomArea,
             botsWork: atomBotsWork,
         }),
