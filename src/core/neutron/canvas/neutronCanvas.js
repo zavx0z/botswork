@@ -3,6 +3,7 @@ import {types} from "mobx-state-tree"
 const neutronCanvas = types
     .model("neutronCanvas", {
         id: types.optional(types.identifier, "canvas"),
+        backgroundColor: types.optional(types.string, '#000000'),
     })
     .volatile(self => ({
         _gl: null,

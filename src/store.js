@@ -14,7 +14,8 @@ import neutronSIO from "./core/neutron/sio/neutronSIO"
 import neutronCanvas from "./core/neutron/canvas/neutronCanvas"
 import atomCamera from "./atom/camera/atomCamera"
 import atomArea from "./atom/atomArea"
-
+import atomBotsWork from "./atom/atomBotsWork"
+import {themeColor} from "./shared/layout/theme/palette"
 const model = types
     .model("everything", {
         atom: types.model('atom', {
@@ -22,7 +23,9 @@ const model = types
             info: atomsInfo,
             profile: types.maybeNull(atomProfile),
             camera: atomCamera,
+
             area: atomArea,
+            botsWork: atomBotsWork,
         }),
         proton: types.compose(
             protonsUser,
@@ -36,7 +39,9 @@ const model = types
             canvas: neutronCanvas,
         }),
     })
-const canvas = neutronCanvas.create({})
+const canvas = neutronCanvas.create({
+    backgroundColor: themeColor.palette.primary.main
+})
 const everything = model.create({
     proton: {},
     neutron: {
@@ -63,9 +68,13 @@ const everything = model.create({
         },
         area: {
             core: {canvas},
-            path: '/glb/area.glb',
+            glbPath: '/glb/area.glb',
             paddingX: 20,
         },
+        botsWork: {
+            core: {canvas},
+            glbPath: '/glb/BotsWork.glb',
+        }
     },
 })
 

@@ -12,7 +12,6 @@ import Canvas from "../core/neutron/canvas/Canvas"
 import Camera from "../atom/camera/Camera"
 import LightAppBar from "../shared/light/LightAppBar"
 import {Leva} from "leva"
-import BotsWork from "../atom/BotsWork/BotsWork"
 
 const Menu = inject('everything')(observer(({menuItems, everything}) => {
     const open = useMemo(() => Boolean(!isMobile), [])
@@ -36,7 +35,6 @@ export const Organism = () => {
                 <Canvas>
                     <Leva hidden={true}/>
                     {/*<Area/>*/}
-                    <BotsWork/>
                     <Camera/>
                     <LightAppBar/>
                     {/*<BotsWorkRoom/>*/}

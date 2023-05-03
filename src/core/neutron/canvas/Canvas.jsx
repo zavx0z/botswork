@@ -4,12 +4,12 @@ import {useEffect} from "react"
 import {inject} from "mobx-react"
 
 
-export const MobxGlProvider = inject('everything')(({everything: {neutron: {canvas: {init}}}}) => {
+export const MobxGlProvider = inject('everything')(({everything: {neutron: {canvas: {init, backgroundColor}}}}) => {
     const get = useThree((state) => state.get)
     useEffect(() => {
         init(get)
     }, [init, get])
-    return <></>
+    return <color attach="background" args={[backgroundColor]}/>
 })
 const Canvas = ({onCreated, children, ...other}) =>
     <FiberCanvas

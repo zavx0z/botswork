@@ -1,4 +1,4 @@
-## BotsWork web app
+## AtomBotsWork web app
 
 !['img'](public/img/apple-icon-180.png)
 

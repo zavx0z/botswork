@@ -1,32 +1,31 @@
+import React from "react"
 import {flow, getRoot, types} from "mobx-state-tree"
 import neutronCanvas from "../core/neutron/canvas/neutronCanvas"
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js'
 import confusion from "../shared/middleware/confusion"
-import {fitObjectToView} from "../shared/utils/fitObjectToView"
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js'
 
 const superposition = [{
     particle: 'neutronCanvas',
     action: 'init',
-    after: ({particle}) => getRoot(particle)['atom'].area.init()
+    after: ({particle}) => getRoot(particle)['atom'].botsWork.init()
 }]
 
-const atomArea = types
-    .model('atomArea', {
+const atomBotsWork = types
+    .model("atomBotsWork", {
         core: types.model({
             canvas: types.safeReference(neutronCanvas),
         }),
-        uuid: types.maybeNull(types.string),
         glbPath: types.string,
-        paddingX: types.optional(types.number, 0),
+        uuid: types.maybeNull(types.string),
     })
     .actions(self => {
         confusion(getRoot(self), superposition)
         return {
             init: flow(function* () {
-                const {glbPath, paddingX, core: {canvas: {scene, camera}}} = self
+                const {glbPath, core: {canvas: {scene}}} = self
                 let result = yield new GLTFLoader().loadAsync(glbPath)
                 let mesh = result.scene.children[0]
-                scene.add(fitObjectToView(camera, mesh, paddingX))
+                scene.add(mesh)
                 self.uuid = mesh.uuid
             }),
         }
@@ -36,4 +35,4 @@ const atomArea = types
             return self['core'].canvas.getObjectByProperty('uuid', self['gltf'].uuid)
         },
     }))
-export default atomArea
+export default atomBotsWork
