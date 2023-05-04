@@ -6,7 +6,8 @@ const neutronCanvas = types
         backgroundColor: types.optional(types.string, '#000000'),
     })
     .volatile(self => ({
-        _gl: null
+        _gl: null,
+        glPromise: null,
     }))
     .actions(self => ({
         init(gl) {
@@ -14,7 +15,26 @@ const neutronCanvas = types
         },
         setFrameLoop(status) {
             self._gl && self._gl().set({frameloop: status})
-        }
+        },
+        getVisibleSize(depth) {
+            return [0, 0]
+        },
+        getGl() {
+            if (self.glPromise) {
+                return self.glPromise
+            }
+            self.glPromise = new Promise(resolve => {
+                const checkForGl = () => {
+                    if (self._gl) {
+                        resolve(self._gl())
+                    } else {
+                        setTimeout(checkForGl, 100)
+                    }
+                }
+                checkForGl()
+            })
+            return self.glPromise
+        },
     }))
     .views(self => ({
         get gl() {

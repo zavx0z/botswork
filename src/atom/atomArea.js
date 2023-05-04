@@ -28,6 +28,9 @@ const atomArea = types
                 let mesh = result.scene.children[0]
                 scene.add(fitObjectToView(camera, mesh, paddingX))
                 self.uuid = mesh.uuid
+                window.addEventListener('resize', () => fitObjectToView(camera, mesh, paddingX))
+                window.addEventListener('orientationchange', () => fitObjectToView(camera, mesh, paddingX))
+                window.visualViewport.addEventListener('resize', () => fitObjectToView(camera, mesh, paddingX))
             }),
         }
     })
