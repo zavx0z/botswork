@@ -31,7 +31,8 @@ const atomChelik = types
     }))
     .views(self => ({
         get ObjectTreeJS() {
-            return self['core'].canvas.getObjectByProperty('uuid', self['gltf'].uuid)
+            return self['core'].canvas
+            .getObjectByProperty('uuid', self['gltf'].uuid)
         },
     }))
 export default atomChelik
