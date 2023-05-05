@@ -1,0 +1,15 @@
+"Прошу выполнить дословный перевод на русский язык комментариев в коде
+и инструкций console.log в коде на языке JavaScript без изменения функциональности.
+Пожалуйста, включите перевод в блок кода JavaScript для удобства.
+Прошу исключить все лишние комментарии и объяснения, оставив только код."
+
+
+"
+Добавьте однострочные комментарии на русском языке в коде на JavaScript.
+Пожалуйста, включите комментарии в блок кода JavaScript для удобства.
+Не включайте никаких объяснений, оставляя только код.
+```javascript
+"
+
+
+"Please provide documentation in Markdown format in Russian for the code below and place it in a markdown code block. Make sure the entire response is enclosed in a markdown code block."
