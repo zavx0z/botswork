@@ -1,6 +1,6 @@
 import {inject, observer} from "mobx-react"
 import {Outlet, useMatches} from "react-router-dom"
-import React, {useEffect, useMemo, useState} from "react"
+import React, {useMemo, useState} from "react"
 import {findMatchWithHandleKey} from "../shared/layout/utils/route"
 import {infoOrg} from "../organism/info"
 import {Body, Content, Root, TopBar} from "../shared/layout/AppLayout"
@@ -25,14 +25,11 @@ const Menu = inject('everything')(observer(({menuItems, everything}) => {
 }))
 
 export const BlackHole = ({everything, children}) => {
-    useEffect(() => {
-        console.log(children)
-    }, [children])
     const match = useMatches()
     // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
     const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
-    const [visibleStat, setVisibleStat] = useState(false)
-    const [visibleLeva, setVisibleLeva] = useState(true)
+    const [visibleStat] = useState(false)
+    const [visibleLeva] = useState(true)
     return <Root>
         <PWA/>
         <TopBar>

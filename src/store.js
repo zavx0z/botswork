@@ -83,6 +83,7 @@ const everything = model.create({
             core: {canvas},
             glbPath: '/glb/botik.glb',
         },
+
         chelik: {
             core: {canvas},
             glbPath: '/glb/chelik.glb'

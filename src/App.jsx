@@ -31,10 +31,7 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
                     {botsWork => <ElectronBotsWork molecule={botsWork}/>}
                 </Await>
                 <Await resolve={data.chelik}>
-                    {chelik => {
-                        console.log(chelik)
-                        return <MoleculeChelik molecule={chelik}/>
-                    }}
+                    {Object3D => <MoleculeChelik molecule={Object3D}/>}
                 </Await>
             </BlackHole>
         </>

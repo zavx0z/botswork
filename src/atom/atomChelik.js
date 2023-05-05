@@ -1,4 +1,3 @@
-import React from "react"
 import {flow, types} from "mobx-state-tree"
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js'
 import neutronCanvas from "../core/neutron/canvas/neutronCanvas"
@@ -17,31 +16,32 @@ const atomChelik = types
             console.log('atomChelik', 'init', glbPath)
             let result = yield new GLTFLoader().loadAsync(glbPath)
             console.log('atomChelik', 'init', result)
-            let group = result.scene
-            self.uuid = group.uuid
-            let objects = []
-            let meshes = []
-            group.children.map(m => {
-                switch (m.type) {
-                    case 'Mesh':
-                        meshes.push(m)
-                        m.castShadow = true
-                        m.receiveShadow = true
-                        break
-                    case 'Object3D':
-                        objects.push(m)
-                    default:
-                        break
+            let object = result.scene.children[0]
+            self.uuid = object.uuid
+            console.log('atomChelik', 'object', object)
+            let bone = {}
+            let skinnedMesh = []
+            object.children.forEach(item => {
+                if (item.type === 'Bone')
+                    bone = item
+                else {
+                    item.key = item.uuid
+                    skinnedMesh.push(item)
                 }
-                console.log(m.type)
-                m.key = m.id
+                // console.log(item.name)
             })
-            group.position.setX(10)
-            group.objects = objects
-            group.meshes = meshes
-            group.scale.set(0.7, 0.7, 0.7)
-            console.log('atomChelik', 'init', group)
-            return group
+            // bones.children = bones.children.map(m => {
+            //     m.castShadow = true
+            //     m.receiveShadow = true
+            //     console.log(m.type)
+            //     m.key = m.id
+            // })
+            bone.position.setX(10)
+            console.log('atomChelik', 'init', object)
+            return {
+                bone,
+                skinnedMesh
+            }
         }),
     }))
     .views(self => ({

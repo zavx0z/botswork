@@ -22,6 +22,6 @@ export const ElectronBotik = ({molecule}) => {
         material={molecule.material}
         {...bind()}
     >
-        {molecule.children.map((child) => <mesh {...child}/>)}
+        {molecule.children.map((child) => <mesh key={child.uuid} {...child}/>)}
     </mesh>
 }
