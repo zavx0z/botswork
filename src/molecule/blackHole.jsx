@@ -1,5 +1,5 @@
 import {inject, observer} from "mobx-react"
-import {Await, Outlet, useLoaderData, useMatches} from "react-router-dom"
+import {Outlet, useMatches} from "react-router-dom"
 import React, {useEffect, useMemo, useState} from "react"
 import {findMatchWithHandleKey} from "../shared/layout/utils/route"
 import {infoOrg} from "../organism/info"
@@ -12,9 +12,7 @@ import Canvas from "../core/neutron/canvas/Canvas"
 import Camera from "../atom/camera/Camera"
 import LightAppBar from "../shared/light/LightAppBar"
 import {Leva} from "leva"
-import ElectronBotsWork from "./ElectronBotsWork"
 import {Stats} from "@react-three/drei"
-import {ElectronBotik} from "../electrons/ElectronBotik"
 
 const Menu = inject('everything')(observer(({menuItems, everything}) => {
     const open = useMemo(() => Boolean(!isMobile), [])
@@ -27,6 +25,9 @@ const Menu = inject('everything')(observer(({menuItems, everything}) => {
 }))
 
 export const BlackHole = ({everything, children}) => {
+    useEffect(() => {
+        console.log(children)
+    }, [children])
     const match = useMatches()
     // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
     const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])

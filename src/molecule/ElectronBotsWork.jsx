@@ -1,10 +1,6 @@
 import {useGesture} from "@use-gesture/react"
-import {useEffect} from "react"
 
-const ElectronBotsWork = ({mesh}) => {
-    useEffect(() => {
-        console.log(mesh)
-    }, [mesh])
+const ElectronBotsWork = ({molecule}) => {
     const bind = useGesture({
         onPointerDown: ({event: {stopPropagation}}) => {
             stopPropagation()
@@ -19,7 +15,7 @@ const ElectronBotsWork = ({mesh}) => {
     })
     return <mesh
         {...bind()}
-        {...mesh}
+        {...molecule}
         castShadow
         receiveShadow
     />

@@ -17,16 +17,31 @@ const atomChelik = types
             console.log('atomChelik', 'init', glbPath)
             let result = yield new GLTFLoader().loadAsync(glbPath)
             console.log('atomChelik', 'init', result)
-            let mesh = result.scene.children[0]
-            self.uuid = mesh.uuid
-            mesh.children.map(m => {
+            let group = result.scene
+            self.uuid = group.uuid
+            let objects = []
+            let meshes = []
+            group.children.map(m => {
+                switch (m.type) {
+                    case 'Mesh':
+                        meshes.push(m)
+                        m.castShadow = true
+                        m.receiveShadow = true
+                        break
+                    case 'Object3D':
+                        objects.push(m)
+                    default:
+                        break
+                }
+                console.log(m.type)
                 m.key = m.id
-                m.castShadow = true
-                m.receiveShadow = true
             })
-            mesh.position.setX(-10)
-            console.log('atomChelik', 'init', mesh)
-            return mesh
+            group.position.setX(10)
+            group.objects = objects
+            group.meshes = meshes
+            group.scale.set(0.7, 0.7, 0.7)
+            console.log('atomChelik', 'init', group)
+            return group
         }),
     }))
     .views(self => ({

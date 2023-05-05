@@ -9,6 +9,7 @@ import {BlackHole} from "./molecule/blackHole"
 import {inject, observer} from "mobx-react"
 import {ElectronBotik} from "./electrons/ElectronBotik"
 import ElectronBotsWork from "./molecule/ElectronBotsWork"
+import {MoleculeChelik} from "./molecule/MoleculeChelik"
 
 const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
     loader: async () => {
@@ -16,7 +17,7 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
             user: await everything.neutron.sso.waitUser(),
             botsWork: everything.atom.botsWork.init(),
             botik: everything.atom.botik.init(),
-            chelik: everything.atom.chelik.init(),
+            chelik: await everything.atom.chelik.init(),
         })
     },
     Component: () => {
@@ -27,10 +28,13 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
                     {botik => <ElectronBotik molecule={botik}/>}
                 </Await>
                 <Await resolve={data.botsWork}>
-                    {botsWork => <ElectronBotsWork mesh={botsWork}/>}
+                    {botsWork => <ElectronBotsWork molecule={botsWork}/>}
                 </Await>
                 <Await resolve={data.chelik}>
-                    {chelik => <MoleculeChelik mesh={chelik}/>}
+                    {chelik => {
+                        console.log(chelik)
+                        return <MoleculeChelik molecule={chelik}/>
+                    }}
                 </Await>
             </BlackHole>
         </>
