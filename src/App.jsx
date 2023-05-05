@@ -1,21 +1,36 @@
-import {createBrowserRouter, defer, Outlet, redirect, RouterProvider, useLoaderData} from "react-router-dom"
+import {Await, createBrowserRouter, defer, Outlet, redirect, RouterProvider, useLoaderData} from "react-router-dom"
 import React from "react"
 import {ssoRoutes} from "./core/neutron/sso/routes"
 import Info, {MainInfo} from "./molecule/Info"
 import {infoOrg} from "./organism/info"
 import {userMenu} from "./organism/user"
 import Profile from "./molecule/Profile"
-import {Organism} from "./organism/Organism"
-import {inject} from "mobx-react"
+import {BlackHole} from "./molecule/blackHole"
+import {inject, observer} from "mobx-react"
+import {ElectronBotik} from "./electrons/ElectronBotik"
+import ElectronBotsWork from "./molecule/ElectronBotsWork"
 
 const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
     loader: async () => {
         return defer({
-            user: await everything.neutron.sso.waitUser,
-            botsWork: everything.atom.botsWork.init()
+            user: await everything.neutron.sso.waitUser(),
+            botsWork: everything.atom.botsWork.init(),
+            botik: everything.atom.botik.init(),
         })
     },
-    element: <Organism/>,
+    Component: () => {
+        const data = useLoaderData()
+        return <>
+            <BlackHole everything={observer(everything)}>
+                <Await resolve={data.botik}>
+                    {botik => <ElectronBotik molecule={botik}/>}
+                </Await>
+                <Await resolve={data.botsWork}>
+                    {botsWork => <ElectronBotsWork mesh={botsWork}/>}
+                </Await>
+            </BlackHole>
+        </>
+    },
     children: [
         {
             path: '/',

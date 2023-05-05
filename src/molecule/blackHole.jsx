@@ -1,8 +1,8 @@
 import {inject, observer} from "mobx-react"
 import {Await, Outlet, useLoaderData, useMatches} from "react-router-dom"
-import React, {useMemo, useState} from "react"
+import React, {useEffect, useMemo, useState} from "react"
 import {findMatchWithHandleKey} from "../shared/layout/utils/route"
-import {infoOrg} from "./info"
+import {infoOrg} from "../organism/info"
 import {Body, Content, Root, TopBar} from "../shared/layout/AppLayout"
 import PWA from "../shared/pwa/PWA"
 import LeftMenu from "../shared/layout/containers/LeftMenu"
@@ -12,17 +12,22 @@ import Canvas from "../core/neutron/canvas/Canvas"
 import Camera from "../atom/camera/Camera"
 import LightAppBar from "../shared/light/LightAppBar"
 import {Leva} from "leva"
-import Metaverse from "../molecule/Metaverse"
+import ElectronBotsWork from "./ElectronBotsWork"
 import {Stats} from "@react-three/drei"
+import {ElectronBotik} from "../electrons/ElectronBotik"
 
 const Menu = inject('everything')(observer(({menuItems, everything}) => {
     const open = useMemo(() => Boolean(!isMobile), [])
-    return <LeftMenu items={menuItems && everything.neutron.sso.isAuthenticated ? menuItems : infoOrg} opened={open} visibleCloseButton={open}/>
+    const superposition = useMemo(() => menuItems &&
+        everything.neutron.sso.isAuthenticated ?
+            menuItems :
+            infoOrg,
+        [menuItems, everything.neutron.sso.isAuthenticated])
+    return <LeftMenu items={superposition} opened={open} visibleCloseButton={open}/>
 }))
 
-export const Organism = inject('everything')(observer(({everything: {atom: {botsWork}}}) => {
+export const BlackHole = ({everything, children}) => {
     const match = useMatches()
-    const data = useLoaderData()
     // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
     const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
     const [visibleStat, setVisibleStat] = useState(false)
@@ -43,11 +48,7 @@ export const Organism = inject('everything')(observer(({everything: {atom: {bots
                     <Leva hidden={visibleLeva}/>
                     <Camera/>
                     <LightAppBar/>
-                    <Await
-                        resolve={data.botsWork}
-                    >
-                        {botsWork => <Metaverse mesh={botsWork}/>}
-                    </Await>
+                    {children}
                 </Canvas>
             </Box>
         </TopBar>
@@ -58,4 +59,4 @@ export const Organism = inject('everything')(observer(({everything: {atom: {bots
             </Content>
         </Body>
     </Root>
-}))
+}

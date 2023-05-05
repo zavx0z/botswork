@@ -1,6 +1,10 @@
 import {useGesture} from "@use-gesture/react"
+import {useEffect} from "react"
 
-const Metaverse = ({mesh}) => {
+const ElectronBotsWork = ({mesh}) => {
+    useEffect(() => {
+        console.log(mesh)
+    }, [mesh])
     const bind = useGesture({
         onPointerDown: ({event: {stopPropagation}}) => {
             stopPropagation()
@@ -20,4 +24,4 @@ const Metaverse = ({mesh}) => {
         receiveShadow
     />
 }
-export default Metaverse
+export default ElectronBotsWork

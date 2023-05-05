@@ -3,7 +3,6 @@ import {animated, useSpring} from "@react-spring/three"
 
 
 const LampBotswork = () => {
-
     const {leftRight: {left, right}, ...animation} = useControls('Свет', animationLeva)
     const {x} = useSpring({
         from: {x: left},

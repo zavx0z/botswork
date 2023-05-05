@@ -16,6 +16,8 @@ import atomCamera from "./atom/camera/atomCamera"
 import atomArea from "./atom/atomArea"
 import atomBotsWork from "./atom/atomBotsWork"
 import {themeColor} from "./shared/layout/theme/palette"
+import atomBotik from "./atom/atomBotik"
+
 const model = types
     .model("everything", {
         atom: types.model('atom', {
@@ -25,6 +27,7 @@ const model = types
             camera: atomCamera,
             area: atomArea,
             botsWork: atomBotsWork,
+            botik: atomBotik,
         }),
         proton: types.compose(
             protonsUser,
@@ -73,6 +76,10 @@ const everything = model.create({
         botsWork: {
             core: {canvas},
             glbPath: '/glb/BotsWork.glb',
+        },
+        botik: {
+            core: {canvas},
+            glbPath: '/glb/botik.glb',
         }
     },
 })
