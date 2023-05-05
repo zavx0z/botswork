@@ -17,6 +17,7 @@ import atomArea from "./atom/atomArea"
 import atomBotsWork from "./atom/atomBotsWork"
 import {themeColor} from "./shared/layout/theme/palette"
 import atomBotik from "./atom/atomBotik"
+import atomChelik from "./atom/atomChelik"
 
 const model = types
     .model("everything", {
@@ -28,6 +29,7 @@ const model = types
             area: atomArea,
             botsWork: atomBotsWork,
             botik: atomBotik,
+            chelik: atomChelik,
         }),
         proton: types.compose(
             protonsUser,
@@ -80,6 +82,10 @@ const everything = model.create({
         botik: {
             core: {canvas},
             glbPath: '/glb/botik.glb',
+        },
+        chelik: {
+            core: {canvas},
+            glbPath: '/glb/chelik.glb'
         }
     },
 })
