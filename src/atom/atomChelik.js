@@ -28,14 +28,8 @@ const atomChelik = types
                     item.key = item.uuid
                     skinnedMesh.push(item)
                 }
-                // console.log(item.name)
             })
-            // bones.children = bones.children.map(m => {
-            //     m.castShadow = true
-            //     m.receiveShadow = true
-            //     console.log(m.type)
-            //     m.key = m.id
-            // })
+            // bone.scale.set(object.scale.x, object.scale.y, object.scale.z)
             bone.position.setX(10)
             console.log('atomChelik', 'init', object)
             return {
