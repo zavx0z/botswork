@@ -10,13 +10,23 @@ const atomChelik = types
         glbPath: types.string,
         uuid: types.maybeNull(types.string),
     })
+    .volatile(self => ({
+        run: types.frozen(),
+    }))
     .actions(self => ({
         init: flow(function* () {
             const {glbPath} = self
             console.log('atomChelik', 'init', glbPath)
+
+            let {animations} = yield new GLTFLoader().loadAsync("/glb/run.glb")
+            const animation = animations[0]
+            console.log('atomChelik', 'animation', animation.name, animation)
+            self.run = animations
+
             let result = yield new GLTFLoader().loadAsync(glbPath)
-            console.log('atomChelik', 'init', result)
             let object = result.scene.children[0]
+            console.log('atomChelik', 'init', result, animation)
+
             self.uuid = object.uuid
             console.log('atomChelik', 'object', object)
             let bone = {}
@@ -32,10 +42,7 @@ const atomChelik = types
             // bone.scale.set(object.scale.x, object.scale.y, object.scale.z)
             bone.position.setX(10)
             console.log('atomChelik', 'init', object)
-            return {
-                bone,
-                skinnedMesh
-            }
+            return self
         }),
     }))
     .views(self => ({

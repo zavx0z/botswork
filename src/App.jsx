@@ -17,7 +17,7 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
             user: await everything.neutron.sso.waitUser(),
             botsWork: everything.atom.botsWork.init(),
             botik: everything.atom.botik.init(),
-            chelik: await everything.atom.chelik.init(),
+            chelik: everything.atom.chelik.init(),
         })
     },
     Component: () => {

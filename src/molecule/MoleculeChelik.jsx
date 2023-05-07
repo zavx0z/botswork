@@ -1,11 +1,12 @@
 import {useAnimations, useGLTF} from "@react-three/drei"
-import {useEffect, useRef} from "react"
+import {useEffect, useRef, useState} from "react"
 import {degToRad} from "three/src/math/MathUtils"
+import {useGesture} from "@use-gesture/react"
 
 export const MoleculeChelik = ({molecule}) => {
     const group = useRef()
     const {nodes, materials, animations} = useGLTF("/glb/chelik.glb")
-    const {actions} = useAnimations(animations, group)
+    const {actions} = useAnimations(molecule.run, group)
     // return <group dispose={null}>
     //     <primitive object={molecule.bone}/>
     //     {molecule.skinnedMesh.map((child) =>
@@ -19,27 +20,62 @@ export const MoleculeChelik = ({molecule}) => {
     //         />
     //     )}
     // </group>
+    const bind = useGesture({
+        onPointerDown: ({event: {stopPropagation}}) => {
+            stopPropagation()
+            console.log('click')
+        },
+        onPointerEnter: () => {
+            document.body.style.cursor = 'pointer'
+        },
+        onPointerLeave: () => {
+            document.body.style.cursor = 'auto'
+        },
+    })
+    const [running, setRunning] = useState(true)
     useEffect(() => {
-        console.log(actions)
-        actions.wait.play()
-    }, [actions])
-    return <group ref={group} dispose={null}>
-        <group name="Scene">
-            <group name="Armature" rotation={[Math.PI / 2, 0, degToRad(90)]} scale={.014} position-x={10}>
-                <primitive object={nodes.mixamorigHips}/>
-                <skinnedMesh
-                    name="Beta_Joints"
-                    geometry={nodes.Beta_Joints.geometry}
-                    material={materials.Beta_Joints_MAT1}
-                    skeleton={nodes.Beta_Joints.skeleton}
-                />
-                <skinnedMesh
-                    name="Beta_Surface"
-                    geometry={nodes.Beta_Surface.geometry}
-                    material={materials.Beta_HighLimbsGeoSG3}
-                    skeleton={nodes.Beta_Surface.skeleton}
-                />
-            </group>
+        // actions.wait.play()
+        console.log(running)
+        running && actions.run.play()
+        !running && actions.run.stop()
+    }, [actions, running])
+    return <group
+        ref={group}
+        dispose={null}
+        onClick={() => {
+            console.log("click")
+            setRunning(!running)
+        }}
+    >
+        <group
+            name="Armature"
+            rotation={[Math.PI / 2, 0, degToRad(90)]}
+            scale={.014}
+            position-x={10}
+        >
+            <primitive
+                object={nodes.mixamorigHips}
+            />
+            <skinnedMesh
+                onClick={() => {
+                    console.log("click")
+                    setRunning(!running)
+                }}
+                name="Beta_Joints"
+                geometry={nodes.Beta_Joints.geometry}
+                material={materials.Beta_Joints_MAT1}
+                skeleton={nodes.Beta_Joints.skeleton}
+            />
+            <skinnedMesh
+                onClick={() => {
+                    console.log("click")
+                    setRunning(!running)
+                }}
+                name="Beta_Surface"
+                geometry={nodes.Beta_Surface.geometry}
+                material={materials.Beta_HighLimbsGeoSG3}
+                skeleton={nodes.Beta_Surface.skeleton}
+            />
         </group>
     </group>
 }
