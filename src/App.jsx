@@ -16,8 +16,6 @@ import Camera from "./atom/camera/Camera"
 import LightAppBar from "./shared/light/LightAppBar"
 import {Menu} from "./shared/layout/Menu"
 import {Botik} from "./molecule/Botik"
-import {OrbitControls} from "@react-three/drei"
-import {degToRad} from "three/src/math/MathUtils"
 import Area from "./molecule/Area"
 
 const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
@@ -38,7 +36,6 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
             <PWA/>
             <TopBar>
                 <Canvas leva={false} stats={false} fullScreen={fullScreen}>
-                    {/*<OrbitControls/>*/}
                     <Camera/>
                     <LightAppBar/>
                     <Await resolve={data.botik}>
@@ -75,7 +72,8 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
                     camera.rotation.set(-1.56, 0, 0)
                 })
                 return true
-            }
+            },
+            element: <div/>,
         },
         {
             path: '/',
