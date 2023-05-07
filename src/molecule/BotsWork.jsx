@@ -1,6 +1,6 @@
 import {useGesture} from "@use-gesture/react"
 
-const ElectronBotsWork = ({molecule}) => {
+const BotsWork = ({molecule}) => {
     const bind = useGesture({
         onPointerDown: ({event: {stopPropagation}}) => {
             stopPropagation()
@@ -20,4 +20,4 @@ const ElectronBotsWork = ({molecule}) => {
         receiveShadow
     />
 }
-export default ElectronBotsWork
+export default BotsWork

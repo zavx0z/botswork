@@ -54,6 +54,15 @@ const everything = model.create({
         logging: {
             nameLength: 10,
             itemLength: 15,
+            include: [
+                'atomBotsWork',
+                'atomArea',
+                'atomBotik',
+                'atomCamera',
+            ],
+            exclude: [
+                'atomChelik',
+            ]
         },
         canvas: canvas
     },
@@ -61,7 +70,7 @@ const everything = model.create({
         info: atomsInfo.create(organismInfo),
         camera: {
             core: {canvas},
-            far: 120,
+            far: 4444,
             near: 70,
             fov: 3.61,
             position: {

@@ -20,15 +20,15 @@ const atomChelik = types
 
             let {animations} = yield new GLTFLoader().loadAsync("/glb/run.glb")
             const animation = animations[0]
-            console.log('atomChelik', 'animation', animation.name, animation)
+            // console.log('atomChelik', 'animation', animation.name, animation)
             self.run = animations
 
             let result = yield new GLTFLoader().loadAsync(glbPath)
             let object = result.scene.children[0]
-            console.log('atomChelik', 'init', result, animation)
+            // console.log('atomChelik', 'init', result, animation)
 
             self.uuid = object.uuid
-            console.log('atomChelik', 'object', object)
+            // console.log('atomChelik', 'object', object)
             let bone = {}
             let skinnedMesh = []
             object.children.forEach(item => {
@@ -41,7 +41,7 @@ const atomChelik = types
             })
             // bone.scale.set(object.scale.x, object.scale.y, object.scale.z)
             bone.position.setX(10)
-            console.log('atomChelik', 'init', object)
+            // console.log('atomChelik', 'init', object)
             return self
         }),
     }))

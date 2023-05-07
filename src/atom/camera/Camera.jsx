@@ -16,7 +16,6 @@ const Camera = ({everything: {atom: {camera}}}) => {
     useEffect(() => {
         camera.position.setAPI(positionAPI.current[0])
     }, [camera.position, positionAPI])
-    // useEffect(() => console.log(positionZ), [positionZ])
     return <>
         <AnimatedCamera
             far={camera.far}

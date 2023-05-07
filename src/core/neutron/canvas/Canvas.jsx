@@ -14,10 +14,10 @@ export const MobxGlProvider = inject('everything')(({everything: {neutron: {canv
     }, [init, get])
     return <color attach="background" args={[backgroundColor]}/>
 })
-const Canvas = ({onCreated, leva, stats, children, ...other}) =>
+const Canvas = ({onCreated, leva, stats, children, fullScreen, ...other}) =>
     <Box sx={theme => ({
         zIndex: 444444,
-        height: theme.spacing(5),
+        height: fullScreen ? '100vh' : theme.spacing(5),
         width: '100%',
         display: 'flex',
         justifyContent: 'center',

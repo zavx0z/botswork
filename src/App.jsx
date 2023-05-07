@@ -6,9 +6,8 @@ import {infoOrg} from "./organism/info"
 import {userMenu} from "./organism/user"
 import Profile from "./molecule/Profile"
 import {inject} from "mobx-react"
-import {MoleculeBotik} from "./electrons/MoleculeBotik"
-import MoleculeBotsWork from "./molecule/ElectronBotsWork"
-import {MoleculeChelik} from "./molecule/MoleculeChelik"
+import BotsWork from "./molecule/BotsWork"
+import {Chelik} from "./molecule/Chelik"
 import {findMatchWithHandleKey} from "./shared/layout/utils/route"
 import {Body, Content, Root, TopBar} from "./shared/layout/AppLayout"
 import PWA from "./shared/pwa/PWA"
@@ -16,10 +15,15 @@ import Canvas from "./core/neutron/canvas/Canvas"
 import Camera from "./atom/camera/Camera"
 import LightAppBar from "./shared/light/LightAppBar"
 import {Menu} from "./shared/layout/Menu"
+import {Botik} from "./molecule/Botik"
+import {OrbitControls} from "@react-three/drei"
+import {degToRad} from "three/src/math/MathUtils"
+import Area from "./molecule/Area"
 
 const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
     loader: async () => defer({
         user: await everything.neutron.sso.waitUser(),
+        area: everything.atom.area.init(),
         botik: everything.atom.botik.init(),
         botsWork: everything.atom.botsWork.init(),
         chelik: everything.atom.chelik.init(),
@@ -29,20 +33,25 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
         const match = useMatches()
         // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
         const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
+        const fullScreen = useMemo(() => findMatchWithHandleKey(match, 'fullScreen'), [match])
         return <Root>
             <PWA/>
             <TopBar>
-                <Canvas leva={false} stats={false}>
+                <Canvas leva={false} stats={false} fullScreen={fullScreen}>
+                    {/*<OrbitControls/>*/}
                     <Camera/>
                     <LightAppBar/>
                     <Await resolve={data.botik}>
-                        {atomBotik => <MoleculeBotik molecule={atomBotik}/>}
+                        {botik => <Botik molecule={botik}/>}
                     </Await>
                     <Await resolve={data.botsWork}>
-                        {atomBotsWork => <MoleculeBotsWork molecule={atomBotsWork}/>}
+                        {botswork => <BotsWork molecule={botswork}/>}
                     </Await>
                     <Await resolve={data.chelik}>
-                        {atomChelik => <MoleculeChelik molecule={atomChelik}/>}
+                        {chelik => <Chelik molecule={chelik}/>}
+                    </Await>
+                    <Await resolve={data.area}>
+                        {area => !fullScreen && <Area molecule={area}/>}
                     </Await>
                 </Canvas>
             </TopBar>
@@ -55,6 +64,19 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
         </Root>
     },
     children: [
+        {
+            handle: {
+                fullScreen: true,
+            },
+            path: '/admin',
+            loader: () => {
+                everything.neutron.canvas.getGl().then(({camera}) => {
+                    camera.position.set(0, 1444, -10)
+                    camera.rotation.set(-1.56, 0, 0)
+                })
+                return true
+            }
+        },
         {
             path: '/',
             handle: {
