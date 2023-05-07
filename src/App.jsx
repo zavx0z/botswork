@@ -1,40 +1,70 @@
-import {Await, createBrowserRouter, defer, Outlet, redirect, RouterProvider, useLoaderData} from "react-router-dom"
-import React from "react"
+import {Await, createBrowserRouter, defer, Outlet, redirect, RouterProvider, useLoaderData, useMatches} from "react-router-dom"
+import React, {useMemo} from "react"
 import {ssoRoutes} from "./core/neutron/sso/routes"
 import Info, {MainInfo} from "./molecule/Info"
 import {infoOrg} from "./organism/info"
 import {userMenu} from "./organism/user"
 import Profile from "./molecule/Profile"
-import {BlackHole} from "./molecule/blackHole"
 import {inject, observer} from "mobx-react"
 import {ElectronBotik} from "./electrons/ElectronBotik"
 import ElectronBotsWork from "./molecule/ElectronBotsWork"
 import {MoleculeChelik} from "./molecule/MoleculeChelik"
+import {findMatchWithHandleKey} from "./shared/layout/utils/route"
+import {Body, Content, Root, TopBar} from "./shared/layout/AppLayout"
+import PWA from "./shared/pwa/PWA"
+import Canvas from "./core/neutron/canvas/Canvas"
+import Camera from "./atom/camera/Camera"
+import LightAppBar from "./shared/light/LightAppBar"
+import {isMobile} from "react-device-detect"
+import LeftMenu from "./shared/layout/containers/LeftMenu"
+
+const Menu = inject('everything')(observer(({menuItems, everything}) => {
+    const open = useMemo(() => Boolean(!isMobile), [])
+    const superposition = useMemo(() => menuItems &&
+        everything.neutron.sso.isAuthenticated ?
+            menuItems :
+            infoOrg,
+        [menuItems, everything.neutron.sso.isAuthenticated])
+    return <LeftMenu items={superposition} opened={open} visibleCloseButton={open}/>
+}))
 
 const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
-    loader: async () => {
-        return defer({
-            user: await everything.neutron.sso.waitUser(),
-            botsWork: everything.atom.botsWork.init(),
-            botik: everything.atom.botik.init(),
-            chelik: everything.atom.chelik.init(),
-        })
-    },
+    loader: async () => defer({
+        user: await everything.neutron.sso.waitUser(),
+        botsWork: everything.atom.botsWork.init(),
+        botik: everything.atom.botik.init(),
+        chelik: everything.atom.chelik.init(),
+    }),
     Component: () => {
         const data = useLoaderData()
-        return <>
-            <BlackHole everything={observer(everything)}>
-                <Await resolve={data.botik}>
-                    {botik => <ElectronBotik molecule={botik}/>}
-                </Await>
-                <Await resolve={data.botsWork}>
-                    {botsWork => <ElectronBotsWork molecule={botsWork}/>}
-                </Await>
-                <Await resolve={data.chelik}>
-                    {Object3D => <MoleculeChelik molecule={Object3D}/>}
-                </Await>
-            </BlackHole>
-        </>
+        console.log(data.user)
+        const match = useMatches()
+        // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
+        const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
+        return <Root>
+            <PWA/>
+            <TopBar>
+                <Canvas leva={false} stats={false}>
+                    <Camera/>
+                    <LightAppBar/>
+                    <Await resolve={data.botik}>
+                        {atomBotik => <ElectronBotik molecule={atomBotik}/>}
+                    </Await>
+                    <Await resolve={data.botsWork}>
+                        {atomBotsWork => <ElectronBotsWork molecule={atomBotsWork}/>}
+                    </Await>
+                    <Await resolve={data.chelik}>
+                        {atomChelik => <MoleculeChelik molecule={atomChelik}/>}
+                    </Await>
+                </Canvas>
+            </TopBar>
+            <Body>
+                <Menu menuItems={menuItems}/>
+                <Content>
+                    <Outlet/>
+                </Content>
+            </Body>
+        </Root>
     },
     children: [
         {
