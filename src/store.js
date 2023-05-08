@@ -18,6 +18,7 @@ import atomBotsWork from "./atom/atomBotsWork"
 import {themeColor} from "./shared/layout/theme/palette"
 import atomBotik from "./atom/atomBotik"
 import atomChelik from "./atom/atomChelik"
+import {config} from "@react-spring/three"
 
 const model = types
     .model("everything", {
@@ -73,16 +74,23 @@ const everything = model.create({
             far: 4444,
             near: 70,
             fov: 3.61,
-            position: {
-                x: 0,
-                y: 2.21,
-                z: 74.44,
-            }
+            // position: {
+            //     x: 0,
+            //     y: 2.21,
+            //     z: 74.44,
+            //     config: config.gentle
+            // },
+            // rotation: {
+            //     x: 0,
+            //     y: 0,
+            //     z: 0,
+            //     // config: config.stiff
+            // }
         },
         area: {
             core: {canvas},
             glbPath: '/glb/area.glb',
-            paddingX: 20,
+            paddingX: 0,
         },
         botsWork: {
             core: {canvas},

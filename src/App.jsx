@@ -12,44 +12,76 @@ import {findMatchWithHandleKey} from "./shared/layout/utils/route"
 import {Body, Content, Root, TopBar} from "./shared/layout/AppLayout"
 import PWA from "./shared/pwa/PWA"
 import Canvas from "./core/neutron/canvas/Canvas"
-import Camera from "./atom/camera/Camera"
 import LightAppBar from "./shared/light/LightAppBar"
 import {Menu} from "./shared/layout/Menu"
 import {Botik} from "./molecule/Botik"
 import Area from "./molecule/Area"
+import {useThree} from "@react-three/fiber"
+import {config} from "@react-spring/three"
+
+const Admin = ({data, fullScreen}) => {
+    const tree = useThree()
+    return <>
+        <Await resolve={data.botik}>
+            {botik => <Botik molecule={botik}/>}
+        </Await>
+        <Await resolve={data.botsWork}>
+            {botswork => <BotsWork molecule={botswork}/>}
+        </Await>
+        <Await resolve={data.chelik}>
+            {chelik => <Chelik molecule={chelik}/>}
+        </Await>
+        <Await resolve={data.area}>
+            {area => <Area molecule={area}/>}
+        </Await>
+    </>
+}
 
 const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
-    loader: async () => defer({
-        user: await everything.neutron.sso.waitUser(),
-        area: everything.atom.area.init(),
-        botik: everything.atom.botik.init(),
-        botsWork: everything.atom.botsWork.init(),
-        chelik: everything.atom.chelik.init(),
-    }),
+    loader: async () => {
+        return defer({
+            user: await everything.neutron.sso.waitUser(),
+            area: everything.atom.area.init(),
+            botik: everything.atom.botik.init(),
+            botsWork: everything.atom.botsWork.init(),
+            chelik: everything.atom.chelik.init(),
+        })
+    },
+    shouldRevalidate: ({defaultShouldRevalidate}) => {
+        everything.neutron.canvas.getGl().then(({scene, camera}) => {
+            everything.atom.area.ObjectTreeJS.visible = true
+            everything.atom.camera.rotation.start({x: 0, y: 0, z: 0, config: {precision: .00001}})
+            everything.atom.camera.position.start({x: 0, y: 2.21, z: 72, config: {precision: .00001}})
+        })
+        return defaultShouldRevalidate
+    },
+    handle: {
+        cameraPosition: [0, 2.21, 72]
+    },
     Component: () => {
         const data = useLoaderData()
         const match = useMatches()
         // const routeLogo = useMemo(() => findMatchWithHandleKey(match, 'routeLogo'), [match])
         const menuItems = useMemo(() => findMatchWithHandleKey(match, 'menuItems'), [match])
         const fullScreen = useMemo(() => findMatchWithHandleKey(match, 'fullScreen'), [match])
+        const cameraPosition = useMemo(() => findMatchWithHandleKey(match, 'cameraPosition'), [match])
         return <Root>
             <PWA/>
             <TopBar>
-                <Canvas leva={false} stats={false} fullScreen={fullScreen}>
-                    <Camera/>
+                <Canvas
+                    leva={false}
+                    stats={false}
+                    fullScreen={fullScreen}
+                    camera={{
+                        far: 44444,
+                        near: 70,
+                        fov: 5,
+                        position: cameraPosition,
+                        rotation: [0, 0, 0],
+                    }}
+                >
                     <LightAppBar/>
-                    <Await resolve={data.botik}>
-                        {botik => <Botik molecule={botik}/>}
-                    </Await>
-                    <Await resolve={data.botsWork}>
-                        {botswork => <BotsWork molecule={botswork}/>}
-                    </Await>
-                    <Await resolve={data.chelik}>
-                        {chelik => <Chelik molecule={chelik}/>}
-                    </Await>
-                    <Await resolve={data.area}>
-                        {area => !fullScreen && <Area molecule={area}/>}
-                    </Await>
+                    <Admin data={data} fullScreen={fullScreen}/>
                 </Canvas>
             </TopBar>
             <Body>
@@ -64,12 +96,14 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
         {
             handle: {
                 fullScreen: true,
+                cameraPosition: [0, 1444, -10]
             },
             path: '/admin',
             loader: () => {
-                everything.neutron.canvas.getGl().then(({camera}) => {
-                    camera.position.set(0, 1444, -10)
-                    camera.rotation.set(-1.56, 0, 0)
+                everything.neutron.canvas.getGl().then(({scene, camera}) => {
+                    everything.atom.area.ObjectTreeJS.visible = false
+                    everything.atom.camera.rotation.start({x: -1.56, y: 0, z: 0, config: {precision: .00001}})
+                    everything.atom.camera.position.start({x: 0, y: 1444, z: -10, config: { precision: .00001}})
                 })
                 return true
             },

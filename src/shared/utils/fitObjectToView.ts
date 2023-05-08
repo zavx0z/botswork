@@ -11,6 +11,7 @@ import {Box3, Object3D, PerspectiveCamera} from "three"
 export const fitObjectToView = (camera: PerspectiveCamera, object: Object3D, paddingX = 0) => {
     if (object) {
         object.updateMatrixWorld()
+        camera.updateMatrixWorld()
         const bbox = new Box3().setFromObject(object)
         const factor = getConversionFactor(camera, bbox.max.z)
         const scale = getVisibleWidth(camera, bbox.max.z) - factor * paddingX

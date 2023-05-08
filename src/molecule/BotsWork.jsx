@@ -1,9 +1,12 @@
 import {useGesture} from "@use-gesture/react"
+import {useNavigate} from "react-router-dom"
 
 const BotsWork = ({molecule}) => {
+    const navigate = useNavigate()
     const bind = useGesture({
         onPointerDown: ({event: {stopPropagation}}) => {
             stopPropagation()
+            navigate('/admin')
             console.log('click')
         },
         onPointerEnter: () => {

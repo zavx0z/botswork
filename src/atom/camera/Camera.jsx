@@ -13,16 +13,30 @@ const Camera = ({everything: {atom: {camera}}}) => {
         positionZ: camera.position.z,
         config: camera.position.config
     }))
+    const rotationAPI = useSpringRef()
+    const [{rotationX, rotationY, rotationZ}] = useSpring(() => ({
+        ref: rotationAPI,
+        rotationX: camera.position.x,
+        rotationY: camera.position.y,
+        rotationZ: camera.position.z,
+        config: camera.position.config
+    }))
+    // useEffect(() => {
+    //     camera.position.setAPI(positionAPI.current[0])
+    // }, [camera.position, positionAPI])
     useEffect(() => {
-        camera.position.setAPI(positionAPI.current[0])
-    }, [camera.position, positionAPI])
+        camera.rotation.setAPI(rotationAPI.current[0])
+    }, [camera.rotation, rotationAPI])
     return <>
         <AnimatedCamera
             far={camera.far}
             near={camera.near}
-            position-x={positionX}
-            position-y={positionY}
-            position-z={positionZ}
+            // position-x={positionX}
+            // position-y={positionY}
+            // position-z={positionZ}
+            rotation-x={rotationX}
+            rotation-y={rotationY}
+            rotation-z={rotationZ}
             fov={camera.fov}
             makeDefault
         />

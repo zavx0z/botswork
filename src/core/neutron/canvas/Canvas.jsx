@@ -1,42 +1,40 @@
-import {Canvas as FiberCanvas, useThree} from "@react-three/fiber"
-// import {ACESFilmicToneMapping, PCFSoftShadowMap} from "three"
+import {Canvas as FiberCanvas} from "@react-three/fiber"
 import React, {useEffect} from "react"
 import {inject} from "mobx-react"
-import Box from "@mui/material/Box"
 import {Stats} from "@react-three/drei"
 import {Leva} from "leva"
+import {a, useSpring} from "@react-spring/web"
+import {useTheme} from "@mui/material"
 
-
-export const MobxGlProvider = inject('everything')(({everything: {neutron: {canvas: {init, backgroundColor}}}}) => {
-    const get = useThree((state) => state.get)
+const Canvas = ({onCreated, leva, stats, children, fullScreen, everything, ...other}) => {
+    const theme = useTheme()
+    const [props] = useSpring(() => ({
+        height: Boolean(fullScreen) ? window.innerHeight + 'px' : theme.spacing(7)
+    }), [fullScreen])
     useEffect(() => {
-        init(get)
-    }, [init, get])
-    return <color attach="background" args={[backgroundColor]}/>
-})
-const Canvas = ({onCreated, leva, stats, children, fullScreen, ...other}) =>
-    <Box sx={theme => ({
-        zIndex: 444444,
-        height: fullScreen ? '100vh' : theme.spacing(5),
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        bgColor: theme.palette.primary.main
-    })}>
+        console.log(fullScreen)
+    }, [fullScreen])
+    return <a.div
+        style={{
+            zIndex: 444444,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            backgroundColor: theme.palette.primary.main,
+            ...props
+        }}>
         <FiberCanvas
-            {...other}
-            onCreated={({gl}) => {
-                Math.min(gl['setPixelRatio'](window.devicePixelRatio), 2)
-                // gl['shadowMap'].enabled = true
-                // gl['shadowMap'].type = PCFSoftShadowMap
-                // gl.toneMapping = ACESFilmicToneMapping
-                // typeof onCreated !== "undefined" && onCreated()
+            onCreated={({get, viewport,}) => {
+                everything.neutron.canvas.init(get)
+                console.log(viewport)
             }}
+            {...other}
         >
             {stats && <Stats showPanel={0} className="stats"/>}
             <Leva hidden={!leva}/>
-            <MobxGlProvider/>
+            <color attach="background" args={[theme.palette.primary.main]}/>
             {children}
         </FiberCanvas>
-    </Box>
-export default Canvas
+    </a.div>
+}
+export default inject('everything')((Canvas))
