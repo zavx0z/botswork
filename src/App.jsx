@@ -16,26 +16,6 @@ import LightAppBar from "./shared/light/LightAppBar"
 import {Menu} from "./shared/layout/Menu"
 import {Botik} from "./molecule/Botik"
 import Area from "./molecule/Area"
-import {useThree} from "@react-three/fiber"
-import {config} from "@react-spring/three"
-
-const Admin = ({data, fullScreen}) => {
-    const tree = useThree()
-    return <>
-        <Await resolve={data.botik}>
-            {botik => <Botik molecule={botik}/>}
-        </Await>
-        <Await resolve={data.botsWork}>
-            {botswork => <BotsWork molecule={botswork}/>}
-        </Await>
-        <Await resolve={data.chelik}>
-            {chelik => <Chelik molecule={chelik}/>}
-        </Await>
-        <Await resolve={data.area}>
-            {area => <Area molecule={area}/>}
-        </Await>
-    </>
-}
 
 const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
     loader: async () => {
@@ -81,7 +61,18 @@ const App = ({everything}) => <RouterProvider router={createBrowserRouter([{
                     }}
                 >
                     <LightAppBar/>
-                    <Admin data={data} fullScreen={fullScreen}/>
+                    <Await resolve={data.botik}>
+                        {botik => <Botik molecule={botik}/>}
+                    </Await>
+                    <Await resolve={data.botsWork}>
+                        {botswork => <BotsWork molecule={botswork}/>}
+                    </Await>
+                    <Await resolve={data.chelik}>
+                        {chelik => <Chelik molecule={chelik}/>}
+                    </Await>
+                    <Await resolve={data.area}>
+                        {area => <Area molecule={area}/>}
+                    </Await>
                 </Canvas>
             </TopBar>
             <Body>
