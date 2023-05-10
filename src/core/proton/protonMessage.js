@@ -1,4 +1,4 @@
-import {applyPatch, types} from "mobx-state-tree"
+import {applyPatch, getRoot, types} from "mobx-state-tree"
 import {sioAfterConnect} from "../neutron/sio/sioMiddleware"
 import channel from "../../shared/chat/channels"
 
@@ -12,33 +12,25 @@ const protonMessage = types
         sent: types.maybe(types.boolean),
         dialogId: types.integer
     })
-
 const protonsMessage = types
     .model({
         message: types.maybeNull(types.map(protonMessage))
     })
-
-const mstPath = '/proton/message'
-const op = 'replace'
-
-export const protonsMessagesInit = everything => sioAfterConnect(everything, sio => sio
-    .emitWithAck(
-        channel.MESSAGE,
-        {}
-    )
-    .then(data => {
-        if (data) {
-            applyPatch(everything, {
-                op: op,
-                value: data,
-                path: mstPath
+    .actions(self => {
+        const everything = getRoot(self)
+        const op = 'replace'
+        const mstPath = '/proton/message'
+        sioAfterConnect(everything, sio => sio
+            .emitWithAck(channel.MESSAGE, {})
+            .then(data => {
+                if (!data)
+                    return Promise.reject(new Error('Сообщения не получены'))
+                applyPatch(everything, {op: op, value: data, path: mstPath})
+                return Promise.resolve(data.length)
             })
-            return Promise.resolve(data.length)
-        }
-        return Promise.reject(new Error('Сообщения не получены'))
+            .then(count => console.log(mstPath, op, `получено ${count} сообщени[е|й]`))
+            .catch(error => console.log(mstPath, op, error))
+        )
+        return {}
     })
-    .then(count => console.log(mstPath, op, `получено ${count} сообщени[е|й]`))
-    .catch(error => console.log(mstPath, op, error))
-)
-
 export default protonsMessage

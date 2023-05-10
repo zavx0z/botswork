@@ -1,9 +1,13 @@
 import {useGesture} from "@use-gesture/react"
+import {useNavigate} from "react-router-dom"
 
-const ElectronBotsWork = ({molecule}) => {
+const BotsWork = ({molecule, onClick}) => {
+    // const navigate = useNavigate()
     const bind = useGesture({
         onPointerDown: ({event: {stopPropagation}}) => {
             stopPropagation()
+            onClick()
+            // navigate('/admin')
             console.log('click')
         },
         onPointerEnter: () => {
@@ -20,4 +24,4 @@ const ElectronBotsWork = ({molecule}) => {
         receiveShadow
     />
 }
-export default ElectronBotsWork
+export default BotsWork

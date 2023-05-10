@@ -1,7 +1,6 @@
 import {flow, getRoot, types} from "mobx-state-tree"
 import neutronCanvas from "../core/neutron/canvas/neutronCanvas"
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js'
-import confusion from "../shared/middleware/confusion"
 import {fitObjectToView} from "../shared/utils/fitObjectToView"
 
 const superposition = [{
@@ -20,23 +19,24 @@ const atomArea = types
         paddingX: types.optional(types.number, 0),
     })
     .actions(self => {
-        confusion(getRoot(self), superposition)
+        // confusion(getRoot(self), superposition)
         return {
             init: flow(function* () {
-                const {glbPath, paddingX, core: {canvas: {scene, camera}}} = self
+                const {glbPath, paddingX, core: {canvas: {camera}}} = self
                 let result = yield new GLTFLoader().loadAsync(glbPath)
                 let mesh = result.scene.children[0]
-                scene.add(fitObjectToView(camera, mesh, paddingX))
                 self.uuid = mesh.uuid
-                window.addEventListener('resize', () => fitObjectToView(camera, mesh, paddingX))
-                window.addEventListener('orientationchange', () => fitObjectToView(camera, mesh, paddingX))
-                window.visualViewport.addEventListener('resize', () => fitObjectToView(camera, mesh, paddingX))
+                mesh = fitObjectToView(camera, mesh, paddingX)
+                window.addEventListener('resize', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
+                window.addEventListener('orientationchange', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
+                window.visualViewport.addEventListener('resize', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
+                return {model: self, gltf: mesh}
             }),
         }
     })
     .views(self => ({
         get ObjectTreeJS() {
-            return self['core'].canvas.getObjectByProperty('uuid', self['gltf'].uuid)
+            return self['core'].canvas.scene.getObjectByProperty('uuid', self['uuid'])
         },
     }))
 export default atomArea

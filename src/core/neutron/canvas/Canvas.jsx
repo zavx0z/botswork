@@ -1,28 +1,34 @@
-import {Canvas as FiberCanvas, useThree} from "@react-three/fiber"
-// import {ACESFilmicToneMapping, PCFSoftShadowMap} from "three"
-import {useEffect} from "react"
+import {Canvas as FiberCanvas} from "@react-three/fiber"
+import React from "react"
 import {inject} from "mobx-react"
+import {Stats} from "@react-three/drei"
+import {Leva} from "leva"
+import {a, useSpring} from "@react-spring/web"
+import {useTheme} from "@mui/material"
 
-
-export const MobxGlProvider = inject('everything')(({everything: {neutron: {canvas: {init, backgroundColor}}}}) => {
-    const get = useThree((state) => state.get)
-    useEffect(() => {
-        init(get)
-    }, [init, get])
-    return <color attach="background" args={[backgroundColor]}/>
-})
-const Canvas = ({onCreated, children, ...other}) =>
-    <FiberCanvas
-        {...other}
-        onCreated={({gl}) => {
-            Math.min(gl['setPixelRatio'](window.devicePixelRatio), 2)
-            // gl['shadowMap'].enabled = true
-            // gl['shadowMap'].type = PCFSoftShadowMap
-            // gl.toneMapping = ACESFilmicToneMapping
-            // typeof onCreated !== "undefined" && onCreated()
-        }}
-    >
-        <MobxGlProvider/>
-        {children}
-    </FiberCanvas>
-export default Canvas
+const Canvas = ({leva, stats, children, fullScreen, everything, ...other}) => {
+    const theme = useTheme()
+    const [props] = useSpring(() => ({height: fullScreen ? window.innerHeight + 'px' : theme.spacing(7)}), [fullScreen])
+    return <a.div
+        style={{
+            zIndex: theme.zIndex.drawer + 2,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            backgroundColor: theme.palette.primary.main,
+            ...props
+        }}>
+        <FiberCanvas
+            onCreated={({get}) => {
+                everything.neutron.canvas.init(get)
+            }}
+            {...other}
+        >
+            {stats && <Stats showPanel={0} className="stats"/>}
+            <Leva hidden={!leva}/>
+            <color attach="background" args={[theme.palette.primary.main]}/>
+            {children}
+        </FiberCanvas>
+    </a.div>
+}
+export default inject('everything')((Canvas))

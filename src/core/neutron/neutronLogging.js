@@ -34,6 +34,8 @@ export const neutronLogging = types
     .model('neutronLogging',{
         nameLength: types.integer,
         itemLength: types.integer,
+        include: types.array(types.string),
+        exclude: types.array(types.string),
     })
     .volatile(self => ({
         originalLog: console.log,

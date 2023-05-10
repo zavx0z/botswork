@@ -1,27 +1,22 @@
-import {useGesture} from "@use-gesture/react"
+import {useAnimations} from "@react-three/drei"
+import {useEffect, useRef, useState} from "react"
 
 export const Chelik = ({molecule}) => {
-    const bind = useGesture({
-        onPointerDown: ({event: {stopPropagation}}) => {
-            stopPropagation()
-            console.log('click', molecule)
-
-        },
-        onPointerEnter: () => {
-            document.body.style.cursor = 'pointer'
-        },
-        onPointerLeave: () => {
-            document.body.style.cursor = 'auto'
-        },
-    })
-    return <mesh
-        position={molecule.position}
-        rotation={molecule.rotation}
+    const group = useRef()
+    const {actions} = useAnimations(molecule.run, group)
+    const [running, setRunning] = useState(true)
+    useEffect(() => {
+        // actions.wait.play()
+        running && actions.run.play()
+    }, [actions, running])
+    return <group
+        ref={group}
+        name="Armature"
+        rotation={[...molecule.rotation]}
         scale={molecule.scale}
-        geometry={molecule.geometry}
-        material={molecule.material}
-        {...bind()}
+        position={[...molecule.position]}
     >
-        {molecule.children.map((child) => <mesh {...child}/>)}
-    </mesh>
+        <primitive object={molecule.bone}/>
+        {molecule.skinnedMesh.map(item => <skinnedMesh key={item.uuid} {...item}/>)}
+    </group>
 }

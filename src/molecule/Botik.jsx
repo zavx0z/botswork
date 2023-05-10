@@ -1,6 +1,6 @@
 import {useGesture} from "@use-gesture/react"
 
-export const ElectronBotik = ({molecule}) => {
+export const Botik = ({molecule}) => {
     const bind = useGesture({
         onPointerDown: ({event: {stopPropagation}}) => {
             stopPropagation()

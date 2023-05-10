@@ -15,11 +15,11 @@ const atomBotik = types
             const {glbPath} = self
             console.log('atomBotik', 'init', glbPath)
             let result = yield new GLTFLoader().loadAsync(glbPath)
-            console.log('atomBotik', 'init', result)
+            // console.log('atomBotik', 'init', result)
             let mesh = result.scene.children[0]
             self.uuid = mesh.uuid
             mesh.position.setX(-10)
-            console.log('atomBotik', 'init', mesh)
+            // console.log('atomBotik', 'init', mesh)
             return mesh
         }),
     }))
