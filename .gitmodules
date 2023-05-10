@@ -1,6 +1,18 @@
 [submodule "src/shared/users"]
     path = src/shared/users
     url = git@github.com:zavx0z/users.git
+[submodule "src/shared/pwa"]
+    path = src/shared/pwa
+    url = git@github.com:zavx0z/pwa.git
+[submodule "src/shared/layout"]
+    path = src/shared/layout
+    url = git@github.com:zavx0z/layout.git
+[submodule "src/shared/chat"]
+    path = src/shared/chat
+    url = git@github.com:zavx0z/chat.git
 [submodule "src/core/neutron/sso"]
     path = src/core/neutron/sso
     url = git@github.com:zavx0z/secure.git
+[submodule "src/core/neutron/sio"]
+    path = src/core/neutron/sio
+    url = git@github.com:zavx0z/sio.git
