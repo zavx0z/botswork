@@ -1,4 +1,4 @@
-import {applyPatch, onPatch, resolvePath, types} from "mobx-state-tree"
+import {applyPatch, getRoot, onPatch, resolvePath, types} from "mobx-state-tree"
 import {protonDialog} from "../core/proton/protonDialog"
 import protonsMessage from "../core/proton/protonMessage"
 import protonsUser from "../core/proton/protonUser"
@@ -20,13 +20,16 @@ export default types
             })
         }))
     })
+    .actions(self => {
+        const everything = getRoot(self)
+        onPatch(everything, snapshot => {
+            let match
+            match = matchPath('/proton/dialog/:id', snapshot.path)
+            if (match && snapshot.value.name === 'support') {
+                const item = resolvePath(everything, match.pathname)
+                applyPatch(everything, {op: 'replace', path: '/atom/support', value: {core: {dialog: item}}})
+            }
 
-export const superpositionSupport = everything => onPatch(everything, snapshot => {
-    let match
-    match = matchPath('/proton/dialog/:id', snapshot.path)
-    if (match && snapshot.value.name === 'support') {
-        const item = resolvePath(everything, match.pathname)
-        applyPatch(everything, {op: 'replace', path: '/atom/support', value: {core: {dialog: item}}})
-    }
-
-})
+        })
+        return {}
+    })

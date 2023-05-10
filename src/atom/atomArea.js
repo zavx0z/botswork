@@ -22,16 +22,14 @@ const atomArea = types
         // confusion(getRoot(self), superposition)
         return {
             init: flow(function* () {
-                const {glbPath, paddingX, core: {canvas: {getGl}}} = self
+                const {glbPath, paddingX, core: {canvas: {camera}}} = self
                 let result = yield new GLTFLoader().loadAsync(glbPath)
                 let mesh = result.scene.children[0]
                 self.uuid = mesh.uuid
-                getGl().then(({camera}) => {
-                    fitObjectToView(camera, self.ObjectTreeJS, paddingX)
-                    window.addEventListener('resize', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
-                    window.addEventListener('orientationchange', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
-                    window.visualViewport.addEventListener('resize', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
-                })
+                mesh = fitObjectToView(camera, mesh, paddingX)
+                window.addEventListener('resize', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
+                window.addEventListener('orientationchange', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
+                window.visualViewport.addEventListener('resize', () => fitObjectToView(camera, self.ObjectTreeJS, paddingX))
                 return {model: self, gltf: mesh}
             }),
         }
