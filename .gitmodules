@@ -1,0 +1,6 @@
+[submodule "src/shared/users"]
+    path = src/shared/users
+    url = git@github.com:zavx0z/users.git
+[submodule "src/core/neutron/sso"]
+    path = src/core/neutron/sso
+    url = git@github.com:zavx0z/secure.git
