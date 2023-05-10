@@ -1,0 +1,14 @@
+{
+  "customizations": {
+    "codespaces": {
+      "repositories": {
+        "zavx0z/secure": {
+          "permissions":  "read-all"
+        },
+        "zavx0z/sio": {
+          "permissions":  "read-all"
+        }
+      }
+    }
+  }
+}
