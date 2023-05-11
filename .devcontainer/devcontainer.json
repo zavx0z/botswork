@@ -3,25 +3,37 @@
     "codespaces": {
       "repositories": {
         "zavx0z/secure": {
-          "permissions":  "read-all"
-        },
+	  "premissions": { 
+            "content": "read"
+	  }
+	},
         "zavx0z/sio": {
-          "permissions":  "read-all"
+	  "premissions": { 
+            "content": "read"
+	  }
         },
         "zavx0z/pwa": {
-          "permissions":  "read-all"
+	  "premissions": { 
+            "content": "read"
+	  }
         },
         "zavx0z/chat": {
-          "permissions":  "read-all"
+	  "premissions": { 
+            "content": "read"
+	  }
         },
         "zavx0z/layout": {
-          "permissions":  "read-all"
+	  "premissions": { 
+            "content": "read"
+	  }
         },
         "zavx0z/users": {
-          "permissions":  "read-all"
+	  "premissions": { 
+            "content": "read"
+	  }
         }
       }
     }
   },
-  "updateContentCommand": "git config --global url.https://x-access-token:${CODESPACES_PREBUILD_TOKEN}@github.com/.insteadOf ssh://git@github.com/ && git config --global url.https://x-access-token:${CODESPACES_PREBUILD_TOKEN}@github.com/.insteadOf git@github.com/ && git config --global url.https://x-access-token:${CODESPACES_PREBUILD_TOKEN}@github.com/.insteadOf git@github.com: && git submodule update --init --recursive"
+  "updateContentCommand": "git config --global url.https://x-access-token:${SELF_TOKEN}@github.com/.insteadOf ssh://git@github.com/ && git config --global url.https://x-access-token:${SELF_TOKEN}@github.com/.insteadOf git@github.com/ && git config --global url.https://x-access-token:${SELF_TOKEN}@github.com/.insteadOf git@github.com: && git submodule update --init --recursive"
 }
