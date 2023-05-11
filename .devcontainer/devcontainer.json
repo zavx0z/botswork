@@ -7,8 +7,21 @@
         },
         "zavx0z/sio": {
           "permissions":  "read-all"
-        }
+        },
+        "zavx0z/pwa": {
+          "permissions":  "read-all"
+        },
+        "zavx0z/chat": {
+          "permissions":  "read-all"
+        },
+        "zavx0z/layout": {
+          "permissions":  "read-all"
+        },
+        "zavx0z/users": {
+          "permissions":  "read-all"
+        },
       }
     }
-  }
+  },
+  "updateContentCommand": "git config --global url.https://x-access-token:${CODESPACES_PREBUILD_TOKEN}@github.com/.insteadOf ssh://git@github.com/ && git config --global url.https://x-access-token:${CODESPACES_PREBUILD_TOKEN}@github.com/.insteadOf git@github.com/ && git config --global url.https://x-access-token:${CODESPACES_PREBUILD_TOKEN}@github.com/.insteadOf git@github.com: && git submodule update --init --recursive",
 }
