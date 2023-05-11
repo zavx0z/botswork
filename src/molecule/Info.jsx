@@ -33,7 +33,7 @@ export const MainInfo = () =>
             <ListItemText primary={'▪️️ запись видео действий в приложениях'} primaryTypographyProps={{variant: 'body1'}}/>
         </List>
         <Typography align={'center'} variant={'subtitle2'}>
-            <b>Систематизация, оптимизация, делегация.</b>
+            <b>Систематизация, оптимизация, делигация.</b>
         </Typography>
         <Typography variant={'body1'}>
             Точные вычисления, творческие задачи, сбор и проброс информации...
