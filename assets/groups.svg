@@ -1,0 +1,57 @@
+<svg xmlns='http://www.w3.org/2000/svg'
+     width='20'
+     height='20'
+     viewBox='-0.844 -1.156 20.5 20.813'
+     style='-webkit-print-color-adjust: exact;'
+     fill='none'
+     stroke='currentColor'
+     stroke-opacity='1'
+     stroke-width='2'
+>
+    <g>
+        <g id='shape-e687deca-7447-8094-8002-cd9bff75de70'>
+            <g class='fills' id='fills-e687deca-7447-8094-8002-cd9bff75de70'>
+                <rect
+                        rx='0.4'
+                        ry='0.4'
+                        x='0.15625000000045475'
+                        y='-0.15625'
+                        width='11.646752981725513'
+                        height='11.646752981725513'
+                />
+            </g>
+            <g class='strokes' id='strokes-e687deca-7447-8094-8002-cd9bff75de70'>
+                <g class='stroke-shape'>
+                    <rect
+                            rx='0.4'
+                            ry='0.4'
+                            x='0.15625000000045475'
+                            y='-0.15625'
+                            width='11.646752981725513'
+                            height='11.646752981725513'
+                    />
+                </g>
+            </g>
+        </g>
+        <g id='shape-e687deca-7447-8094-8002-cd9bff75de71'>
+            <g class='fills' id='fills-e687deca-7447-8094-8002-cd9bff75de71'>
+                <ellipse
+                        rx='7'
+                        ry='7'
+                        cx='11.656250000000455'
+                        cy='11.65625'
+                />
+            </g>
+            <g class='strokes' id='strokes-e687deca-7447-8094-8002-cd9bff75de71'>
+                <g class='stroke-shape'>
+                    <ellipse
+                            rx='7'
+                            ry='7'
+                            cx='11.656250000000455'
+                            cy='11.65625'
+                    />
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
