@@ -21,7 +21,7 @@
 	]
 </script>
 
-<div class="fixed z-50 flex flex-col items-center justify-center bg-surface-900/40 backdrop-blur-3xl">
+<div class="fixed z-50 inset-0 flex flex-col items-center justify-center bg-surface-900/40 backdrop-blur-3xl">
 	<div melt={$root} class="relative flex h-96 w-96 flex-col content-center rounded-md bg-surface-800 p-4 shadow-md">
 		<div aria-label="Authentication" melt={$tabsList} class="flex w-full justify-around">
 			{#each tabs as tab (tab.id)}

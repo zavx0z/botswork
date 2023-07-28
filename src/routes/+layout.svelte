@@ -8,6 +8,7 @@
 	import type { PageData } from './$types'
 	import Left from '$lib/dash/Left.svelte'
 	import Right from '$lib/dash/Right.svelte'
+	import { displayService } from '../xstate/layout'
 
 	export let data: PageData
 	let { supabase, session } = data
@@ -20,25 +21,25 @@
 		})
 		return () => subscription.unsubscribe()
 	})
-
 	let z3d = 20
 	const zSidebar = 30
 
-
 </script>
-<slot />
+<svelte:window on:resize={() => displayService.send({type: 'detectDisplay'})} />
 <div class='fixed h-[calc(100dvh)] w-screen inset-0 z-{z3d} overscroll-none'>
 	<Canvas>
 		<Scene />
 	</Canvas>
 </div>
+
 <div class='fixed inset-y-0 left-0 flex-row z-{zSidebar}'>
 	<Left />
 </div>
 <div class='fixed inset-y-0 w-80 left-12 flex-row z-{zSidebar} bg-surface-800/90 backdrop-blur-sm' />
 
-<div class='fixed inset-y-0 w-80 right-12 flex-row z-{zSidebar} bg-surface-800/90 backdrop-blur-sm' />
+<slot />
 
+<div class='fixed inset-y-0 w-80 right-12 flex-row z-{zSidebar} bg-surface-800/90 backdrop-blur-sm' />
 <div class='fixed right-0 top-0 flex h-full flex-row z-{zSidebar} '>
 	<Right />
 </div>
