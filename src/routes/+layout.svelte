@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { map } from 'rxjs/operators'
 	import '../xstate/inspector'
 	import '../app.css'
 	import '../component.css'
@@ -12,59 +11,28 @@
 	import Right from '$lib/dash/Right.svelte'
 	import machine from '../xstate/machine'
 	import { useMachine } from '@xstate/svelte'
-	import { fromEvent, debounceTime, merge } from 'rxjs'
 
 	export let data: PageData
 	let { supabase, session } = data
 	$: ({ supabase, session } = data)
 
-	const { state, send } = useMachine(machine, { devTools: true })
-	state.subscribe((e) => {
-		if (e.changed) console.log(e.event.payload, e.value)
-	})
 	onMount(() => {
-		send({ type: 'detect', payload: { width: window.innerWidth, height: window.innerHeight } })
-
-		// Функция для обработки событий изменения размера окна и изменения ориентации дисплея
-		function handleWindowResizeOrOrientationChange() {
-			const payload = {
-				width: window.innerWidth,
-				height: window.innerHeight,
-				orientation: window.screen.orientation.type
-			}
-			send({ type: 'detect', payload })
-		}
-
-		// Отслеживание событий изменения размера окна
-		const windowResize$ = fromEvent(window, 'resize').pipe(debounceTime(200))
-
-		// Отслеживание событий изменения ориентации дисплея
-		const orientationChange$ = fromEvent(window, 'orientationchange').pipe(debounceTime(200))
-
-		// Объединение потоков событий
-		const merged$ = merge(windowResize$, orientationChange$)
-
-		// Подписываемся на объединенный поток событий и вызываем обработчик
-		const observer = merged$.subscribe(handleWindowResizeOrOrientationChange)
-
-		// const observer = fromEvent(window, 'resize')
-		// 	.pipe(debounceTime(200))
-		// 	.subscribe(() => send({ type: 'detect', payload: { width: window.innerWidth, height: window.innerHeight } }))
-
-		const {
-			data: { subscription }
-		} = supabase.auth.onAuthStateChange((event, _session) => {
+		const supabaseAuth = supabase.auth.onAuthStateChange((event, _session) => {
 			if (_session?.expires_at !== session?.expires_at) invalidate('supabase:auth')
 		})
-		return () => {
-			// observer.unsubscribe()
-			subscription.unsubscribe()
-		}
+		return supabaseAuth.data.subscription.unsubscribe
 	})
+
 	let z3d = 20
 	const zSidebar = 30
+
+	const { state, send } = useMachine(machine, { devTools: true })
+	state.subscribe((e) => {
+		if (e.changed) console.log(e.value)
+	})
 </script>
 
+<svelte:window on:resize={() => send({ type: 'resize' })} />
 <div class="fixed inset-0 h-[calc(100dvh)] w-screen z-{z3d} overscroll-none">
 	<Canvas>
 		<Scene />

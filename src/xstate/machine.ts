@@ -1,189 +1,49 @@
 import { browser } from '$app/environment'
-import { createMachine } from 'xstate'
+import { createMachine, send } from 'xstate'
+import { raise } from 'xstate/lib/actions'
 
 const machine = createMachine(
 	{
-		/** @xstate-layout N4IgpgJg5mDOIC5QQJawA4BsCGBPAdAK4B2EYAZisZAMRkAuYAxvQNoAMAuoqOgPawU9FH2I8QAD0QBGAJzsAHPgDsAVgBs7VQGZ16gCyyATNP0AaELhmqly6Ufnb2+6e2X720gL5eLqDDgEJGSU1BB0YIwsrNLcSCD8gsKi4lII0gqy0vj6RsrGCnqGJuaWiKrK6ioOzuqmatrS2j5+aFh4RKQUVLQMzGxGcbwCQiJi8WkZstr4xvlGhQbGphZWCLIKqrOqrvqq7EYa0uoKLSD+7UFdob2R-azaQwkjyeOgk5nZufOLxStl6W02lkOUyO2U2nBclOvnObUCnRCPXCfWi+ieiVGKQmMgUeNmeQKRWWpTW0mU7nw0h26m0HicmyMRjOFwRsAAthEomwuOJMa9UogjE59Pg6YpnLIIQomasZPoZvSDopcvZpNSWfCOhyufdYnyXmNBQgHKYxR4FJLpSU5ekFTl2E4jCqTCZ7JqAtrOaiBhjDdj3og6XTZuobFbtDL-mT7UrnQpVW7VB7LvgdT6Hn6kkacQg9nkcmHLYZrdJbU1RWGnS61RkUwj2Si7tFefF+TnAybadlndNPNp3HTVLaNCDnC5abJ9JtlAn6x1G7rovq2-63pIg6YjGL3HZdLPPI6R+ox-oJ8DpxU57DWQum9zWIMDdmAxu84T8Ds6cdhY69MfT3PKcZ2vVpPQIRcM0eZ8sXXNJp3sfB+wnX9dHUACkLPY4LxA-R5wITAoCXHks1g40gSMKpBxMdg3E2IF0IBKV2BUPQfxlPQDHw-BCOImJSIFXNIwcfAFF3Jp1APVxtFtZjWLqdQFkoopuN4jMn1XF84MQFxZ3wSjv0Upw0Nk5QWMqBSlM4vCby1AiiKggSOzfM8IVEvEUOM-8mLM+T2OUrjbPA-AJEwPjW2GLTyLMmYpUU1QKkohUp3LIFsmLWkdlUPI9FkbjQr4ldIrIoSsiqac8lUaZDiyDRUsaUTakhakcpPfKwvUpzX3giSqSMfQ90ky0ywBJoGoy5rsosvKgtTArHJgwTOwVPTFIGiSpPq9Kmqy1qZrAub5ubEjFuc+Csm3Q9jjPJxFOUcsLMLSSdgURpMmmfKjofIrnii3MdnYKpIwTH8vPu0bHv0PQ1AyN7ZA+2aEQkL77g04qlrfHQPCpSNPL-cGyUh6GXrhhGDqRlHomgzSSs7BL8TxEGjPxh69CemHXqmBHYWIPgyHgeJbzWdGzpkSTZFtAaqR0ftXWUZTk0Rjpgm6MJTu6mR5YJ6xlH0uwTzPMF5AqbiOXV7STTGsUMgStC-kYskKj144p2nWQqq0Gzybvc3jWFacqW+DiPDMh3yhPTCgMvWcvbhYLCN93MHBlUSDeOeX7GcUzzLYxSOJUpWCFCxPO2a0UBvcIyT1cCXRrSxqocmvbPswEuXJOEFI1pOw3G0ZPhwhgPZGJ2GucVnwgA */
+		/** @xstate-layout N4IgpgJg5mDOIC5QQJawA4BsCGBPAdCgHYoAuAxANoAMAuoqOgPaxkpNEMgAeiArAHYAHABoQufgICc+PgF85Y1BhwFiZKgEZ6SEM1al2nXbwSDR4xAGYhANlkKlaLHkIkKlAEw7GLNhy5TczEJBAAWIStHEGUXNXcqKx89P0MAk0kLUNsBW2jY1TcNSjDk-X9jUCDhEMRPKWp850LYAFtyACc4FAAvMBoy1KNAxFtPIXwhTU8+TT4ZoWEpTVqzeqaVV1aITu6+ga5ytMqeUfHJ6b5Vqys8xRjm10woXdZ9ukOh9KqziamZuYLJYrSzhKyeBz3AqubiYV69fofXRHYYZBBjP6XQF8RZCZarMZ8SFOTYEbiw+HvQYGVE-dHnf5XUGeKwyeTRIhMCBwLjQ0K+GnfU4IcG2VaAjZxIqkT6Ck6mKwCMKrGZE+aeAQarWazVCSUtVqyiojBACKxqsK2RZM0J8RWySI3J3OqJQx4EbZG44ms0Wq0CG3WMJhB0usP6p5QL204W+2SW62rYOafDUR1hp0CCNkzDRoWmON8BMBglWENpjPO7P4cm55FfeWIQvFwMITwRVPpyuaBQKIA */
 		id: 'display',
-		initial: 'undefined',
+		initial: 'init',
 		states: {
-			undefined: {
-				on: {
-					detect: [
-						{
-							target: 'sm',
-							cond: 'sm'
-						},
-						{
-							target: 'md',
-							cond: 'md'
-						},
-						{
-							target: 'lg',
-							cond: 'lg'
-						},
-						{
-							target: 'xl',
-							cond: 'xl'
-						},
-						{
-							target: 'xxl',
-							cond: 'xxl'
-						}
-					]
-				}
+			init: {
+				always: [
+					{ target: 'sm', cond: 'sm' },
+					{ target: 'md', cond: 'md' },
+					{ target: 'lg', cond: 'lg' },
+					{ target: 'xl', cond: 'xl' },
+					{ target: 'xxl', cond: 'xxl' },
+				]
 			},
-			sm: {
-				on: {
-                    setSize: {
-                        actions: ['windowSetSize'],
-                        target: 'sm'
-                    },
-					detect: [
-						{
-							target: 'md',
-							cond: 'md'
-						},
-						{
-							target: 'lg',
-							cond: 'lg'
-						},
-						{
-							target: 'xl',
-							cond: 'xl'
-						},
-						{
-							target: 'xxl',
-							cond: 'xxl'
-						}
-					]
-				}
-			},
-			md: {
-				on: {
-                    setSize: {
-                        actions: ['windowSetSize'],
-                        target: 'md'
-                    },
-					detect: [
-						{
-							target: 'sm',
-							cond: 'sm'
-						},
-						{
-							target: 'lg',
-							cond: 'lg'
-						},
-						{
-							target: 'xl',
-							cond: 'xl'
-						},
-						{
-							target: 'xxl',
-							cond: 'xxl'
-						}
-					]
-				}
-			},
-			lg: {
-				on: {
-                    setSize: {
-                        actions: ['windowSetSize'],
-                        target: 'lg'
-                    },
-					detect: [
-						{
-							target: 'sm',
-							cond: 'sm'
-						},
-						{
-							target: 'md',
-							cond: 'md'
-						},
-						{
-							target: 'xl',
-							cond: 'xl'
-						},
-						{
-							target: 'xxl',
-							cond: 'xxl'
-						}
-					]
-				}
-			},
-			xl: {
-				on: {
-                    setSize: {
-                        actions: ['windowSetSize'],
-                        target: 'xl'
-                    },
-					detect: [
-						{
-							target: 'sm',
-							cond: 'sm'
-						},
-						{
-							target: 'md',
-							cond: 'md'
-						},
-						{
-							target: 'lg',
-							cond: 'lg'
-						},
-						{
-							target: 'xxl',
-							cond: 'xxl'
-						}
-					]
-				}
-			},
-			xxl: {
-				on: {
-                    setSize: {
-                        actions: ['windowSetSize'],
-                        target: 'xxl'
-                    },
-					detect: [
-						{
-							target: 'sm',
-							cond: 'sm',
-						},
-						{
-							target: 'md',
-							cond: 'md'
-						},
-						{
-							target: 'lg',
-							cond: 'lg'
-						},
-						{
-							target: 'xl',
-							cond: 'xl'
-						}
-					]
-				}
-			}
+			sm: { on: { resize: 'init' } },
+			md: { on: { resize: 'init' } },
+			lg: { on: { resize: 'init' } },
+			xl: { on: { resize: 'init' } },
+			xxl: { on: { resize: 'init' } },
 		},
-        predictableActionArguments: true,
-        preserveActionOrder: true,
+		predictableActionArguments: true,
+		preserveActionOrder: true
 	},
 	{
-        actions: {
-            windowSetSize: (args) =>{
-                if (browser){
-                    console.log(args )
-                    // width:number, height: number
-                    // window.innerWidth = width
-                    // window.innerHeight = height
-                }
-            }
-        },
+		actions: {},
 		guards: {
-			sm: (_, { payload: { width } }) => width < 640,
-			md: (_, { payload: { width } }) => 640 < width && width < 780 ,
-			lg: (_, { payload: { width } }) => 780 < width && width < 1024,
-			xl: (_, { payload: { width } }) => 1024 < width && width < 1280,
-			xxl: (_, { payload: { width } }) => 1280 < width && width < 1536
+			sm: () => {
+				return browser ? window.innerWidth < 640 : false
+			},
+			md: () => {
+				return browser ? 640 < window.innerWidth && window.innerWidth < 780 : false
+			},
+			lg: () => {
+				return browser ? 780 < window.innerWidth && window.innerWidth < 1024 : false
+			},
+			xl: () => {
+				return browser ? 1024 < window.innerWidth && window.innerWidth < 1280 : false
+			},
+			xxl: () => {
+				return browser ? 1280 < window.innerWidth && window.innerWidth < 1536 : false
+			}
 		}
 	}
 )
