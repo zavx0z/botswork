@@ -32,7 +32,7 @@
 	})
 </script>
 
-<svelte:window on:resize={() => send({ type: 'resize' })} />
+<svelte:window on:resize={() => send({ type: 'resize' })} on:orientationchange={() => send({ type: 'rotate' })} />
 <div class="fixed inset-0 h-[calc(100dvh)] w-screen z-{z3d} overscroll-none">
 	<Canvas>
 		<Scene />
