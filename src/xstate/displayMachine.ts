@@ -1,5 +1,5 @@
 import { browser } from '$app/environment'
-import { createMachine } from 'xstate'
+import { assign, createMachine } from 'xstate'
 
 const machine = createMachine(
 	{
@@ -17,6 +17,7 @@ const machine = createMachine(
 				initial: 'init',
 				states: {
 					init: {
+						exit: ['setSize'],
 						always: [
 							{ target: 'sm', cond: 'sm' },
 							{ target: 'md', cond: 'md' },
@@ -26,29 +27,29 @@ const machine = createMachine(
 						]
 					},
 					sm: {
-						tags: [],
+						tags: ['phone'],
 						on: { resize: 'init' }
 					},
 					md: {
-						tags: [],
+						tags: ['desktop', 'pad', 'phone'],
 						on: { resize: 'init' }
 					},
 					lg: {
-						tags: [],
+						tags: ['desktop', 'pad', 'phone'],
 						on: { resize: 'init' }
 					},
 					xl: {
-						tags: [],
+						tags: ['desktop'],
 						on: { resize: 'init' }
 					},
 					xxl: {
-						tags: [],
+						tags: ['tv', '4k'],
 						on: { resize: 'init' }
 					}
 				}
 			},
 			orientation: {
-				description: "Ориентация клиентского устройства",
+				description: 'Ориентация клиентского устройства',
 				initial: 'init',
 				states: {
 					init: {
@@ -82,7 +83,12 @@ const machine = createMachine(
 		preserveActionOrder: true
 	},
 	{
-		actions: {},
+		actions: {
+			setSize: assign({
+				width: (context) => (browser ? window.innerWidth : context.width),
+				height: (context) => (browser ? window.innerHeight : context.height)
+			})
+		},
 		guards: {
 			sm: () => (browser ? window.innerWidth < 640 : false),
 			md: () => (browser ? 640 < window.innerWidth && window.innerWidth < 780 : false),
