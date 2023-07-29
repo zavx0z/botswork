@@ -11,7 +11,7 @@
 	import Right from '$lib/dash/Right.svelte'
 	import machine from '../xstate/displayMachine'
 	import { useMachine } from '@xstate/svelte'
-
+	import {debounce} from '$lib/utils'
 	export let data: PageData
 	let { supabase, session } = data
 	$: ({ supabase, session } = data)
@@ -32,7 +32,10 @@
 	})
 </script>
 
-<svelte:window on:resize={() => send({ type: 'resize' })} on:orientationchange={() => send({ type: 'rotate' })} />
+<svelte:window
+	on:resize={debounce(() => send({ type: 'resize' }), 100)}
+	on:orientationchange={() => send({ type: 'rotate' })}
+/>
 <div class="fixed inset-0 h-[calc(100dvh)] w-screen z-{z3d} overscroll-none">
 	<Canvas>
 		<Scene />

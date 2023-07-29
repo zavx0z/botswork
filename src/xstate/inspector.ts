@@ -7,5 +7,5 @@ if (browser){
 		iframe: false,
 		// targetWindow: window
 	})
-	createWindowReceiver({}).subscribe(console.log)
+	// createWindowReceiver({}).subscribe(console.log)
 }
