@@ -1,6 +1,5 @@
 import { browser } from '$app/environment'
-import { createMachine, send } from 'xstate'
-import { raise } from 'xstate/lib/actions'
+import { createMachine } from 'xstate'
 
 const machine = createMachine(
 	{

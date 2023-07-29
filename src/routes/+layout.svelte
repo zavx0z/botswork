@@ -9,7 +9,7 @@
 	import type { PageData } from './$types'
 	import Left from '$lib/dash/Left.svelte'
 	import Right from '$lib/dash/Right.svelte'
-	import machine from '../xstate/machine'
+	import machine from '../xstate/displayMachine'
 	import { useMachine } from '@xstate/svelte'
 
 	export let data: PageData
