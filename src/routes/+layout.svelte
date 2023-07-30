@@ -10,8 +10,10 @@
 	import Left from '$lib/dash/Left.svelte'
 	import Right from '$lib/dash/Right.svelte'
 	import machine from '../xstate/displayMachine'
-	import { useMachine } from '@xstate/svelte'
-	import {debounce} from '$lib/utils'
+	import { useMachine, useSelector } from '@xstate/svelte'
+	import { debounce } from '$lib/utils'
+	import stateMachine from '../xstate/stateMachine'
+	import { interpret } from 'xstate'
 	export let data: PageData
 	let { supabase, session } = data
 	$: ({ supabase, session } = data)
@@ -26,15 +28,23 @@
 	let z3d = 20
 	const zSidebar = 30
 
-	const { state, send } = useMachine(machine, { devTools: true })
-	state.subscribe((e) => {
-		if (e.changed) console.log(e.value)
-	})
+	const { service } = useMachine(stateMachine, { devTools: true })
+	const display = useSelector(service, (state) => state.children.display)
+
+	const width = useSelector($display, (state) => state.context.width)
+	$:console.log($width)
+	const height = useSelector($display, (state) => state.context.height)
+	$:console.log($height)
+	const size = useSelector($display, (state) => state.value.size)
+	$:console.log($size)
+	const orientation = useSelector($display, (state) => state.value.orientation)
+	$:console.log($orientation)
+
 </script>
 
 <svelte:window
-	on:resize={debounce(() => send({ type: 'resize' }), 100)}
-	on:orientationchange={() => send({ type: 'rotate' })}
+	on:resize={debounce(() => $display.send('resize'), 100)}
+	on:orientationchange={() => $display.send('rotate')}
 />
 <div class="fixed inset-0 h-[calc(100dvh)] w-screen z-{z3d} overscroll-none">
 	<Canvas>
