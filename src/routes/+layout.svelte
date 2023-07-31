@@ -22,30 +22,29 @@
 		})
 		return supabaseAuth.data.subscription.unsubscribe
 	})
-
-	let z3d = 20
-	const zSidebar = 30
 	const display = stateMachine.children.get('display')
+	const layoutCanvas = stateMachine.children.get('canvas')
+	const layoutHtml = stateMachine.children.get('html')
 </script>
 
 <svelte:window
-	on:resize={debounce(() => display?.send('resize'), 200)}
+	on:resize={debounce(() => display?.send({ type: 'resize', data: { su: 'success' } }), 200)}
 	on:orientationchange={() => display?.send('rotate')}
 />
-<div class="fixed inset-0 h-[calc(100dvh)] w-screen z-{z3d} overscroll-none">
+<div class="fixed inset-0 h-[calc(100dvh)] w-screen z-{$layoutCanvas.value.zIndex} overscroll-none">
 	<Canvas>
 		<Scene />
 	</Canvas>
 </div>
 
-<div class="fixed inset-y-0 left-0 flex-row z-{zSidebar}">
+<div class="fixed inset-y-0 left-0 flex-row z-{$layoutHtml.value.zIndex}">
 	<Left />
 </div>
-<div class="fixed inset-y-0 left-12 w-80 flex-row z-{zSidebar} bg-surface-800/90 backdrop-blur-sm" />
+<div class="fixed inset-y-0 left-12 w-80 flex-row z-{$layoutHtml.value.zIndex} bg-surface-800/90 backdrop-blur-sm" />
 
 <slot />
 
-<div class="fixed inset-y-0 right-12 w-80 flex-row z-{zSidebar} bg-surface-800/90 backdrop-blur-sm" />
-<div class="fixed right-0 top-0 flex h-full flex-row z-{zSidebar} ">
+<div class="fixed inset-y-0 right-12 w-80 flex-row z-{$layoutHtml.value.zIndex} bg-surface-800/90 backdrop-blur-sm" />
+<div class="fixed right-0 top-0 flex h-full flex-row z-{$layoutHtml.value.zIndex} ">
 	<Right />
 </div>

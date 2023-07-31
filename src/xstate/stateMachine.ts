@@ -1,6 +1,7 @@
-import { createMachine, interpret } from 'xstate'
+import { createMachine, interpret, spawn } from 'xstate'
 import displayMachine from './displayMachine'
 import sideBar from './sideBar'
+import Layout, { zIndex } from './Layout/Layout'
 
 const machine = createMachine(
 	{
@@ -10,6 +11,12 @@ const machine = createMachine(
 		states: {
 			display: {
 				invoke: { id: 'display', src: 'display' }
+			},
+			layout: {
+				invoke: [
+					{ id: 'canvas', src: 'layoutCanvas' },
+					{ id: 'html', src: 'layoutHtml' }
+				]
 			},
 			sideBarLeft: {
 				invoke: { id: 'sideBarLeft', src: 'sideBarLeft' }
@@ -22,8 +29,10 @@ const machine = createMachine(
 	{
 		services: {
 			display: displayMachine,
-			sideBarLeft: () => createMachine({ ...sideBar.config, id: 'sideBarLeft' }),
-			sideBarRight: () => createMachine({ ...sideBar.config, id: 'sideBarRight' }),
+			sideBarLeft: createMachine({ ...sideBar.config, id: 'sideBarLeft' }),
+			sideBarRight: createMachine({ ...sideBar.config, id: 'sideBarRight' }),
+			layoutCanvas: () => Layout('layoutCanvas').withContext({ zIndex: zIndex.z0 }),
+			layoutHtml: () => Layout('layoutHtml').withContext({ zIndex: zIndex.z10 })
 		}
 	}
 )
