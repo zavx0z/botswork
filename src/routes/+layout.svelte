@@ -9,10 +9,10 @@
 	import type { PageData } from './$types'
 	import Left from '$lib/dash/Left.svelte'
 	import Right from '$lib/dash/Right.svelte'
-	import { useSelector } from '@xstate/svelte'
 	import { debounce } from '$lib/utils'
 	import stateMachine from '../xstate/stateMachine'
 	export let data: PageData
+
 	let { supabase, session } = data
 	$: ({ supabase, session } = data)
 
@@ -25,23 +25,12 @@
 
 	let z3d = 20
 	const zSidebar = 30
-
-	const display = useSelector(stateMachine, (state) => state.children.display)
-
-	const width = useSelector($display, (state) => state.context.width)
-	$:console.log($width)
-	const height = useSelector($display, (state) => state.context.height)
-	$:console.log($height)
-	const size = useSelector($display, (state) => state.value.size)
-	$:console.log($size)
-	const orientation = useSelector($display, (state) => state.value.orientation)
-	$:console.log($orientation)
-
+	const display = stateMachine.children.get('display')
 </script>
 
 <svelte:window
-	on:resize={debounce(() => $display.send('resize'), 100)}
-	on:orientationchange={() => $display.send('rotate')}
+	on:resize={debounce(() => display?.send('resize'), 200)}
+	on:orientationchange={() => display?.send('rotate')}
 />
 <div class="fixed inset-0 h-[calc(100dvh)] w-screen z-{z3d} overscroll-none">
 	<Canvas>
