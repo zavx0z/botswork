@@ -9,11 +9,9 @@
 	import type { PageData } from './$types'
 	import Left from '$lib/dash/Left.svelte'
 	import Right from '$lib/dash/Right.svelte'
-	import machine from '../xstate/displayMachine'
-	import { useMachine, useSelector } from '@xstate/svelte'
+	import { useSelector } from '@xstate/svelte'
 	import { debounce } from '$lib/utils'
 	import stateMachine from '../xstate/stateMachine'
-	import { interpret } from 'xstate'
 	export let data: PageData
 	let { supabase, session } = data
 	$: ({ supabase, session } = data)
@@ -28,8 +26,7 @@
 	let z3d = 20
 	const zSidebar = 30
 
-	const { service } = useMachine(stateMachine, { devTools: true })
-	const display = useSelector(service, (state) => state.children.display)
+	const display = useSelector(stateMachine, (state) => state.children.display)
 
 	const width = useSelector($display, (state) => state.context.width)
 	$:console.log($width)
