@@ -30,9 +30,8 @@ export default (id: string = 'layout') =>
 				context: {} as ContextTypes,
 				actions: {} as { type: 'cacheData'; context: ContextTypes }
 			},
-			tsTypes: {} as import('./Layout.typegen.d.ts').Typegen0,
+			tsTypes: {} as import('./layoutMachine.typegen.d.ts').Typegen0,
 			states: {
-                
 				zIndex: {
 					initial: 'change',
 					states: {
@@ -57,7 +56,9 @@ export default (id: string = 'layout') =>
 						[zIndex.auto]: { on: { SET_INDEX: { target: 'change', actions: ['cacheData'] } } }
 					}
 				}
-			}
+			},
+			predictableActionArguments: true,
+			preserveActionOrder: true
 		},
 		{
 			actions: {

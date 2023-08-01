@@ -1,7 +1,7 @@
 import { createMachine, interpret, spawn } from 'xstate'
-import displayMachine from './displayMachine'
-import sideBar from './sideBar'
-import Layout, { zIndex } from './Layout/Layout'
+import displayMachine from '../displayMachine/displayMachine'
+import sideBar from '../sideBarMachine/sideBarMachine'
+import Layout, { zIndex } from '../layoutMachine/layoutMachine'
 
 const machine = createMachine(
 	{
@@ -24,15 +24,18 @@ const machine = createMachine(
 			sideBarRight: {
 				invoke: { id: 'sideBarRight', src: 'sideBarRight' }
 			}
-		}
+		},
+		predictableActionArguments: true,
+		preserveActionOrder: true,
+		tsTypes: {} as import('./stateMachine.typegen.d.ts').Typegen0
 	},
 	{
 		services: {
 			display: displayMachine,
 			sideBarLeft: createMachine({ ...sideBar.config, id: 'sideBarLeft' }),
 			sideBarRight: createMachine({ ...sideBar.config, id: 'sideBarRight' }),
-			layoutCanvas: () => Layout('layoutCanvas').withContext({ zIndex: zIndex.z0 }),
-			layoutHtml: () => Layout('layoutHtml').withContext({ zIndex: zIndex.z10 })
+			layoutCanvas: Layout('layoutCanvas').withContext({ zIndex: zIndex.z0 }),
+			layoutHtml: Layout('layoutHtml').withContext({ zIndex: zIndex.z10 })
 		}
 	}
 )

@@ -4,7 +4,8 @@
   export interface Typegen0 {
         '@@xstate/typegen': true;
         internalEvents: {
-          "xstate.init": { type: "xstate.init" };
+          "": { type: "" };
+"xstate.init": { type: "xstate.init" };
         };
         invokeSrcNameMap: {
           
@@ -16,18 +17,24 @@
           services: never;
         };
         eventsCausingActions: {
-          
+          "cacheData": "SET_INDEX";
         };
         eventsCausingDelays: {
           
         };
         eventsCausingGuards: {
-          
+          "auto": "";
+"z0": "";
+"z10": "";
+"z20": "";
+"z30": "";
+"z40": "";
+"z50": "";
         };
         eventsCausingServices: {
           
         };
-        matchesStates: undefined;
+        matchesStates: "zIndex" | "zIndex.0" | "zIndex.10" | "zIndex.20" | "zIndex.30" | "zIndex.40" | "zIndex.50" | "zIndex.auto" | "zIndex.change" | { "zIndex"?: "0" | "10" | "20" | "30" | "40" | "50" | "auto" | "change"; };
         tags: never;
       }
   

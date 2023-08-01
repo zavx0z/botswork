@@ -36,7 +36,9 @@ const ActivityPanelButton = createMachine({
 			}
 		}
 	},
-	tsTypes: {} as import("./ActivityPanelButton.typegen.d.ts").Typegen0,
+	predictableActionArguments: true,
+	preserveActionOrder: true,
+	tsTypes: {} as import('./activityLayoutButtonMachine.typegen.d.ts').Typegen0,
 	schema: {
 		events: {} as EventTypes,
 		context: {} as ContextTypes
