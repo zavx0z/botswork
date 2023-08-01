@@ -1,12 +1,13 @@
 import { createMachine, interpret, spawn } from 'xstate'
 import displayMachine from '../displayMachine/displayMachine'
 import sideBar from '../sideBarMachine/sideBarMachine'
-import Layout, { zIndex } from '../layoutMachine/layoutMachine'
+import layoutMachineFabric from '../layoutMachine/layoutMachine'
 
 const machine = createMachine(
 	{
 		/** @xstate-layout N4IgpgJg5mDOIC5gF8A0IB2B7CdGlgBcBDQsAWWIGMALASwzHxAActY7C6sNmAPRAEYATOgCeQgGwAWAHQBWZGhBFSFavUayIdWCwA2xCUlbtO3XiYEJJABnGJh84UvSqylWgzCyOuAELEAE4AMmAAZoTMbBxcPPyIdg4I0gDMqQquKiQeGt6+dAHBAEp0UDRRJjHm8VaJ9iDGkoKKSshAA */
 		id: 'stateMachine',
+		key: 'stateMachine',
 		type: 'parallel',
 		states: {
 			display: {
@@ -14,7 +15,7 @@ const machine = createMachine(
 			},
 			layout: {
 				invoke: [
-					{ id: 'canvas', src: 'layoutCanvas' },
+					{ id: 'canvas', src: 'layoutCanvas'},
 					{ id: 'html', src: 'layoutHtml' }
 				]
 			},
@@ -34,8 +35,8 @@ const machine = createMachine(
 			display: displayMachine,
 			sideBarLeft: createMachine({ ...sideBar.config, id: 'sideBarLeft' }),
 			sideBarRight: createMachine({ ...sideBar.config, id: 'sideBarRight' }),
-			layoutCanvas: Layout('layoutCanvas').withContext({ zIndex: zIndex.z0 }),
-			layoutHtml: Layout('layoutHtml').withContext({ zIndex: zIndex.z10 })
+			layoutCanvas: layoutMachineFabric('layoutCanvas', '0' ),
+			layoutHtml: layoutMachineFabric('layoutHtml', '10')
 		}
 	}
 )
