@@ -14,3 +14,5 @@ export function debounce<T extends any[]>(func: (...args: T) => void, timeout: n
 		}, timeout)
 	}
 }
+export const themeColor = (varColor: string): string =>
+	`rgb(${window.getComputedStyle(document.body).getPropertyValue(varColor).replaceAll(' ', ', ')})`
