@@ -10,7 +10,7 @@
 	import Left from '$lib/dash/Left.svelte'
 	import Right from '$lib/dash/Right.svelte'
 	import { debounce } from '$lib/utils'
-	import stateMachine from '../xstate/stateMachine/stateMachine'
+	import stateMachine from '../xstate/stateMachine'
 	export let data: PageData
 	let { supabase, session } = data
 	$: ({ supabase, session } = data)

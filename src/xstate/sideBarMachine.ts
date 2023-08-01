@@ -1,5 +1,5 @@
 import { createMachine, spawn } from 'xstate'
-import ActivityPanelButton from '../activityLayoutButtonMachine/activityLayoutButtonMachine'
+import ActivityPanelButton from './activityLayoutButtonMachine'
 
 type ContextTypes = {
 	

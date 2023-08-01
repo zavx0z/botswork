@@ -1,6 +1,6 @@
 import { assign, createMachine } from 'xstate'
 
-const layoutMachineFabric = (id: string = 'layout', zIndex: string = 'auto'): any => {
+const layoutMachineFabric = (id: string = 'layout', zIndex: string = 'auto') =>
 	createMachine(
 		{
 			/** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOgC8BJfCMADxIAYBiAZQFEAVAfQoDkARNgA0A2gwC6iUAAcA9rFwAXXLPxSQtRAGYtAFhIAmXQE5jugOwBWXQA4burcYA0IAJ6JL5gyVPGb5rXMANi1LMwBGAF9IlzQsPEJSSmo6EnDmdm4+QVEJdTkFZVV1TQQdfSNTC2s7B2c3RANjBh9fCyD7S0sg6NiMHAJicioaegMMzh4BYTFJJBACpRU1edLywxMzK1t7Rxd3BAdw1tMgoIcgg3HzXpA4gcThlPotCazp3LmZeSXi1e09BsqttansGgh0rpjr4qgwtEFjAiDLd7gkhslRiRdG8pjlZvkfkUVqA1oDKlsart6gdwiYTn5dOdLHCbjE7v00UkRqlmaxJtkZnl5osiSUARVNtUdnV9ohmi0YVYDDZLK8HCiOYMuc8SDh0PgYEx8cLCcsxWVaT4GJddLY7ZYVbKEGdzCdauNmkYNfEtU9MXqDWAjeEvgtTX8SdpLc0bXbOo7wVoVfSHeEmn4wt6HujufQA4aRAZQyKzf8LfoY0Y47oHZYnZYDEF6cE7OEgszWX0fY8Mal80GRFpi+HiRooxXrVX7PG6+DwuFAowGMuGLabAZHMZkWzUb7e3nsPqC7ph4VS5Hy1bY9OawmDlX6Y5AjYtAY01nOX6+4fA0bLKfflHNZo0nNd7TvOVjEsekVQCBgAihD891zXUfwLIIANFMstBA69wNnA4VQrXwzmMcwYygpCexQ-sjXMTDzzHS9KzAmcnRsBgbBTGwgi8F8LConMdXQABXRRZD5d48SFb4zwjJj1gMZll1fIIGD8REnXMBc3S3SxwgbTNbnwWQaHgeZd0SAk5KAxAAFojCdBzdEE7VRmswDzUc8FLnpLdXyU8J7DMVyv3oBgPKwi8LFdcxNjU+clM9J01K0N1zB4q4bHCTt2W7ITMXSSLGNKGKSDi04GESsIGAMJ1X2hEigqaBdzlC-dDAik0bPNMqKsRKq0xqurwUZbwYUuKrlxVEKd01aidVeYr5NK8xYviwaktqp10gCJcV2y7LrDI9qUOxZbbMONbyo26rkrnDjm3UnRrBrXLLIKnkutkzyyz626hvug5jBwmCzCaWpjFOnV+wu80vB2mxjBIHCjDU8ZArIno5vytzUlE8S4b+67+oSwHtvBDjkZhWxQkbNbseiIA */
@@ -59,5 +59,4 @@ const layoutMachineFabric = (id: string = 'layout', zIndex: string = 'auto'): an
 			}
 		}
 	)
-}
 export default layoutMachineFabric

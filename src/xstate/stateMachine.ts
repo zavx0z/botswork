@@ -1,7 +1,7 @@
 import { createMachine, interpret, spawn } from 'xstate'
-import displayMachine from '../displayMachine/displayMachine'
-import sideBar from '../sideBarMachine/sideBarMachine'
-import layoutMachineFabric from '../layoutMachine/layoutMachine'
+import displayMachine from './displayMachine'
+import sideBar from './sideBarMachine'
+import layoutMachineFabric from './layoutMachine'
 
 const machine = createMachine(
 	{

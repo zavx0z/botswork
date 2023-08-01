@@ -8,10 +8,10 @@
 	import GroupsIcon from '~icons/botswork/groups'
 	import SidebarCloseIcon from '~icons/lucide/sidebar-close'
 	import SettingsIcon from '~icons/fluent/settings-32-regular'
-	import stateMachine from '../../xstate/stateMachine/stateMachine'
+	import stateMachine from '../../xstate/stateMachine'
 
 	const sideBarLeft = stateMachine.children.get('sideBarLeft')
-	// console.log(sideBarLeft)
+	console.log(sideBarLeft)
 
 	const topLinks = [
 		{ icon: BotikIcon, path: '/' },
