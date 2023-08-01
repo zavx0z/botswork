@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { createAvatar } from '@melt-ui/svelte'
+	let Cl = ''
+	export { Cl as class }
 
 	export let src = ''
 	export let alt = 'avatar'
@@ -10,7 +12,7 @@
 	{#if src}
 		<img melt={$image} {alt} class="h-full w-full rounded-[inherit]" />
 	{/if}
-	<span melt={$fallback} class="text-sm uppercase font-medium text-primary-500">
+	<span melt={$fallback} class="text-sm font-medium uppercase text-primary-500">
 		{alt.slice(0, 2)}
 	</span>
 </div>

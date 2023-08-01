@@ -14,13 +14,13 @@
 	export let data: PageData
 	let { supabase, session } = data
 	$: ({ supabase, session } = data)
+	const display = stateMachine.children.get('display')
 	onMount(() => {
 		const supabaseAuth = supabase.auth.onAuthStateChange((event, _session) => {
 			if (_session?.expires_at !== session?.expires_at) invalidate('supabase:auth')
 		})
 		return supabaseAuth.data.subscription.unsubscribe
 	})
-	const display = stateMachine.children.get('display')
 	const layoutCanvas = stateMachine.children.get('canvas')
 	const layoutHtml = stateMachine.children.get('html')
 </script>

@@ -16,7 +16,7 @@
           services: never;
         };
         eventsCausingActions: {
-          "init": "INIT";
+          
         };
         eventsCausingDelays: {
           
@@ -27,7 +27,7 @@
         eventsCausingServices: {
           
         };
-        matchesStates: "closed" | "idle" | "opened" | "opened.buttons" | "opened.panel" | "opened.panel.closed" | "opened.panel.idle" | "opened.panel.opened" | { "opened"?: "buttons" | "panel" | { "panel"?: "closed" | "idle" | "opened"; }; };
+        matchesStates: "active" | "hovered" | "inactive";
         tags: never;
       }
   

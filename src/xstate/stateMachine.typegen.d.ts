@@ -45,7 +45,7 @@
 "sideBarLeft": "xstate.init";
 "sideBarRight": "xstate.init";
         };
-        matchesStates: "display" | "layout" | "sideBarLeft" | "sideBarRight";
+        matchesStates: "display" | "layout" | "sideBar";
         tags: never;
       }
   

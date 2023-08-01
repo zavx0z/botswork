@@ -1,5 +1,4 @@
 <script>
-	import { page } from '$app/stores'
 	import Avatar from '$lib/ui/components/Avatar.svelte'
 	import zavx0z from '$lib/assets/img/zavx0z.jpg'
 	import BotikIcon from '~icons/botswork/botik'
@@ -9,43 +8,37 @@
 	import SidebarCloseIcon from '~icons/lucide/sidebar-close'
 	import SettingsIcon from '~icons/fluent/settings-32-regular'
 	import stateMachine from '../../xstate/stateMachine'
+	import buttonMachine from '../../xstate/buttonMachine'
+	import linkMachine from '../../xstate/linkMachine'
+	import ActivityButtons from './ActivityButtons.svelte'
 
 	const sideBarLeft = stateMachine.children.get('sideBarLeft')
-	console.log(sideBarLeft)
-
-	const topLinks = [
-		{ icon: BotikIcon, path: '/' },
-		{ icon: HumansIcon, path: 'humans' },
-		{ icon: BotsIcon, path: 'bots' },
-		{ icon: GroupsIcon, path: 'groups' }
-	]
-	const bottomLinks = [
-		{ icon: Avatar, path: '/auth', props: { alt: 'zavx0z', src: zavx0z } },
-		{ icon: SettingsIcon, path: '/settings', props: { class: 'h-6 w-6' } },
-		{ icon: SidebarCloseIcon, path: ' ', props: { class: 'h-6 w-6' } }
-	]
+	sideBarLeft?.send({
+		type: 'INIT',
+		top: [
+			linkMachine('navHome').withContext({ component: BotikIcon, path: '/' }),
+			linkMachine('navHuman').withContext({ component: HumansIcon, path: 'humans' }),
+			linkMachine('navBots').withContext({ component: BotsIcon, path: 'bots' }),
+			linkMachine('navGroup').withContext({ component: GroupsIcon, path: 'groups' })
+		],
+		bottom: [
+			linkMachine('linkProfile').withContext({ component: Avatar, path: 'auth', props: { src: zavx0z } }),
+			linkMachine('linkSettings').withContext({ component: SettingsIcon, path: '/settings' }),
+			buttonMachine('buttonActivityFold').withContext({ component: SidebarCloseIcon, onClick: () => console.log() })
+		]
+	})
+	const { top, bottom } = $sideBarLeft.context
 </script>
-<nav class='flex h-full w-12 flex-col items-center justify-between justify-items-center bg-surface-900'>
+
+<nav class="flex h-full w-12 flex-col items-center justify-between justify-items-center bg-surface-900">
 	<div>
-		{#each topLinks as link (link.path)}
-			<a
-				href={link.path}
-				data-active={link.path === '/' ? $page.route.id === '/' : $page.route.id?.includes(link.path)}
-				class='grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500'
-			>
-				<svelte:component this={link.icon} />
-			</a>
+		{#each top as button (button.id)}
+			<ActivityButtons {button} />
 		{/each}
 	</div>
 	<div>
-		{#each bottomLinks as link (link.path)}
-			<a
-				href={link.path}
-				data-active={link.path === '/' ? $page.route.id === '/' : $page.route.id?.includes(link.path)}
-				class='grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500'
-			>
-				<svelte:component this={link.icon} {...link.props} />
-			</a>
+		{#each bottom as button (button.id)}
+			<ActivityButtons {button} />
 		{/each}
 	</div>
 </nav>

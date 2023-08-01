@@ -1,4 +1,4 @@
-import { createMachine, interpret, spawn } from 'xstate'
+import { createMachine, interpret } from 'xstate'
 import displayMachine from './displayMachine'
 import sideBar from './sideBarMachine'
 import layoutMachineFabric from './layoutMachine'
@@ -15,15 +15,15 @@ const machine = createMachine(
 			},
 			layout: {
 				invoke: [
-					{ id: 'canvas', src: 'layoutCanvas'},
+					{ id: 'canvas', src: 'layoutCanvas' },
 					{ id: 'html', src: 'layoutHtml' }
 				]
 			},
-			sideBarLeft: {
-				invoke: { id: 'sideBarLeft', src: 'sideBarLeft' }
-			},
-			sideBarRight: {
-				invoke: { id: 'sideBarRight', src: 'sideBarRight' }
+			sideBar: {
+				invoke: [
+					{ id: 'sideBarLeft', src: 'sideBarLeft' },
+					{ id: 'sideBarRight', src: 'sideBarRight' }
+				]
 			}
 		},
 		predictableActionArguments: true,
@@ -33,9 +33,9 @@ const machine = createMachine(
 	{
 		services: {
 			display: displayMachine,
-			sideBarLeft: createMachine({ ...sideBar.config, id: 'sideBarLeft' }),
-			sideBarRight: createMachine({ ...sideBar.config, id: 'sideBarRight' }),
-			layoutCanvas: layoutMachineFabric('layoutCanvas', '0' ),
+			sideBarLeft: sideBar('sideBarLeft'),
+			sideBarRight: sideBar('sideBarRight'),
+			layoutCanvas: layoutMachineFabric('layoutCanvas', '0'),
 			layoutHtml: layoutMachineFabric('layoutHtml', '10')
 		}
 	}
