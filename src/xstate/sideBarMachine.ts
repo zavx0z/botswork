@@ -1,5 +1,4 @@
 import { assign, createMachine, spawn } from 'xstate'
-import activityLayoutButtonMachine from './activityLayoutButtonMachine'
 
 export default (id: string = 'sideBar') =>
 	createMachine(
@@ -20,7 +19,7 @@ export default (id: string = 'sideBar') =>
 					on: { CLOSE: 'closed' },
 					type: 'parallel',
 					states: {
-						buttons: {},
+						activity: {},
 						panel: {
 							initial: 'idle',
 							states: {

@@ -4,7 +4,8 @@
   export interface Typegen0 {
         '@@xstate/typegen': true;
         internalEvents: {
-          "xstate.init": { type: "xstate.init" };
+          "xstate.after(144)#(machine).active": { type: "xstate.after(144)#(machine).active" };
+"xstate.init": { type: "xstate.init" };
         };
         invokeSrcNameMap: {
           
@@ -16,7 +17,7 @@
           services: never;
         };
         eventsCausingActions: {
-          
+          "onClick": "ACTIVATE";
         };
         eventsCausingDelays: {
           

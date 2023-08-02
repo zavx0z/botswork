@@ -43,6 +43,18 @@ devDependencies:
   '@iconify-json/lucide':
     specifier: ^1.1.112
     version: 1.1.113
+  '@iconify-json/material-symbols':
+    specifier: ^1.1.53
+    version: 1.1.53
+  '@iconify-json/octicon':
+    specifier: ^1.1.45
+    version: 1.1.45
+  '@iconify-json/pepicons-pencil':
+    specifier: ^1.1.1
+    version: 1.1.1
+  '@iconify-json/tabler':
+    specifier: ^1.1.86
+    version: 1.1.86
   '@melt-ui/pp':
     specifier: ^0.0.6
     version: 0.0.6(@melt-ui/svelte@0.24.1)(svelte@4.1.1)
@@ -407,6 +419,30 @@ packages:
 
   /@iconify-json/lucide@1.1.113:
     resolution: {integrity: sha512-Jd1lZcQl/1c+xgfCh74w3WQi4PZAQ27MMaLgZg9KXMXxla43z0HeCHtiyNnQRDofWbCmwC2vLz58oPmZzEIFDA==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/material-symbols@1.1.53:
+    resolution: {integrity: sha512-dTRCCrNForVyGU0zId8+i9KrXraN5yCgigg+qC4lbXyeaY15hEt4Wt/t8Sg/Znf/1mMmu3rxxpZGWMpShYssTg==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/octicon@1.1.45:
+    resolution: {integrity: sha512-F0McN9nyabgeJ2DmHmtShvZWBRStkH6D0cLuFzqiUhd0PeLBxP/ro9sMgBwORNP80X07SKx9HWijw3i5QU9gRw==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/pepicons-pencil@1.1.1:
+    resolution: {integrity: sha512-4qMxDzuGewxZmPl6D0A5ieqYOVmtv+e9QcHOGcwZylgzFBDDCUTVHeLi3rER1sjfM1Fv4czIpiUSFhh72PGf8g==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/tabler@1.1.86:
+    resolution: {integrity: sha512-DFMz3MUUzw1+U8rrkw8ihe1EwfACiFU8KOm/HEvxR4RHj/lb1fKQnkeo4atlGpQY9GyfFucneeuIeohyo+viWA==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

@@ -2,9 +2,9 @@
 	import Avatar from '$lib/ui/components/Avatar.svelte'
 	import zavx0z from '$lib/assets/img/zavx0z.jpg'
 	import BotikIcon from '~icons/botswork/botik'
-	import HumansIcon from '~icons/botswork/humans'
-	import BotsIcon from '~icons/botswork/bots'
-	import GroupsIcon from '~icons/botswork/groups'
+	import HumansIcon from '~icons/material-symbols/circle-outline'
+	import BotsIcon from '~icons/material-symbols/square-outline-rounded'
+	import GroupsIcon from '~icons/tabler/circle-square'
 	import SidebarCloseIcon from '~icons/lucide/sidebar-close'
 	import SettingsIcon from '~icons/fluent/settings-32-regular'
 	import stateMachine from '../../xstate/stateMachine'
@@ -24,7 +24,9 @@
 		bottom: [
 			linkMachine('linkProfile').withContext({ component: Avatar, path: 'auth', props: { src: zavx0z } }),
 			linkMachine('linkSettings').withContext({ component: SettingsIcon, path: '/settings' }),
-			buttonMachine('buttonActivityFold').withContext({ component: SidebarCloseIcon, onClick: () => console.log() })
+			buttonMachine('buttonActivityFold')
+				.withContext({ component: SidebarCloseIcon })
+				.withConfig({ actions: { onClick: () => console.log() } })
 		]
 	})
 	const { top, bottom } = $sideBarLeft.context

@@ -27,7 +27,7 @@
         eventsCausingServices: {
           
         };
-        matchesStates: "closed" | "idle" | "opened" | "opened.buttons" | "opened.panel" | "opened.panel.closed" | "opened.panel.idle" | "opened.panel.opened" | { "opened"?: "buttons" | "panel" | { "panel"?: "closed" | "idle" | "opened"; }; };
+        matchesStates: "closed" | "idle" | "opened" | "opened.activity" | "opened.panel" | "opened.panel.closed" | "opened.panel.idle" | "opened.panel.opened" | { "opened"?: "activity" | "panel" | { "panel"?: "closed" | "idle" | "opened"; }; };
         tags: never;
       }
   
