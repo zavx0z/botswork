@@ -1,6 +1,6 @@
 import { createMachine, interpret } from 'xstate'
 import displayMachine from './displayMachine'
-import sideBar from './sideBarMachine'
+import sideBar from '../lib/sideBar/sideBarMachine'
 import layoutMachineFabric from './layoutMachine'
 
 const machine = createMachine(
@@ -13,30 +13,26 @@ const machine = createMachine(
 			display: {
 				invoke: { id: 'display', src: 'display' }
 			},
-			layout: {
-				invoke: [
-					{ id: 'canvas', src: 'layoutCanvas' },
-					{ id: 'html', src: 'layoutHtml' }
-				]
+			sideBarLeft: {
+				invoke: { id: 'sideBar-left', src: 'sideBarLeft' }
 			},
-			sideBar: {
-				invoke: [
-					{ id: 'sideBarLeft', src: 'sideBarLeft' },
-					{ id: 'sideBarRight', src: 'sideBarRight' }
-				]
+			canvas: {
+				invoke: { id: 'canvas', src: 'layoutCanvas' },
+			},
+			sideBarRight: {
+				invoke: { id: 'sideBar-right', src: 'sideBarRight' }
 			}
 		},
 		predictableActionArguments: true,
 		preserveActionOrder: true,
-		tsTypes: {} as import("./stateMachine.typegen.d.ts").Typegen0 
+		tsTypes: {} as import('./stateMachine.typegen.d.ts').Typegen0
 	},
 	{
 		services: {
 			display: displayMachine,
-			sideBarLeft: sideBar('sideBarLeft'),
-			sideBarRight: sideBar('sideBarRight'),
+			sideBarLeft: sideBar('left').withContext({zIndex: 20}),
+			sideBarRight: sideBar('right').withContext({zIndex: 20}),
 			layoutCanvas: layoutMachineFabric('layoutCanvas', '0'),
-			layoutHtml: layoutMachineFabric('layoutHtml', '10')
 		}
 	}
 )

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { matchers } from './../../../.svelte-kit/generated/client/matchers.js';
 	export let button: any
 </script>
 

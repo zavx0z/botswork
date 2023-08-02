@@ -1,12 +1,19 @@
 import { assign, createMachine, spawn } from 'xstate'
+import activityMachine from './activity/activityMachine.js'
 
-export default (id: string = 'sideBar') =>
-	createMachine(
+export default (position: string = 'left') => {
+	const machineId = `sideBar-${position}`
+	const activityId = `${machineId}-activity`
+	return createMachine(
 		{
 			/** @xstate-layout N4IgpgJg5mDOIC5QEMDGAXAlgN0+gngHSYQA2YAxAPIAKAogHIDaADALqKgAOA9rHph4A7TiAAeiAIwBOAGyFJADgAskgOzSZa9QFY1igDQh8iAMw6WC6Sx2qWk2WtPS1sgL5ujaLLgLEylADCADJUAMp0rBxIILz8WMKiEggyAEyELNbKpkoOii6yhsaIyoryLKnZOaamGvamyh5eGDh4RDxcYEKQFCHhkeyicQKJMcn50oSK6rIssjqKOjqpckYmCFUZlTWSNXW7jZ4g3q1+HV2QhFzI3aT+5NT0DAD6NACCDHTBUUN8IyJjErOQg6WqyUqyJSpMq2NZSHTyVKSCHKJFzRQsUxNY4tXztTrdCBXG5gO4kB59CKvD5fH4xYYJAGgZLZSag1wQqEw5RwhCmJFTaYI1GmQqmRRqbEnPGEc6E4m3QioUh8Hq0RjUz7fQb0v6MpKIWTgwjSHTSZTSaT8mzgyS81LmEHSMrSFZaPQ6KW4tqygmXa6KuU9Sl0TW0nXcPWCJniRAWRFqVIsTINUX6HnFBAOnROl1ulwerFHaU+5WqiCPRh0yPxaMGlJyBQqdSaFy6fS81SSQhJ1SpNRLFYI00eI5CHgQOCiEsEX610bMxBJwjaFgW5MO2TmRQqXkAWkkcx7i12enyORcXp8PvJYDn-3rhRXh-XFVF26K61Uk17DlFrtSJNJWLb0zj9CB731QEs1NEEwTNZEk37Bp9yUFcT3MfQrRkWQ5CvU58QuIkA1JSC62g1M4NcBDUQqJwM3WJ9tBRNFCkxfCZSDYiSTJAIyIXWM+U0Kj5k0WjkIYpdHTNPNWwHNRlGA5przAoiFVJJUVVgSB+JjZJZjUHtE3sZ1HG-O1M35bsd0kYVN0UcVwQ4n0uPUu4uN0x8WEM-skxkMoFJkCz1ls+RmLKVFDzY1JPRAlSiDLbSIN1ec9LjZQEyQuZJCUaZPxKRwtiqXZamsXZRzcIA */
-			id: id,
+			id: machineId,
 			initial: 'idle',
-			context: { top: [], bottom: [] },
+			context: {
+				zIndex: 'auto',
+				top: [],
+				bottom: []
+			},
 			states: {
 				idle: {
 					on: {
@@ -19,7 +26,12 @@ export default (id: string = 'sideBar') =>
 					on: { CLOSE: 'closed' },
 					type: 'parallel',
 					states: {
-						activity: {},
+						activity: {
+							invoke: {
+								id: activityId,
+								src: activityMachine(activityId)
+							}
+						},
 						panel: {
 							initial: 'idle',
 							states: {
@@ -53,13 +65,13 @@ export default (id: string = 'sideBar') =>
 				events: {} as
 					| { type: 'OPEN' }
 					| { type: 'CLOSE' }
-					| { type: 'OPEN' }
 					| { type: 'OPEN_PANEL' }
 					| { type: 'CLOSE_PANEL' }
 					| { type: 'INIT'; top: any[]; bottom: any[] },
-				context: {
-					top: {} as any[] | never[],
-					bottom: {} as any[] | never[]
+				context: {} as {
+					zIndex: 0 | 10 | 20 | 30 | 40 | 50 | '0' | '10' | '20' | '30' | '40' | '50' | 'auto'
+					top?: any[] | never[]
+					bottom?: any[] | never[]
 				}
 			},
 			tsTypes: {} as import('./sideBarMachine.typegen.d.ts').Typegen0
@@ -73,3 +85,4 @@ export default (id: string = 'sideBar') =>
 			}
 		}
 	)
+}

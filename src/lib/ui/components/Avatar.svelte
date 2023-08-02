@@ -1,8 +1,5 @@
 <script lang="ts">
 	import { createAvatar } from '@melt-ui/svelte'
-	let Cl = ''
-	export { Cl as class }
-
 	export let src = ''
 	export let alt = 'avatar'
 	const { image, fallback } = createAvatar({ src: src })

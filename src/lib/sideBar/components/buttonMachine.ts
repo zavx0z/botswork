@@ -32,7 +32,7 @@ export default (id: string) =>
 				context: {} as { component: any; props?: { [key: string]: any } },
 				actions: {} as { type: 'onClick' }
 			},
-			tsTypes: {} as import('./buttonMachine.typegen.d.ts').Typegen0
+			tsTypes: {} as import("./buttonMachine.typegen.d.ts").Typegen0
 		},
 		{
 			actions: {
