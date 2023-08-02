@@ -11,8 +11,6 @@ export default (position: string = 'left') => {
 			initial: 'idle',
 			context: {
 				zIndex: 'auto',
-				top: [],
-				bottom: []
 			},
 			states: {
 				idle: {
@@ -66,23 +64,12 @@ export default (position: string = 'left') => {
 					| { type: 'OPEN' }
 					| { type: 'CLOSE' }
 					| { type: 'OPEN_PANEL' }
-					| { type: 'CLOSE_PANEL' }
-					| { type: 'INIT'; top: any[]; bottom: any[] },
+					| { type: 'CLOSE_PANEL' },
 				context: {} as {
 					zIndex: 0 | 10 | 20 | 30 | 40 | 50 | '0' | '10' | '20' | '30' | '40' | '50' | 'auto'
-					top?: any[] | never[]
-					bottom?: any[] | never[]
 				}
 			},
 			tsTypes: {} as import('./sideBarMachine.typegen.d.ts').Typegen0
 		},
-		{
-			actions: {
-				init: assign({
-					top: (_, event) => event.top.map((item: any) => spawn(item, item.id)),
-					bottom: (_, event) => event.bottom.map((item: any) => spawn(item, item.id))
-				})
-			}
-		}
 	)
 }

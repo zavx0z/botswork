@@ -2,6 +2,7 @@ import { createMachine, interpret } from 'xstate'
 import displayMachine from './displayMachine'
 import sideBar from '../lib/sideBar/sideBarMachine'
 import layoutMachineFabric from './layoutMachine'
+import { browser } from '$app/environment'
 
 const machine = createMachine(
 	{
@@ -17,7 +18,7 @@ const machine = createMachine(
 				invoke: { id: 'sideBar-left', src: 'sideBarLeft' }
 			},
 			canvas: {
-				invoke: { id: 'canvas', src: 'layoutCanvas' },
+				invoke: { id: 'canvas', src: 'layoutCanvas' }
 			},
 			sideBarRight: {
 				invoke: { id: 'sideBar-right', src: 'sideBarRight' }
@@ -30,10 +31,15 @@ const machine = createMachine(
 	{
 		services: {
 			display: displayMachine,
-			sideBarLeft: sideBar('left').withContext({zIndex: 20}),
-			sideBarRight: sideBar('right').withContext({zIndex: 20}),
-			layoutCanvas: layoutMachineFabric('layoutCanvas', '0'),
+			sideBarLeft: sideBar('left').withContext({ zIndex: 20 }),
+			sideBarRight: sideBar('right').withContext({ zIndex: 20 }),
+			layoutCanvas: layoutMachineFabric('layoutCanvas', '0')
 		}
 	}
 )
-export default interpret(machine, { devTools: true }).start()
+export default interpret(machine, { devTools: true })
+	.onTransition((state) => {
+		// if (browser) localStorage.setItem('sideBar-left', JSON.stringify(state.children['sideBar-left'].getSnapshot()))
+		// console.log(leftBar))
+	})
+	.start()

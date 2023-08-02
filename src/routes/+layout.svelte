@@ -35,22 +35,6 @@
 	const display = stateMachine.children.get('display')
 	const layoutCanvas = stateMachine.children.get('canvas')
 	const sideBarLeft = stateMachine.children.get('sideBar-left')
-	sideBarLeft?.send({
-		type: 'INIT',
-		top: [
-			linkMachine('navHome').withContext({ component: BotikIcon, path: '/' }),
-			linkMachine('navHuman').withContext({ component: HumansIcon, path: 'humans' }),
-			linkMachine('navBots').withContext({ component: BotsIcon, path: 'bots' }),
-			linkMachine('navGroup').withContext({ component: GroupsIcon, path: 'groups' })
-		],
-		bottom: [
-			linkMachine('navProfile').withContext({ component: Avatar, path: 'auth', props: { src: zavx0z } }),
-			linkMachine('navSettings').withContext({ component: SettingsIcon, path: '/settings' }),
-			buttonMachine('btnActivityFold')
-				.withContext({ component: SidebarCloseIcon })
-				.withConfig({ actions: { onClick: () => console.log() } })
-		]
-	})
 	sideBarLeft?.send('OPEN')
 	// $: console.log($sideBarLeft.children)
 </script>
