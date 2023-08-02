@@ -28,9 +28,9 @@ export default (id: string) =>
 		},
 		predictableActionArguments: true,
 		preserveActionOrder: true,
-		tsTypes: {} as import("./linkMachine.typegen.d.ts").Typegen0,
 		schema: {
 			events: {} as { type: 'ACTIVATE' } | { type: 'DEACTIVATE' } | { type: 'HOVER' } | { type: 'BLUR' },
 			context: {} as { component: any; path: string; props?: { [key: string]: any } }
-		}
+		},
+		tsTypes: {} as import('./linkMachine.typegen.d.ts').Typegen0
 	})

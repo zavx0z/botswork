@@ -42,7 +42,7 @@ const layoutMachineFabric = (id: string = 'layout', zIndex: string = 'auto') =>
 				context: {} as { zIndex: string },
 				actions: {} as { type: 'cacheData' }
 			},
-			tsTypes: {} as import('./layoutMachine.typegen.d.ts').Typegen0
+			tsTypes: {} as import("./layoutMachine.typegen.d.ts").Typegen0
 		},
 		{
 			actions: {

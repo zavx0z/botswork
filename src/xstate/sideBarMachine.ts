@@ -49,7 +49,6 @@ export default (id: string = 'sideBar') =>
 			},
 			predictableActionArguments: true,
 			preserveActionOrder: true,
-			tsTypes: {} as import('./sideBarMachine.typegen.d.ts').Typegen0,
 			schema: {
 				events: {} as
 					| { type: 'OPEN' }
@@ -62,7 +61,8 @@ export default (id: string = 'sideBar') =>
 					top: {} as any[] | never[],
 					bottom: {} as any[] | never[]
 				}
-			}
+			},
+			tsTypes: {} as import('./sideBarMachine.typegen.d.ts').Typegen0
 		},
 		{
 			actions: {

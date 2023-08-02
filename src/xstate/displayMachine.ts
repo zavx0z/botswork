@@ -81,7 +81,7 @@ const machine = createMachine(
 		},
 		predictableActionArguments: true,
 		preserveActionOrder: true,
-		tsTypes: {} as import('./displayMachine.typegen.d.ts').Typegen0
+		tsTypes: {} as import("./displayMachine.typegen.d.ts").Typegen0
 	},
 	{
 		actions: {

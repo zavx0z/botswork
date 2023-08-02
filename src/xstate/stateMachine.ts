@@ -28,7 +28,7 @@ const machine = createMachine(
 		},
 		predictableActionArguments: true,
 		preserveActionOrder: true,
-		tsTypes: {} as import('./stateMachine.typegen.d.ts').Typegen0
+		tsTypes: {} as import("./stateMachine.typegen.d.ts").Typegen0 
 	},
 	{
 		services: {
