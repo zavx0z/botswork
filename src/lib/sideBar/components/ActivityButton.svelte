@@ -1,21 +1,26 @@
 <script lang="ts">
-	export let button: any
+	export let item: any
+	const {
+		machine,
+		item: { path, component, props }
+	} = item
+
 </script>
 
-{#if $button.context.path}
+{#if path}
 	<a
-		href={$button.context.path}
-		data-state={$button.value}
+		href={path}
+		data-state={$machine.value}
 		class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
 	>
-		<svelte:component this={$button.context.component} {...$button.context.props} class="h-6 w-6" />
+		<svelte:component this={component} {...props} />
 	</a>
 {:else}
 	<button
-		data-state={$button.value}
+		data-state={$machine.value}
 		class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
-		on:click={() => button.send('ACTIVATE')}
+		on:click={() => machine.send('ACTIVATE')}
 	>
-		<svelte:component this={$button.context.component} {...$button.context.props} class="h-6 w-6" />
+		<svelte:component this={component} {...props} />
 	</button>
 {/if}

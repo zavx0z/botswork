@@ -1,10 +1,13 @@
-import { createMachine, send } from 'xstate'
+import { createMachine } from 'xstate'
 
 export default (id: string) =>
 	createMachine(
 		{
 			id: id,
 			initial: 'inactive',
+			context: {
+				path: null
+			},
 			states: {
 				inactive: {
 					on: {
@@ -14,7 +17,7 @@ export default (id: string) =>
 				},
 				active: {
 					after: {
-						144: 'inactive'
+						144: { target: 'inactive', cond: 'isButton' }
 					}
 				},
 				hovered: {
@@ -29,14 +32,17 @@ export default (id: string) =>
 			preserveActionOrder: true,
 			schema: {
 				events: {} as { type: 'ACTIVATE' } | { type: 'DEACTIVATE' } | { type: 'HOVER' } | { type: 'BLUR' },
-				context: {} as { component: any; props?: { [key: string]: any } },
+				context: {} as { path: string | null | undefined },
 				actions: {} as { type: 'onClick' }
 			},
-			tsTypes: {} as import("./buttonMachine.typegen.d.ts").Typegen0
+			tsTypes: {} as import('./buttonMachine.typegen.d.ts').Typegen0
 		},
 		{
 			actions: {
-				onClick: (e): void => {}
+				onClick: () => {}
+			},
+			guards: {
+				isButton: (context, _) => !Boolean(context.path)
 			}
 		}
 	)

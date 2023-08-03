@@ -1,10 +1,11 @@
 import { createMachine, assign, spawn } from 'xstate'
+import buttonMachine from '../components/buttonMachine.js'
 
 export default (id: string = 'activity') =>
 	createMachine(
 		{
 			id: id,
-			context: { top: [], bottom: [] },
+			context: { buttons: {} },
 			initial: 'opened',
 			states: {
 				opened: {
@@ -29,24 +30,30 @@ export default (id: string = 'activity') =>
 			predictableActionArguments: true,
 			preserveActionOrder: true,
 			schema: {
-				events: {} as { type: 'OPEN' } | { type: 'CLOSE' } | { type: 'UPDATE'; node: HTMLElement},
-				context: { 
-                    top: {} as any[] | never[], 
-                    bottom: {} as any[] | never[] 
-                },
+				events: {} as
+					| { type: 'OPEN' }
+					| { type: 'CLOSE' }
+					| { type: 'UPDATE'; buttons: [[string, { path?: string; onClick?: any }]] },
+				context: {} as { buttons: { [key: string]: any } },
 				actions: { type: 'update' }
 			},
-			tsTypes: {} as import('./activityMachine.typegen.d.ts').Typegen0
+			tsTypes: {} as import("./activityMachine.typegen.d.ts").Typegen0
 		},
 		{
 			actions: {
-                update: (context, event)=>{
-                    console.log(context, event)
-                }
-				// update: assign({
-				// 	top: (_, event) => event.top.map((item: any) => spawn(item, item.id)),
-				// 	bottom: (_, event) => event.bottom.map((item: any) => spawn(item, item.id))
-				// })
+				update: assign({
+					buttons: (context, event) => {
+						const obj: { [key: string]: any } = {}
+						for (const [key, value] of event.buttons) {
+							const { onClick, path } = value
+							let machine: any = buttonMachine(key)
+							if (onClick) machine.withConfig({ actions: { onClick: value['onClick']() } })
+							if (path) machine.withContext({ path: value['path'] })
+							obj[key] = spawn(machine, key)
+						}
+						return { ...context.buttons, ...obj }
+					}
+				})
 			}
 		}
 	)
