@@ -26,7 +26,7 @@ const routeMachineFabric = () => {
 									observer = new MutationObserver((mutations) => {
 										if (oldHref !== document.location.href) {
 											oldHref = document.location.href
-											callback({ type: 'CHANGE', pathname: document.location.pathname })
+											callback({ type: 'NAVIGATE', pathname: document.location.pathname })
 										}
 									})
 									if (body) observer.observe(body, { childList: true, subtree: true })
@@ -39,7 +39,7 @@ const routeMachineFabric = () => {
 						}
 					},
 					on: {
-						CHANGE: {
+						NAVIGATE: {
 							actions: ['changePathName']
 						},
 						WARNING: 'warning'
