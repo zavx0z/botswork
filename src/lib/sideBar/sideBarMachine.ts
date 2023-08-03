@@ -12,15 +12,28 @@ export default (position: string = 'left') => {
 		context: {
 			zIndex: 'auto'
 		},
+		// always: [
+		// 	{
+		// 		target: 'idle',
+		// 		// actions: (event) => console.log(event),
+		// 		cond: (context, event) => {
+		// 			return false
+		// 		}
+		// 	}
+		// ],
 		states: {
 			idle: {
 				on: {
 					OPEN: 'opened',
-					CLOSE: 'closed'
+					CLOSE: 'closed',
+					NAVIGATE: { actions: () => console.log('navigate') }
 				}
 			},
 			opened: {
-				on: { CLOSE: 'closed' },
+				on: { 
+					NAVIGATE: { target: 'opened', actions: (context, event) => console.log('navigate', event) },
+					CLOSE: 'closed',
+				 },
 				type: 'parallel',
 				states: {
 					activity: {
@@ -46,8 +59,8 @@ export default (position: string = 'left') => {
 							},
 							opened: {
 								on: {
-									CLOSE_PANEL: 'closed'
-								}
+									CLOSE_PANEL: 'closed',
+									NAVIGATE: { actions: () => console.log('navigate') }}
 							}
 						}
 					}
@@ -60,7 +73,12 @@ export default (position: string = 'left') => {
 		predictableActionArguments: true,
 		preserveActionOrder: true,
 		schema: {
-			events: {} as { type: 'OPEN' } | { type: 'CLOSE' } | { type: 'OPEN_PANEL' } | { type: 'CLOSE_PANEL' },
+			events: {} as
+				| { type: 'OPEN' }
+				| { type: 'CLOSE' }
+				| { type: 'OPEN_PANEL' }
+				| { type: 'CLOSE_PANEL' }
+				| { type: 'NAVIGATE' },
 			context: {} as {
 				zIndex: 0 | 10 | 20 | 30 | 40 | 50 | '0' | '10' | '20' | '30' | '40' | '50' | 'auto'
 			}

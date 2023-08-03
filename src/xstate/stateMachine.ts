@@ -1,16 +1,17 @@
 import {
 	createMachine,
 	interpret,
-	spawn,
 	type AnyEventObject,
 	type BaseActionObject,
 	type ResolveTypegenMeta,
-	type StateMachine
+	type StateMachine,
+	send
 } from 'xstate'
 import displayMachine from './displayMachine'
 import sideBar from '../lib/sideBar/sideBarMachine'
 import layoutMachineFabric from './layoutMachine'
-import routeMachineFabric from '../routes/routeMachine'
+import routeMachine from '../routes/routeMachine'
+import { sendTo } from 'xstate/lib/actions'
 
 const testFabric = (): StateMachine<
 	unknown,
@@ -68,19 +69,18 @@ const machine = interpret(
 			type: 'parallel',
 			states: {
 				router: {
-					invoke: {
-						id: 'router',
-						src: 'routerMachine'
+					invoke: { id: 'router', src: 'routerMachine' },
+					on: {
+						NAVIGATE: {
+							actions: sendTo('sideBar-left', (_, event) => ({ type: 'NAVIGATE', pathname: event.pathname }))
+						}
 					}
 				},
 				display: {
 					invoke: { id: 'display', src: 'display' }
 				},
 				sideBarLeft: {
-					invoke: {
-						id: 'sideBar-left',
-						src: 'sideBarLeft'
-					}
+					invoke: { id: 'sideBar-left', src: 'sideBarLeft' }
 				},
 				canvas: {
 					invoke: { id: 'canvas', src: 'layoutCanvas' }
@@ -91,14 +91,13 @@ const machine = interpret(
 			},
 			predictableActionArguments: true,
 			preserveActionOrder: true,
+			schema: { events: {} as { type: 'NAVIGATE'; pathname: string } },
 			tsTypes: {} as import('./stateMachine.typegen.d.ts').Typegen1
 		},
 		{
+			actions: {},
 			services: {
-				routerMachine: (context, event) => {
-					// console.log(context, event)
-					return routeMachineFabric()
-				},
+				routerMachine: routeMachine,
 				display: displayMachine,
 				sideBarLeft: sideBar('left').withContext({ zIndex: 20 }),
 				sideBarRight: sideBar('right').withContext({ zIndex: 20 }),
