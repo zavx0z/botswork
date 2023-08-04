@@ -1,6 +1,5 @@
-import { assign, createMachine } from 'xstate'
+import { assign, createMachine, sendParent } from 'xstate'
 import { browser } from '$app/environment'
-import { sendParent } from 'xstate/lib/actions'
 
 const routeMachine = createMachine(
 	{
@@ -44,6 +43,8 @@ const routeMachine = createMachine(
 			},
 			warning: { on: { RELOAD: 'observe' } }
 		},
+		predictableActionArguments: true,
+		preserveActionOrder: true,
 		schema: {
 			context: {} as { pathname: string },
 			events: {} as { type: 'NAVIGATE'; pathname: string } | { type: 'WARNING' } | { type: 'RELOAD' }
@@ -53,7 +54,7 @@ const routeMachine = createMachine(
 	{
 		actions: {
 			changePathName: assign((context, event) => ({ ...context, pathname: event.pathname })),
-            parentUpdate:  sendParent((context, event) => ({ type: 'NAVIGATE', pathname: event.pathname })),
+			parentUpdate: sendParent((context, event) => ({ type: 'NAVIGATE', pathname: event.pathname })),
 			init: assign((context) => {
 				if (browser) {
 					const { pathname } = window.location

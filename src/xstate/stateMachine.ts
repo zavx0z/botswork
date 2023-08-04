@@ -1,64 +1,8 @@
-import {
-	createMachine,
-	interpret,
-	type AnyEventObject,
-	type BaseActionObject,
-	type ResolveTypegenMeta,
-	type StateMachine,
-	send
-} from 'xstate'
+import { createMachine, interpret, sendTo } from 'xstate'
 import displayMachine from './displayMachine'
-import sideBar from '../lib/sideBar/sideBarMachine'
+import sideBar from '$lib/sideBar/sideBarMachine'
 import layoutMachineFabric from './layoutMachine'
 import routeMachine from '../routes/routeMachine'
-import { sendTo } from 'xstate/lib/actions'
-
-const testFabric = (): StateMachine<
-	unknown,
-	any,
-	AnyEventObject,
-	{ value: any; context: unknown },
-	BaseActionObject,
-	any,
-	ResolveTypegenMeta<any, AnyEventObject, BaseActionObject, any>
-> => {
-	const machineTest = createMachine({
-		id: 'testMachine',
-		initial: 'idle',
-		states: {
-			idle: {
-				invoke: {
-					id: 'generator',
-					src: () => {
-						return import('$lib/ui/components/Avatar.svelte')
-					},
-					onDone: {
-						target: 'ready',
-						actions: (context, event) => {
-							console.log(context, event)
-							const sideBarLeft = machine.children.get('sideBarLeft')
-							console.log(sideBarLeft)
-
-							const display = machine.children.get('display')
-							console.log(display)
-
-							display?.subscribe((event) => {
-								console.log(event.context)
-							})
-						}
-					}
-				}
-			},
-			ready: {
-				on: {
-					target: 'idle'
-				}
-			}
-		},
-		tsTypes: {} as import('./stateMachine.typegen.d.ts').Typegen0
-	})
-	return machineTest
-}
 
 const machine = interpret(
 	createMachine(
@@ -72,7 +16,7 @@ const machine = interpret(
 					invoke: { id: 'router', src: 'routerMachine' },
 					on: {
 						NAVIGATE: {
-							actions: sendTo('sideBar-left', (_, event) => ({ type: 'NAVIGATE', pathname: event.pathname }))
+							actions: [sendTo('sideBar-left', (_, event) => ({ type: 'NAVIGATE', pathname: event.pathname }))]
 						}
 					}
 				},
@@ -83,7 +27,8 @@ const machine = interpret(
 					invoke: { id: 'sideBar-left', src: 'sideBarLeft' }
 				},
 				canvas: {
-					invoke: { id: 'canvas', src: 'layoutCanvas' }
+					invoke: { id: 'canvas', src: 'layoutCanvas' },
+					on: {}
 				},
 				sideBarRight: {
 					invoke: { id: 'sideBar-right', src: 'sideBarRight' }
@@ -92,7 +37,7 @@ const machine = interpret(
 			predictableActionArguments: true,
 			preserveActionOrder: true,
 			schema: { events: {} as { type: 'NAVIGATE'; pathname: string } },
-			tsTypes: {} as import('./stateMachine.typegen.d.ts').Typegen1
+			tsTypes: {} as import('./stateMachine.typegen.d.ts').Typegen0
 		},
 		{
 			actions: {},
