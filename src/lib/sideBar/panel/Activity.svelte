@@ -1,6 +1,6 @@
 <script>
 	import ActivityButton from '$lib/sideBar/components/ActivityButton.svelte'
-	import Avatar from '$lib/ui/components/Avatar.svelte'
+	import Avatar from '$lib/ui/Avatar.svelte'
 	import zavx0z from '$lib/assets/img/zavx0z.jpg'
 	import BotikIcon from '~icons/botswork/botik'
 	import HumansIcon from '~icons/material-symbols/circle-outline'

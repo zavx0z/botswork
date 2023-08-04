@@ -1,13 +1,4 @@
 <script lang="ts">
-	import Avatar from '$lib/ui/components/Avatar.svelte'
-	import zavx0z from '$lib/assets/img/zavx0z.jpg'
-	import BotikIcon from '~icons/botswork/botik'
-	import HumansIcon from '~icons/material-symbols/circle-outline'
-	import BotsIcon from '~icons/material-symbols/square-outline-rounded'
-	import GroupsIcon from '~icons/tabler/circle-square'
-	import SidebarCloseIcon from '~icons/lucide/sidebar-close'
-	import SettingsIcon from '~icons/fluent/settings-32-regular'
-
 	import '../xstate/inspector'
 	import '../app.css'
 	import '../component.css'
@@ -30,11 +21,14 @@
 		return supabaseAuth.data.subscription.unsubscribe
 	})
 	// ========================================================
+	const routeRoot = stateMachine.children.get('route-root')
 	const display = stateMachine.children.get('display')
+	const sideBarLeft = $routeRoot.children['sideBar-left']
+	const sideBarRight = $routeRoot.children['sideBar-right']
 	const layoutCanvas = stateMachine.children.get('canvas')
-	const sideBarLeft = stateMachine.children.get('sideBar-left')
 	sideBarLeft?.send('OPEN')
-	// $: console.log($sideBarLeft.children)
+	sideBarRight?.send('OPEN')
+	// $: console.log(sideBarLeft)
 </script>
 
 <svelte:window
@@ -68,7 +62,13 @@
 	/>
 {/if}
 <slot />
-<div class="fixed right-0 top-0 flex h-full flex-row z-{20} ">
-	<Right />
-</div>
-<div class="fixed inset-y-0 right-12 w-80 flex-row z-{20} bg-surface-800/90 backdrop-blur-sm" />
+{#if $sideBarRight.matches('opened')}
+	{@const activity = $sideBarRight.children['sideBar-left-activity']}
+	{@const machine = (node) => activity.send({ type: 'UPDATE', node: node })}
+	<div class="fixed right-0 top-0 flex h-full flex-row z-{$sideBarRight.context.zIndex}">
+		<Right />
+	</div>
+	<div
+		class="fixed inset-y-0 right-12 w-80 flex-row z-{$sideBarRight.context.zIndex} bg-surface-800/90 backdrop-blur-sm"
+	/>
+{/if}

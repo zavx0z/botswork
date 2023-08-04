@@ -1,6 +1,5 @@
 import { createMachine } from 'xstate'
 import activityMachine from './activity/activityMachine.js'
-import { log } from 'xstate/lib/actions.js'
 
 export default (position: string = 'left') => {
 	const machineId = `sideBar-${position}`

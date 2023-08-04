@@ -1,5 +1,6 @@
 import { assign, createMachine, sendParent } from 'xstate'
 import { browser } from '$app/environment'
+import { send } from 'xstate/lib/actions.js'
 
 const routeMachine = createMachine(
 	{
@@ -49,7 +50,7 @@ const routeMachine = createMachine(
 			context: {} as { pathname: string },
 			events: {} as { type: 'NAVIGATE'; pathname: string } | { type: 'WARNING' } | { type: 'RELOAD' }
 		},
-		tsTypes: {} as import('./routeMachine.typegen.d.ts').Typegen0
+		tsTypes: {} as import("./routeMachine.typegen.d.ts").Typegen0
 	},
 	{
 		actions: {
