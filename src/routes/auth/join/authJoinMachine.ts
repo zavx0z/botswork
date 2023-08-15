@@ -35,6 +35,7 @@ export default createMachine(
 			}
 		},
 		predictableActionArguments: true,
+		preserveActionOrder: true,
 		schema: {
 			events: {} as { type: 'SUBMIT'; email: string; password: string },
 			context: {} as {

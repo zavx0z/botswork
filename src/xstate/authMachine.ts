@@ -1,9 +1,9 @@
+import type { Session } from '@supabase/supabase-js'
+import type { SupabaseAuthClient } from '@supabase/supabase-js/dist/module/lib/SupabaseAuthClient.js'
 import { assign, createMachine } from 'xstate'
-import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'
-import { createClient } from '@supabase/supabase-js'
-const machine = createMachine(
+export default createMachine(
 	{
-		/** @xstate-layout N4IgpgJg5mDOIC5QEMCuAXAFgOlQOzSwHsAnASwC9IBiAGQHkBxASQDkBtABgF1FQAHIrDLoyRPHxAAPRABYAjAE5sigMwB2AKwAaEAE9EqgGzqAvqd2EcV0pRoNG9AKoAVLryQhBw0eMkyEBWU1LV0DQKMAJnNLDGs42yoIagApejZ3SW8RMQlPANlC7HkADlD9RBL5GJArbAArIjI8OiZnNx4soRy-fMR5WU5sSMUjMp0KhA1NGrrG5uoAJQBRAGVljo8Bbt880ACBoZGx8vDIyNlzCxA8Igg4SSsun1z-RABaIzCPo1m43AICXISWePT20kQkSMRmK42+U0UJT+WGwNmBkFBuzeCE0uOwJUiVUiEzOmki2FUyJw83B2SxfUCkXh8nk5OJV1MQA */
+		/** @xstate-layout N4IgpgJg5mDOIC5QEMCuAXAFgOgG5gCcBLAMyIGNl0iB7AOwGIJ6xsi7caBrV2OWWnQDaABgC6iUAAcaA6vUkgAHogBMAdgCc2AKwBmAIyqAHABYRANlPHNp0xYA0IAJ6IDBkdk3fbI4+pFAnVVVAF9QpzQsPEJSCipBBkICGgJsKQAbKhJUgFtsPlgBelEJJBAZOUFFFQQNbX0jM0trW3snVzrgrx8DPRFTdVNNIfDIjBxUOijMVKIAL0gGADUAUQAlAEkAMQBNUsVKonk6GsRDbT1TPWM+ix1rCwMLRxc1EVUe7xa9C00TYxhCIgGbYGZzRYQFYbHb7cSHWTHarlWoXbBXG53B7GJ4vDqICyeHyaQGE2zeQbhYF0GgQOCKGYIqoKFGIAC0hnxCDZqgs2ECgQM6j0mhEOiCejGIImMWIZEoJyZSJZoFqQq5Fk+xIsvyFItFAyloKm4OIkKVitZCGuOl0mp092emgdnLedXc2GG33U+hxotUOiNMtNC0gFuRqsQNrtAcdfxdBg12i9zudvxCtnUVNCQA */
 		id: 'auth',
 		initial: 'verification',
 		states: {
@@ -11,16 +11,26 @@ const machine = createMachine(
 				invoke: {
 					id: 'session',
 					src: 'session',
-					onError: {ta},
-					onDone:{},
+					onDone: [
+						{
+							target: 'authorized',
+							actions: 'done',
+							cond: 'sessionExist'
+						},
+						{
+							target: 'unauthorized',
+							cond: 'sessionNotExist'
+						}
+					],
+					onError: { target: 'unauthorized', actions: 'error' }
 				}
 			},
-			unauthorized: {
+			authorized: {
 				on: {
 					VERIFY: { target: 'verification', actions: [] }
 				}
 			},
-			authorized: {
+			unauthorized: {
 				on: {
 					VERIFY: { target: 'verification', actions: [] }
 				}
@@ -29,19 +39,29 @@ const machine = createMachine(
 		predictableActionArguments: true,
 		schema: {
 			context: {} as {
-				service: any
+				service: SupabaseAuthClient
 			},
-			events: {} as { type: 'VERIFY' }
+			events: {} as { type: 'VERIFY' },
+			services: {} as {
+				session: { data: { data: { session: Session | null } } }
+			}
 		},
 		tsTypes: {} as import('./authMachine.typegen.d.ts').Typegen0
 	},
 	{
+		guards: {
+			sessionExist: (_, event) => {
+				console.log(event.data.data)
+				return Boolean(event.data.data.session)
+			},
+			sessionNotExist: (_, event) => !Boolean(event.data.data.session)
+		},
+		actions: {
+			done: (context, { data }) => console.log(data),
+			error: (context, event) => console.log(event)
+		},
 		services: {
 			session: (context, event) => context.service.getSession()
 		}
 	}
 )
-
-const authMachine = machine.withContext({
-	service: createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY)
-})
