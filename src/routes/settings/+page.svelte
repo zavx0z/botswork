@@ -1,4 +1,4 @@
-<script lang='ts'>
-    console.log('page')
- </script>
- <p>settings</p>
+<script lang="ts">
+</script>
+
+<p>settings</p>
