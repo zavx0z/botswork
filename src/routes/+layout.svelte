@@ -1,11 +1,12 @@
-<script lang="ts">
-	import '../xstate/inspector'
+<script context="module">
 	import '../app.css'
 	import '../component.css'
+	import stateMachine from '../xstate/stateMachine'
+	import '../xstate/inspector'
+
 	import Scene from '$lib/3d/Scene.svelte'
 	import { Canvas } from '@threlte/core'
 	import { debounce } from '$lib/utils'
-	import stateMachine from '../xstate/stateMachine'
 
 	import Avatar from '$lib/ui/Avatar.svelte'
 	import zavx0z from '$lib/assets/img/zavx0z.jpg'
@@ -15,15 +16,22 @@
 	import GroupsIcon from '~icons/tabler/circle-square'
 	import SidebarCloseIcon from '~icons/lucide/sidebar-close'
 	import SettingsIcon from '~icons/fluent/settings-32-regular'
+	import LoginIcon from '~icons/ri/login-circle-line'
 
 	const routeRoot = stateMachine.children.get('route-root')
 	const display = stateMachine.children.get('display')
+	const layoutCanvas = stateMachine.children.get('canvas')
+</script>
+
+<script lang="ts">
 	const sideBarLeft = $routeRoot.children['sideBar-left']
 	const sideBarRight = $routeRoot.children['sideBar-right']
-	const layoutCanvas = stateMachine.children.get('canvas')
+	const auth = $routeRoot.children['auth']
+
 	sideBarLeft?.send('OPEN')
 	sideBarRight?.send('OPEN')
-	// $: console.log(sideBarLeft)
+
+	$: console.log($auth.value)
 </script>
 
 <svelte:window
@@ -41,55 +49,65 @@
 			<div>
 				<a
 					href={'/'}
-					data-state={'active'}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
+					data-state={$routeRoot.matches({ page: 'root' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
 				>
 					<BotikIcon />
 				</a>
 				<a
 					href={'humans'}
-					data-state={'active'}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
+					data-state={$routeRoot.matches({ page: 'humans' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
 				>
 					<HumansIcon />
 				</a>
 				<a
 					href={'bots'}
-					data-state={'active'}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
+					data-state={$routeRoot.matches({ page: 'bots' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
 				>
 					<BotsIcon />
 				</a>
 				<a
 					href={'groups'}
-					data-state={'active'}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
+					data-state={$routeRoot.matches({ page: 'groups' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
 				>
 					<GroupsIcon />
 				</a>
 			</div>
 			<div>
-				<button
-					data-state={'active'}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
-					on:click={console.log}
-				>
-					<Avatar src={zavx0z} alt="zavx0z" />
-				</button>
+				{#if $auth.matches('unauthorized')}
+					<a
+						href={'auth'}
+						data-state={$routeRoot.matches({ page: 'auth' })}
+						class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+					>
+						<LoginIcon />
+					</a>
+				{:else if $auth.matches('authorized')}
+					<a
+						href={'profile'}
+						data-state={$routeRoot.matches({ page: 'profile' })}
+						class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+					>
+						<Avatar src={zavx0z} alt="zavx0z" />
+					</a>
+				{/if}
 				<a
 					href={'settings'}
-					data-state={'active'}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
+					data-state={$routeRoot.matches({ page: 'settings' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
 				>
 					<SettingsIcon />
 				</a>
-				<a
-					href={'settings'}
-					data-state={'active'}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=active]:bg-surface-800 data-[state=active]:text-primary-500"
+				<button
+					data-state={$routeRoot.matches({ page: '' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+					on:click={console.log}
 				>
 					<SidebarCloseIcon />
-				</a>
+				</button>
 			</div>
 		</nav>
 	</div>
@@ -100,8 +118,7 @@
 <slot />
 {#if $sideBarRight.matches('opened')}
 	{@const activity = $sideBarRight.children['sideBar-left-activity']}
-	<div class="fixed right-0 top-0 flex h-full flex-row z-{$sideBarRight.context.zIndex}">
-	</div>
+	<div class="fixed right-0 top-0 flex h-full flex-row z-{$sideBarRight.context.zIndex}" />
 	<div
 		class="fixed inset-y-0 right-12 w-80 flex-row z-{$sideBarRight.context.zIndex} bg-surface-800/90 backdrop-blur-sm"
 	/>

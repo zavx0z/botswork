@@ -25,24 +25,26 @@ const rootMachine = createMachine(
 			view: {
 				invoke: [{ id: 'canvas', src: 'layoutCanvas' }]
 			},
-			routes: {
-				initial: 'home',
+			page: {
+				initial: 'root',
+				on: {
+					NAVIGATE: [
+						{ target: 'page.root', cond: 'root' },
+						{ target: 'page.humans', cond: 'humans' },
+						{ target: 'page.bots', cond: 'bots' },
+						{ target: 'page.groups', cond: 'groups' },
+						{ target: 'page.profile', cond: 'profile' },
+						{ target: 'page.settings', cond: 'settings' },
+					]
+				},
 				states: {
-					home: {invoke: []},
+					root: { invoke: [] },
 					humans: { invoke: [] },
 					bots: { invoke: [] },
 					groups: { invoke: [] },
 					profile: { invoke: [] },
 					settings: { invoke: [] }
 				}
-			}
-		},
-		on: {
-			NAVIGATE: {
-				actions: [
-					(_, event) => console.log('navigate', event.pathname)
-					// sendTo('sideBar-left', (_, event) => ({ type: 'NAVIGATE', pathname: event.pathname }))
-				]
 			}
 		},
 		predictableActionArguments: true,
@@ -53,6 +55,18 @@ const rootMachine = createMachine(
 		tsTypes: {} as import('./rootMachine.typegen.d.ts').Typegen0
 	},
 	{
+		guards: {
+			root: (_, event) => event.pathname === '/',
+			humans: (_, event) => {
+				console.log('navigate', event.pathname, event.pathname.includes('humans'))
+				return event.pathname.includes('humans')
+			},
+			bots: (_, event) => event.pathname.includes('bots'),
+			groups: (_, event) => event.pathname.includes('groups'),
+			profile: (_, event) => event.pathname.includes('profile'),
+			settings: (_, event) => event.pathname.includes('settings'),
+		},
+		actions: {},
 		services: {
 			layoutCanvas: layoutMachineFabric('layoutCanvas', '0'),
 			sideBarLeft: sideBar('left').withContext({ zIndex: 20 }),
