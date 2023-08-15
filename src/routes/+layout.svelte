@@ -49,61 +49,63 @@
 			<div>
 				<a
 					href={'/'}
-					data-state={$routeRoot.matches({ page: 'root' })}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+					data-active={$routeRoot.matches({ page: 'root' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
 				>
 					<BotikIcon />
 				</a>
 				<a
 					href={'humans'}
-					data-state={$routeRoot.matches({ page: 'humans' })}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+					data-active={$routeRoot.matches({ page: 'humans' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
 				>
 					<HumansIcon />
 				</a>
 				<a
 					href={'bots'}
-					data-state={$routeRoot.matches({ page: 'bots' })}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+					data-active={$routeRoot.matches({ page: 'bots' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
 				>
 					<BotsIcon />
 				</a>
 				<a
 					href={'groups'}
-					data-state={$routeRoot.matches({ page: 'groups' })}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+					data-active={$routeRoot.matches({ page: 'groups' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
 				>
 					<GroupsIcon />
 				</a>
 			</div>
 			<div>
-				{#if $auth.matches('unauthorized')}
-					<a
-						href={'auth'}
-						data-state={$routeRoot.matches({ page: 'auth' })}
-						class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
-					>
-						<LoginIcon />
-					</a>
-				{:else if $auth.matches('authorized')}
+				{#if $auth.matches('authorized')}
 					<a
 						href={'profile'}
-						data-state={$routeRoot.matches({ page: 'profile' })}
-						class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+						data-active={$routeRoot.matches({ page: 'profile' })}
+						class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
 					>
 						<Avatar src={zavx0z} alt="zavx0z" />
 					</a>
+				{:else if $auth.matches('unauthorized')}
+					<a
+						href={'auth/login'}
+						data-active={$routeRoot.matches({ page: 'auth' })}
+						class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
+					>
+						<LoginIcon />
+					</a>
 				{/if}
-				<a
-					href={'settings'}
-					data-state={$routeRoot.matches({ page: 'settings' })}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
-				>
-					<SettingsIcon />
-				</a>
+				<span>
+					<a
+						href={'settings'}
+						data-active={$routeRoot.matches({ page: 'settings' })}
+						class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
+					>
+						<SettingsIcon />
+					</a>
+				</span>
 				<button
-					data-state={$routeRoot.matches({ page: '' })}
-					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[state=true]:bg-surface-800 data-[state=true]:text-primary-500"
+					data-active={$routeRoot.matches({ page: '' })}
+					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
 					on:click={console.log}
 				>
 					<SidebarCloseIcon />
