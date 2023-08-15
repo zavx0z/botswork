@@ -1,5 +1,5 @@
 import { createMachine } from 'xstate'
-import activityMachine from './activity/activityMachine.js'
+import activityMachine from './activityMachine.js'
 
 export default (position: string = 'left') => {
 	const machineId = `sideBar-${position}`
@@ -82,6 +82,6 @@ export default (position: string = 'left') => {
 				zIndex: 0 | 10 | 20 | 30 | 40 | 50 | '0' | '10' | '20' | '30' | '40' | '50' | 'auto'
 			}
 		},
-		tsTypes: {} as import('./sideBarMachine.typegen.d.ts').Typegen0
+		tsTypes: {} as import("./sideBarMachine.typegen.d.ts").Typegen0
 	})
 }

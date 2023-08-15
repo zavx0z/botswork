@@ -1,6 +1,6 @@
 import { createMachine } from 'xstate'
 import layoutMachineFabric from '../xstate/layoutMachine'
-import sideBar from '$lib/sideBar/sideBarMachine'
+import sideBar from '../xstate/sideBarMachine'
 import authMachine from '../xstate/authMachine'
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'
 import { createClient } from '@supabase/supabase-js'
@@ -26,7 +26,9 @@ const rootMachine = createMachine(
 				invoke: [{ id: 'canvas', src: 'layoutCanvas' }]
 			},
 			routes: {
+				initial: 'home',
 				states: {
+					home: {invoke: []},
 					humans: { invoke: [] },
 					bots: { invoke: [] },
 					groups: { invoke: [] },
