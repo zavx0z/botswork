@@ -8,8 +8,8 @@ input {
     file:border-0 file:bg-transparent file:text-sm file:font-medium
     placeholder:text-primary-800
     focus:outline-none focus:ring-1 focus:ring-surface-500 focus:placeholder:text-transparent
-    disabled:cursor-not-allowed disabled:opacity-50
-}
+    disabled:cursor-not-allowed disabled:opacity-50;
+} 
 
 button {
     @apply

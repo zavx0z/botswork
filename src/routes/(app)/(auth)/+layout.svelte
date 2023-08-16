@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import X from '~icons/lucide/x'
 
 	const tabs = [
@@ -12,11 +13,13 @@
 	<div class="relative flex h-96 w-96 flex-col content-center rounded-md bg-surface-800 p-4 shadow-md">
 		<div aria-label="Authentication" class="flex w-full justify-around">
 			{#each tabs as tab (tab.id)}
-				<button
-					class="flex h-11 flex-1 cursor-default items-center justify-center rounded-none rounded-t px-4 leading-none text-primary-900 outline-none focus-visible:ring-1 focus-visible:ring-surface-500 data-[state=active]:text-primary-600 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current"
+				<a
+					href={tab.id}
+					data-active={$page.url.pathname.includes(tab.id)}
+					class="flex h-11 flex-1 cursor-default items-center justify-center rounded-none rounded-t px-4 leading-none text-primary-900 outline-none focus-visible:ring-1 focus-visible:ring-surface-500 data-[active=true]:text-primary-600 data-[active=true]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[active=true]:shadow-current"
 				>
 					{tab.title}
-				</button>
+				</a>
 			{/each}
 		</div>
 		<div

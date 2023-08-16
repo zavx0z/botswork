@@ -1,5 +1,5 @@
 <script lang="ts">
-	import stateMachine from "../../xstate/stateMachine"
+	import stateMachine from "../../../../xstate/stateMachine"
 
     const routeRoot = stateMachine.children.get('route-root')
     const sideBarRight = $routeRoot.children['sideBar-right']
