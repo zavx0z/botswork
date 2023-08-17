@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ripple } from 'svelte-ripple-action';
 	import { enhance } from '$app/forms'
 	import type { SubmitFunction } from '@sveltejs/kit'
 	import type { PageData } from './$types'
@@ -22,6 +23,7 @@
 		<InputEmail bind:email />
 	</div>
 	<button
+		use:ripple
 		title="сброс пароля"
 		type="submit"
 		class="rounded bg-primary-500 px-4 py-2 text-sm uppercase text-surface-700 hover:bg-primary-400 focus-visible:bg-primary-400 focus-visible:outline-offset-4"

@@ -17,6 +17,7 @@
 
 <script lang="ts">
 	import { page } from '$app/stores'
+	import { ripple } from 'svelte-ripple-action'
 	export let data
 
 	let { session } = data
@@ -36,7 +37,6 @@
 	]
 </script>
 
-
 {#if $sideBarLeft.matches('opened')}
 	<nav
 		class="fixed inset-y-0 left-0 z-40 flex h-full w-12 flex-col items-center justify-between justify-items-center bg-surface-900"
@@ -44,6 +44,7 @@
 		<div>
 			{#each topLinks as link (link.href)}
 				<a
+					use:ripple
 					href={link.href}
 					data-active={link.href === '/' ? $page.url.pathname === link.href : $page.url.pathname.includes(link.href)}
 					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
@@ -55,6 +56,7 @@
 		<div>
 			{#if session}
 				<a
+					use:ripple
 					href={'profile'}
 					data-active={$page.url.pathname.includes('profile')}
 					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
@@ -63,6 +65,7 @@
 				</a>
 			{:else}
 				<a
+					use:ripple
 					href={'login'}
 					class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500"
 				>
@@ -70,6 +73,7 @@
 				</a>
 			{/if}
 			<a
+				use:ripple
 				href="settings"
 				data-active={$page.url.pathname.includes('settings')}
 				class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
@@ -77,6 +81,7 @@
 				<SettingsIcon />
 			</a>
 			<button
+				use:ripple
 				class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500"
 				on:click={console.log}
 			>

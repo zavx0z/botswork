@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import X from '~icons/lucide/x'
-
+	import { ripple } from "svelte-ripple-action";
 	const tabs = [
 		{ title: 'Вход', id: 'login' },
 		{ title: 'Регистрация', id: 'join' },
@@ -15,6 +15,7 @@
 			{#each tabs as tab (tab.id)}
 				<a
 					href={tab.id}
+					use:ripple
 					data-active={$page.url.pathname.includes(tab.id)}
 					class="flex h-11 flex-1 cursor-default items-center justify-center rounded-none rounded-t px-4 leading-none text-primary-900 outline-none focus-visible:ring-1 focus-visible:ring-surface-500 data-[active=true]:text-primary-600 data-[active=true]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[active=true]:shadow-current"
 				>

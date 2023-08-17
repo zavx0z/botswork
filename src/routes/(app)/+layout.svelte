@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../../app.css'
 	import '../../component.css'
+	import "svelte-ripple-action/ripple.css"
 	import { Canvas } from '@threlte/core'
 	import Scene from '$lib/3d/Scene.svelte'
 </script>

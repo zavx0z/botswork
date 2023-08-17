@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { debounce } from '$lib/utils'
 	import { onMount } from 'svelte'
-	import { invalidate } from '$app/navigation'
+	import { goto, invalidate } from '$app/navigation'
 	import '../xstate/inspector'
 	import stateMachine from '../xstate/stateMachine'
 	const display = stateMachine.children.get('display')
@@ -11,7 +11,10 @@
 	$: ({ supabase, session } = data)
 	onMount(() => {
 		const supabaseAuth = supabase.auth.onAuthStateChange((_, _session) => {
-			if (_session?.expires_at !== session?.expires_at) invalidate('supabase:auth')
+			if (_session?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth')
+				goto('/')
+			}
 		})
 		return supabaseAuth.data.subscription.unsubscribe
 	})

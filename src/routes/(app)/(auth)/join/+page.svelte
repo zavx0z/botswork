@@ -4,6 +4,7 @@
 	import type { SubmitFunction } from '@sveltejs/kit'
 	import InputPassword from '../InputPassword.svelte'
 	import InputEmail from '../InputEmail.svelte'
+	import { ripple } from 'svelte-ripple-action'
 
 	export let data: PageData
 	let { supabase } = data
@@ -40,6 +41,7 @@
 		/>
 	</div>
 	<button
+		use:ripple
 		title="зарегистрироваться"
 		type="submit"
 		class="rounded bg-primary-500 px-4 py-2 text-sm uppercase text-surface-700 hover:bg-primary-400 focus-visible:bg-primary-400 focus-visible:outline-offset-4"

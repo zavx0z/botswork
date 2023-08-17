@@ -60,6 +60,7 @@
 		"@threlte/core": "^6.0.0-next.11",
 		"@threlte/extras": "^5.0.0-next.16",
 		"@xstate/inspect": "^0.8.0",
+		"svelte-ripple-action": "^1.0.2",
 		"tailwindcss": "^3.3.3",
 		"xstate": "^4.38.2"
 	}
