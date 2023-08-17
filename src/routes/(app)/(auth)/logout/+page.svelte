@@ -3,6 +3,7 @@
 	import { enhance } from '$app/forms'
 	import type { SubmitFunction } from '@sveltejs/kit'
 	import type { PageData } from './$types'
+	import { goto } from '$app/navigation'
 
 	export let data: PageData
 
@@ -10,6 +11,7 @@
 		const { error } = await data.supabase.auth.signOut()
 		if (error) console.log(error)
 		cancel()
+		goto('/login')
 	}
 </script>
 
