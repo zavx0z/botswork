@@ -13,9 +13,10 @@
 
 <fieldset>
 	<label for={eltId}>Пароль</label>
-	<div class="relative">
-		<span class="absolute inset-y-0 right-0 flex items-center pr-2">
+	<span class="relative">
+		<div class="absolute inset-y-0 right-0 flex items-center pr-2">
 			<button
+				tabindex="-1"
 				title={visible ? 'скрыть пароль' : 'показать пароль'}
 				on:click|preventDefault={() => (visible = !visible)}
 				class="focus:shadow-outline p-1 text-primary-700 transition-colors hover:text-primary-500 focus:outline-none"
@@ -26,7 +27,7 @@
 					<VisibleIcon class="h-6 w-6 stroke-current" />
 				{/if}
 			</button>
-		</span>
+		</div>
 		<input
 			id={eltId}
 			placeholder="пароль"
@@ -36,5 +37,5 @@
 			required
 			class="mb-4"
 		/>
-	</div>
+	</span>
 </fieldset>
