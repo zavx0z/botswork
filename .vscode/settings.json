@@ -1,3 +1,7 @@
 {
-    "a-file-icon-vscode.folderTheme": "classic"
+    "cSpell.words": [
+        "octicon",
+        "pepicons",
+        "tabler"
+    ]
 }
