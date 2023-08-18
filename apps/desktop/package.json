@@ -38,6 +38,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"ui": "workspace:*",
 		"@supabase/supabase-js": "^2.32.0",
 		"@xstate/inspect": "^0.8.0",
 		"svelte-ripple-action": "^1.0.2",
