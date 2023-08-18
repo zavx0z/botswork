@@ -16,6 +16,7 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
+		"@packages/config": "workspace:*",
 		"eslint-config-custom": "workspace:*",
 		"@iconify-json/ant-design": "^1.1.6",
 		"@iconify-json/ci": "^1.1.9",

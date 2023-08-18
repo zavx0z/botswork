@@ -12,6 +12,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@packages/config": "workspace:*",
 		"eslint-config-custom": "workspace:*",
 		"@iconify-json/ant-design": "^1.1.6",
 		"@iconify-json/lucide": "^1.1.113",

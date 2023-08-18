@@ -48,6 +48,9 @@ importers:
       '@iconify-json/lucide':
         specifier: ^1.1.113
         version: 1.1.113
+      '@packages/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
         version: 2.0.0(@sveltejs/kit@1.20.4)
@@ -172,6 +175,9 @@ importers:
       '@melt-ui/pp':
         specifier: ^0.0.6
         version: 0.0.6(@melt-ui/svelte@0.24.1)(svelte@4.0.5)
+      '@packages/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@playwright/test':
         specifier: ^1.28.1
         version: 1.28.1
@@ -238,6 +244,18 @@ importers:
       vitest:
         specifier: ^0.32.2
         version: 0.32.2
+
+  packages/config:
+    devDependencies:
+      autoprefixer:
+        specifier: ^10.4.15
+        version: 10.4.15(postcss@8.4.28)
+      postcss:
+        specifier: ^8.4.28
+        version: 8.4.28
+      tailwindcss:
+        specifier: ^3.3.3
+        version: 3.3.3
 
   packages/eslint-config-custom:
     dependencies:
@@ -660,7 +678,7 @@ packages:
     dependencies:
       '@jridgewell/set-array': 1.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
-      '@jridgewell/trace-mapping': 0.3.9
+      '@jridgewell/trace-mapping': 0.3.19
 
   /@jridgewell/resolve-uri@3.1.1:
     resolution: {integrity: sha512-dSYZh7HhCDtCKm4QakX0xFpsRDqjjtZf/kjI/v3T3Nwt5r8/qz/M19F9ySyOqU94SXBmeG9ttTul+YnR4LOxFA==}
@@ -684,6 +702,7 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
 
   /@melt-ui/pp@0.0.6(@melt-ui/svelte@0.24.1)(svelte@4.0.5):
     resolution: {integrity: sha512-89ABEJ6rZWyPWvSy++7+QVzAepesixHBBLPecNFoJm0kwVxj6gVMKLGJO56Cbx/+es7Y/kcHH0kLA2fl+GvedA==}

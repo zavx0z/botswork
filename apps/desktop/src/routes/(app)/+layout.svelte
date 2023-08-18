@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../../app.css'
+	import "@packages/config/tailwindCSS"
 	import '../../component.css'
 	import { ripple } from 'svelte-ripple-action'
 	import BotikIcon from '~icons/botswork/botik'

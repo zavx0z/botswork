@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../../app.css'
+	import "@packages/config/tailwindCSS"
 	import '../../component.css'
 	import "svelte-ripple-action/ripple.css"
 	import { Canvas } from '@threlte/core'
