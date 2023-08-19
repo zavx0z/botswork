@@ -1,5 +1,4 @@
 <svg
-	xmlns='http://www.w3.org/2000/svg'
 	width='24'
 	height='24'
 	id='screenshot-e687deca-7447-8094-8002-cd9bff75de96'

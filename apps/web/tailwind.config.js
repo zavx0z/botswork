@@ -1,4 +1,4 @@
-import tailwindConfig from "@packages/config/tailwindConfig"
+import tailwindConfig from "config/tailwindConfig"
 
 const config = {
   ...tailwindConfig,

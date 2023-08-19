@@ -1,4 +1,4 @@
-import postcssConfig from "@packages/config/postcssConfig"
+import postcssConfig from "config/postcssConfig"
 const config = {
   ...postcssConfig,
 }

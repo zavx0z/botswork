@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      g:
+        specifier: ^2.0.1
+        version: 2.0.1
+      pnpm:
+        specifier: ^8.6.12
+        version: 8.6.12
     devDependencies:
       '@turbo/gen':
         specifier: ^1.9.7
@@ -32,28 +39,22 @@ importers:
       '@xstate/inspect':
         specifier: ^0.8.0
         version: 0.8.0(ws@8.13.0)(xstate@4.38.2)
+      elements:
+        specifier: workspace:*
+        version: link:../../packages/elements
+      icons:
+        specifier: workspace:*
+        version: link:../../packages/icons
       svelte-ripple-action:
         specifier: ^1.0.2
         version: 1.0.2(svelte@4.0.5)
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
-      unplugin-icons:
-        specifier: ^0.16.5
-        version: 0.16.5
       xstate:
         specifier: ^4.38.2
         version: 4.38.2
     devDependencies:
-      '@iconify-json/ant-design':
-        specifier: ^1.1.6
-        version: 1.1.6
-      '@iconify-json/lucide':
-        specifier: ^1.1.113
-        version: 1.1.113
-      '@packages/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
         version: 2.0.0(@sveltejs/kit@1.20.4)
@@ -75,6 +76,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.15
         version: 10.4.15(postcss@8.4.28)
+      config:
+        specifier: workspace:*
+        version: link:../../packages/config
       eslint:
         specifier: ^8.28.0
         version: 8.28.0
@@ -135,6 +139,9 @@ importers:
       '@xstate/inspect':
         specifier: ^0.8.0
         version: 0.8.0(ws@8.13.0)(xstate@4.38.2)
+      icons:
+        specifier: workspace:*
+        version: link:../../packages/icons
       svelte-ripple-action:
         specifier: ^1.0.2
         version: 1.0.2(svelte@4.0.5)
@@ -181,9 +188,6 @@ importers:
       '@melt-ui/pp':
         specifier: ^0.0.6
         version: 0.0.6(@melt-ui/svelte@0.24.1)(svelte@4.0.5)
-      '@packages/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@playwright/test':
         specifier: ^1.28.1
         version: 1.28.1
@@ -205,6 +209,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.15(postcss@8.4.28)
+      config:
+        specifier: workspace:*
+        version: link:../../packages/config
       eslint-config-custom:
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom
@@ -263,6 +270,18 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
 
+  packages/elements:
+    dependencies:
+      '@tsconfig/svelte':
+        specifier: ^5.0.0
+        version: 5.0.0
+      svelte:
+        specifier: ^4.0.5
+        version: 4.0.5
+      svelte-ripple-action:
+        specifier: ^1.0.2
+        version: 1.0.2(svelte@4.0.5)
+
   packages/eslint-config-custom:
     dependencies:
       eslint:
@@ -278,41 +297,25 @@ importers:
         specifier: ^2.30.0
         version: 2.30.0(eslint@8.28.0)(svelte@4.0.5)
 
-  packages/tsconfig: {}
+  packages/icons: {}
 
   packages/ui:
     dependencies:
-      '@sveltejs/vite-plugin-svelte':
-        specifier: ^2.4.5
-        version: 2.4.5(svelte@4.0.5)(vite@4.4.2)
       '@tsconfig/svelte':
         specifier: ^5.0.0
         version: 5.0.0
-      cross-env:
-        specifier: ^7.0.3
-        version: 7.0.3
-      svelte-preprocess:
-        specifier: ^5.0.4
-        version: 5.0.4(postcss@8.4.28)(svelte@4.0.5)(typescript@5.1.6)
-      svelte-ripple-action:
-        specifier: ^1.0.2
-        version: 1.0.2(svelte@4.0.5)
-      typescript:
-        specifier: ^5.0.0
-        version: 5.1.6
-      unplugin-icons:
-        specifier: ^0.16.5
-        version: 0.16.5
-      vite:
-        specifier: ^4.4.2
-        version: 4.4.2(@types/node@17.0.45)
-    devDependencies:
-      eslint-config-custom:
+      config:
         specifier: workspace:*
-        version: link:../eslint-config-custom
+        version: link:../config
+      icons:
+        specifier: workspace:*
+        version: link:../icons
       svelte:
         specifier: ^4.0.5
         version: 4.0.5
+      svelte-ripple-action:
+        specifier: ^1.0.2
+        version: 1.0.2(svelte@4.0.5)
 
 packages:
 
@@ -1159,6 +1162,7 @@ packages:
 
   /@types/pug@2.0.6:
     resolution: {integrity: sha512-SnHmG9wN1UVmagJOnyo/qkk0Z7gejYxOYYmaAwr5u2yFYfsupN3sg10kyzN8Hep/2zbHxCnsumxOoRIRMBwKCg==}
+    dev: true
 
   /@types/semver@7.5.0:
     resolution: {integrity: sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==}
@@ -1636,6 +1640,7 @@ packages:
 
   /buffer-crc32@0.2.13:
     resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
+    dev: true
 
   /buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
@@ -1863,14 +1868,6 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /cross-env@7.0.3:
-    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
-    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
-    hasBin: true
-    dependencies:
-      cross-spawn: 7.0.3
-    dev: false
-
   /cross-fetch@3.1.8:
     resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
     dependencies:
@@ -1981,6 +1978,7 @@ packages:
   /detect-indent@6.1.0:
     resolution: {integrity: sha512-reYkTUJAZb9gUuZ2RvVCNhVHdg62RHnJ7WJl8ftMi4diZ6NWlciOzQN88pUhSELEwflJht4oQDv0F0BMlwaYtA==}
     engines: {node: '>=8'}
+    dev: true
 
   /devalue@4.3.2:
     resolution: {integrity: sha512-KqFl6pOgOW+Y6wJgu80rHpo2/3H07vr8ntR9rkkFIRETewbf5GaYYcakYfiKz89K+sLsuPkQIZaXDMjUObZwWg==}
@@ -2055,6 +2053,7 @@ packages:
 
   /es6-promise@3.3.1:
     resolution: {integrity: sha512-SOp9Phqvqn7jtEUxPWdWfWoLmyt2VaJ6MpvP9Comy1MceMXqE6bxvaTu4iaxpYYPzhny28Lc+M87/c2cPK6lDg==}
+    dev: true
 
   /es6-symbol@3.1.3:
     resolution: {integrity: sha512-NJ6Yn3FuDinBaBRWl/q5X/s4koRHBrgKAu+yGI6JCBeiu3qrcbJhwT2GeR/EXVfylRk8dpQVJoLEFhK+Mu31NA==}
@@ -2491,6 +2490,10 @@ packages:
     resolution: {integrity: sha512-dsKNQNdj6xA3T+QlADDA7mOSlX0qiMINjn0cgr+eGHGsbSHzTabcIogz2+p/iqP1Xs6EP/sS2SbqH+brGTbq0g==}
     dev: true
 
+  /g@2.0.1:
+    resolution: {integrity: sha512-Fi6Ng5fZ/ANLQ15H11hCe+09sgUoNvDEBevVgx3KoYOhsH5iLNPn54hx0jPZ+3oSWr+xajnp2Qau9VmPsc7hTA==}
+    dev: false
+
   /get-func-name@2.0.0:
     resolution: {integrity: sha512-Hm0ixYtaSZ/V7C8FJrtZIuBBI+iSgL+1Aq82zSu8VQNB4S3Gk8e7Qs3VwBDJAhmRZcFqkl3tQu36g/Foh5I5ig==}
     dev: true
@@ -2566,6 +2569,7 @@ packages:
 
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+    dev: true
 
   /grapheme-splitter@1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
@@ -2932,6 +2936,7 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
 
   /magic-string@0.30.2:
     resolution: {integrity: sha512-lNZdu7pewtq/ZvWUp9Wpf/x7WzMTsR26TWV03BRZrXFsv+BI6dy8RAiKgm1uM/kyR0rCfUcqvOlXKG66KhIGug==}
@@ -2984,6 +2989,7 @@ packages:
   /min-indent@1.0.1:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
     engines: {node: '>=4'}
+    dev: true
 
   /minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
@@ -2999,11 +3005,14 @@ packages:
 
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+    dev: true
 
   /mkdirp@0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
+    hasBin: true
     dependencies:
       minimist: 1.2.8
+    dev: true
 
   /mlly@1.4.0:
     resolution: {integrity: sha512-ua8PAThnTwpprIaU47EPeZ/bPUVp2QYBbWMphUQpVdBI3Lgqzm5KZQ45Agm3YJedHXaIHl6pBGabaLSUPPSptg==}
@@ -3290,6 +3299,12 @@ packages:
     hasBin: true
     dev: true
 
+  /pnpm@8.6.12:
+    resolution: {integrity: sha512-Eza4C5SO/Xl5IYozupbZ5NOA5leBRPYxmXmXfe7G4/4uCkRLhks84rB33aitxNZU/uMrnDGGjwrLktoKvPjqHA==}
+    engines: {node: '>=16.14'}
+    hasBin: true
+    dev: false
+
   /postcss-import@15.1.0(postcss@8.4.28):
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
     engines: {node: '>=14.0.0'}
@@ -3573,6 +3588,7 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+    dev: true
 
   /rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
@@ -3631,6 +3647,7 @@ packages:
       graceful-fs: 4.2.11
       mkdirp: 0.5.6
       rimraf: 2.7.1
+    dev: true
 
   /semver@7.5.0:
     resolution: {integrity: sha512-+XC0AD/R7Q2mPSRuy2Id0+CGTZ98+8f+KvwirxOKIEyid+XSx6HbC63p+O4IndTHuX5Z+JxQ0TghCkO5Cg/2HA==}
@@ -3703,6 +3720,7 @@ packages:
       buffer-crc32: 0.2.13
       minimist: 1.2.8
       sander: 0.5.1
+    dev: true
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
@@ -3760,6 +3778,7 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       min-indent: 1.0.1
+    dev: true
 
   /strip-json-comments@2.0.1:
     resolution: {integrity: sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==}
@@ -3901,6 +3920,7 @@ packages:
       strip-indent: 3.0.0
       svelte: 4.0.5
       typescript: 5.1.6
+    dev: true
 
   /svelte-ripple-action@1.0.2(svelte@4.0.5):
     resolution: {integrity: sha512-AjVMENYLUrg495Fj5lrVNXwk/yXFjT6t2j4CJPTedcfyFMPbwoKajGXju9dk/dl/QOBEPXeIk6fGwt0wO54swQ==}
@@ -4240,6 +4260,7 @@ packages:
     resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
     engines: {node: '>=14.17'}
     hasBin: true
+    dev: true
 
   /ufo@1.2.0:
     resolution: {integrity: sha512-RsPyTbqORDNDxqAdQPQBpgqhWle1VcTSou/FraClYlHf6TZnQcGslpLcAphNR+sQW4q5lLWLbOsRlh9j24baQg==}

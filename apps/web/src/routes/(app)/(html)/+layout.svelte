@@ -1,24 +1,17 @@
-<script context="module">
-  import { NavButtonBotik } from "ui"
-  import stateMachine from "../../../xstate/stateMachine"
-
-  import Avatar from "$lib/ui/Avatar.svelte"
-  import zavx0z from "$lib/assets/img/zavx0z.jpg"
-  import BotikIcon from "~icons/botswork/botik"
-  import HumansIcon from "~icons/material-symbols/circle-outline"
-  import BotsIcon from "~icons/material-symbols/square-outline-rounded"
-  import GroupsIcon from "~icons/tabler/circle-square"
-  import SidebarCloseIcon from "~icons/lucide/sidebar-close"
-  import SettingsIcon from "~icons/fluent/settings-32-regular"
-  import LoginIcon from "~icons/ri/login-circle-line"
-
-  const routeRoot = stateMachine.children.get("route-root")
-  const layoutCanvas = stateMachine.children.get("canvas")
-</script>
-
 <script lang="ts">
   import { page } from "$app/stores"
   import { ripple } from "svelte-ripple-action"
+  import { Button } from "ui/activity"
+  import { BotsIcon, BotikIcon, GroupsIcon, HumansIcon, SettingsIcon, LoginIcon, SidebarCloseIcon } from "icons"
+
+  import stateMachine from "../../../xstate/stateMachine"
+  import { Activity } from "ui/activity"
+  import Avatar from "$lib/ui/Avatar.svelte"
+  import zavx0z from "$lib/assets/img/zavx0z.jpg"
+
+  const routeRoot = stateMachine.children.get("route-root")
+  const layoutCanvas = stateMachine.children.get("canvas")
+
   export let data
 
   let { session } = data
@@ -29,30 +22,23 @@
 
   sideBarLeft?.send("OPEN")
   sideBarRight?.send("OPEN")
-
-  const topLinks = [
-    { href: "humans", icon: HumansIcon },
-    { href: "bots", icon: BotsIcon },
-    { href: "groups", icon: GroupsIcon },
-  ]
 </script>
 
 {#if $sideBarLeft.matches("opened")}
-  <nav
-    class="fixed inset-y-0 left-0 z-40 flex h-full w-12 flex-col items-center justify-between justify-items-center bg-surface-900"
-  >
+  <Activity>
     <div>
-      <NavButtonBotik href={"/"} active={$page.url.pathname === "/"} />
-      {#each topLinks as link (link.href)}
-        <a
-          use:ripple
-          href={link.href}
-          data-active={link.href === "/" ? $page.url.pathname === link.href : $page.url.pathname.includes(link.href)}
-          class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
-        >
-          <svelte:component this={link.icon} />
-        </a>
-      {/each}
+      <Button href="/" active={$page.url.pathname === "/"}>
+        <BotikIcon />
+      </Button>
+      <Button href="humans" active={$page.url.pathname.includes("humans")}>
+        <HumansIcon />
+      </Button>
+      <Button href="bots" active={$page.url.pathname.includes("bots")}>
+        <BotsIcon />
+      </Button>
+      <Button href="groups" active={$page.url.pathname.includes("groups")}>
+        <GroupsIcon />
+      </Button>
     </div>
     <div>
       {#if session}
@@ -65,30 +51,17 @@
           <Avatar src={zavx0z} alt="zavx0z" />
         </a>
       {:else}
-        <a
-          use:ripple
-          href={"login"}
-          class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500"
-        >
+        <Button href={"login"}>
           <LoginIcon />
-        </a>
+        </Button>
       {/if}
-      <a
-        use:ripple
-        href="settings"
-        data-active={$page.url.pathname.includes("settings")}
-        class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
-      >
+      <Button href="settings" active={$page.url.pathname.includes("settings")}>
         <SettingsIcon />
-      </a>
-      <button
-        use:ripple
-        class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500"
-        on:click={console.log}
-      >
+      </Button>
+      <Button on:click={console.log}>
         <SidebarCloseIcon />
-      </button>
+      </Button>
     </div>
-  </nav>
+  </Activity>
 {/if}
 <slot />

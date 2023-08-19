@@ -1,5 +1,5 @@
 {
-  "name": "ui",
+  "name": "elements",
   "version": "0.0.0",
   "description": "Styles and components for use in svelte websites",
   "type": "module",
@@ -8,8 +8,6 @@
   "license": "MIT",
   "scripts": {},
   "dependencies": {
-    "icons": "workspace:*",
-    "config": "workspace:*",
     "@tsconfig/svelte": "^5.0.0",
     "svelte": "^4.0.5",
     "svelte-ripple-action": "^1.0.2"

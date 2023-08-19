@@ -7,6 +7,5 @@
     "allowJs": true,
     "checkJs": true
   },
-  "include": ["**/*.d.ts", "**/*.ts", "**/*.js", "**/*.svelte"],
-  "exclude": ["tailwind.config.js", "postcss.config.js", "node_modules"]
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
 }
