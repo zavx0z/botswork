@@ -121,9 +121,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@melt-ui/svelte':
-        specifier: ^0.24.1
-        version: 0.24.1(svelte@4.0.5)
       '@supabase/auth-helpers-sveltekit':
         specifier: ^0.10.1
         version: 0.10.1(@supabase/supabase-js@2.32.0)(@sveltejs/kit@1.20.4)
@@ -185,9 +182,6 @@ importers:
       '@iconify-json/tabler':
         specifier: ^1.1.86
         version: 1.1.86
-      '@melt-ui/pp':
-        specifier: ^0.0.6
-        version: 0.0.6(@melt-ui/svelte@0.24.1)(svelte@4.0.5)
       '@playwright/test':
         specifier: ^1.28.1
         version: 1.28.1
@@ -603,20 +597,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@floating-ui/core@1.4.1:
-    resolution: {integrity: sha512-jk3WqquEJRlcyu7997NtR5PibI+y5bi+LS3hPmguVClypenMsCY3CBa3LAQnozRCtCrYWSEtAdiskpamuJRFOQ==}
-    dependencies:
-      '@floating-ui/utils': 0.1.1
-
-  /@floating-ui/dom@1.5.1:
-    resolution: {integrity: sha512-KwvVcPSXg6mQygvA1TjbN/gh///36kKtllIF8SUm0qpFj8+rvYrpvlYdL1JoA71SHpDqgSSdGOSoQ0Mp3uY5aw==}
-    dependencies:
-      '@floating-ui/core': 1.4.1
-      '@floating-ui/utils': 0.1.1
-
-  /@floating-ui/utils@0.1.1:
-    resolution: {integrity: sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==}
-
   /@humanwhocodes/config-array@0.11.10:
     resolution: {integrity: sha512-KVVjQmNUepDVGXNuoRRdmmEjruj0KfiGSbS8LVc12LMsWDQzRXJ0qdhN8L8uUigKpfEHRhlaQFY0ib1tnUbNeQ==}
     engines: {node: '>=10.10.0'}
@@ -746,27 +726,6 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
-
-  /@melt-ui/pp@0.0.6(@melt-ui/svelte@0.24.1)(svelte@4.0.5):
-    resolution: {integrity: sha512-89ABEJ6rZWyPWvSy++7+QVzAepesixHBBLPecNFoJm0kwVxj6gVMKLGJO56Cbx/+es7Y/kcHH0kLA2fl+GvedA==}
-    peerDependencies:
-      '@melt-ui/svelte': '>= 0.22.0'
-      svelte: ^3.55.0 || ^4.0.0
-    dependencies:
-      '@melt-ui/svelte': 0.24.1(svelte@4.0.5)
-      svelte: 4.0.5
-    dev: true
-
-  /@melt-ui/svelte@0.24.1(svelte@4.0.5):
-    resolution: {integrity: sha512-lSJKEpG1kh3+vmOvTzYR/PSfVQPb+DT1Oz8FoUFftofyK+N9CVJufG7213CroMTJFgMsO03R0PvRxYmzj9mp9Q==}
-    peerDependencies:
-      svelte: '>=3 <5'
-    dependencies:
-      '@floating-ui/core': 1.4.1
-      '@floating-ui/dom': 1.5.1
-      focus-trap: 7.5.2
-      nanoid: 4.0.2
-      svelte: 4.0.5
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2455,11 +2414,6 @@ packages:
   /flatted@3.2.7:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
 
-  /focus-trap@7.5.2:
-    resolution: {integrity: sha512-p6vGNNWLDGwJCiEjkSK6oERj/hEyI9ITsSwIUICBoKLlWiTWXJRfQibCwcoi50rTZdbi87qDtUlMCmQwsGSgPw==}
-    dependencies:
-      tabbable: 6.2.0
-
   /fraction.js@4.2.0:
     resolution: {integrity: sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==}
     dev: true
@@ -3052,11 +3006,6 @@ packages:
   /nanoid@3.3.6:
     resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
-
-  /nanoid@4.0.2:
-    resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
-    engines: {node: ^14 || ^16 || >=18}
     hasBin: true
 
   /natural-compare-lite@1.4.0:
@@ -3962,9 +3911,6 @@ packages:
       lower-case: 1.1.4
       upper-case: 1.1.3
     dev: true
-
-  /tabbable@6.2.0:
-    resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
 
   /table@6.8.1:
     resolution: {integrity: sha512-Y4X9zqrCftUhMeH2EptSSERdVKt/nEdijTOacGD/97EKjhQ/Qs8RTlEGABSJNNN8lac9kheH+af7yAkEWlgneA==}

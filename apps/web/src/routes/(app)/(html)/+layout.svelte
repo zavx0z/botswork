@@ -42,14 +42,9 @@
     </div>
     <div>
       {#if session}
-        <a
-          use:ripple
-          href={"profile"}
-          data-active={$page.url.pathname.includes("profile")}
-          class="grid h-12 w-12 cursor-pointer place-items-center bg-transparent text-primary-700 hover:text-primary-500 data-[active=true]:bg-surface-800 data-[active=true]:text-primary-500"
-        >
+        <Button href={"profile"} active={$page.url.pathname.includes("profile")}>
           <Avatar src={zavx0z} alt="zavx0z" />
-        </a>
+        </Button>
       {:else}
         <Button href={"login"}>
           <LoginIcon />
