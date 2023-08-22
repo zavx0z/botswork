@@ -7,6 +7,6 @@
 	export let data: LayoutData
 </script>
 
-<AuthStateChange {data}>
+<AuthStateChange {data} redirect='login'>
 	<slot />
 </AuthStateChange>
