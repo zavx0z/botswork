@@ -1,20 +1,25 @@
 <script lang="ts">
 	import type { SubmitFunction } from '@sveltejs/kit'
-	import  Login from './Login.svelte'
+	import Login from './Login.svelte'
 	import type { Provider } from '@supabase/supabase-js'
+	import { goto } from '$app/navigation'
+	import type { PageData } from './$types'
 
-	export let data: any
+	export let data: PageData
 	let { supabase } = data
 	$: ({ supabase } = data)
 
 	let email = ''
 	let password = ''
 	let errorMessage = ''
+	export let redirect = 'profile'
 
-	const handleSignIn: SubmitFunction = async () => {
+	const handleSignIn: SubmitFunction = async ({ cancel }) => {
 		const { error } = await supabase.auth.signInWithPassword({ email, password })
 		if (error) errorMessage = error.message
 		console.log(error?.name, error?.status, error?.message, error?.cause)
+		cancel()
+		goto(redirect)
 	}
 
 	const handleSignInOAuth: SubmitFunction = async ({ cancel, submitter }) => {
@@ -28,6 +33,7 @@
 			}
 		}
 		cancel()
+		goto(redirect)
 	}
 </script>
 

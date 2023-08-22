@@ -4,4 +4,4 @@
 	export let data: PageData
 </script>
 
-<Login {data} />
+<Login {data} redirect='/' />

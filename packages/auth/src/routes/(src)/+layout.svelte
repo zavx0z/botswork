@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import { CloseIcon } from 'icons'
+	import { Modal } from 'ui/modal'
 	import { ripple } from 'svelte-ripple-action'
 	const tabs = [
 		{ title: 'Вход', id: 'login' },
@@ -9,7 +9,7 @@
 	]
 </script>
 
-<div class="bg-surface-900/40 fixed inset-0 z-50 flex flex-col items-center justify-center backdrop-blur-3xl">
+<Modal>
 	<div class="bg-surface-800 relative flex h-96 w-96 flex-col content-center rounded-md p-4 shadow-md">
 		<div aria-label="Authentication" class="flex w-full justify-around">
 			{#each tabs as tab (tab.id)}
@@ -29,10 +29,4 @@
 			<slot />
 		</div>
 	</div>
-	<a
-		href="/"
-		class="bg-surface-900 text-primary-500 hover:bg-surface-800 hover:text-primary-400 fixed right-2 top-2 flex h-10 w-10 items-center justify-center rounded-3xl"
-	>
-		<CloseIcon />
-	</a>
-</div>
+</Modal>

@@ -19,6 +19,9 @@
 		"./src/**/*.ts",
 		"./src/**/*.svelte",
 		"login",
-		"join"
+		"join",
+		"reset",
+		"logout",
+		"profile"
 	]
 }
