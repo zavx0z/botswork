@@ -1,7 +1,8 @@
 <script lang="ts">
-	import "config/tailwindCSS"
-	import '../../component.css'
-	import "svelte-ripple-action/ripple.css"
+	import 'config/styles/tailwindCSS'
+	import 'config/styles/componentCSS'
+	import 'svelte-ripple-action/ripple.css'
+	
 	import { Canvas } from '@threlte/core'
 	import Scene from '$lib/3d/Scene.svelte'
 </script>

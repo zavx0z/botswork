@@ -3,7 +3,7 @@
 	import { enhance } from '$app/forms'
 	import type { SubmitFunction } from '@sveltejs/kit'
 	import type { PageData } from './$types'
-	import InputEmail from '../InputEmail.svelte'
+	import { Email } from 'ui/input'
 
 	export let data: PageData
 	let { supabase } = data
@@ -23,13 +23,13 @@
 </svelte:head>
 <form action="?/reset" method="POST" use:enhance={resetPassword} class="flex h-full flex-col justify-between">
 	<div class="flex h-full w-full flex-col justify-center">
-		<InputEmail bind:email />
+		<Email bind:email />
 	</div>
 	<button
 		use:ripple
 		title="сброс пароля"
 		type="submit"
-		class="rounded bg-primary-500 px-4 py-2 text-sm uppercase text-surface-700 hover:bg-primary-400 focus-visible:bg-primary-400 focus-visible:outline-offset-4"
+		class="bg-primary-500 text-surface-700 hover:bg-primary-400 focus-visible:bg-primary-400 rounded px-4 py-2 text-sm uppercase focus-visible:outline-offset-4"
 	>
 		Сбросить пароль
 	</button>

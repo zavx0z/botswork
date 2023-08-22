@@ -3,8 +3,7 @@
 </script>
 
 <script>
-	import VisibleIcon from '~icons/ant-design/eye-invisible-outlined'
-	import InVisibleIcon from '~icons/ant-design/eye-outlined'
+	import { VisibleIcon, NotVisibleIcon } from 'icons'
 
 	export let visible = false
 	export let password = ''
@@ -19,12 +18,16 @@
 				tabindex="-1"
 				title={visible ? 'скрыть пароль' : 'показать пароль'}
 				on:click|preventDefault={() => (visible = !visible)}
-				class="focus:shadow-outline p-1 text-primary-700 transition-colors hover:text-primary-500 focus:outline-none"
+				class="focus:shadow-outline text-primary-700 hover:text-primary-500 p-1 transition-colors focus:outline-none"
 			>
 				{#if visible}
-					<InVisibleIcon class="h-6 w-6 stroke-current" />
+					<span class="h-6 w-6 stroke-current">
+						<NotVisibleIcon />
+					</span>
 				{:else}
-					<VisibleIcon class="h-6 w-6 stroke-current" />
+					<span class="h-6 w-6 stroke-current">
+						<VisibleIcon />
+					</span>
 				{/if}
 			</button>
 		</div>

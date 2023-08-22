@@ -1,12 +1,21 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "baseUrl": ".",
-    "allowJs": true,
-    "checkJs": true
-  },
-  "include": ["**/*.d.ts", "**/*.ts", "**/*.js", "**/*.svelte"],
-  "exclude": ["tailwind.config.js", "postcss.config.js", "node_modules"]
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true
+	},
+	"include": [
+		"./vite.config.ts",
+		"./.svelte-kit/ambient.d.ts",
+		"./.svelte-kit/types/**/$types.d.ts",
+		"./src/**/*.js",
+		"./src/**/*.ts",
+		"./src/**/*.svelte"
+	]
 }

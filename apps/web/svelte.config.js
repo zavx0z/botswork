@@ -6,7 +6,10 @@ import sequence from 'svelte-sequential-preprocessor'
 const config = {
 	preprocess: sequence([vitePreprocess()]),
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		env: {
+			dir: '../../'
+		}
 	}
 }
 

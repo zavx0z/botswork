@@ -2,10 +2,9 @@
 	import { enhance } from '$app/forms'
 	import type { PageData } from './$types'
 	import type { SubmitFunction } from '@sveltejs/kit'
-	import InputPassword from '../InputPassword.svelte'
-	import InputEmail from '../InputEmail.svelte'
 	import { ripple } from 'svelte-ripple-action'
-
+	import { Email, Password } from 'ui/input'
+	
 	export let data: PageData
 	let { supabase } = data
 	$: ({ supabase } = data)
@@ -32,8 +31,8 @@
 </svelte:head>
 <form action="?/join" method="POST" use:enhance={handleSignUp} class="flex h-full flex-col justify-between">
 	<div class="flex h-full w-full flex-col">
-		<InputEmail bind:email />
-		<InputPassword bind:password bind:visible />
+		<Email bind:email />
+		<Password bind:password bind:visible />
 		<input
 			placeholder="повтор пароля"
 			{...{ type: visible ? 'text' : 'password' }}
@@ -47,7 +46,7 @@
 		use:ripple
 		title="зарегистрироваться"
 		type="submit"
-		class="rounded bg-primary-500 px-4 py-2 text-sm uppercase text-surface-700 hover:bg-primary-400 focus-visible:bg-primary-400 focus-visible:outline-offset-4"
+		class="bg-primary-500 text-surface-700 hover:bg-primary-400 focus-visible:bg-primary-400 rounded px-4 py-2 text-sm uppercase focus-visible:outline-offset-4"
 	>
 		Зарегистрироваться
 	</button>

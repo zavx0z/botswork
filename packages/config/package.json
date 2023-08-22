@@ -12,15 +12,19 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./postcssConfig": {
-      "import": "./dist/postcss.config.cjs",
-      "require": "./dist/postcss.config.cjs"
-    },
     "./tailwindConfig": {
       "import": "./dist/tailwind.config.cjs",
       "require": "./dist/tailwind.config.cjs"
     },
-    "./tailwindCSS": {
+    "./postcssConfig": {
+      "import": "./dist/postcss.config.cjs",
+      "require": "./dist/postcss.config.cjs"
+    },
+    "./styles/componentCSS":{
+      "import": "./dist/component.css",
+      "require": "./dist/component.css"
+    },
+    "./styles/tailwindCSS":{
       "import": "./dist/tailwind.css",
       "require": "./dist/tailwind.css"
     }

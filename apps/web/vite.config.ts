@@ -1,7 +1,6 @@
 // @ts-ignore
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vitest/config'
-import Icons from 'unplugin-icons/vite'
 import { promises as fs } from 'node:fs'
 
 export default defineConfig({
@@ -10,15 +9,6 @@ export default defineConfig({
 	},
 	plugins: [
 		sveltekit(),
-		Icons({
-			compiler: 'svelte',
-			autoInstall: true,
-			customCollections: {
-				botswork: {
-					botik: () => fs.readFile('assets/botik.svg', 'utf-8'),
-				}
-			}
-		})
 	],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
