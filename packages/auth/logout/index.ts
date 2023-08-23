@@ -1,2 +1,2 @@
-export { default as LogOut } from '../src/routes/(src)/logout/+page.svelte'
-export { actions } from '../src/routes/(src)/logout/+page.server'
+export { default as LogOut } from '../src/routes/auth/logout/+page.svelte'
+export { actions } from '../src/routes/auth/logout/+page.server'

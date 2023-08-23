@@ -1,5 +1,5 @@
 <script lang="ts">
-    import LogOut from '../../(auth)/logout/+page.svelte'
+    import LogOut from '../../auth/logout/+page.svelte'
 	export let data
 	let { session, supabase } = data
 	$: ({ session, supabase } = data)

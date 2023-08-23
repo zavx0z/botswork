@@ -6,7 +6,7 @@
 	import type { PageData } from './$types'
 
 	export let data: PageData
-	export let redirect = 'login'
+	export let redirect = 'auth/login'
 	const handleSignOut: SubmitFunction = async ({ cancel }) => {
 		const { error } = await data.supabase.auth.signOut()
 		if (error) console.log(error)

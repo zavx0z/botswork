@@ -12,7 +12,7 @@
 	let email = ''
 	let password = ''
 	let errorMessage = ''
-	export let redirect = 'profile'
+	export let redirect = '/profile'
 
 	const handleSignIn: SubmitFunction = async ({ cancel }) => {
 		const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -24,6 +24,7 @@
 
 	const handleSignInOAuth: SubmitFunction = async ({ cancel, submitter }) => {
 		const attr = submitter?.getAttribute('formaction')
+		cancel()
 		if (attr) {
 			const params = new URLSearchParams(attr)
 			const provider: string | null = params.get('provider')
@@ -32,7 +33,6 @@
 				console.log(data, err)
 			}
 		}
-		cancel()
 		goto(redirect)
 	}
 </script>
