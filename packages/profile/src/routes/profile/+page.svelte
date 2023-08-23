@@ -2,11 +2,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { SubmitFunction } from './$types'
+	import Avatar from './Avatar.svelte'
 	export let data
 	export let form
 
-	let { session, profile } = data
-	$: ({ session, profile } = data)
+	let { session, supabase, profile } = data
+	$: ({ session, supabase, profile } = data)
 
 	let profileForm: HTMLFormElement
 	let loading = false
@@ -14,7 +15,7 @@
 	let username: string = profile?.username ?? ''
 	let avatarUrl: string = profile?.avatar_url ?? ''
 
-	const handleSubmit: SubmitFunction = ({cancel}) => {
+	const handleSubmit: SubmitFunction = () => {
 		console.log('submit')
 		loading = true
 		return async () => {
@@ -24,11 +25,16 @@
 </script>
 
 <div class="m-4 flex justify-center gap-4">
-	{#if !!avatarUrl}
-		<img class="h-44 w-44" src={avatarUrl} alt={username} />
-	{/if}
 	<div class="w-96">
 		<form class="form-widget" method="post" action="?/update" use:enhance={handleSubmit} bind:this={profileForm}>
+			<Avatar
+				{supabase}
+				bind:url={avatarUrl}
+				size={10}
+				on:upload={() => {
+					profileForm.requestSubmit()
+				}}
+			/>
 			<div>
 				<label for="email">Email</label>
 				<input id="email" type="text" value={session.user.email} disabled />
