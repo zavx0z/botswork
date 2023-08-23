@@ -14,18 +14,11 @@
 	let username: string = profile?.username ?? ''
 	let avatarUrl: string = profile?.avatar_url ?? ''
 
-	const handleSubmit: SubmitFunction = () => {
+	const handleSubmit: SubmitFunction = ({cancel}) => {
+		console.log('submit')
 		loading = true
 		return async () => {
 			loading = false
-		}
-	}
-
-	const handleSignOut: SubmitFunction = () => {
-		loading = true
-		return async ({ update }) => {
-			loading = false
-			update()
 		}
 	}
 </script>
@@ -55,11 +48,6 @@
 					value={loading ? 'Loading...' : 'Update'}
 					disabled={loading}
 				/>
-			</div>
-		</form>
-		<form class="text-primary-50" method="post" action="?/signout" use:enhance={handleSignOut}>
-			<div>
-				<button class="button block" disabled={loading}>Sign Out</button>
 			</div>
 		</form>
 	</div>

@@ -6,12 +6,12 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 	if (!session) throw redirect(303, '/')
 
 	const { data: profile, error } = await supabase
-		.from('profiles')
+		.from('profile')
 		.select(`username, full_name, avatar_url`)
 		.eq('id', session.user.id)
 		.single()
 	if (error) console.log(error)
-	
+
 	return { session, profile }
 }
 
@@ -24,7 +24,7 @@ export const actions = {
 
 		const session = await getSession()
 
-		const { error } = await supabase.from('profiles').upsert({
+		const { error } = await supabase.from('profile').upsert({
 			id: session?.user.id,
 			full_name: fullName,
 			username,
