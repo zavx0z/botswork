@@ -1,0 +1,21 @@
+{
+	"name": "profile",
+	"author": "zavx0z",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "vite dev --port 4011"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/kit": "^1.20.4",
+		"svelte": "^4.0.5",
+		"vite": "^4.4.2"
+	},
+	"dependencies": {
+		"config": "workspace:*",
+		"ui": "workspace:*",
+		"auth": "workspace:*",
+		"svelte-ripple-action": "^1.0.2"
+	},
+	"type": "module"
+}
