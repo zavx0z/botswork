@@ -7,5 +7,5 @@
 
 <div class="flex flex-col items-center">
 	<Profile {data} />
-	<LogOut {data} />
+	<LogOut {data} redirect="/" />
 </div>
