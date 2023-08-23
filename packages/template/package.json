@@ -1,6 +1,7 @@
 {
 	"name": "template",
 	"version": "0.0.1",
+	"author": "zavx0z",
 	"scripts": {
 		"dev": "vite dev --port 4010",
 		"build": "vite build && pnpm run package",
@@ -28,7 +29,6 @@
 	"devDependencies": {
 		"config": "workspace:*",
 		"svelte-ripple-action": "^1.0.2",
-
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
 		"@sveltejs/package": "^2.0.0",
