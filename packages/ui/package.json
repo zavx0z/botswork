@@ -5,12 +5,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev_tmp": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"dev_pkg": "vite dev --port 4004",
-		"build": "vite build",
-		"preview": "vite preview",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"dev_pkg": "vite dev --port 4004"
 	},
 	"devDependencies": {
 		"config": "workspace:*",
