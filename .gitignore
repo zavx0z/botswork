@@ -29,6 +29,7 @@ yarn-error.log*
 
 # turbo
 .turbo
+.vercel
 
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
