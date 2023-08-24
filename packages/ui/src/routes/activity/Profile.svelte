@@ -6,12 +6,12 @@
 	export let src = ''
 	export let alt = 'avatar'
 	export let profileHref = 'profile'
-	export let profileActive:boolean = false
+	export let profileActive: boolean = false
 	export let loginHref = 'login'
 </script>
 
 {#if session}
-	<Button href={profileHref} active={profileActive}>
+	<Button href={profileHref} label="Профиль пользователя" active={profileActive}>
 		<div class="bg-surface-800 flex h-8 w-8 items-center justify-center rounded-3xl">
 			{#if src}
 				<img {alt} class="h-full w-full rounded-[inherit]" {src} />
@@ -23,8 +23,7 @@
 		</div>
 	</Button>
 {:else}
-	<Button href={loginHref}>
-    
+	<Button href={loginHref} label="Авторизация">
 		<LoginIcon />
 	</Button>
 {/if}
