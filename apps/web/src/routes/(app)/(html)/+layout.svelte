@@ -42,7 +42,7 @@
 				session={Boolean(session)}
 				profileHref="profile"
 				profileActive={$page.url.pathname.includes('profile')}
-				loginHref="login"
+				loginHref="/auth/login"
 				src={session?.user.user_metadata.avatar_url}
 				alt={session?.user.user_metadata.name}
 			/>
