@@ -3,7 +3,8 @@
 	"author": "zavx0z",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "vite dev --port 4011"
+		"dev": "vite dev --port 4011",
+		"build": "svelte-kit sync"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",

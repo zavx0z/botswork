@@ -5,7 +5,8 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev_pkg": "vite dev --port 4004"
+		"dev_pkg": "vite dev --port 4004",
+		"build": "svelte-kit sync"
 	},
 	"devDependencies": {
 		"config": "workspace:*",

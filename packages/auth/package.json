@@ -4,7 +4,8 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev_pkg": "vite dev --port 4000"
+		"dev_pkg": "vite dev --port 4000",
+		"build": "svelte-kit sync"
 	},
 	"devDependencies": {
 		"eslint-config-custom": "workspace:*",
