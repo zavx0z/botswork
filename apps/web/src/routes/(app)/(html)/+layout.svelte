@@ -24,16 +24,16 @@
 {#if $sideBarLeft.matches('opened')}
 	<Activity>
 		<div>
-			<Button href="/" active={$page.url.pathname === '/'}>
+			<Button href="/" label="Главная страница" active={$page.url.pathname === '/'}>
 				<BotikIcon />
 			</Button>
-			<Button href="humans" active={$page.url.pathname.includes('humans')}>
+			<Button href="humans" label="Люди" active={$page.url.pathname.includes('humans')}>
 				<HumansIcon />
 			</Button>
-			<Button href="bots" active={$page.url.pathname.includes('bots')}>
+			<Button href="bots" label="Боты" active={$page.url.pathname.includes('bots')}>
 				<BotsIcon />
 			</Button>
-			<Button href="groups" active={$page.url.pathname.includes('groups')}>
+			<Button href="groups" label="Группы" active={$page.url.pathname.includes('groups')}>
 				<GroupsIcon />
 			</Button>
 		</div>
@@ -46,10 +46,10 @@
 				src={session?.user.user_metadata.avatar_url}
 				alt={session?.user.user_metadata.name}
 			/>
-			<Button href="settings" active={$page.url.pathname.includes('settings')}>
+			<Button href="settings" label="Настройки приложения" active={$page.url.pathname.includes('settings')}>
 				<SettingsIcon />
 			</Button>
-			<Button on:click={console.log}>
+			<Button label="Скрыть панель" on:click={console.log}>
 				<SidebarCloseIcon />
 			</Button>
 		</div>
