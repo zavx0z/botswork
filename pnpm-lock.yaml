@@ -268,6 +268,43 @@ importers:
         specifier: ^0.32.2
         version: 0.32.2
 
+  packages/chat:
+    dependencies:
+      '@supabase/supabase-js':
+        specifier: ^2.28.0
+        version: 2.32.0
+      '@xstate/inspect':
+        specifier: ^0.8.0
+        version: 0.8.0(ws@8.13.0)(xstate@4.38.2)
+      auth:
+        specifier: workspace:*
+        version: link:../auth
+      config:
+        specifier: workspace:*
+        version: link:../config
+      svelte-ripple-action:
+        specifier: ^1.0.2
+        version: 1.0.2(svelte@4.0.5)
+      ui:
+        specifier: workspace:*
+        version: link:../ui
+      xstate:
+        specifier: ^4.38.2
+        version: 4.38.2
+    devDependencies:
+      '@sveltejs/adapter-auto':
+        specifier: ^2.0.0
+        version: 2.0.0(@sveltejs/kit@1.20.4)
+      '@sveltejs/kit':
+        specifier: ^1.20.4
+        version: 1.20.4(svelte@4.0.5)(vite@4.4.2)
+      svelte:
+        specifier: ^4.0.5
+        version: 4.0.5
+      vite:
+        specifier: ^4.4.2
+        version: 4.4.2(@types/node@17.0.45)
+
   packages/config:
     devDependencies:
       autoprefixer:
@@ -352,6 +389,43 @@ importers:
         specifier: ^4.4.2
         version: 4.4.2(@types/node@17.0.45)
 
+  packages/screenShare:
+    dependencies:
+      '@supabase/supabase-js':
+        specifier: ^2.28.0
+        version: 2.32.0
+      '@xstate/inspect':
+        specifier: ^0.8.0
+        version: 0.8.0(ws@8.13.0)(xstate@4.38.2)
+      auth:
+        specifier: workspace:*
+        version: link:../auth
+      config:
+        specifier: workspace:*
+        version: link:../config
+      svelte-ripple-action:
+        specifier: ^1.0.2
+        version: 1.0.2(svelte@4.0.5)
+      ui:
+        specifier: workspace:*
+        version: link:../ui
+      xstate:
+        specifier: ^4.38.2
+        version: 4.38.2
+    devDependencies:
+      '@sveltejs/adapter-auto':
+        specifier: ^2.0.0
+        version: 2.0.0(@sveltejs/kit@1.20.4)
+      '@sveltejs/kit':
+        specifier: ^1.20.4
+        version: 1.20.4(svelte@4.0.5)(vite@4.4.2)
+      svelte:
+        specifier: ^4.0.5
+        version: 4.0.5
+      vite:
+        specifier: ^4.4.2
+        version: 4.4.2(@types/node@17.0.45)
+
   packages/template:
     dependencies:
       config:
@@ -371,7 +445,7 @@ importers:
         specifier: ^4.4.2
         version: 4.4.2(@types/node@17.0.45)
 
-  packages/templateWithAuth:
+  packages/template-with-auth:
     dependencies:
       '@supabase/supabase-js':
         specifier: ^2.28.0

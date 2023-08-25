@@ -11,12 +11,12 @@ const machine = createMachine({
     states: {
         "пустой": {
             on: {
-                "МОНТАЖ": { target: "видео-элемент", actions: ['setVideoElement'] }
+                "MOUNT": { target: "видео-элемент", actions: ['setVideoElement'] }
             }
         },
         "видео-элемент": {
             on: {
-                "ВЫБОР ИСТОЧНИКА": { target: "ожидание" }
+                "SELECT_SOURCE": { target: "ожидание" }
             }
 
         },
@@ -25,7 +25,7 @@ const machine = createMachine({
                 id: 'mediaSource',
                 src: 'mediaSource',
                 onDone: { target: "воспроизведение", actions: 'setStream' },
-                onError: { target: 'видео-элемент' }
+                onError: { target: videoElement }
             }
         },
         "воспроизведение": {
@@ -35,7 +35,7 @@ const machine = createMachine({
         }
     },
     schema: {
-        events: {} as { type: "МОНТАЖ"; videoElement: HTMLVideoElement } | { type: "ВЫБОР ИСТОЧНИКА" } | { type: "ОТКЛЮЧИТЬ" } | { type: "ОСТАНОВИТЬ" },
+        events: {} as { type: "MOUNT"; videoElement: HTMLVideoElement } | { type: "SELECT_SOURCE" } | { type: "UNMOUNT" } | { type: "ОСТАНОВИТЬ" },
         context: {} as {
             videoElement: HTMLVideoElement | null,
             config: {}

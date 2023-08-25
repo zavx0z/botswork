@@ -11,7 +11,7 @@
 
 	let video: HTMLVideoElement
 	onMount(() => {
-		stateMachine.send({ type: 'МОНТАЖ', videoElement: video })
+		stateMachine.send({ type: 'MOUNT', videoElement: video })
 		return () => stateMachine.send({ type: 'ОСТАНОВИТЬ' })
 	})
 </script>
