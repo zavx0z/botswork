@@ -4,7 +4,6 @@ import type { LayoutLoad } from './$types'
 import type { Database } from 'db'
 
 export const load: LayoutLoad = async ({ fetch, data, depends }) => {
-	console.log('[auth]', 'layout.ts')
 	depends('supabase:auth')
 	const supabase = createSupabaseLoadClient<Database>({
 		supabaseUrl: PUBLIC_SUPABASE_URL,
@@ -12,8 +11,7 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 		event: { fetch },
 		serverSession: data.session
 	})
-	const {
-		data: { session }
-	} = await supabase.auth.getSession()
+	const { data: {session} } = await supabase.auth.getSession()
+	console.log('[auth]', '+layout.ts')
 	return { supabase, session }
 }

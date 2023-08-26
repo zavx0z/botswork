@@ -7,11 +7,6 @@ export const load: LayoutLoad = async ({ depends }) => {
 	console.log('[auth]', 'ssr load')
 	depends('supabase:auth')
 	const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY)
-	const {
-		data: { session }
-	} = await supabase.auth.getSession()
-	return {
-		supabase,
-		session
-	}
+	const { data: { session } } = await supabase.auth.getSession()
+	return { supabase, session }
 }
