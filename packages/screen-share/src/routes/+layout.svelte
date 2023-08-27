@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>with auth</title>
+	<title>screen-share</title>
 </svelte:head>
 <AuthStateChange {data} redirect="/auth/login">
 	<slot />

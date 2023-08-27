@@ -29,7 +29,7 @@ export const load: LayoutLoad = async ({ parent }) => {
 	const machine = WebRTCReceiverMachine.withConfig({
 		services: { signalServer, mediaDevice, peerConnection, dataChannel }
 	})
-	inspect({ iframe: false })
+	// inspect({ iframe: false })
 	const webRTCReceiver = interpret(machine, { devTools: true }).start()
 	return { webRTCReceiver }
 }
