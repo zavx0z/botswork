@@ -3,52 +3,86 @@
 	import type { Database } from 'db'
 	import type { SupabaseClient } from '@supabase/supabase-js'
 	import { onMount } from 'svelte'
+	import { ClientJS } from 'clientjs'
+	import { ButtonCallScreenShare } from 'ui/call'
 
 	export let data: PageData
-	let { mediaDeviceMachine, useMediaDeviceMachine, session } = data
+	let { useMediaDeviceMachine, session } = data
 
 	const supabase: SupabaseClient<Database> = data.supabase
-	let realtime: { [key: string]: any } = {}
-
+	interface Client {
+		uuid: string
+		presence_ref: string
+		screen: 'mirror' | 'share'
+		os: string
+		online_at: string
+		email: string
+		browser: string
+	}
+	let realtime: Client[] = []
+	let screenChannel = supabase.channel('roomScreen', {
+		config: {
+			broadcast: {
+				self: false
+			}
+		}
+	})
 	onMount(() => {
-		const screenChannel = supabase.channel('screen')
+		const client = new ClientJS()
 		screenChannel
 			.on('presence', { event: 'sync' }, () => {
 				const newState = screenChannel.presenceState()
-				realtime = newState
-				console.log('sync', newState)
+				let newRealtime: Client[] = []
+				Object.keys(newState).forEach((item) => {
+					const client = newState[item][0] as Client
+					if (client.uuid !== session.user.id) {
+						newRealtime.push(client)
+					}
+				})
+				realtime = newRealtime
 			})
-			// .on('presence', { event: 'join' }, ({ key, newPresences }) => {
-			// 	console.log('join', key, newPresences)
-			// })
-			// .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
-			// 	// console.log('leave', key, leftPresences)
-			// })
+			.on('broadcast', { event: 'call' }, (payload) => console.log(payload))
 			.subscribe(async (status) => {
 				if (status === 'SUBSCRIBED') {
-					const presenceTrackStatus = await screenChannel.track({
-						screen: 'share',
+					await screenChannel.track({
+						uuid: session.user.id,
+						screen: 'mirror',
 						email: session.user.email,
-						online_at: new Date().toISOString()
+						online_at: new Date().toISOString(),
+						os: client.getOS(),
+						browser: client.getBrowser()
 					})
-					// console.log(presenceTrackStatus)
 				}
 			})
-		return () => screenChannel.unsubscribe()
+		return () => supabase.removeChannel(screenChannel)
 	})
 </script>
 
-<div class="flex flex-col">
-	{#each Object.keys(realtime) as i}
-		{@const item = realtime[i][0]}
-		<p class="text-secondary-400">{item.screen}: {item.email}</p>
+<div class="flex flex-col gap-2 p-2">
+	{#each realtime as item (item.presence_ref)}
+		<div class="bg-surface-700 flex w-96 flex-col rounded-md p-2">
+			<p class="text-secondary-400"><span class="text-primary-500">{item.uuid}</span></p>
+			<p class="text-secondary-400"><span class="text-primary-500">{item.screen}:</span> {item.email}</p>
+			<p class="text-secondary-400"><span class="text-primary-500">Операционная система:</span> {item.os}</p>
+			<p class="text-secondary-400"><span class="text-primary-500">Браузер:</span> {item.browser}</p>
+			<ButtonCallScreenShare
+				title={'Запросить экран'}
+				size={'sm'}
+				on:click={() =>
+					screenChannel.send({
+						type: 'broadcast',
+						event: 'call',
+						constraints: {
+							called: session.user.id,
+							audio: true,
+							video: {
+								type: 'screen'
+							}
+						}
+					})}
+			/>
+		</div>
 	{/each}
-	<button
-		class={'bg-primary-500 text-surface-900 hover:bg-primary-200 m-2 w-48 rounded-sm p-2'}
-		on:click={() => mediaDeviceMachine?.send('SELECT_SOURCE')}
-	>
-		Соединение
-	</button>
 </div>
 <video use:useMediaDeviceMachine autoplay playsinline muted class="h-1/2 w-full">
 	<track kind="captions" src="" />
