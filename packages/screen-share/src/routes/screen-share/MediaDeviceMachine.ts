@@ -44,7 +44,8 @@ const MediaDeviceMachine = createMachine(
 				on: {
 					UNMOUNT: {
 						description: 'Страница закрылась',
-						target: 'videoElement'
+						target: 'videoElement',
+						actions: 'playVideo'
 					}
 				}
 			}
@@ -67,6 +68,7 @@ const MediaDeviceMachine = createMachine(
 	{
 		guards: {},
 		actions: {
+			playVideo: (context) => context.videoElement?.play(),
 			sendParentMediaTracks: sendParent((_, { data }) => ({ type: 'SET_TRACKS', payload: data.getTracks() })),
 			setVideoElement: assign({ videoElement: (_, event) => event.videoElement }),
 			setSrcObject: (context, event) => {

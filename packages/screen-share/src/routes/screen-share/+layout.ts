@@ -5,7 +5,7 @@ import { interpret } from 'xstate'
 import SignalServerMachine from './SignalServerMachine'
 import mediaDevice from './MediaDeviceMachine'
 import WebRTCReceiverMachine from './WebRTCReceiverMachine'
-import { inspect } from '@xstate/inspect'
+// import { inspect } from '@xstate/inspect'
 import PeerConnectionMachine from './PeerConnectionMachine'
 import DataChannelMachine from './DataChannelMachine'
 
@@ -31,5 +31,17 @@ export const load: LayoutLoad = async ({ parent }) => {
 	})
 	// inspect({ iframe: false })
 	const webRTCReceiver = interpret(machine, { devTools: true }).start()
-	return { webRTCReceiver }
+
+
+	const mediaDeviceMachine = webRTCReceiver.children.get('media-device')
+	const useMediaDeviceMachine = (node: HTMLVideoElement) => {
+		mediaDeviceMachine?.send({ type: 'MOUNT', videoElement: node })
+		return {
+			destroy() {
+				mediaDeviceMachine?.send({ type: 'UNMOUNT' })
+			}
+		}
+	}
+
+	return { webRTCReceiver, mediaDeviceMachine, useMediaDeviceMachine }
 }
