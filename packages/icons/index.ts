@@ -9,3 +9,5 @@ export { default as SidebarCloseIcon } from "./src/SidebarClose.svelte"
 export { default as VisibleIcon } from "./src/Visible.svelte"
 export { default as NotVisibleIcon } from "./src/NotVisible.svelte"
 export { default as CloseIcon } from "./src/Close.svelte"
+
+export { default as CallIcon } from "./src/Call.svelte"
