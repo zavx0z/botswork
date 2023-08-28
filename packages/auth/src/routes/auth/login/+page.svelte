@@ -15,11 +15,11 @@
 	export let redirect = '/profile'
 
 	const handleSignIn: SubmitFunction = async ({ cancel }) => {
-		const { error } = await supabase.auth.signInWithPassword({ email, password })
+		const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 		if (error) errorMessage = error.message
-		console.log(error?.name, error?.status, error?.message, error?.cause)
+		console.log('[auth]', 'login/+page.svelte(Login)', data, error)
 		cancel()
-		goto(redirect)
+		// goto(redirect)
 	}
 
 	const handleSignInOAuth: SubmitFunction = async ({ cancel, submitter }) => {
@@ -29,11 +29,15 @@
 			const params = new URLSearchParams(attr)
 			const provider: string | null = params.get('provider')
 			if (provider) {
-				const { data, error: err } = await supabase.auth.signInWithOAuth({ provider: provider as Provider })
-				console.log(data, err)
+				const { data, error: err } = await supabase.auth.signInWithOAuth({
+					provider: provider as Provider,
+					options: {
+						redirectTo: redirect
+					}
+				})
+				console.log('[auth]', 'login/+page.svelte(OAuth)', data, err)
 			}
 		}
-		goto(redirect)
 	}
 </script>
 

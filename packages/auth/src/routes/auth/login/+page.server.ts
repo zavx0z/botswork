@@ -6,16 +6,16 @@ const OAUTH_PROVIDER = ['google', 'github']
 
 export const actions: Actions = {
 	login: async ({ request, url, locals: { supabase } }) => {
+		console.log('[auth]', 'login/+page.server.ts', 'login')
 		const provider = url.searchParams.get('provider') as Provider
 
 		if (provider) {
 			if (!OAUTH_PROVIDER.includes(provider)) return fail(400, { error: 'Provider not supported.' })
 			const { data, error: err } = await supabase.auth.signInWithOAuth({ provider })
 			if (err) return fail(400, { message: 'Something went wrong' })
+			console.log('[auth]', 'redirect', data.url)
 			throw redirect(303, data.url)
 		}
-
-		console.log('SSR login')
 
 		const formData = await request.formData()
 		const email = formData.get('email') as string

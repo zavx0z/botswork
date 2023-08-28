@@ -11,14 +11,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
 		event
 	})
-	/**
-	 * a little helper that is written for convenience so that instead
-	 * of calling `const { data: { session } } = await supabase.auth.getSession()`
-	 * you just call this `await getSession()`
-	 */
 	event.locals.getSession = async () => {
 		const { data, error } = await event.locals.supabase.auth.getSession()
-		console.log('[auth]', 'getSession() session', data.session ? 'exist' : 'not exist', error)
+		console.log('[auth]', 'getSession() session', data.session ? 'EXIST' : 'NOT EXIST', error ? `error: ${error}` : '')
 		return data.session
 	}
 	return resolve(event, {

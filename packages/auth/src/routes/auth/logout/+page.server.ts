@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit'
 
 export const actions: Actions = {
 	async logout({ locals: { supabase } }) {
-		console.log('logout')
+		console.log('[auth]', 'logout')
 		await supabase.auth.signOut()
 		throw redirect(303, '/')
 	}

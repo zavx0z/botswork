@@ -10,10 +10,10 @@
 
 	onMount(() => {
 		if (!session && redirect) goto(redirect)
-		const supabaseAuth = supabase.auth.onAuthStateChange((_, _session) => {
+		const supabaseAuth = supabase.auth.onAuthStateChange((event, _session) => {
 			if (_session?.expires_at !== session?.expires_at) {
+				console.log('[auth]', 'change state', event)
 				invalidate('supabase:auth')
-				if (redirect) goto(redirect)
 			}
 		})
 		return supabaseAuth.data.subscription.unsubscribe
