@@ -5,5 +5,5 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
 	const code = url.searchParams.get('code')
 	console.log('[auth]', 'callback', code)
 	if (code) await supabase.auth.exchangeCodeForSession(code)
-	throw redirect(303, '/profile')
+	throw redirect(303, '/')
 }

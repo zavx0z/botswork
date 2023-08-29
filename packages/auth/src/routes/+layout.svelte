@@ -2,15 +2,14 @@
 	import 'config/styles/tailwindCSS'
 	import 'config/styles/componentCSS'
 	import 'svelte-ripple-action/ripple.css'
-	import AuthStateChange from './AuthStateChange.svelte'
 	import type { LayoutData } from './$types'
+	import { Toaster } from 'svelte-french-toast'
+	import { goto } from '$app/navigation'
 
-	export let data: LayoutData
 </script>
 
 <svelte:head>
 	<title>авторизация</title>
 </svelte:head>
-<AuthStateChange {data}>
-	<slot />
-</AuthStateChange>
+<slot />
+<Toaster />

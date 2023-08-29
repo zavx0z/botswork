@@ -1,44 +1,63 @@
 <script lang="ts">
-	import type { SubmitFunction } from '@sveltejs/kit'
-	import Login from './Login.svelte'
-	import type { Provider } from '@supabase/supabase-js'
-	import { goto } from '$app/navigation'
+	import { ripple } from 'svelte-ripple-action'
+	import { enhance } from '$app/forms'
+	import { UserName, Password } from 'ui/input'
 	import type { PageData } from './$types'
+	import { goto } from '$app/navigation'
 
 	export let data: PageData
-	let { supabase } = data
-	$: ({ supabase } = data)
+	let { auth } = data
 
-	let email = ''
-	let password = ''
-	let errorMessage = ''
-	export let redirect = '/profile'
-
-	const handleSignIn: SubmitFunction = async ({ cancel }) => {
-		const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-		if (error) errorMessage = error.message
-		console.log('[auth]', 'login/+page.svelte(Login)', data, error)
-		cancel()
-		// goto(redirect)
+	$: {
+		if ($auth.hasTag('authorized')) goto(redirectTo)
 	}
-
-	const handleSignInOAuth: SubmitFunction = async ({ cancel, submitter }) => {
-		const attr = submitter?.getAttribute('formaction')
-		cancel()
-		if (attr) {
-			const params = new URLSearchParams(attr)
-			const provider: string | null = params.get('provider')
-			if (provider) {
-				const { data, error: err } = await supabase.auth.signInWithOAuth({
-					provider: provider as Provider,
-					options: {
-						redirectTo: redirect
-					}
-				})
-				console.log('[auth]', 'login/+page.svelte(OAuth)', data, err)
-			}
-		}
-	}
+	export let username = ''
+	export let password = ''
+	export let redirectTo: string = '/'
 </script>
 
-<Login {handleSignIn} {handleSignInOAuth} bind:email bind:password />
+<svelte:head>
+	<title>BotsWork | Вход</title>
+</svelte:head>
+
+<div class="flex h-full flex-col justify-between">
+	<form
+		action="?/login"
+		method="POST"
+		use:enhance={({ cancel }) => {
+			auth.send({ type: 'LOGIN', username, password })
+			cancel()
+		}}
+	>
+		<UserName bind:username />
+		<Password bind:password />
+		<button
+			use:ripple
+			title="войти"
+			type="submit"
+			class="bg-primary-500 text-surface-700 hover:bg-primary-400 focus-visible:bg-primary-400 w-full rounded px-4 py-2 text-sm uppercase focus-visible:outline-offset-4"
+		>
+			Войти
+		</button>
+	</form>
+	<form action="?/login" method="POST" class="flex justify-center gap-4">
+		<button
+			use:ripple
+			type="submit"
+			title="GitHub"
+			formaction="?/login&provider=github"
+			class="border-tertiary-500 text-tertiary-500 hover:border-tertiary-400 hover:text-tertiary-400 focus-visible:border-tertiary-400 focus-visible:text-tertiary-400 rounded border px-4 py-2 text-sm uppercase focus-visible:outline-offset-4"
+		>
+			github
+		</button>
+		<button
+			use:ripple
+			type="submit"
+			title="Google"
+			formaction="?/login&provider=google"
+			class="border-tertiary-500 text-tertiary-500 hover:border-tertiary-400 hover:text-tertiary-400 focus-visible:border-tertiary-400 focus-visible:text-tertiary-400 rounded border px-4 py-2 text-sm uppercase focus-visible:outline-offset-4"
+		>
+			google
+		</button>
+	</form>
+</div>
