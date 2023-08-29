@@ -14,7 +14,7 @@
 	<input
 		id={eltId}
 		{autofocus}
-		placeholder="никнейм"
+		placeholder="логин"
 		name="username"
 		bind:value={username}
 		required

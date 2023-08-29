@@ -51,8 +51,10 @@ const AuthMachine = createMachine(
 			},
 			unauthorized: {
 				initial: 'idle',
+				tags: 'unauthorized',
 				states: {
 					idle: {
+						tags: 'unauthorized',
 						after: {
 							10: { actions: 'clearError' }
 						},
@@ -63,6 +65,7 @@ const AuthMachine = createMachine(
 						}
 					},
 					login: {
+						tags: 'unauthorized',
 						invoke: {
 							src: 'login',
 							onDone: { target: '#auth.authorized', actions: 'authorize' },
@@ -70,6 +73,7 @@ const AuthMachine = createMachine(
 						}
 					},
 					join: {
+						tags: 'unauthorized',
 						invoke: {
 							src: 'join',
 							onDone: { target: '#auth.authorized' },
@@ -77,6 +81,7 @@ const AuthMachine = createMachine(
 						}
 					},
 					reset: {
+						tags: 'unauthorized',
 						invoke: {
 							src: 'reset',
 							onDone: { target: '#auth.authorized' },
@@ -88,7 +93,7 @@ const AuthMachine = createMachine(
 			authorized: {
 				tags: ['authorized'],
 				on: {
-					UNAUTHORIZE: { target: 'unauthorized', actions: 'unauthorize' },
+					LOGOUT: { target: 'unauthorized', actions: 'unauthorize' },
 					UPDATE_TOKEN: { target: '.updating' }
 				},
 				initial: 'idle',
@@ -123,8 +128,7 @@ const AuthMachine = createMachine(
 				error: string | null
 			},
 			events: {} as
-				| { type: 'AUTHORIZE' }
-				| { type: 'UNAUTHORIZE' }
+				| { type: 'LOGOUT' }
 				| { type: 'UPDATE_TOKEN' }
 				| { type: 'JOIN'; username: string; password: string }
 				| { type: 'LOGIN'; username: string; password: string }
@@ -150,6 +154,8 @@ const AuthMachine = createMachine(
 				switch (error) {
 					case 'Not enough segments':
 						return { ...context, error } // не переданы данные при авторизации status: 422, statusText: 'Unprocessable Entity'
+					case 'Incorrect username or password':
+						return { ...context, error: "Алеша! Введи правильно ник или пароль!" }
 					default:
 						return { ...context, error }
 				}
@@ -162,10 +168,11 @@ const AuthMachine = createMachine(
 				localStorage.setItem(REFRESH_TOKEN, refreshToken)
 				return { ...context, id, accessToken, refreshToken }
 			}),
-			unauthorize: assign(() => {
+			unauthorize: assign((context) => {
+				console.log('un')
 				localStorage.removeItem(ACCESS_TOKEN)
 				localStorage.removeItem(REFRESH_TOKEN)
-				return { id: null, accessToken: null, refreshToken: null }
+				return { ...context, id: null, accessToken: null, refreshToken: null }
 			})
 		},
 		services: {

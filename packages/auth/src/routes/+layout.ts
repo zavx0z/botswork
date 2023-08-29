@@ -3,7 +3,7 @@ export let prerender = false
 
 import { interpret } from 'xstate'
 import type { LayoutLoad } from './$types'
-import AuthMachine from './AuthMachine'
+import AuthMachine from '../xstate/AuthMachine'
 import { inspect } from '@xstate/inspect'
 import toast from 'svelte-french-toast'
 
