@@ -17,6 +17,7 @@
 			<button
 				tabindex="-1"
 				title={visible ? 'скрыть пароль' : 'показать пароль'}
+				type={'button'}
 				on:click|preventDefault={() => (visible = !visible)}
 				class="focus:shadow-outline text-primary-700 hover:text-primary-500 p-1 transition-colors focus:outline-none"
 			>

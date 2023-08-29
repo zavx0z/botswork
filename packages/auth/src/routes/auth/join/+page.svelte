@@ -1,36 +1,36 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import type { SubmitFunction } from '@sveltejs/kit'
+	import { goto } from '$app/navigation'
 	import { ripple } from 'svelte-ripple-action'
-	import { Email, Password } from 'ui/input'
-	
-	export let data: any
-	let { supabase } = data
-	$: ({ supabase } = data)
+	import { UserName, Password } from 'ui/input'
 
-	let email = ''
-	let password = ''
+	export let data: any
+	let { auth } = data
+
+	export let username = ''
+	export let password = ''
+	export let redirectTo = '/profile'
+	$: {
+		if ($auth.hasTag('authorized')) goto(redirectTo)
+	}
 	let doublePassword = ''
 	let visible = false
-
-	const handleSignUp: SubmitFunction = async () => {
-		if (password === doublePassword)
-			await supabase.auth.signUp({
-				email,
-				password,
-				options: {
-					emailRedirectTo: `${location.origin}/auth/callback`
-				}
-			})
-	}
 </script>
 
 <svelte:head>
 	<title>BotsWork | Регистрация</title>
 </svelte:head>
-<form action="?/join" method="POST" use:enhance={handleSignUp} class="flex h-full flex-col justify-between">
+<form
+	action="?/join"
+	method="POST"
+	class="flex h-full flex-col justify-between"
+	use:enhance={({ cancel }) => {
+		auth.send({ type: 'JOIN', username, password })
+		cancel()
+	}}
+>
 	<div class="flex h-full w-full flex-col">
-		<Email bind:email />
+		<UserName bind:username />
 		<Password bind:password bind:visible />
 		<input
 			placeholder="повтор пароля"

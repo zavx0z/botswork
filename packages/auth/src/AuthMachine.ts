@@ -1,6 +1,5 @@
 import { assign, createMachine } from 'xstate'
 import axios from 'axios'
-import { raise } from 'xstate/lib/actions.js'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000' + '/api.v1'
 
@@ -13,6 +12,7 @@ const AuthMachine = createMachine(
 		initial: 'checking',
 		context: {
 			id: null,
+			username: null,
 			accessToken: null,
 			refreshToken: null,
 			error: null
@@ -42,6 +42,7 @@ const AuthMachine = createMachine(
 					},
 					fetchUser: {
 						invoke: {
+							id: 'fetchUser',
 							src: 'fetchUser',
 							onDone: { target: '#auth.authorized', actions: 'setUser' },
 							onError: { target: '#auth.unauthorized', actions: 'setError' }
@@ -67,22 +68,25 @@ const AuthMachine = createMachine(
 					login: {
 						tags: 'unauthorized',
 						invoke: {
+							id: 'login',
 							src: 'login',
-							onDone: { target: '#auth.authorized', actions: 'authorize' },
+							onDone: { target: '#auth.authorized', actions: ['setUser', 'setAccessToken', 'setRefreshToken'] },
 							onError: { target: 'idle', actions: 'setError' }
 						}
 					},
 					join: {
 						tags: 'unauthorized',
 						invoke: {
+							id: 'join',
 							src: 'join',
-							onDone: { target: '#auth.authorized' },
-							onError: { target: 'idle' }
+							onDone: { target: '#auth.checking', actions: ['setUser', 'setAccessToken', 'setRefreshToken'] },
+							onError: { target: 'idle', actions: 'setError' }
 						}
 					},
 					reset: {
 						tags: 'unauthorized',
 						invoke: {
+							id: 'reset',
 							src: 'reset',
 							onDone: { target: '#auth.authorized' },
 							onError: { target: '#auth.authorized' }
@@ -91,15 +95,15 @@ const AuthMachine = createMachine(
 				}
 			},
 			authorized: {
-				tags: ['authorized'],
+				tags: 'authorized',
 				on: {
-					LOGOUT: { target: 'unauthorized', actions: 'unauthorize' },
+					LOGOUT: { target: 'unauthorized', actions: ['removeUser', 'removeAccessToken', 'removeRefreshToken'] },
 					UPDATE_TOKEN: { target: '.updating' }
 				},
 				initial: 'idle',
 				states: {
 					updating: {
-						tags: ['authorized'],
+						tags: 'authorized',
 						invoke: {
 							src: 'update',
 							onDone: {},
@@ -107,7 +111,7 @@ const AuthMachine = createMachine(
 						}
 					},
 					idle: {
-						tags: ['authorized']
+						tags: 'authorized'
 					}
 				}
 			}
@@ -115,14 +119,15 @@ const AuthMachine = createMachine(
 		predictableActionArguments: true,
 		schema: {
 			services: {
-				fetchUser: { data: {} as { id: number } },
-				login: { data: {} as { id: number; accessToken: string; refreshToken: string } },
-				join: { data: {} as { id: number; accessToken: string; refreshToken: string } },
+				fetchUser: { data: {} as { id: number; username: string } },
+				login: { data: {} as { id: number; username: string; accessToken: string; refreshToken: string } },
+				join: { data: {} as { id: number; username: string; accessToken: string; refreshToken: string } },
 				update: { data: {} as { id: number; accessToken: string; refreshToken: string } },
 				reset: { data: {} as { id: number; accessToken: string; refreshToken: string } }
 			},
 			context: {} as {
 				id: number | null
+				username: string | null
 				accessToken: string | null
 				refreshToken: string | null
 				error: string | null
@@ -138,16 +143,18 @@ const AuthMachine = createMachine(
 	},
 	{
 		guards: {
+			// USER
+			userIsExist: (context) => Boolean(context.id && context.username),
+			userIsNotExist: (context) => !Boolean(context.id || context.username),
+			// ACCESS_TOKEN
 			accessTokenIsExist: (context) => Boolean(context.accessToken),
 			accessTokenIsNotExist: (context) => !Boolean(context.accessToken),
-
+			// REFRESH_TOKEN
 			refreshTokenIsExist: (context) => Boolean(context.refreshToken),
-			refreshTokenIsNotExist: (context) => !Boolean(context.refreshToken),
-
-			userIsExist: (context) => Boolean(context.id),
-			userIsNotExist: (context) => !Boolean(context.id)
+			refreshTokenIsNotExist: (context) => !Boolean(context.refreshToken)
 		},
 		actions: {
+			// ERROR
 			clearError: assign((context) => ({ ...context, error: null })),
 			// @ts-ignore
 			setError: assign((context, { data: { error } }) => {
@@ -155,24 +162,33 @@ const AuthMachine = createMachine(
 					case 'Not enough segments':
 						return { ...context, error } // не переданы данные при авторизации status: 422, statusText: 'Unprocessable Entity'
 					case 'Incorrect username or password':
-						return { ...context, error: "Алеша! Введи правильно ник или пароль!" }
+						return { ...context, error: 'Алеша! Введи правильно ник или пароль!' }
 					default:
 						return { ...context, error }
 				}
 			}),
+			// USER
+			setUser: assign((context, { data: { id, username } }) => ({ ...context, id, username })),
+			removeUser: assign((context) => ({ ...context, id: null, username: null })),
+			// ACCESS_TOKEN
 			getAccessToken: assign((context) => ({ ...context, accessToken: localStorage.getItem(ACCESS_TOKEN) })),
-			getRefreshToken: assign((context) => ({ ...context, refreshToken: localStorage.getItem(REFRESH_TOKEN) })),
-			setUser: assign((context, { data: { id } }) => ({ ...context, id })),
-			authorize: assign((context, { data: { id, accessToken, refreshToken } }) => {
+			setAccessToken: assign((context, { data: { accessToken } }) => {
 				localStorage.setItem(ACCESS_TOKEN, accessToken)
-				localStorage.setItem(REFRESH_TOKEN, refreshToken)
-				return { ...context, id, accessToken, refreshToken }
+				return { ...context, accessToken }
 			}),
-			unauthorize: assign((context) => {
-				console.log('un')
+			removeAccessToken: assign((context) => {
 				localStorage.removeItem(ACCESS_TOKEN)
+				return { ...context, accessToken: null }
+			}),
+			// REFRESH_TOKEN
+			getRefreshToken: assign((context) => ({ ...context, refreshToken: localStorage.getItem(REFRESH_TOKEN) })),
+			setRefreshToken: assign((context, { data: { refreshToken } }) => {
+				localStorage.setItem(REFRESH_TOKEN, refreshToken)
+				return { ...context, refreshToken }
+			}),
+			removeRefreshToken: assign((context) => {
 				localStorage.removeItem(REFRESH_TOKEN)
-				return { ...context, id: null, accessToken: null, refreshToken: null }
+				return { ...context, refreshToken: null }
 			})
 		},
 		services: {
@@ -182,17 +198,25 @@ const AuthMachine = createMachine(
 					.then(({ data }) => data)
 					.catch(({ response }) => Promise.reject({ error: response.data.detail })),
 			join: (_, { username, password }) =>
-				axios.post('/join', { username, password }).then((response) => response.data),
+				axios
+					.post('/join', { username, password })
+					.then((response) => response.data)
+					.catch(({ response }) => Promise.reject({ error: JSON.stringify(response.data.detail) })),
 			update: ({ refreshToken }) =>
 				axios
 					.get('/refresh', { headers: { Authorization: `Bearer ${refreshToken}` } })
-					.then((response) => response.data),
+					.then((response) => response.data)
+					.catch(({ response }) => Promise.reject({ error: response.data.detail })),
 			fetchUser: ({ accessToken }) =>
 				axios
 					.get('/user', { headers: { Authorization: `Bearer ${accessToken}` } })
 					.then((response) => response.data)
 					.catch(({ response }) => Promise.reject({ error: response.data.detail })),
-			reset: (_, { username }) => axios.post('/reset', { username }).then((response) => response.data)
+			reset: (_, { username }) =>
+				axios
+					.post('/reset', { username })
+					.then((response) => response.data)
+					.catch(({ response }) => Promise.reject({ error: response.data.detail }))
 		}
 	}
 )

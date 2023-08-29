@@ -1,28 +1,27 @@
 <script lang="ts">
 	import { ripple } from 'svelte-ripple-action'
 	import { enhance } from '$app/forms'
-	import type { SubmitFunction } from '@sveltejs/kit'
-	import { Email } from 'ui/input'
+	import { UserName } from 'ui/input'
 
 	export let data: any
-	let { supabase } = data
-	$: ({ supabase } = data)
+	const { auth } = data
 
-	let email = ''
-	let password = ''
-
-	const resetPassword: SubmitFunction = async () => {
-		const { error } = await supabase.auth.resetPasswordForEmail(email)
-		console.log(error)
-	}
+	let username = ''
 </script>
 
 <svelte:head>
 	<title>BotsWork | Сброс пароля</title>
 </svelte:head>
-<form action="?/reset" method="POST" use:enhance={resetPassword} class="flex h-full flex-col justify-between">
+<form
+	action="?/reset"
+	method="POST"
+	use:enhance={({ cancel }) => {
+		cancel()
+	}}
+	class="flex h-full flex-col justify-between"
+>
 	<div class="flex h-full w-full flex-col justify-center">
-		<Email bind:email />
+		<UserName bind:username />
 	</div>
 	<button
 		use:ripple
