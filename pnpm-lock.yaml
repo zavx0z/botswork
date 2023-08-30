@@ -194,9 +194,6 @@ importers:
       config:
         specifier: workspace:*
         version: link:../config
-      db:
-        specifier: workspace:*
-        version: link:../db
       icons:
         specifier: workspace:*
         version: link:../icons
@@ -289,15 +286,6 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
 
-  packages/db:
-    dependencies:
-      '@supabase/auth-helpers-sveltekit':
-        specifier: ^0.10.1
-        version: 0.10.1(@supabase/supabase-js@2.32.0)(@sveltejs/kit@1.20.4)
-      '@supabase/supabase-js':
-        specifier: ^2.28.0
-        version: 2.32.0
-
   packages/elements:
     dependencies:
       '@tsconfig/svelte':
@@ -360,9 +348,6 @@ importers:
 
   packages/screen-mirror:
     dependencies:
-      '@supabase/supabase-js':
-        specifier: ^2.28.0
-        version: 2.32.0
       '@xstate/inspect':
         specifier: ^0.8.0
         version: 0.8.0(ws@8.13.0)(xstate@4.38.2)
@@ -375,9 +360,6 @@ importers:
       config:
         specifier: workspace:*
         version: link:../config
-      db:
-        specifier: workspace:*
-        version: link:../db
       svelte-ripple-action:
         specifier: ^1.0.2
         version: 1.0.2(svelte@4.0.5)
@@ -406,9 +388,6 @@ importers:
 
   packages/screen-share:
     dependencies:
-      '@supabase/supabase-js':
-        specifier: ^2.28.0
-        version: 2.32.0
       '@xstate/inspect':
         specifier: ^0.8.0
         version: 0.8.0(ws@8.13.0)(xstate@4.38.2)
@@ -421,9 +400,6 @@ importers:
       config:
         specifier: workspace:*
         version: link:../config
-      db:
-        specifier: workspace:*
-        version: link:../db
       svelte-ripple-action:
         specifier: ^1.0.2
         version: 1.0.2(svelte@4.0.5)

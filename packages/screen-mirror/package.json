@@ -14,11 +14,9 @@
 		"vite": "^4.4.2"
 	},
 	"dependencies": {
-		"@supabase/supabase-js": "^2.28.0",
 		"auth": "workspace:*",
 		"clientjs": "^0.2.1",
 		"config": "workspace:*",
-		"db": "workspace:*",
 		"svelte-ripple-action": "^1.0.2",
 		"ui": "workspace:*",
 		"@xstate/inspect": "^0.8.0",

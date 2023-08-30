@@ -31,14 +31,13 @@
 	},
 	"dependencies": {
 		"@xstate/inspect": "^0.8.0",
+		"xstate": "^4.38.2",
 		"axios": "^1.5.0",
 		"config": "workspace:*",
-		"db": "workspace:*",
 		"icons": "workspace:*",
 		"svelte-french-toast": "^1.2.0",
 		"svelte-ripple-action": "^1.0.2",
 		"tailwindcss": "^3.3.3",
-		"ui": "workspace:*",
-		"xstate": "^4.38.2"
+		"ui": "workspace:*"
 	}
 }
