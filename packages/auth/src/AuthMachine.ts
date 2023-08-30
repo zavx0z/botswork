@@ -1,5 +1,6 @@
 import { assign, createMachine } from 'xstate'
 import axios from 'axios'
+import { browser } from '$app/environment'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000' + '/api.v1'
 
@@ -171,23 +172,29 @@ const AuthMachine = createMachine(
 			setUser: assign((context, { data: { id, username } }) => ({ ...context, id, username })),
 			removeUser: assign((context) => ({ ...context, id: null, username: null })),
 			// ACCESS_TOKEN
-			getAccessToken: assign((context) => ({ ...context, accessToken: localStorage.getItem(ACCESS_TOKEN) })),
+			getAccessToken: assign((context) => ({
+				...context,
+				accessToken: browser ? localStorage.getItem(ACCESS_TOKEN) : null
+			})),
 			setAccessToken: assign((context, { data: { accessToken } }) => {
-				localStorage.setItem(ACCESS_TOKEN, accessToken)
+				browser && localStorage.setItem(ACCESS_TOKEN, accessToken)
 				return { ...context, accessToken }
 			}),
 			removeAccessToken: assign((context) => {
-				localStorage.removeItem(ACCESS_TOKEN)
+				browser && localStorage.removeItem(ACCESS_TOKEN)
 				return { ...context, accessToken: null }
 			}),
 			// REFRESH_TOKEN
-			getRefreshToken: assign((context) => ({ ...context, refreshToken: localStorage.getItem(REFRESH_TOKEN) })),
+			getRefreshToken: assign((context) => ({
+				...context,
+				refreshToken: browser ? localStorage.getItem(REFRESH_TOKEN) : null
+			})),
 			setRefreshToken: assign((context, { data: { refreshToken } }) => {
-				localStorage.setItem(REFRESH_TOKEN, refreshToken)
+				browser && localStorage.setItem(REFRESH_TOKEN, refreshToken)
 				return { ...context, refreshToken }
 			}),
 			removeRefreshToken: assign((context) => {
-				localStorage.removeItem(REFRESH_TOKEN)
+				browser && localStorage.removeItem(REFRESH_TOKEN)
 				return { ...context, refreshToken: null }
 			})
 		},
