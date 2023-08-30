@@ -1,6 +1,5 @@
 export let ssr = false
 import type { PageLoad } from './$types'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from 'db'
 
 export const load: PageLoad = async ({ parent }) => {
@@ -18,6 +17,5 @@ export const load: PageLoad = async ({ parent }) => {
 			}
 		}
 	}
-	const screenChannel = supabase.channel('screen')
-	return { useMediaDeviceMachine, mediaDeviceMachine, screenChannel }
+	return { useMediaDeviceMachine, mediaDeviceMachine }
 }
