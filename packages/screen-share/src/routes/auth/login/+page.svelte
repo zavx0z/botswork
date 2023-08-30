@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Login } from 'auth/login'
+	import { Login } from 'auth'
 	import type { PageData } from './$types'
 	export let data: PageData
 </script>
 
-<Login {data} redirect='/' />
+<Login {data} redirectTo='/' />

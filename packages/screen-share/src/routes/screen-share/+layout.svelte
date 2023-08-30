@@ -1,47 +1,15 @@
 <script lang="ts">
 	import type { LayoutData } from './$types'
-	import type { Database } from 'db'
-	import type { SupabaseClient } from '@supabase/supabase-js'
-	import { onMount } from 'svelte'
-	import { ClientJS } from 'clientjs'
 	import callSound from './callSound.mp3'
 	import { ButtonCall, ButtonCallEnd } from 'ui/call'
 	export let data: LayoutData
-	let { mediaDeviceMachine, useMediaDeviceMachine, session } = data
-	const supabase: SupabaseClient<Database> = data.supabase
+	let { mediaDeviceMachine, useMediaDeviceMachine } = data
 
 	let realtime: { [key: string]: any } = {}
 	let called = false
 	// called = true
 	let audioElement: HTMLAudioElement
 
-	onMount(() => {
-		const screenChannel = supabase.channel('roomScreen')
-		const client = new ClientJS()
-		screenChannel
-			.on('presence', { event: 'sync' }, () => {
-				const newState = screenChannel.presenceState()
-				realtime = newState
-			})
-			.on('broadcast', { event: 'call' }, (payload) => {
-				called = true
-				console.log(payload)
-			})
-			.subscribe(async (status) => {
-				if (status === 'SUBSCRIBED') {
-					const presenceTrackStatus = await screenChannel.track({
-						uuid: session.user.id,
-						screen: 'share',
-						email: session.user.email,
-						online_at: new Date().toISOString(),
-						os: client.getOS(),
-						browser: client.getBrowser()
-					})
-					// console.log(presenceTrackStatus)
-				}
-			})
-		return () => supabase.removeChannel(screenChannel)
-	})
 	$: called && audioElement?.play().catch((error) => console.log(error))
 </script>
 

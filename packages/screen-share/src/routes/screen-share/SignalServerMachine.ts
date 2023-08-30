@@ -22,10 +22,7 @@ const SignalServerMachine = createMachine(
 	{
 		services: {},
 		actions: {
-			check: async (context, event) => {
-				const { data, error } = await context.service.from('peer_connection').select(`*`)
-				console.log(data)
-			}
+			check: async (context, event) => {}
 		}
 	}
 )

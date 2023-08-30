@@ -10,9 +10,7 @@ import PeerConnectionMachine from './PeerConnectionMachine'
 import DataChannelMachine from './DataChannelMachine'
 
 export const load: LayoutLoad = async ({ parent }) => {
-	let { supabase } = await parent()
-
-	const signalServer = SignalServerMachine.withContext({ service: supabase })
+	const signalServer = SignalServerMachine.withContext({ service: null })
 	const connection = new RTCPeerConnection({
 		iceServers: [
 			{ urls: 'stun:stun.l.google.com:19302' },
