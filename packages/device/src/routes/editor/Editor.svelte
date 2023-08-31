@@ -4,13 +4,13 @@
 	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api'
 
 	export let code: string = "console.log('Катюлечька! Я люблю тебя!')"
-	export let lang: 'javascript' | 'json' = 'json'
+	export let lang: 'javascript' | 'json' | 'typescript' = 'javascript'
 
 	let editor: Monaco.editor.IStandaloneCodeEditor
 	let monaco: typeof Monaco
 	let editorContainer: HTMLElement
 
-	const width = 800
+	export let width = 800
 
 	onMount(async () => {
 		const monacoEditor = await import('monaco-editor')

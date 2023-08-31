@@ -2,9 +2,8 @@
 	import { ClientJS } from 'clientjs'
 	import Editor from '../editor/Editor.svelte'
 	const client = new ClientJS()
-	console.log(client.getBrowser())
 	// @ts-ignore
-	const browserData = JSON.stringify(client.getBrowserData(), null, '\t')
+	const browserData = JSON.stringify(client.getBrowserData(), (k, v) => (v === undefined ? 'undefined' : v), '\t')
 	// @ts-ignore
 	const isFont = client.isFont()
 </script>
@@ -25,7 +24,7 @@
 		<br />
 		<a href="https://clientjs.org/#Browser" class="text-tertiary-500 flex-1 text-center text-xl font-bold">Browser Methods</a>
 		<p>client.getBrowserData()</p>
-		<Editor code={browserData} />
+		<Editor code={browserData} lang="json" />
 		<p>client.getBrowser(): <span class="text-secondary-500">{client.getBrowser()}</span></p>
 		<p>client.getBrowserVersion(): <span class="text-secondary-500">{client.getBrowserVersion()}</span></p>
 		<p>client.getBrowserMajorVersion(): <span class="text-secondary-500">{client.getBrowserMajorVersion()}</span></p>

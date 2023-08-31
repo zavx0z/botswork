@@ -18,6 +18,9 @@
 		"vite": "^4.4.2"
 	},
 	"dependencies": {
-		"clientjs": "^0.2.1"
+		"@types/ua-parser-js": "^0.7.36",
+		"clientjs": "^0.2.1",
+		"device-detector-js": "^3.0.3",
+		"ua-parser-js": "^1.0.35"
 	}
 }

@@ -3,6 +3,6 @@
 </script>
 
 <svelte:head>
-	<title>template</title>
+	<title>device</title>
 </svelte:head>
 <slot/>
