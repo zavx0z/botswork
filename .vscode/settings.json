@@ -1,5 +1,13 @@
 {
-	"cSpell.words": ["octicon", "pepicons", "Silverlight", "tabler"],
+	"cSpell.words": [
+		"AAFB",
+		"CDCFE",
+		"DCDCAA",
+		"octicon",
+		"pepicons",
+		"Silverlight",
+		"tabler"
+	],
 	"css.customData": [".vscode/tailwind.json"],
 	"css.lint.unknownAtRules": "ignore"
 }
