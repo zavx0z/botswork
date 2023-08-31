@@ -46,7 +46,7 @@ const AuthMachine = createMachine(
 							id: 'fetchUser',
 							src: 'fetchUser',
 							onDone: { target: '#auth.authorized', actions: 'setUser' },
-							onError: { target: '#auth.unauthorized', actions: 'setError' }
+							onError: { target: '#auth.unauthorized', actions: ['setError', 'removeAccessToken', 'removeRefreshToken'] }
 						}
 					}
 				}
