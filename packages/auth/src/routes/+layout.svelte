@@ -20,5 +20,7 @@
 <svelte:head>
 	<title>авторизация</title>
 </svelte:head>
-<slot />
+<div class="h-1/2">
+	<slot />
+</div>
 <Toaster />

@@ -120,14 +120,14 @@ const AuthMachine = createMachine(
 		predictableActionArguments: true,
 		schema: {
 			services: {
-				fetchUser: { data: {} as { id: number; username: string } },
-				login: { data: {} as { id: number; username: string; accessToken: string; refreshToken: string } },
-				join: { data: {} as { id: number; username: string; accessToken: string; refreshToken: string } },
-				update: { data: {} as { id: number; accessToken: string; refreshToken: string } },
-				reset: { data: {} as { id: number; accessToken: string; refreshToken: string } }
+				fetchUser: { data: {} as { id: string; username: string } },
+				login: { data: {} as { id: string; username: string; accessToken: string; refreshToken: string } },
+				join: { data: {} as { id: string; username: string; accessToken: string; refreshToken: string } },
+				update: { data: {} as { id: string; accessToken: string; refreshToken: string } },
+				reset: { data: {} as { id: string; accessToken: string; refreshToken: string } }
 			},
 			context: {} as {
-				id: number | null
+				id: string | null
 				username: string | null
 				accessToken: string | null
 				refreshToken: string | null
@@ -163,7 +163,7 @@ const AuthMachine = createMachine(
 					case 'Not enough segments':
 						return { ...context, error } // не переданы данные при авторизации status: 422, statusText: 'Unprocessable Entity'
 					case 'Incorrect username or password':
-						return { ...context, error: 'Алеша! Введи правильно ник или пароль!' }
+						return { ...context, error: 'Не правильный логин или пароль.' }
 					default:
 						return { ...context, error }
 				}
