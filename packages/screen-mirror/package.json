@@ -1,26 +1,19 @@
 {
-	"name": "screen-mirror",
-	"version": "0.0.1",
-	"author": "zavx0z",
-	"scripts": {
-		"dev": "vite dev --port 4445",
-		"build": "svelte-kit sync"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/kit": "^1.20.4",
-		"@types/clientjs": "^0.2.0",
-		"svelte": "^4.0.5",
-		"vite": "^4.4.2"
-	},
-	"dependencies": {
-		"auth": "workspace:*",
-		"clientjs": "^0.2.1",
-		"config": "workspace:*",
-		"svelte-ripple-action": "^1.0.2",
-		"ui": "workspace:*",
-		"@xstate/inspect": "^0.8.0",
-		"xstate": "^4.38.2"
-	},
-	"type": "module"
+  "name": "screen-mirror",
+  "version": "0.0.1",
+  "author": "zavx0z",
+  "scripts": {
+    "dev": "vite dev --port 4445",
+    "build": "svelte-kit sync"
+  },
+  "devDependencies": {
+    "@types/clientjs": "^0.2.0"
+  },
+  "dependencies": {
+    "config": "workspace:*",
+    "auth": "workspace:*",
+    "ui": "workspace:*",
+    "clientjs": "^0.2.1"
+  },
+  "type": "module"
 }

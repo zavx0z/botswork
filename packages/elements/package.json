@@ -8,8 +8,5 @@
   "license": "MIT",
   "scripts": {},
   "dependencies": {
-    "@tsconfig/svelte": "^5.0.0",
-    "svelte": "^4.0.5",
-    "svelte-ripple-action": "^1.0.2"
   }
 }

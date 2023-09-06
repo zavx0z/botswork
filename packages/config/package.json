@@ -1,48 +1,44 @@
 {
-	"name": "config",
-	"version": "0.0.0",
-	"description": "",
-	"author": "zavx0z",
-	"license": "MIT",
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"svelte": "./dist/index.js",
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
-		},
-		"./tailwindConfig": {
-			"import": "./dist/tailwind.config.cjs",
-			"require": "./dist/tailwind.config.cjs"
-		},
-		"./postcssConfig": {
-			"import": "./dist/postcss.config.cjs",
-			"require": "./dist/postcss.config.cjs"
-		},
-		"./styles/componentCSS": {
-			"import": "./dist/component.css",
-			"require": "./dist/component.css"
-		},
-		"./styles/tailwindCSS": {
-			"import": "./dist/tailwind.css",
-			"require": "./dist/tailwind.css"
-		},
-		"./styles": {
-			"import": "./dist/styles.ts",
-			"require": "./dist/styles.ts"
-		}
-	},
-	"type": "module",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [],
-	"devDependencies": {
-		"autoprefixer": "^10.4.15",
-		"postcss": "^8.4.28",
-		"tailwindcss": "^3.3.3",
-		"svelte-ripple-action": "^1.0.2"
-	},
-	"dependencies": {}
+  "name": "config",
+  "version": "0.0.0",
+  "description": "",
+  "author": "zavx0z",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "svelte": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./tailwindConfig": {
+      "import": "./dist/tailwind.config.cjs",
+      "require": "./dist/tailwind.config.cjs"
+    },
+    "./postcssConfig": {
+      "import": "./dist/postcss.config.cjs",
+      "require": "./dist/postcss.config.cjs"
+    },
+    "./styles/componentCSS": {
+      "import": "./dist/component.css",
+      "require": "./dist/component.css"
+    },
+    "./styles/tailwindCSS": {
+      "import": "./dist/tailwind.css",
+      "require": "./dist/tailwind.css"
+    },
+    "./styles": {
+      "import": "./dist/styles.ts",
+      "require": "./dist/styles.ts"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "devDependencies": {
+  },
+  "dependencies": {}
 }

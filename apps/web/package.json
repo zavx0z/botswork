@@ -1,58 +1,25 @@
 {
-	"name": "web",
-	"version": "0.0.1",
-	"private": false,
-	"module": "src/index.ts",
-	"scripts": {
-		"devNet": "vite dev --host 0.0.0.0 --port 3000",
-		"dev": "vite dev --port 3000",
-		"build": "vite build",
-		"preview": "vite preview",
-		"test": "npm run test:integration && npm run test:unit",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write .",
-		"test:integration": "playwright test",
-		"test:unit": "vitest"
-	},
-	"devDependencies": {
-		"@playwright/test": "^1.28.1",
-		"@sveltejs/adapter-vercel": "^3.0.3",
-		"@sveltejs/kit": "^1.20.4",
-		"@types/three": "^0.154.0",
-		"@typescript-eslint/eslint-plugin": "^5.45.0",
-		"@typescript-eslint/parser": "^5.45.0",
-		"autoprefixer": "^10.4.14",
-		"config": "workspace:*",
-		"eslint-config-custom": "workspace:*",
-		"postcss": "^8.4.27",
-		"postcss-import": "^15.1.0",
-		"postcss-nesting": "^12.0.0",
-		"prettier": "^2.8.8",
-		"prettier-plugin-svelte": "^2.10.1",
-		"prettier-plugin-tailwindcss": "^0.4.1",
-		"svelte": "^4.0.5",
-		"svelte-check": "^3.4.3",
-		"svelte-sequential-preprocessor": "^2.0.1",
-		"three": "^0.154.0",
-		"tslib": "^2.4.1",
-		"typescript": "^5.0.0",
-		"vite": "^4.4.2",
-		"vitest": "^0.32.2"
-	},
-	"type": "module",
-	"dependencies": {
-		"@supabase/auth-helpers-sveltekit": "^0.10.1",
-		"@supabase/supabase-js": "^2.28.0",
-		"@threlte/core": "^6.0.0-next.11",
-		"@threlte/extras": "^5.0.0-next.16",
-		"@xstate/inspect": "^0.8.0",
-		"auth": "workspace:*",
-		"icons": "workspace:*",
-		"svelte-ripple-action": "^1.0.2",
-		"tailwindcss": "^3.3.3",
-		"ui": "workspace:*",
-		"xstate": "^4.38.2"
-	}
+  "name": "web",
+  "author": "zavx0z",
+  "version": "0.0.1",
+  "private": false,
+  "module": "src/index.ts",
+  "scripts": {
+    "dev": "vite dev --port 3000",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "config": "workspace:*",
+    "eslint-config-custom": "workspace:*",
+    "@types/three": "^0.154.0",
+    "three": "^0.154.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "auth": "workspace:*",
+    "icons": "workspace:*",
+    "@threlte/core": "^6.0.0-next.11",
+    "@threlte/extras": "^5.0.0-next.16",
+    "ui": "workspace:*"
+  }
 }

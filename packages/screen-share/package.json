@@ -1,27 +1,20 @@
 {
-	"name": "screen-share",
-	"version": "0.0.1",
-	"author": "zavx0z",
-	"scripts": {
-		"dev": "vite dev --host 0.0.0.0 --port 4444",
-		"build": "svelte-kit sync"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/kit": "^1.20.4",
-		"@types/clientjs": "^0.2.0",
-		"svelte": "^4.0.5",
-		"vite": "^4.4.2"
-	},
-	"dependencies": {
-		"@xstate/inspect": "^0.8.0",
-		"auth": "workspace:*",
-		"clientjs": "^0.2.1",
-		"config": "workspace:*",
-		"socket.io-client": "^4.7.2",
-		"svelte-ripple-action": "^1.0.2",
-		"ui": "workspace:*",
-		"xstate": "^4.38.2"
-	},
-	"type": "module"
+  "name": "screen-share",
+  "version": "0.0.1",
+  "author": "zavx0z",
+  "scripts": {
+    "dev": "vite dev --host 0.0.0.0 --port 4444",
+    "build": "svelte-kit sync"
+  },
+  "devDependencies": {
+    "@types/clientjs": "^0.2.0"
+  },
+  "dependencies": {
+    "auth": "workspace:*",
+    "config": "workspace:*",
+    "ui": "workspace:*",
+    "clientjs": "^0.2.1",
+    "socket.io-client": "^4.7.2"
+  },
+  "type": "module"
 }
