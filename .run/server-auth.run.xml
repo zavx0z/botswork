@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="server-auth" type="Python.FastAPI">
+    <option name="file" value="C:\project\botswork\apps\server\auth\server_auth\main.py" />
+    <module name="botswork" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <option name="SDK_HOME" value="C:\project\botswork\.venv\Scripts\python.exe" />
+    <option name="SDK_NAME" value="Poetry (botswork)" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/apps/server/auth/server_auth" />
+    <option name="IS_MODULE_SDK" value="false" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="false" />
+    <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+    <option name="launchJavascriptDebuger" value="false" />
+    <method v="2" />
+  </configuration>
+</component>

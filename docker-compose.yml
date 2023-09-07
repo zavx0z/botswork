@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  auth:
+    container_name: auth
+    build:
+      context: ./apps/server/auth
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - ${AUTH_PORT}:${AUTH_PORT}
+    depends_on:
+      - db
+    restart: always
+    entrypoint: [ "uvicorn", "server_auth.main:app", "--host", "${AUTH_HOST}", "--port", "${AUTH_PORT}" ]
+    networks:
+      net:
+        aliases:
+          - ${AUTH_HOST}
+  db:
+    container_name: db
+    image: postgres:alpine
+    volumes:
+      - ${POSTGRES_DIR}/data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    restart: always
+    networks:
+      net:
+        aliases:
+          - ${POSTGRES_HOST}
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    restart: always
+    networks:
+      net:
+        aliases:
+          - ${REDIS_HOST}
+networks:
+  net:
+    driver: bridge
