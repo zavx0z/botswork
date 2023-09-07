@@ -2,7 +2,8 @@
   "name": "botswork",
   "private": true,
   "scripts": {
-    "graph": "pnpm exec nx graph"
+    "graph": "pnpm exec nx graph",
+    "visualization": "gource --hide dirnames,filenames --seconds-per-day 0.1 --auto-skip-seconds 1 -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 4 -bf 0 ../gource.mp4"
   },
   "devDependencies": {
     "@nxlv/python": "^16.1.2",
