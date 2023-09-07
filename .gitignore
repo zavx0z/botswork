@@ -37,3 +37,7 @@ vite.config.ts.timestamp-*
 **/src-tauri/target/
 build/
 *.typegen.d.ts
+# python
+__pycache__/
+*.py[cod]
+*$py.class
