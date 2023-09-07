@@ -11,5 +11,18 @@
   },
   "affected": {
     "defaultBase": "master"
+  },
+  "plugins": [
+    "@nxlv/python"
+  ],
+  "generators": {
+    "@nxlv/python:poetry-project": {
+      "pyenvPythonVersion": "3.11.5",
+      "pyprojectPythonDependency": "~=3.11.5"
+    },
+    "@nxlv/python:migrate-to-shared-venv": {
+      "pyenvPythonVersion": "3.11.5",
+      "pyprojectPythonDependency": "~=3.11.5"
+    }
   }
 }
