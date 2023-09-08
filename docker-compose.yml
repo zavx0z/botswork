@@ -27,7 +27,7 @@ services:
     container_name: db
     image: postgres:alpine
     volumes:
-      - ${POSTGRES_DIR}/data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -49,6 +49,53 @@ services:
       net:
         aliases:
           - ${REDIS_HOST}
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      net:
+        aliases:
+          - grafana
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      net:
+        aliases:
+          - prometheus
+volumes:
+  prometheus_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${STORE_DIR}/prometheus_data
+  grafana_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${STORE_DIR}/grafana_data
+  postgres_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${STORE_DIR}/data
+
 networks:
   net:
     driver: bridge

@@ -29,6 +29,7 @@ group = { }
   fastapi-another-jwt-auth = {git = "https://github.com/GlitchCorp/fastapi-another-jwt-auth", rev = "refs/pull/20/merge"}
   passlib = "^1.7.4"
   python-dotenv = "^1.0.0"
+  prometheus-fastapi-instrumentator = "^6.1.0"
 
     [tool.poetry.dependencies.py-db]
     path = "..\\..\\..\\libs\\py\\db"

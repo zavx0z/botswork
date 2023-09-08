@@ -4,8 +4,10 @@ from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from server_auth.config import JWT_SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
 from server_auth.routes import refresh, login, join, user
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
+Instrumentator().instrument(app).expose(app)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
