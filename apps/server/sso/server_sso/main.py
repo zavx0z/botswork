@@ -3,7 +3,7 @@ from fastapi_another_jwt_auth import AuthJWT
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from server_sso.config import JWT_SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
-from server_sso.routes import refresh, login, join, user
+from server_sso.routes import refresh, login, join, verify
 from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
@@ -31,5 +31,5 @@ def get_config():
 
 app.include_router(login.router)
 app.include_router(join.router)
-app.include_router(user.router)
+app.include_router(verify.router)
 app.include_router(refresh.router)

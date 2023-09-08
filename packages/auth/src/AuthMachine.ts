@@ -37,14 +37,14 @@ const AuthMachine = createMachine(
 					},
 					checkingUserLoaded: {
 						always: [
-							{ target: 'fetchUser', cond: 'userIsNotExist' },
+							{ target: 'verify', cond: 'userIsNotExist' },
 							{ target: '#auth.authorized', cond: 'userIsExist' }
 						]
 					},
-					fetchUser: {
+					verify: {
 						invoke: {
-							id: 'fetchUser',
-							src: 'fetchUser',
+							id: 'verify',
+							src: 'verify',
 							onDone: { target: '#auth.authorized', actions: 'setUser' },
 							onError: { target: '#auth.unauthorized', actions: ['setError', 'removeAccessToken', 'removeRefreshToken'] }
 						}
@@ -120,7 +120,7 @@ const AuthMachine = createMachine(
 		predictableActionArguments: true,
 		schema: {
 			services: {
-				fetchUser: { data: {} as { id: string; username: string } },
+				verify: { data: {} as { id: string; username: string } },
 				login: { data: {} as { id: string; username: string; accessToken: string; refreshToken: string } },
 				join: { data: {} as { id: string; username: string; accessToken: string; refreshToken: string } },
 				update: { data: {} as { id: string; accessToken: string; refreshToken: string } },
@@ -214,9 +214,9 @@ const AuthMachine = createMachine(
 					.get('/refresh', { headers: { Authorization: `Bearer ${refreshToken}` } })
 					.then((response) => response.data)
 					.catch(({ response }) => Promise.reject({ error: response.data.detail })),
-			fetchUser: ({ accessToken }) =>
+			verify: ({ accessToken }) =>
 				axios
-					.get('/user', { headers: { Authorization: `Bearer ${accessToken}` } })
+					.get('/verify', { headers: { Authorization: `Bearer ${accessToken}` } })
 					.then((response) => response.data)
 					.catch(({ response }) => Promise.reject({ error: response.data.detail })),
 			reset: (_, { username }) =>
