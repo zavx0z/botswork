@@ -6,7 +6,7 @@ from sqlalchemy import select
 
 from py_db.user import User
 from py_db.shared.db import get_db
-from server_auth.schema.user import UserSchema
+from server_sso.schema.user import UserSchema
 
 router = APIRouter()
 

@@ -5,7 +5,7 @@ from fastapi_another_jwt_auth import AuthJWT
 from jwt import InvalidTokenError
 from sqlalchemy.dialects.postgresql import UUID
 
-from server_auth.config import ACCESS_TOKEN_EXPIRE_MINUTES, JWT_SECRET_KEY
+from server_sso.config import ACCESS_TOKEN_EXPIRE_MINUTES, JWT_SECRET_KEY
 
 
 def create_access_token(pk: UUID, authjwt: AuthJWT):

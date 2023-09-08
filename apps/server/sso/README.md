@@ -1,3 +1,3 @@
-# server-auth
+# server-sso
 
 Project description here.

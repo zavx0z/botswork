@@ -6,8 +6,8 @@ from sqlalchemy import select
 
 from py_db.shared.db import get_db
 from py_db.user import User
-from server_auth.schema.user import UserWithTokenSchema
-from server_auth.token_utils import create_access_token
+from server_sso.schema.user import UserWithTokenSchema
+from server_sso.token_utils import create_access_token
 
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")  # Определяем объект контекста для шифрования паролей

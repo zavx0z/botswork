@@ -27,8 +27,8 @@ readme = "README.md"
     path = "libs/py/db"
     develop = true
 
-    [tool.poetry.dependencies.server-auth]
-    path = "apps/server/auth"
+    [tool.poetry.dependencies.server-sso]
+    path = "apps/server/sso"
     develop = true
 
 [tool.poetry.group.dev.dependencies]

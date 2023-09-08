@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi_another_jwt_auth import AuthJWT
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
-from server_auth.config import JWT_SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
-from server_auth.routes import refresh, login, join, user
+from server_sso.config import JWT_SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
+from server_sso.routes import refresh, login, join, user
 from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()

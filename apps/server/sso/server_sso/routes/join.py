@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from py_db.shared.db import get_db
 from py_db.user import Role, User
-from server_auth.schema.user import UserWithTokenSchema, JoinUserRequest
-from server_auth.token_utils import create_access_token
+from server_sso.schema.user import UserWithTokenSchema, JoinUserRequest
+from server_sso.token_utils import create_access_token
 
 router = APIRouter()
 

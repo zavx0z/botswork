@@ -1,14 +1,14 @@
 {
-	"name": "server-auth",
+	"name": "server-sso",
 	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
 	"projectType": "application",
-	"sourceRoot": "apps/server/auth/server_auth",
+	"sourceRoot": "apps/server/sso/server_sso",
 	"targets": {
 		"lock": {
 			"executor": "@nxlv/python:run-commands",
 			"options": {
 				"command": "poetry lock --no-update",
-				"cwd": "apps/server/auth"
+				"cwd": "apps/server/sso"
 			}
 		},
 		"add": {
@@ -27,7 +27,7 @@
 			"executor": "@nxlv/python:build",
 			"outputs": ["{projectRoot}/dist"],
 			"options": {
-				"outputPath": "apps/server/auth/dist",
+				"outputPath": "apps/server/sso/dist",
 				"publish": false,
 				"lockedVersions": true,
 				"bundleLocalDependencies": true
@@ -45,17 +45,17 @@
 		},
 		"lint": {
 			"executor": "@nxlv/python:flake8",
-			"outputs": ["{workspaceRoot}/reports/apps/server/auth/pylint.txt"],
+			"outputs": ["{workspaceRoot}/reports/apps/server/sso/pylint.txt"],
 			"options": {
-				"outputFile": "reports/apps/server/auth/pylint.txt"
+				"outputFile": "reports/apps/server/sso/pylint.txt"
 			}
 		},
 		"test": {
 			"executor": "@nxlv/python:run-commands",
-			"outputs": ["{workspaceRoot}/reports/apps/server/auth/unittests", "{workspaceRoot}/coverage/apps/server/auth"],
+			"outputs": ["{workspaceRoot}/reports/apps/server/sso/unittests", "{workspaceRoot}/coverage/apps/server/sso"],
 			"options": {
 				"command": "poetry run pytest tests/",
-				"cwd": "apps/server/auth"
+				"cwd": "apps/server/sso"
 			}
 		}
 	},

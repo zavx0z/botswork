@@ -7,7 +7,7 @@ RUN apk update && apk add --no-cache git
 
 COPY ./dist ./
 
-RUN pip install --no-cache-dir server_auth-*.whl
+RUN pip install --no-cache-dir server_sso-*.whl
 
 # Финальный образ
 FROM python:3.11.5-alpine
@@ -29,6 +29,6 @@ ENV POSTGRES_USER=${POSTGRES_USER}
 ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 ENV JWT_SECRET_KEY=${JWT_SECRET_KEY}
 
-EXPOSE ${AUTH_PORT}
+EXPOSE ${SSO_PORT}
 
-CMD ["uvicorn", "server_auth.main:app", "--host", "${AUTH_HOST}", "--port", "${AUTH_PORT}"]
+CMD ["uvicorn", "server_sso.main:app", "--host", "${SSO_HOST}", "--port", "${SSO_PORT}"]
