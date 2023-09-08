@@ -11,6 +11,13 @@
         "cwd": "libs/py/db/py_db"
       }
     },
+    "build-sql": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "..\\..\\..\\..\\.venv\\Scripts\\activate.bat && alembic upgrade head --sql > ../dist/01_tables.sql",
+        "cwd": "libs/py/db/py_db"
+      }
+    },
     "lock": {
       "executor": "@nxlv/python:run-commands",
       "options": {

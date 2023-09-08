@@ -1,13 +1,3 @@
-from alembic import op
-
-revision = '5a5f6dd908d3'
-down_revision = '5a5f6dd908d2'
-branch_labels = None
-depends_on = None
-
-
-def upgrade():
-    op.execute("""
 create function client_get_or_create(
     p_user_id uuid,
     p_device_family character varying,
@@ -95,8 +85,8 @@ BEGIN
 
 END;
 $$;
-""")
-    op.execute("""alter function client_get_or_create(
+
+alter function client_get_or_create(
     uuid,
     varchar,
     varchar,
@@ -111,24 +101,4 @@ $$;
     varchar,
     varchar
     ) owner to zavx0z;
-    """)
 
-
-def downgrade():
-    op.execute("""
-    DROP FUNCTION client_get_or_create(
-    p_user_id uuid,
-    p_device_family character varying,
-    p_device_brand character varying,
-    p_device_model character varying,
-    p_os_family character varying,
-    p_os_major character varying,
-    p_os_minor character varying,
-    p_os_patch character varying,
-    p_os_patch_minor character varying,
-    p_browser_family character varying,
-    p_browser_major character varying,
-    p_browser_minor character varying,
-    p_browser_patch character varying
-    )
-    """)
