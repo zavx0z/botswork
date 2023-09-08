@@ -19,11 +19,10 @@ services:
     depends_on:
       - db
     restart: always
-    entrypoint: [ "uvicorn", "server_sso.main:app", "--host", "${SSO_HOST}", "--port", "${SSO_PORT}" ]
+    entrypoint: [ "uvicorn", "server_sso.main:app", "--host", "0.0.0.0", "--port", "${SSO_PORT}" ]
     networks:
       net:
-        aliases:
-          - ${SSO_HOST}
+
   db:
     container_name: db
     image: postgres:alpine
@@ -38,8 +37,7 @@ services:
     restart: always
     networks:
       net:
-        aliases:
-          - ${POSTGRES_HOST}
+
   redis:
     container_name: redis
     image: redis:alpine
@@ -48,8 +46,7 @@ services:
     restart: always
     networks:
       net:
-        aliases:
-          - ${REDIS_HOST}
+
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -59,8 +56,6 @@ services:
       - grafana:/var/lib/grafana
     networks:
       net:
-        aliases:
-          - grafana
 
   prometheus:
     image: prom/prometheus
@@ -75,8 +70,7 @@ services:
       - '--storage.tsdb.path=/prometheus'
     networks:
       net:
-        aliases:
-          - prometheus
+
 volumes:
   prometheus:
     driver: local
