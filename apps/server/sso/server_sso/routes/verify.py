@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi_another_jwt_auth import AuthJWT
-from fastapi_another_jwt_auth.exceptions import FreshTokenRequired
+from fastapi_another_jwt_auth.exceptions import FreshTokenRequired, MissingTokenError, InvalidHeaderError
 from sqlalchemy import select
 
 from py_db.user import User
@@ -10,7 +10,7 @@ from server_sso.schema.user import UserSchema
 router = APIRouter()
 
 
-@router.get("/api.v1/verify")
+@router.get("/verify")
 async def get_user(request: Request, authjwt: AuthJWT = Depends(), db=Depends(get_db)):
     """Получение информации о текущем пользователе"""
     try:
@@ -29,3 +29,7 @@ async def get_user(request: Request, authjwt: AuthJWT = Depends(), db=Depends(ge
             raise HTTPException(status_code=401, detail="User not exist")
     except FreshTokenRequired:
         raise HTTPException(status_code=401, detail="Access token has expired. Please request a new one using the provided refresh token.")
+    except MissingTokenError:
+        raise HTTPException(status_code=401, detail="Missing token")
+    except InvalidHeaderError:
+        raise HTTPException(status_code=401, detail="Token is invalid")

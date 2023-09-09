@@ -31,7 +31,7 @@ class UserCredentialsPayload(BaseModel):
     password: str
 
 
-@router.post("/api.v1/login")
+@router.post("/login")
 async def login(item: UserCredentialsPayload, request: Request, db=Depends(get_db), authjwt: AuthJWT = Depends()) -> UserWithTokenSchema:
     """Аутентификация и выдача токена"""
     user = await authenticate_user(item.username, item.password, db)

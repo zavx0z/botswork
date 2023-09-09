@@ -7,7 +7,6 @@ from server_sso.routes import refresh, login, join, verify
 from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
-Instrumentator().instrument(app).expose(app)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -33,3 +32,4 @@ app.include_router(login.router)
 app.include_router(join.router)
 app.include_router(verify.router)
 app.include_router(refresh.router)
+Instrumentator().instrument(app).expose(app)

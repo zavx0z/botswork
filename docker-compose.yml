@@ -1,6 +1,18 @@
 version: "3.9"
 
 services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/relay/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - sso
+    networks:
+      - net
+
   sso:
     container_name: sso
     build:
@@ -60,7 +72,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./infrastructure/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./deploy/infrastructure/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'

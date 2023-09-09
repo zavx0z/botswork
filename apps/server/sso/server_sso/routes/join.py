@@ -31,7 +31,7 @@ async def create_user(db: AsyncSession, username: str, password: str, role=Role.
     return user
 
 
-@router.post("/api.v1/join")
+@router.post("/join")
 async def register(item: JoinUserRequest, db=Depends(get_db), authjwt: AuthJWT = Depends()) -> UserWithTokenSchema:
     """Регистрация нового пользователя"""
     user = await get_user(db, item.username)

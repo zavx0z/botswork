@@ -4,7 +4,7 @@ from fastapi_another_jwt_auth import AuthJWT
 router = APIRouter()
 
 
-@router.post("/api.v1/refresh")
+@router.post("/refresh")
 async def refresh(authjwt: AuthJWT = Depends()):
     """Обновление токена авторизации"""
     authjwt.jwt_refresh_token_required()  # Получаем имя пользователя из токена обновления
