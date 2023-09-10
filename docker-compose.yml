@@ -102,6 +102,17 @@ services:
     networks:
       - net
 
+  redis_exporter:
+    image: oliver006/redis_exporter
+    container_name: redis_exporter
+    ports:
+      - "9121:9121"
+    command:
+      - '-redis.addr=redis:6379'
+    restart: always
+    networks:
+      - net
+
 volumes:
   prometheus:
     driver: local
