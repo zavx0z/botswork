@@ -23,3 +23,7 @@ iwr https://get.pnpm.io/install.ps1 -useb | iex
 ## Nginx
 
 [Docker-Compose-nginx-Django-prometheus-grafana-nginx-exporter](https://github.com/hedeesaa/Docker-Compose-nginx-Django-prometheus-grafana-nginx-exporter)
+
+## PostgreSQL
+
+[Dashboard](https://grafana.com/grafana/dashboards/3742-aaa-postgres-exporter/)
