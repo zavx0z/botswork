@@ -51,7 +51,7 @@ const WebRTCReceiverMachine = createMachine(
 				| { type: 'SEND_ANSWER' }
 				| { type: 'SET_TRACKS'; payload: [MediaStreamTrack] }
 		},
-		tsTypes: {} as import('./WebRTCReceiverMachine.typegen.d.ts').Typegen0,
+		tsTypes: {} as import("./WebRTCReceiverMachine.typegen").Typegen0,
 		predictableActionArguments: true
 	},
 	{

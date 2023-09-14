@@ -73,7 +73,7 @@ const PeerConnectionMachine = createMachine(
 				answer: undefined | any | null
 			}
 		},
-		tsTypes: {} as import('./PeerConnectionMachine.typegen.d.ts').Typegen0,
+		tsTypes: {} as import("./PeerConnectionMachine.typegen").Typegen0,
 		predictableActionArguments: true
 	},
 	{

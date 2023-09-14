@@ -15,7 +15,8 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"channels": ["libs/channels/src/index.ts"]
+			"channels": ["libs/channels/src/index.ts"],
+			"screen-remote": ["libs/screen-remote/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

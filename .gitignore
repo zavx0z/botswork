@@ -37,7 +37,9 @@ yarn-error.log*
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 **/src-tauri/target/
+
 *.typegen.d.ts
+**/*.typegen.ts
 # python
 __pycache__/
 *.py[cod]

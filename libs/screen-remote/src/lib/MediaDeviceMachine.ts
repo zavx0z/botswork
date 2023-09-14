@@ -62,7 +62,7 @@ const MediaDeviceMachine = createMachine(
 				}
 			}
 		},
-		tsTypes: {} as import('./MediaDeviceMachine.typegen.d.ts').Typegen0,
+		tsTypes: {} as import("./MediaDeviceMachine.typegen").Typegen0,
 		predictableActionArguments: true
 	},
 	{

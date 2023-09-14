@@ -17,7 +17,7 @@ const SignalServerMachine = createMachine(
 			}
 		},
 		predictableActionArguments: true,
-		tsTypes: {} as import('./SignalServerMachine.typegen.d.ts').Typegen0
+		tsTypes: {} as import("./SignalServerMachine.typegen").Typegen0
 	},
 	{
 		services: {},

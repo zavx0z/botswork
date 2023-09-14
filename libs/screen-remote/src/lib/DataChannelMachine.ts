@@ -24,7 +24,7 @@ const DataChannelMachine = createMachine(
 			}
 		},
 		predictableActionArguments: true,
-		tsTypes: {} as import("./DataChannelMachine.typegen.d.ts").Typegen0
+		tsTypes: {} as import("./DataChannelMachine.typegen").Typegen0
 	},
 	{
 		services: {
