@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "config": "workspace:*",
-    "eslint-config-custom": "workspace:*",
     "@types/three": "^0.154.0",
     "three": "^0.154.0"
   },

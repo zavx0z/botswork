@@ -9,8 +9,7 @@
     "build": "svelte-kit sync"
   },
   "devDependencies": {
-    "config": "workspace:*",
-    "eslint-config-custom": "workspace:*"
+    "config": "workspace:*"
   },
   "dependencies": {
     "icons": "workspace:*"

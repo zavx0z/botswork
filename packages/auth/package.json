@@ -8,7 +8,6 @@
     "build": "svelte-kit sync"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*"
   },
   "dependencies": {
     "config": "workspace:*",
