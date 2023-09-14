@@ -1,0 +1,12 @@
+{
+  "name": "io-message",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon --exec ts-node --esm ./src/index.ts",
+    "build": "tsc"
+  },
+    "dependencies": {
+  }
+}

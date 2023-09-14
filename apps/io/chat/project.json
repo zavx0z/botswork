@@ -1,0 +1,50 @@
+{
+	"name": "io-chat",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/io/chat/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"executor": "@nx/webpack:webpack",
+			"outputs": ["{options.outputPath}"],
+			"defaultConfiguration": "production",
+			"options": {
+				"target": "node",
+				"compiler": "tsc",
+				"outputPath": "dist/apps/io/chat",
+				"main": "apps/io/chat/src/main.ts",
+				"tsConfig": "apps/io/chat/tsconfig.app.json",
+				"assets": ["apps/io/chat/src/assets"],
+				"isolatedConfig": true,
+				"webpackConfig": "apps/io/chat/webpack.config.js"
+			},
+			"configurations": {
+				"development": {},
+				"production": {}
+			}
+		},
+		"serve": {
+			"executor": "@nx/js:node",
+			"defaultConfiguration": "development",
+			"options": {
+				"buildTarget": "io-chat:build"
+			},
+			"configurations": {
+				"development": {
+					"buildTarget": "io-chat:build:development"
+				},
+				"production": {
+					"buildTarget": "io-chat:build:production"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["apps/io/chat/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

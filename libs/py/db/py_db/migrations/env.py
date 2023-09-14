@@ -54,7 +54,7 @@ async def run_async_migrations() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode."""
+    """Run migrations in 'channels' mode."""
 
     asyncio.run(run_async_migrations())
 
