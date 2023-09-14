@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 4444",
-    "build": "svelte-kit sync"
+    "build": "svelte-kit sync",
+    "typegen": "xstate typegen \"src/**/*.ts?(x)\""
   },
   "devDependencies": {
   },

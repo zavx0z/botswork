@@ -10,12 +10,13 @@
     "@types/clientjs": "^0.2.0"
   },
   "dependencies": {
-    "config": "workspace:*",
     "auth": "workspace:*",
-    "ui": "workspace:*",
+    "channels": "workspace:*",
     "clientjs": "^0.2.1",
+    "config": "workspace:*",
     "screen-remote": "workspace:*",
-    "svelte-ripple-action": "^1.0.2"
+    "svelte-ripple-action": "^1.0.2",
+    "ui": "workspace:*"
   },
   "type": "module"
 }

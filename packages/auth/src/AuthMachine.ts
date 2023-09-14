@@ -140,7 +140,7 @@ const AuthMachine = createMachine(
                 | { type: 'LOGIN'; username: string; password: string }
                 | { type: 'RESET'; username: string }
         },
-        tsTypes: {} as import('./AuthMachine.typegen.d.ts').Typegen0
+        tsTypes: {} as import("./AuthMachine.typegen").Typegen0
     },
     {
         guards: {

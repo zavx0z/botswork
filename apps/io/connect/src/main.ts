@@ -16,8 +16,13 @@ const pubClient = new Redis({host: process.env.REDIS_HOST, port: parseInt(proces
 const subClient = pubClient.duplicate()
 io.adapter(createAdapter(pubClient, subClient))
 // ================================ SOCKET.IO + REDIS PUBLICATION ====================================
-io.on('connection', (socket) => {
-    console.log("Connected:", socket.id)
+io.on('connection', async (socket) => {
+    const userAgent = socket.handshake.headers['user-agent']
+    const sid = socket.id
+    console.log("Connected:", sid)
+
+    const sockets = await io.fetchSockets()
+    console.log("FetchSockets:", sockets.length)
     socket.on('disconnect', () => console.log("Disconnected:", socket.id))
 
     redirect(Io.CHAT, socket, pubClient)
@@ -25,6 +30,7 @@ io.on('connection', (socket) => {
     redirect(Io.MESSAGE, socket, pubClient)
 
     socket.on(channel, (message) => {
+        io.emit(channel, message)
         console.log(`main.ts:27-${message}`)
     })
 })
