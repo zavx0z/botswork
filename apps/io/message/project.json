@@ -1,0 +1,50 @@
+{
+	"name": "io-message",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/io/message/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"executor": "@nx/webpack:webpack",
+			"outputs": ["{options.outputPath}"],
+			"defaultConfiguration": "production",
+			"options": {
+				"target": "node",
+				"compiler": "tsc",
+				"outputPath": "dist/apps/io/message",
+				"main": "apps/io/message/src/main.ts",
+				"tsConfig": "apps/io/message/tsconfig.app.json",
+				"assets": ["apps/io/message/src/assets"],
+				"isolatedConfig": true,
+				"webpackConfig": "apps/io/message/webpack.config.js"
+			},
+			"configurations": {
+				"development": {},
+				"production": {}
+			}
+		},
+		"serve": {
+			"executor": "@nx/js:node",
+			"defaultConfiguration": "development",
+			"options": {
+				"buildTarget": "io-message:build"
+			},
+			"configurations": {
+				"development": {
+					"buildTarget": "io-message:build:development"
+				},
+				"production": {
+					"buildTarget": "io-message:build:production"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["apps/io/message/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

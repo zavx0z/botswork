@@ -5,15 +5,9 @@ const errorCallback = (err: any, channel: Io) => {
     err ? console.error(`${channel} subscription: error`, err) : console.log(`${channel} subscription: success`)
 }
 
-interface Receive {
-    channel: Io
-    redis: Redis,
-    handler: (message: any) => void
-}
-
-export const receive = ({channel, redis, handler}: Receive): void => {
+export const receive = (channel: Io, redis: Redis, handler: (message: any) => void): void => {
     redis.subscribe(channel, (err) => errorCallback(err, channel))
-    redis.on('message', (channel: keyof Io, message: Object) => {
+    redis.on('message', (channel: keyof Io, message: any) => {
         console.log(`Получено сообщение для ${channel as string}: ${message}`)
         try {
             handler(message)

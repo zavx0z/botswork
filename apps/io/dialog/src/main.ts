@@ -6,8 +6,8 @@ import {Redis} from 'ioredis'
 import {Io, receive, redirect} from 'channels'
 import * as process from "process"
 // ========================================= PROJECT ENV =============================================
-const channel = Io.CHAT
-const port = process.env.IO_CHAT_PORT
+const channel = Io.DIALOG
+const port = process.env.IO_DIALOG_PORT
 // ========================================= CONNECTIONS =============================================
 const app = express()
 const server = http.createServer(app)
@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
     console.log("Connected:", socket.id)
     socket.on('disconnect', () => console.log("Disconnected:", socket.id))
 
-    redirect(Io.DIALOG, socket, pubClient)
+    redirect(Io.CHAT, socket, pubClient)
     redirect(Io.MESSAGE, socket, pubClient)
     redirect(Io.CONNECT, socket, pubClient)
 

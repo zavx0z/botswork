@@ -8,13 +8,7 @@ const errorCallback = (err: any, channel: Io, message: any) => {
         console.log(`${channel} publish: success`, message)
 }
 
-interface Redirect {
-    to: Io
-    socket: Socket,
-    redis: Redis,
-}
-
-export const redirect = ({to, socket, redis}: Redirect): void => {
+export const redirect = (to: Io, socket: Socket, redis: Redis): void => {
     socket.on(to, (message) => {
         redis.publish(to, message, (err: any) => errorCallback(err, to, message))
     })

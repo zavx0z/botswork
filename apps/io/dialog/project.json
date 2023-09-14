@@ -1,0 +1,50 @@
+{
+	"name": "io-dialog",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/io/dialog/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"executor": "@nx/webpack:webpack",
+			"outputs": ["{options.outputPath}"],
+			"defaultConfiguration": "production",
+			"options": {
+				"target": "node",
+				"compiler": "tsc",
+				"outputPath": "dist/apps/io/dialog",
+				"main": "apps/io/dialog/src/main.ts",
+				"tsConfig": "apps/io/dialog/tsconfig.app.json",
+				"assets": ["apps/io/dialog/src/assets"],
+				"isolatedConfig": true,
+				"webpackConfig": "apps/io/dialog/webpack.config.js"
+			},
+			"configurations": {
+				"development": {},
+				"production": {}
+			}
+		},
+		"serve": {
+			"executor": "@nx/js:node",
+			"defaultConfiguration": "development",
+			"options": {
+				"buildTarget": "io-dialog:build"
+			},
+			"configurations": {
+				"development": {
+					"buildTarget": "io-dialog:build:development"
+				},
+				"production": {
+					"buildTarget": "io-dialog:build:production"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["apps/io/dialog/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

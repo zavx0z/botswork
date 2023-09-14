@@ -1,0 +1,50 @@
+{
+	"name": "io-connect",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/io/connect/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"executor": "@nx/webpack:webpack",
+			"outputs": ["{options.outputPath}"],
+			"defaultConfiguration": "production",
+			"options": {
+				"target": "node",
+				"compiler": "tsc",
+				"outputPath": "dist/apps/io/connect",
+				"main": "apps/io/connect/src/main.ts",
+				"tsConfig": "apps/io/connect/tsconfig.app.json",
+				"assets": ["apps/io/connect/src/assets"],
+				"isolatedConfig": true,
+				"webpackConfig": "apps/io/connect/webpack.config.js"
+			},
+			"configurations": {
+				"development": {},
+				"production": {}
+			}
+		},
+		"serve": {
+			"executor": "@nx/js:node",
+			"defaultConfiguration": "development",
+			"options": {
+				"buildTarget": "io-connect:build"
+			},
+			"configurations": {
+				"development": {
+					"buildTarget": "io-connect:build:development"
+				},
+				"production": {
+					"buildTarget": "io-connect:build:production"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["apps/io/connect/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}
