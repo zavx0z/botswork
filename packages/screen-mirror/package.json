@@ -13,7 +13,9 @@
     "config": "workspace:*",
     "auth": "workspace:*",
     "ui": "workspace:*",
-    "clientjs": "^0.2.1"
+    "clientjs": "^0.2.1",
+    "screen-remote": "workspace:*",
+    "svelte-ripple-action": "^1.0.2"
   },
   "type": "module"
 }

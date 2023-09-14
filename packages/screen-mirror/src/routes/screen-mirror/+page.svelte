@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types'
-	import { ClientJS } from 'clientjs'
+	// import { ClientJS } from 'clientjs'
 	import { ButtonCallScreenShare } from 'ui/call'
 
 	export let data: PageData

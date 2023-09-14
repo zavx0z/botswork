@@ -1,0 +1,9 @@
+{
+  "name": "screen-remote",
+  "version": "0.0.1",
+  "author": "zavx0z",
+  "scripts": {
+  },
+  "type": "module",
+  "main": "src/index.ts"
+}

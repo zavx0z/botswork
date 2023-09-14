@@ -219,6 +219,8 @@ importers:
         specifier: ^0.154.0
         version: 0.154.0
 
+  libs/screen-remote: {}
+
   packages/auth:
     dependencies:
       axios:
@@ -307,6 +309,12 @@ importers:
       config:
         specifier: workspace:*
         version: link:../config
+      screen-remote:
+        specifier: workspace:*
+        version: link:../../libs/screen-remote
+      svelte-ripple-action:
+        specifier: ^1.0.2
+        version: 1.0.2(svelte@4.0.5)
       ui:
         specifier: workspace:*
         version: link:../ui
@@ -326,6 +334,9 @@ importers:
       config:
         specifier: workspace:*
         version: link:../config
+      screen-remote:
+        specifier: workspace:*
+        version: link:../../libs/screen-remote
       socket.io-client:
         specifier: ^4.7.2
         version: 4.7.2
