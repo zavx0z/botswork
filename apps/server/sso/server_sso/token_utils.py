@@ -1,19 +1,6 @@
-from datetime import timedelta
-
 import jwt
-from fastapi_another_jwt_auth import AuthJWT
 from jwt import InvalidTokenError
-from sqlalchemy.dialects.postgresql import UUID
-
-from server_sso.config import ACCESS_TOKEN_EXPIRE_MINUTES, JWT_SECRET_KEY
-
-
-def create_access_token(pk: UUID, authjwt: AuthJWT):
-    """Генерация токена авторизации"""
-    expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = authjwt.create_access_token(subject=str(pk), expires_time=expires_delta)
-    # return {"access_token": access_token, "expires_in": ACCESS_TOKEN_EXPIRE_MINUTES * 60}
-    return access_token
+from server_sso.config import JWT_SECRET_KEY
 
 
 def is_token_valid(token: str) -> bool:
