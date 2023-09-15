@@ -5,6 +5,7 @@ import {createAdapter} from '@socket.io/redis-adapter'
 import {Redis} from 'ioredis'
 import {Io, receive, redirect} from 'channels'
 import * as process from "process"
+import jwt_decode from "jwt-decode"
 // ========================================= PROJECT ENV =============================================
 const channel = Io.CONNECT
 const port = process.env.IO_CONNECT_PORT
@@ -16,6 +17,16 @@ const pubClient = new Redis({host: process.env.REDIS_HOST, port: parseInt(proces
 const subClient = pubClient.duplicate()
 io.adapter(createAdapter(pubClient, subClient))
 // ================================ SOCKET.IO + REDIS PUBLICATION ====================================
+io.use((socket, next) => {
+    const header = socket.handshake.headers['authorization']
+    console.log(socket.handshake.headers)
+    const token = header.split(' ')[1]
+    const uuid = jwt_decode(token)['uuid']
+    console.log(jwt_decode(token))
+    return next()
+    // return next(new Error('authentication error'))
+})
+
 io.on('connection', async (socket) => {
     const userAgent = socket.handshake.headers['user-agent']
     const sid = socket.id

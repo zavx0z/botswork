@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev --port 4444",
     "build": "svelte-kit sync",
     "typegen": "xstate typegen \"src/**/*.ts?(x)\""
   },
@@ -14,7 +13,6 @@
     "config": "workspace:*",
     "icons": "workspace:*",
     "ui": "workspace:*",
-    "axios": "^1.5.0",
     "svelte-french-toast": "^1.2.0",
     "svelte-ripple-action": "^1.0.2"
   }

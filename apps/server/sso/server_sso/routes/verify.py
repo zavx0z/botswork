@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi_another_jwt_auth import AuthJWT
-from fastapi_another_jwt_auth.exceptions import FreshTokenRequired, MissingTokenError, InvalidHeaderError
+from fastapi_another_jwt_auth.exceptions import FreshTokenRequired, MissingTokenError, InvalidHeaderError, JWTDecodeError
 from sqlalchemy import select
 
 from py_db.user import User
@@ -33,3 +33,5 @@ async def get_user(request: Request, authjwt: AuthJWT = Depends(), db=Depends(ge
         raise HTTPException(status_code=401, detail="Missing token")
     except InvalidHeaderError:
         raise HTTPException(status_code=401, detail="Token is invalid")
+    except JWTDecodeError as e:
+        raise HTTPException(status_code=422, detail='Срок действия токена истек')  # 'Signature has expired'

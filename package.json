@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "graph": "pnpm exec nx graph",
-    "visualization": "gource --hide dirnames,filenames --seconds-per-day 0.1 --auto-skip-seconds 1 -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 4 -bf 0 ../gource.mp4"
+    "visualization": "gource --hide dirnames,filenames,mouse,progress --default-user-image apps/client/desktop/src-tauri/icons/icon.png --font-file apps/client/web/src/RussoOne-Regular.ttf --font-colour 87ceeb --highlight-colour BFC8D1 --disable-input --camera-mode overview --background 1b2634 --seconds-per-day 0.1 --title BotsWork --auto-skip-seconds 1 --file-idle-time 0 --key -1920x1080 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 4 -bf 0  ../FullHD.mp4"
   },
   "devDependencies": {
     "@nx/eslint-plugin": "^16.8.1",
@@ -16,6 +16,7 @@
     "@playwright/test": "^1.28.1",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
+    "@types/express": "^4.17.17",
     "@types/node": "^20.6.0",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.62.0",
@@ -24,6 +25,8 @@
     "autoprefixer": "^10.4.14",
     "eslint": "^8.49.0",
     "eslint-plugin-svelte": "^2.33.0",
+    "express": "^4.18.2",
+    "jwt-decode": "^3.1.2",
     "nx": "16.8.0",
     "postcss": "^8.4.29",
     "postcss-import": "^15.1.0",

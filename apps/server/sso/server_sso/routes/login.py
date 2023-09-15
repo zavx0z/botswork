@@ -37,7 +37,7 @@ async def login(item: UserCredentialsPayload, request: Request, db=Depends(get_d
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     access_token = authjwt.create_access_token(subject=str(user.id))
-    refresh_token = authjwt.create_refresh_token(subject=str(user.id))  # Генерируем токен обновления
+    refresh_token = authjwt.create_refresh_token(subject=str(user.id))
     return UserWithTokenSchema(
         id=user.id,
         username=user.username,

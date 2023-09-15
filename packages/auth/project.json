@@ -1,0 +1,20 @@
+{
+  "name": "auth",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/auth",
+  "projectType": "library",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "xstate typegen \"src/**/*.ts?(x)\" --watch",
+          "vite dev --port 4444"
+        ],
+        "cwd": "packages/auth",
+        "parallel": true
+      }
+    }
+  },
+  "tags": []
+}

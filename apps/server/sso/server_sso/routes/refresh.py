@@ -1,13 +1,24 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi_another_jwt_auth import AuthJWT
+from fastapi_another_jwt_auth.exceptions import MissingTokenError
+from pydantic import BaseModel
 
 router = APIRouter()
 
 
-@router.post("/refresh")
-async def refresh(authjwt: AuthJWT = Depends()):
+class RefreshResponse(BaseModel):
+    accessToken: str
+    refreshToken: str
+
+
+@router.get("/refresh")
+async def refresh(authjwt: AuthJWT = Depends()) -> RefreshResponse:
     """Обновление токена авторизации"""
-    authjwt.jwt_refresh_token_required()  # Получаем имя пользователя из токена обновления
-    username = authjwt.get_jwt_subject()  # Генерируем новый токен авторизации
-    access_token = authjwt.create_access_token(subject=username)
-    return {"access_token": access_token}
+    try:
+        authjwt.jwt_refresh_token_required()  # Получаем имя пользователя из токена обновления
+        user_id = authjwt.get_jwt_subject()  # Генерируем новый токен авторизации
+        access_token = authjwt.create_access_token(subject=user_id)
+        refresh_token = authjwt.create_refresh_token(subject=user_id)
+        return RefreshResponse(accessToken=access_token, refreshToken=refresh_token)
+    except MissingTokenError as e:
+        raise HTTPException(status_code=401, detail="Отсутствует токен обновления")

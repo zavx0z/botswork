@@ -38,7 +38,7 @@ importers:
         version: 16.8.1(@types/node@20.6.0)(@typescript-eslint/parser@5.62.0)(eslint@8.49.0)(nx@16.8.0)(typescript@5.1.6)
       '@nx/express':
         specifier: ^16.8.1
-        version: 16.8.1(@types/node@20.6.0)(eslint@8.49.0)(nx@16.8.0)(typescript@5.1.6)
+        version: 16.8.1(@types/node@20.6.0)(eslint@8.49.0)(express@4.18.2)(nx@16.8.0)(typescript@5.1.6)
       '@nx/js':
         specifier: 16.8.1
         version: 16.8.1(@types/node@20.6.0)(nx@16.8.0)(typescript@5.1.6)
@@ -90,6 +90,12 @@ importers:
       eslint-plugin-svelte:
         specifier: ^2.33.0
         version: 2.33.0(eslint@8.49.0)(svelte@4.0.5)
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      jwt-decode:
+        specifier: ^3.1.2
+        version: 3.1.2
       nx:
         specifier: 16.8.0
         version: 16.8.0
@@ -2263,10 +2269,10 @@ packages:
       - verdaccio
     dev: true
 
-  /@nrwl/express@16.8.1(@types/node@20.6.0)(eslint@8.49.0)(nx@16.8.0)(typescript@5.1.6):
+  /@nrwl/express@16.8.1(@types/node@20.6.0)(eslint@8.49.0)(express@4.18.2)(nx@16.8.0)(typescript@5.1.6):
     resolution: {integrity: sha512-lt63dSwfGchr1j2DC5xSex1yMiwKDCPzTgagFjIDI7+CFt11ewXyPe8iMDkVfK0o5gPT8djenG1vGIvra1jIsg==}
     dependencies:
-      '@nx/express': 16.8.1(@types/node@20.6.0)(eslint@8.49.0)(nx@16.8.0)(typescript@5.1.6)
+      '@nx/express': 16.8.1(@types/node@20.6.0)(eslint@8.49.0)(express@4.18.2)(nx@16.8.0)(typescript@5.1.6)
     transitivePeerDependencies:
       - '@babel/traverse'
       - '@swc-node/register'
@@ -2490,7 +2496,7 @@ packages:
       - verdaccio
     dev: true
 
-  /@nx/express@16.8.1(@types/node@20.6.0)(eslint@8.49.0)(nx@16.8.0)(typescript@5.1.6):
+  /@nx/express@16.8.1(@types/node@20.6.0)(eslint@8.49.0)(express@4.18.2)(nx@16.8.0)(typescript@5.1.6):
     resolution: {integrity: sha512-WQqlrb+LyXmyi51kRgnXDVXi2fwZdKQSiWVBOggl2oWhSIX3Ks70Kz3wEEnYBbtlJSrnGH7F+LhF4AMjDmFagQ==}
     peerDependencies:
       express: ^4.18.1
@@ -2498,9 +2504,10 @@ packages:
       express:
         optional: true
     dependencies:
-      '@nrwl/express': 16.8.1(@types/node@20.6.0)(eslint@8.49.0)(nx@16.8.0)(typescript@5.1.6)
+      '@nrwl/express': 16.8.1(@types/node@20.6.0)(eslint@8.49.0)(express@4.18.2)(nx@16.8.0)(typescript@5.1.6)
       '@nx/devkit': 16.8.1(nx@16.8.0)
       '@nx/node': 16.8.1(@types/node@20.6.0)(eslint@8.49.0)(nx@16.8.0)(typescript@5.1.6)
+      express: 4.18.2
       tslib: 2.6.1
     transitivePeerDependencies:
       - '@babel/traverse'
@@ -6987,6 +6994,10 @@ packages:
       universalify: 2.0.0
     optionalDependencies:
       graceful-fs: 4.2.11
+    dev: true
+
+  /jwt-decode@3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
     dev: true
 
   /kleur@4.1.5:

@@ -5,9 +5,23 @@ import {interpret} from 'xstate'
 import {PeerConnectionMachine, DataChannelMachine, SignalServerMachine, WebRTCReceiverMachine, MediaDeviceMachine} from 'screen-remote'
 import {io} from 'socket.io-client'
 import {Io} from 'channels'
+import type {LayoutLoad} from './$types'
 
-export const load = () => {
-    const sio = io('localhost:2003')
+
+export const load: LayoutLoad = async ({parent}) => {
+    const {auth} = await parent()
+    const {accessToken, id} = auth.getSnapshot().context
+    console.log(accessToken)
+    const sio = io('localhost:2003', {
+        transportOptions: {
+            polling: {
+                extraHeaders: {
+                    Authorization: 'Bearer ' + accessToken,
+                },
+            },
+            transports: ['websocket', 'polling'],
+        }
+    })
     sio.on('connect', () => console.log('Connect'))
     sio.on('disconnect', () => console.log('Disconnect'))
     sio.on(Io.CONNECT, (message) => console.log(message))

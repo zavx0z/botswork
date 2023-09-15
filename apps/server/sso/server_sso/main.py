@@ -1,3 +1,4 @@
+# from typing import Tuple, Sequence
 from fastapi import FastAPI
 from fastapi_another_jwt_auth import AuthJWT
 from pydantic import BaseModel
@@ -19,8 +20,8 @@ app.add_middleware(
 class Settings(BaseModel):
     """Settings management"""
     authjwt_secret_key: str = JWT_SECRET_KEY
-    authjwt_access_token_expires = ACCESS_TOKEN_EXPIRE_MINUTES * 60
-    authjwt_token_location = ('headers', 'cookies')
+    authjwt_access_token_expires: int = ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    # authjwt_token_location: Sequence[str] = ['headers', 'cookies']
 
 
 @AuthJWT.load_config
