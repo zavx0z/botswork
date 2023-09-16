@@ -22,7 +22,7 @@ io.use((socket, next) => {
     console.log(socket.handshake.headers)
     const token = header.split(' ')[1]
     const uuid = jwt_decode(token)['uuid']
-    console.log(jwt_decode(token))
+    console.log(uuid)
     return next()
     // return next(new Error('authentication error'))
 })

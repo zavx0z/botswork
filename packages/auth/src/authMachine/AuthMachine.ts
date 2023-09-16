@@ -8,7 +8,7 @@ const ACCESS_TOKEN = 'at', REFRESH_TOKEN = 'rt'
 export default createMachine(
     {
         id: 'auth',
-        initial: 'checking',
+        initial: 'identification',
         context: {
             id: null,
             username: null,
@@ -16,98 +16,238 @@ export default createMachine(
             refreshToken: null,
             error: null
         },
-        entry: ['getAccessToken', 'getRefreshToken'],
+        entry: [
+            'atStoreCtx', // установить токен доступа в контекст из хранилища браузера
+            'rtStoreCtx' // установить токен обновления в контекст из хранилища браузера
+        ],
         states: {
-            checking: {
-                initial: 'checkingAccessTokenExist',
+            identification: {
+                description: 'Идентификация',
+                initial: 'checkAccessToken',
                 states: {
-                    checkingAccessTokenExist: {
+                    checkAccessToken: {
+                        description: 'Наличие токена доступа в контексте',
                         always: [
-                            {target: '#auth.unauthorized', cond: 'accessTokenIsNotExist'},
-                            {target: 'checkingRefreshTokenExist', cond: 'accessTokenIsExist'}
+                            {
+                                description: 'Токен доступа отсутствует',
+                                target: '#auth.unauthorized', cond: 'atNotExist'
+                            },
+                            {
+                                description: 'Токен доступа присутствует',
+                                target: 'checkRefreshToken', cond: 'atExist'
+                            }
                         ]
                     },
-                    checkingRefreshTokenExist: {
+                    checkRefreshToken: {
+                        description: 'Наличие токена обновления в контексте',
                         always: [
-                            {target: '#auth.unauthorized', cond: 'refreshTokenIsNotExist'},
-                            {target: 'checkingUserLoaded', cond: 'refreshTokenIsExist'}
+                            {
+                                description: 'Токен обновления отсутствует',
+                                target: '#auth.unauthorized', cond: 'rtNotExist'
+                            },
+                            {
+                                description: 'Токен обновления присутствует',
+                                target: 'checkUserId', cond: 'rtExist'
+                            }
                         ]
                     },
-                    checkingUserLoaded: {
+                    checkUserId: {
+                        description: 'Наличие Id пользователя в контексте',
                         always: [
-                            {target: 'verify', cond: 'userIsNotExist'},
-                            {target: '#auth.authorized', cond: 'userIsExist'}
+                            {
+                                description: 'id присутствует',
+                                target: '#auth.authorized', cond: 'idExist'
+                            },
+                            {
+                                description: 'id отсутствует',
+                                target: 'verify', cond: 'idNotExist'
+                            }
                         ]
                     },
                     verify: {
+                        description: 'Верификация токена',
                         invoke: {
-                            id: 'verify',
-                            src: 'verify',
-                            onDone: {target: '#auth.authorized', actions: ['setUser']},
+                            id: 'verify', src: 'verify',
+                            description: 'Токен доступа верифицирован',
+                            onDone: {
+                                description: 'Успешная верификация',
+                                target: '#auth.authorized',
+                                actions: ['idFetchCtx'] // сохранить id пользователя в контекст машины
+                            },
                             onError: [
-                                {target: '#auth.authorized.refreshed', cond: 'tokenHasExpired'},
-                                {target: '#auth.unauthorized', actions: ['setError', 'removeAccessToken', 'removeRefreshToken']},
+                                {
+                                    description: 'Время токена истекло',
+                                    target: '#auth.authorized.refreshed', cond: 'tokenHasExpired',
+                                    actions: [
+                                        'atRMStore', // удалить токен доступа из хранилища браузера
+                                        'atRMctx', // удалить токен доступа из контекста машины
+                                    ]
+                                },
+                                {
+                                    description: 'Ошибка верификации',
+                                    target: '#auth.unauthorized',
+                                    actions: [
+                                        'idRM', // удалить id пользователя из контекста машины
+                                        'atRMStore', // удалить токен доступа из хранилища браузера
+                                        'atRMctx', // удалить токен доступа из контекста машины
+                                        'rtRMStore', // удалить токен обновления из хранилища браузера
+                                        'rtRMctx', // удалить токен из контекста машины
+                                    ]
+                                }
                             ]
                         }
                     }
                 }
             },
             unauthorized: {
+                description: 'Не авторизован',
                 initial: 'idle',
                 tags: 'unauthorized',
                 states: {
                     idle: {
+                        description: 'Не авторизован',
                         tags: 'unauthorized',
-                        after: {10: {actions: 'clearError'}},
-                        on: {JOIN: 'join', LOGIN: 'login', RESET: 'reset'}
+                        after: {
+                            10: {
+                                description: 'Очистка ошибок',
+                                actions: ['errRM'] // удалить ошибку из контекста
+                            }
+                        },
+                        on: {
+                            JOIN: {
+                                description: 'Зарегистрироваться',
+                                target: 'join'
+                            },
+                            LOGIN: {
+                                description: 'Войти',
+                                target: 'login'
+                            },
+                            RESET: {
+                                description: 'Сбросить пароль',
+                                target: 'reset'
+                            }
+                        }
                     },
                     login: {
+                        description: 'Авторизация',
                         tags: 'unauthorized',
                         invoke: {
-                            id: 'login',
-                            src: 'login',
-                            onDone: {target: '#auth.authorized', actions: ['setUser', 'setAccessToken', 'setRefreshToken']},
-                            onError: {target: 'idle', actions: 'setError'}
+                            id: 'login', src: 'login',
+                            onDone: {
+                                description: 'Успешная авторизация',
+                                target: '#auth.authorized',
+                                actions: [
+                                    'idFetchCtx', // сохранить id пользователя в контекст машины
+                                    'atFetchStore', // сохранить токен доступа из ответа сервера в хранилище браузера
+                                    'atFetchCtx', // сохранить токен доступа из ответа сервера в контекст машины
+                                    'rtFetchStore', // сохранить токен обновления из ответа сервера в хранилище браузера
+                                    'rtFetchCtx'// сохранить токен обновления из ответа сервера в контекст машины
+                                ]
+                            },
+                            onError: {
+                                description: 'Ошибка авторизации',
+                                target: '#auth.unauthorized',
+                                actions: ['errFetchCtx'] // сохранить ошибку с сервера в контекст
+                            }
                         }
                     },
                     join: {
+                        description: 'Регистрация',
                         tags: 'unauthorized',
                         invoke: {
-                            id: 'join',
-                            src: 'join',
-                            onDone: {target: '#auth.checking', actions: ['setUser', 'setAccessToken', 'setRefreshToken']},
-                            onError: {target: 'idle', actions: 'setError'}
+                            id: 'join', src: 'join',
+                            onDone: {
+                                description: 'Зарегистрирован',
+                                target: '#auth.identification',
+                                actions: [
+                                    'idFetchCtx', // сохранить id пользователя в контекст машины
+                                    'atFetchStore', // сохранить токен доступа из ответа сервера в хранилище браузера
+                                    'atFetchCtx', // сохранить токен доступа из ответа сервера в контекст машины
+                                    'rtFetchStore', // сохранить токен обновления из ответа сервера в хранилище браузера
+                                    'rtFetchCtx'// сохранить токен обновления из ответа сервера в контекст машины
+                                ]
+                            },
+                            onError: {
+                                description: 'Ошибка регистрации',
+                                target: '#auth.unauthorized',
+                                actions: ['errFetchCtx'] // сохранить ошибку с сервера в контекст
+                            }
                         }
                     },
                     reset: {
+                        description: 'Сброс пароля',
                         tags: 'unauthorized',
                         invoke: {
-                            id: 'reset',
-                            src: 'reset',
-                            onDone: {target: '#auth.authorized'},
-                            onError: {target: '#auth.authorized'}
+                            id: 'reset', src: 'reset',
+                            onDone: {
+                                description: 'Пароль сброшен',
+                                target: '#auth.authorized',
+                            },
+                            onError: {
+                                description: 'Ошибка сброса пароля',
+                                target: '#auth.authorized',
+                            }
                         }
                     }
                 }
             },
             authorized: {
+                description: 'Авторизован',
                 tags: 'authorized',
                 on: {
-                    LOGOUT: {target: 'unauthorized', actions: ['removeUser', 'removeAccessToken', 'removeRefreshToken']},
-                    REFRESH: {target: '.refreshed'}
+                    LOGOUT: {
+                        description: 'Выйти',
+                        target: '#auth.unauthorized',
+                        actions: [
+                            'idRM', // удалить id пользователя из контекста машины
+                            'atRMStore', // удалить токен доступа из хранилища браузера
+                            'atRMctx', // удалить токен доступа из контекста машины
+                            'rtRMStore', // удалить токен обновления из хранилища браузера
+                            'rtRMctx', // удалить токен из контекста машины
+                        ]
+                    },
+                    REFRESH: {
+                        description: 'Обновить токен',
+                        target: '#auth.authorized.refreshed',
+                        actions: [
+                            'atRMStore', // удалить токен доступа из хранилища браузера
+                            'atRMctx', // удалить токен доступа из контекста машины
+                        ]
+                    }
                 },
                 initial: 'idle',
                 states: {
+                    idle: {
+                        description: 'Авторизован',
+                        tags: 'authorized'
+                    },
                     refreshed: {
+                        description: 'Обновление токена',
                         tags: 'authorized',
                         invoke: {
-                            id: 'refresh',
-                            src: 'refresh',
-                            onDone: {target: '#auth.authorized', actions: ['setAccessToken', 'setRefreshToken']},
-                            onError: {target: '#auth.unauthorized.idle', actions: ['setError', 'removeRefreshToken', 'redirectToLogin']}
+                            id: 'refresh', src: 'refresh',
+                            onDone: {
+                                description: 'Токен обновлен',
+                                target: '#auth.authorized',
+                                actions: [
+                                    'atFetchStore', // сохранить токен доступа из ответа сервера в хранилище браузера
+                                    'atFetchCtx', // сохранить токен доступа из ответа сервера в контекст машины
+                                    'rtFetchStore', // сохранить токен обновления из ответа сервера в хранилище браузера
+                                    'rtFetchCtx'// сохранить токен обновления из ответа сервера в контекст машины
+                                ]
+                            },
+                            onError: {
+                                description: 'Токен не обновлен',
+                                target: '#auth.unauthorized',
+                                actions: [
+                                    'errFetchCtx', // показать ошибку
+                                    'rtRMStore', // удалить токен обновления из хранилища браузера
+                                    'rtRMctx', // удалить токен из контекста машины
+                                    'redirectToLogin' // перенаправить пользователя на страницу авторизации
+                                ]
+                            }
                         }
-                    },
-                    idle: {tags: 'authorized'}
+                    }
                 }
             }
         },
@@ -118,45 +258,37 @@ export default createMachine(
     {
         guards: {
             // USER
-            userIsExist: (context) => Boolean(context.id && context.username),
-            userIsNotExist: (context) => !Boolean(context.id || context.username),
+            idExist: (context) => Boolean(context.id && context.username),
+            idNotExist: (context) => !Boolean(context.id || context.username),
             // ACCESS_TOKEN
-            accessTokenIsExist: (context) => Boolean(context.accessToken),
-            accessTokenIsNotExist: (context) => !Boolean(context.accessToken),
+            atExist: (context) => Boolean(context.accessToken),
+            atNotExist: (context) => !Boolean(context.accessToken),
             // REFRESH_TOKEN
-            refreshTokenIsExist: (context) => Boolean(context.refreshToken),
-            refreshTokenIsNotExist: (context) => !Boolean(context.refreshToken),
+            rtExist: (context) => Boolean(context.refreshToken),
+            rtNotExist: (context) => !Boolean(context.refreshToken),
             // CHECK ERRORS
             tokenHasExpired: (_, {data: {code}}) => code === 422,
         },
         actions: {
             redirectToLogin: () => browser && goto('/auth/login'),
             // ERROR
-            clearError: assign((context) => ({...context, error: null})),
-            setError: assign((context, {data: {error}}) => ({...context, error})),
+            errRM: assign((context) => ({...context, error: null})),
+            errFetchCtx: assign((context, {data: {error}}) => ({...context, error})),
             // USER
-            setUser: assign((context, {data: {id, username}}) => ({...context, id, username})),
-            removeUser: assign((context) => ({...context, id: null, username: null})),
+            idFetchCtx: assign((context, {data: {id, username}}) => ({...context, id, username})),
+            idRM: assign((context) => ({...context, id: null, username: null})),
             // ACCESS_TOKEN
-            getAccessToken: assign((context) => ({...context, accessToken: browser ? localStorage.getItem(ACCESS_TOKEN) : null})),
-            setAccessToken: assign((context, {data: {accessToken}}) => {
-                browser && localStorage.setItem(ACCESS_TOKEN, accessToken)
-                return {...context, accessToken}
-            }),
-            removeAccessToken: assign((context) => {
-                browser && localStorage.removeItem(ACCESS_TOKEN)
-                return {...context, accessToken: null}
-            }),
+            atStoreCtx: assign((context) => ({...context, accessToken: localStorage.getItem(ACCESS_TOKEN)})),
+            atFetchCtx: assign((context, {data: {accessToken}}) => ({...context, accessToken})),
+            atRMctx: assign((context) => ({...context, accessToken: null})),
+            atFetchStore: (_, {data: {accessToken}}) => localStorage.setItem(ACCESS_TOKEN, accessToken),
+            atRMStore: () => localStorage.removeItem(ACCESS_TOKEN),
             // REFRESH_TOKEN
-            getRefreshToken: assign((context) => ({...context, refreshToken: browser ? localStorage.getItem(REFRESH_TOKEN) : null})),
-            setRefreshToken: assign((context, {data: {refreshToken}}) => {
-                browser && localStorage.setItem(REFRESH_TOKEN, refreshToken)
-                return {...context, refreshToken}
-            }),
-            removeRefreshToken: assign((context) => {
-                browser && localStorage.removeItem(REFRESH_TOKEN)
-                return {...context, refreshToken: null}
-            })
+            rtStoreCtx: assign((context) => ({...context, refreshToken: localStorage.getItem(REFRESH_TOKEN)})),
+            rtFetchCtx: assign((context, {data: {refreshToken}}) => ({...context, refreshToken})),
+            rtRMctx: assign((context) => ({...context, refreshToken: null})),
+            rtFetchStore: (_, {data: {refreshToken}}) => localStorage.setItem(REFRESH_TOKEN, refreshToken),
+            rtRMStore: () => localStorage.removeItem(REFRESH_TOKEN)
         },
         services: {
             join: (_, {username, password}) => join({username, password}),
