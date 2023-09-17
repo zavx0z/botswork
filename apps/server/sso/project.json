@@ -7,7 +7,12 @@
     "rebuild": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker-compose up --build -d sso"
+        "commands": [
+          "nx run server-sso:build",
+          "docker-compose up --build -d sso",
+          "docker-compose restart nginx"
+        ],
+        "parallel": false
       }
     },
     "lock": {
@@ -49,15 +54,6 @@
         "cacheDir": ".cache/pypoetry",
         "verbose": false,
         "debug": false
-      }
-    },
-    "lint": {
-      "executor": "@nxlv/python:flake8",
-      "outputs": [
-        "{workspaceRoot}/reports/apps/server/sso/pylint.txt"
-      ],
-      "options": {
-        "outputFile": "reports/apps/server/sso/pylint.txt"
       }
     },
     "test": {
