@@ -6,13 +6,13 @@ import {PeerConnectionMachine, DataChannelMachine, SignalServerMachine, WebRTCRe
 import {io} from 'socket.io-client'
 import {Io} from 'channels'
 import type {LayoutLoad} from './$types'
+import {PUBLIC_HOST} from '$env/static/public'
 
 
 export const load: LayoutLoad = async ({parent}) => {
     const {auth} = await parent()
-    const {accessToken, id} = auth.getSnapshot().context
-    console.log(accessToken)
-    const sio = io('localhost:2003', {
+    const {accessToken} = auth.getSnapshot().context
+    const sio = io(PUBLIC_HOST, {
         transportOptions: {
             polling: {
                 extraHeaders: {

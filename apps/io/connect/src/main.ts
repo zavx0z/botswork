@@ -19,12 +19,14 @@ io.adapter(createAdapter(pubClient, subClient))
 // ================================ SOCKET.IO + REDIS PUBLICATION ====================================
 io.use((socket, next) => {
     const header = socket.handshake.headers['authorization']
-    console.log(socket.handshake.headers)
-    const token = header.split(' ')[1]
-    const uuid = jwt_decode(token)['uuid']
-    console.log(uuid)
+    // if (!header) {
+    //     console.log('not authorized')
+    //     return next(new Error('authentication error'))
+    // }
+    // const token = header.split(' ')[1]
+    // const uuid = jwt_decode(token)['uuid']
+    // console.log(uuid)
     return next()
-    // return next(new Error('authentication error'))
 })
 
 io.on('connection', async (socket) => {
