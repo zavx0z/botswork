@@ -4,16 +4,38 @@
   "sourceRoot": "packages/auth",
   "projectType": "library",
   "targets": {
+    "typegen_watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "xstate typegen \"src/**/*.ts?(x)\" --watch",
+        "cwd": "packages/auth",
+        "parallel": true
+      }
+    },
     "dev": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "xstate typegen \"src/**/*.ts?(x)\" --watch",
-          "vite dev --port 4444"
+          "vite dev --port 4444",
+          "xstate typegen \"src/**/*.ts?(x)\" --watch"
         ],
         "cwd": "packages/auth",
         "parallel": true
       }
+    },
+    "dev_with_sso": {
+      "executor": "nx:run-commands",
+      "options": {
+      },
+      "dependsOn": [
+        "dev",
+        {
+          "projects": [
+            "server-sso"
+          ],
+          "target": "dev"
+        }
+      ]
     }
   },
   "tags": []

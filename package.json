@@ -23,6 +23,7 @@
     "@xstate/cli": "^0.5.2",
     "@xstate/inspect": "^0.8.0",
     "autoprefixer": "^10.4.14",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.49.0",
     "eslint-plugin-svelte": "^2.33.0",
     "express": "^4.18.2",
@@ -45,11 +46,11 @@
   "dependencies": {
     "@socket.io/redis-adapter": "^8.2.1",
     "ioredis": "^5.3.2",
+    "jwt-decode": "^3.1.2",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
     "svelte-ripple-action": "^1.0.2",
     "tailwindcss": "^3.3.3",
-    "jwt-decode": "^3.1.2",
     "xstate": "^4.38.2"
   }
 }

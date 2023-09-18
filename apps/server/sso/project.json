@@ -15,6 +15,29 @@
         "parallel": false
       }
     },
+    "dev_nginx": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx env-cmd --silent -x -f ./.env docker-compose up --force-recreate --no-deps -d nginx",
+        "cwd": "apps/server/sso"
+      }
+    },
+    "deploy_nginx": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx env-cmd --silent -x -f ./.env docker-compose up --force-recreate --no-deps -d nginx"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "..\\..\\..\\.venv\\Scripts\\activate.bat && uvicorn server_sso.main:app --reload",
+        "cwd": "apps/server/sso"
+      },
+      "dependsOn": [
+        "dev_nginx"
+      ]
+    },
     "lock": {
       "executor": "@nxlv/python:run-commands",
       "options": {

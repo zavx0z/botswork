@@ -23,8 +23,11 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./deploy/relay/default.conf:/etc/nginx/conf.d/default.conf
+      - ./deploy/relay/default.conf:/etc/nginx/templates/default.conf.template
       - nginx:/var/log/nginx/
+    environment:
+      SSO_HOST: ${SSO_HOST}
+      SSO_PORT: ${SSO_PORT}
     depends_on:
       - sso
       - io-connect
