@@ -14,11 +14,18 @@ const app = express()
 const server = http.createServer(app)
 const io = new Server(server, {cors: {origin: "*"}})
 const pubClient = new Redis({host: process.env.REDIS_HOST, port: parseInt(process.env.REDIS_PORT)})
+pubClient.on("error", (err) => {
+    console.log(err)
+})
 const subClient = pubClient.duplicate()
+subClient.on("error", (err) => {
+    console.log(err)
+})
 io.adapter(createAdapter(pubClient, subClient))
 // ================================ SOCKET.IO + REDIS PUBLICATION ====================================
 io.use((socket, next) => {
-    const header = socket.handshake.headers['authorization']
+    // const header = socket.handshake.headers['authorization']
+    // console.log(socket)
     // if (!header) {
     //     console.log('not authorized')
     //     return next(new Error('authentication error'))

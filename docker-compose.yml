@@ -1,6 +1,22 @@
 version: "3.9"
 
 services:
+  io-connect:
+    container_name: io-connect
+    build:
+      context: ./apps/io/connect
+      dockerfile: Dockerfile
+    environment:
+      IO_CONNECT_PORT: ${IO_CONNECT_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      restart: always
+    entrypoint: [ "npm", "start" ]
+    depends_on:
+      - redis
+    networks:
+      - net
+
   nginx:
     image: nginx:stable-alpine
     container_name: nginx
@@ -11,6 +27,7 @@ services:
       - nginx:/var/log/nginx/
     depends_on:
       - sso
+      - io-connect
     networks:
       - net
 

@@ -13,14 +13,10 @@ export const load: LayoutLoad = async ({parent}) => {
     const {auth} = await parent()
     const {accessToken} = auth.getSnapshot().context
     const sio = io(PUBLIC_HOST, {
-        transportOptions: {
-            polling: {
-                extraHeaders: {
-                    Authorization: 'Bearer ' + accessToken,
-                },
-            },
-            transports: ['websocket', 'polling'],
-        }
+        transportOptions: {polling: {extraHeaders: {Authorization: 'Bearer ' + accessToken}}}
+    }).on('connect_error', (err) => {
+        sio.disconnect()
+        console.dir(err)
     })
     sio.on('connect', () => console.log('Connect'))
     sio.on('disconnect', () => console.log('Disconnect'))
