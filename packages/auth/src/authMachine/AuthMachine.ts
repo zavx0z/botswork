@@ -1,8 +1,6 @@
 import {assign, createMachine} from 'xstate'
-import {browser} from '$app/environment'
 import type {Events, Context, Services} from "./types"
 import {join, login, refresh, reset, verify} from "./services"
-import {goto} from "$app/navigation"
 
 const ACCESS_TOKEN = 'at', REFRESH_TOKEN = 'rt'
 export default createMachine(
@@ -64,6 +62,19 @@ export default createMachine(
                             }
                         ]
                     },
+                    // checkExpiredToken: {
+                    //     description: 'Срок действия токена доступа',
+                    //     always: [
+                    //         {
+                    //             description: 'Срок действия истек',
+                    //             target: '#auth.authorized', cond: 'atExpired'
+                    //         },
+                    //         {
+                    //             description: 'Срок действия не истек',
+                    //             target: 'verify', cond: 'atNotExpired'
+                    //         }
+                    //     ]
+                    // },
                     verify: {
                         description: 'Верификация токена',
                         invoke: {
@@ -78,21 +89,11 @@ export default createMachine(
                                 {
                                     description: 'Время токена истекло',
                                     target: '#auth.authorized.refreshed', cond: 'tokenHasExpired',
-                                    actions: [
-                                        'atRMStore', // удалить токен доступа из хранилища браузера
-                                        'atRMctx', // удалить токен доступа из контекста машины
-                                    ]
                                 },
                                 {
                                     description: 'Ошибка верификации',
                                     target: '#auth.unauthorized',
-                                    actions: [
-                                        'idRM', // удалить id пользователя из контекста машины
-                                        'atRMStore', // удалить токен доступа из хранилища браузера
-                                        'atRMctx', // удалить токен доступа из контекста машины
-                                        'rtRMStore', // удалить токен обновления из хранилища браузера
-                                        'rtRMctx', // удалить токен из контекста машины
-                                    ]
+                                    actions: ['errFetchCtx'] // сохранить ошибку с сервера в контекст
                                 }
                             ]
                         }
@@ -103,6 +104,13 @@ export default createMachine(
                 description: 'Не авторизован',
                 initial: 'idle',
                 tags: 'unauthorized',
+                entry: [
+                    'idRM', // удалить id пользователя из контекста машины
+                    'atRMStore', // удалить токен доступа из хранилища браузера
+                    'atRMctx', // удалить токен доступа из контекста машины
+                    'rtRMStore', // удалить токен обновления из хранилища браузера
+                    'rtRMctx', // удалить токен из контекста машины
+                ],
                 states: {
                     idle: {
                         description: 'Не авторизован',
@@ -194,25 +202,15 @@ export default createMachine(
             authorized: {
                 description: 'Авторизован',
                 tags: 'authorized',
+                entry: ['errRM'],
                 on: {
                     LOGOUT: {
                         description: 'Выйти',
                         target: '#auth.unauthorized',
-                        actions: [
-                            'idRM', // удалить id пользователя из контекста машины
-                            'atRMStore', // удалить токен доступа из хранилища браузера
-                            'atRMctx', // удалить токен доступа из контекста машины
-                            'rtRMStore', // удалить токен обновления из хранилища браузера
-                            'rtRMctx', // удалить токен из контекста машины
-                        ]
                     },
                     REFRESH: {
                         description: 'Обновить токен',
                         target: '#auth.authorized.refreshed',
-                        actions: [
-                            'atRMStore', // удалить токен доступа из хранилища браузера
-                            'atRMctx', // удалить токен доступа из контекста машины
-                        ]
                     }
                 },
                 initial: 'idle',
@@ -222,6 +220,10 @@ export default createMachine(
                         tags: 'authorized'
                     },
                     refreshed: {
+                        entry: [
+                            'atRMStore', // удалить токен доступа из хранилища браузера
+                            'atRMctx', // удалить токен доступа из контекста машины
+                        ],
                         description: 'Обновление токена',
                         tags: 'authorized',
                         invoke: {
@@ -239,12 +241,7 @@ export default createMachine(
                             onError: {
                                 description: 'Токен не обновлен',
                                 target: '#auth.unauthorized',
-                                actions: [
-                                    'errFetchCtx', // показать ошибку
-                                    'rtRMStore', // удалить токен обновления из хранилища браузера
-                                    'rtRMctx', // удалить токен из контекста машины
-                                    'redirectToLogin' // перенаправить пользователя на страницу авторизации
-                                ]
+                                // actions: ['errFetchCtx', /* показать ошибку */]
                             }
                         }
                     }
@@ -270,10 +267,9 @@ export default createMachine(
             tokenHasExpired: (_, {data: {code}}) => code === 422,
         },
         actions: {
-            redirectToLogin: () => browser && goto('/auth/login'),
             // ERROR
             errRM: assign((context) => ({...context, error: null})),
-            errFetchCtx: assign((context, {data: {error}}) => ({...context, error})),
+            errFetchCtx: assign((context, {data: {error}}) => ({...context, error: error})),
             // USER
             idFetchCtx: assign((context, {data: {id, username}}) => ({...context, id, username})),
             idRM: assign((context) => ({...context, id: null, username: null})),

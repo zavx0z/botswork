@@ -1,4 +1,4 @@
-import { PUBLIC_HOST } from '$env/static/public'
+import {PUBLIC_HOST} from '$env/static/public'
 
 const validate = async (response: Response) => {
     const data = await response.json()
