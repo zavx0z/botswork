@@ -72,6 +72,14 @@ services:
     environment:
       SSO_HOST: ${SSO_HOST}
       SSO_PORT: ${SSO_PORT}
+      IO_CHAT_HOST: ${IO_CHAT_HOST}
+      IO_CHAT_PORT: ${IO_CHAT_PORT}
+      IO_DIALOG_HOST: ${IO_DIALOG_HOST}
+      IO_DIALOG_PORT: ${IO_DIALOG_PORT}
+      IO_MESSAGE_HOST: ${IO_MESSAGE_HOST}
+      IO_MESSAGE_PORT: ${IO_MESSAGE_PORT}
+      IO_CONNECT_HOST: ${IO_CONNECT_HOST}
+      IO_CONNECT_PORT: ${IO_CONNECT_PORT}
     depends_on:
       - sso
       - io-connect

@@ -3,9 +3,9 @@ import http from 'http'
 import {Server} from 'socket.io'
 import {createAdapter} from '@socket.io/redis-adapter'
 import {Redis} from 'ioredis'
-import {Io, receive, redirect} from 'channels'
+import {Io} from 'channels'
+import {receive, redirect} from "io-shared"
 import * as process from "process"
-import jwt_decode from "jwt-decode"
 // ========================================= PROJECT ENV =============================================
 const channel = Io.CONNECT
 const port = process.env.SOCKET_PORT
@@ -18,9 +18,7 @@ pubClient.on("error", (err) => {
     console.log(err)
 })
 const subClient = pubClient.duplicate()
-subClient.on("error", (err) => {
-    console.log(err)
-})
+
 io.adapter(createAdapter(pubClient, subClient))
 // ================================ SOCKET.IO + REDIS PUBLICATION ====================================
 io.use((socket, next) => {
@@ -56,6 +54,7 @@ io.on('connection', async (socket) => {
 })
 // ======================================= REDIS SUBSCRIBE ===========================================
 receive(channel, subClient, (message) => {
+    io.emit(channel, message)
     console.log(`main.ts:30-${message}`)
 })
 // ========================================== REST API ================================================

@@ -3,7 +3,8 @@ import http from 'http'
 import {Server} from 'socket.io'
 import {createAdapter} from '@socket.io/redis-adapter'
 import {Redis} from 'ioredis'
-import {Io, receive, redirect} from 'channels'
+import {Io} from 'channels'
+import {receive, redirect} from "io-shared"
 import * as process from "process"
 // ========================================= PROJECT ENV =============================================
 const channel = Io.MESSAGE

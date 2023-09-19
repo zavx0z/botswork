@@ -302,14 +302,101 @@ importers:
       socket.io:
         specifier: ^4.7.2
         version: 4.7.2
-      socket.io-prometheus:
-        specifier: ^0.3.0
-        version: 0.3.0(prom-client@11.5.3)
+      tslib:
+        specifier: ^2.5.0
+        version: 2.6.1
+
+  apps/io/dialog:
+    dependencies:
+      '@socket.io/redis-adapter':
+        specifier: ^8.2.1
+        version: 8.2.1(socket.io-adapter@2.5.2)
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      ioredis:
+        specifier: ^5.3.2
+        version: 5.3.2
+      jwt-decode:
+        specifier: ^3.1.2
+        version: 3.1.2
+      socket.io:
+        specifier: ^4.7.2
+        version: 4.7.2
+      tslib:
+        specifier: ^2.5.0
+        version: 2.6.1
+
+  apps/io/dialog/dist:
+    dependencies:
+      '@socket.io/redis-adapter':
+        specifier: ^8.2.1
+        version: 8.2.1(socket.io-adapter@2.5.2)
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      ioredis:
+        specifier: ^5.3.2
+        version: 5.3.2
+      jwt-decode:
+        specifier: ^3.1.2
+        version: 3.1.2
+      socket.io:
+        specifier: ^4.7.2
+        version: 4.7.2
+      tslib:
+        specifier: ^2.5.0
+        version: 2.6.1
+
+  apps/io/message:
+    dependencies:
+      '@socket.io/redis-adapter':
+        specifier: ^8.2.1
+        version: 8.2.1(socket.io-adapter@2.5.2)
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      ioredis:
+        specifier: ^5.3.2
+        version: 5.3.2
+      jwt-decode:
+        specifier: ^3.1.2
+        version: 3.1.2
+      socket.io:
+        specifier: ^4.7.2
+        version: 4.7.2
+      tslib:
+        specifier: ^2.5.0
+        version: 2.6.1
+
+  apps/io/message/dist:
+    dependencies:
+      '@socket.io/redis-adapter':
+        specifier: ^8.2.1
+        version: 8.2.1(socket.io-adapter@2.5.2)
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      ioredis:
+        specifier: ^5.3.2
+        version: 5.3.2
+      jwt-decode:
+        specifier: ^3.1.2
+        version: 3.1.2
+      socket.io:
+        specifier: ^4.7.2
+        version: 4.7.2
       tslib:
         specifier: ^2.5.0
         version: 2.6.1
 
   libs/channels: {}
+
+  libs/io-shared:
+    dependencies:
+      channels:
+        specifier: workspace:*
+        version: link:../channels
 
   libs/screen-remote: {}
 
@@ -4359,10 +4446,6 @@ packages:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
 
-  /bintrees@1.0.2:
-    resolution: {integrity: sha512-VOMgTMwjAaUG580SXn3LacVgjurrbMme7ZZNYGSSV7mmtY6QQRh0Eg3pwIcntQ77DErK1L0NxkbetjcoXzVwKw==}
-    dev: false
-
   /bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
     dependencies:
@@ -7269,13 +7352,6 @@ packages:
     dependencies:
       '@prisma/engines': 5.2.0
 
-  /prom-client@11.5.3:
-    resolution: {integrity: sha512-iz22FmTbtkyL2vt0MdDFY+kWof+S9UB/NACxSn2aJcewtw+EERsen0urSkZ2WrHseNdydsvcxCTAnPcSMZZv4Q==}
-    engines: {node: '>=6.1'}
-    dependencies:
-      tdigest: 0.1.2
-    dev: false
-
   /proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
     engines: {node: '>= 0.10'}
@@ -7662,14 +7738,6 @@ packages:
       debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
-    dev: false
-
-  /socket.io-prometheus@0.3.0(prom-client@11.5.3):
-    resolution: {integrity: sha512-ERrHtTizVy/buZDMCAcrFD1WZJHM01B6t3OwkV+abQGCNj86+UlRLwvAfxLK+HP3/qqYrWNk9W3vywYYsRe09w==}
-    peerDependencies:
-      prom-client: '>=10 <15'
-    dependencies:
-      prom-client: 11.5.3
     dev: false
 
   /socket.io@4.7.2:
@@ -8089,12 +8157,6 @@ packages:
       inherits: 2.0.4
       readable-stream: 3.6.2
     dev: true
-
-  /tdigest@0.1.2:
-    resolution: {integrity: sha512-+G0LLgjjo9BZX2MfdvPfH+MKLCrxlXSYec5DaPYP1fe6Iyhf0/fSmJ0bFiZ1F8BT6cGXl2LpltQptzjXKWEkKA==}
-    dependencies:
-      bintrees: 1.0.2
-    dev: false
 
   /test-exclude@6.0.0:
     resolution: {integrity: sha512-cAGWPIyOHU6zlmg88jwm7VRyXnMN7iV68OGAbYDk/Mh/xC/pzVPlQtY6ngoIH/5/tciuhGfvESU8GrHrcxD56w==}

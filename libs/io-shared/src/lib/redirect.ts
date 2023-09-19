@@ -1,6 +1,6 @@
 import {type Socket} from "socket.io"
-import {Io} from "./io"
 import {type Redis} from "ioredis"
+import {Io} from "channels"
 
 const errorCallback = (err: any, channel: Io, message: any) => {
     err ?
