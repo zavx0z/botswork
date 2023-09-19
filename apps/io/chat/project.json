@@ -44,6 +44,10 @@
 			"options": {
 				"lintFilePatterns": ["apps/io/chat/**/*.ts"]
 			}
+		},
+		"docker-build": {
+			"dependsOn": ["build"],
+			"command": "docker build -f apps/io/chat/Dockerfile . -t io-chat"
 		}
 	},
 	"tags": []

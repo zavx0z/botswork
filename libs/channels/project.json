@@ -1,16 +1,8 @@
 {
-	"name": "channels",
-	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"sourceRoot": "libs/channels/src",
-	"projectType": "library",
-	"targets": {
-		"lint": {
-			"executor": "@nx/linter:eslint",
-			"outputs": ["{options.outputFile}"],
-			"options": {
-				"lintFilePatterns": ["libs/channels/**/*.ts"]
-			}
-		}
-	},
-	"tags": []
+  "name": "channels",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/channels/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": []
 }

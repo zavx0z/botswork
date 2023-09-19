@@ -7,61 +7,52 @@
     "rebuild": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "nx run io-connect:build",
-          "docker-compose up --build -d io-connect"
-        ],
-        "parallel": false
-      }
+        "command": "npx env-cmd --silent -x -f ./.env docker-compose up --build -d io-connect",
+        "parallel": true
+      },
+      "dependsOn": [
+        "build"
+      ]
     },
     "build": {
-      "executor": "@nx/webpack:webpack",
+      "executor": "@nx/esbuild:esbuild",
       "outputs": [
         "{options.outputPath}"
       ],
-      "defaultConfiguration": "production",
       "options": {
-        "target": "node",
-        "compiler": "tsc",
+        "platform": "node",
         "outputPath": "apps/io/connect/dist",
-        "main": "apps/io/connect/src/main.ts",
+        "format": [
+          "cjs"
+        ],
+        "bundle": false,
+        "main": "apps/io/connect/src/main.js",
         "tsConfig": "apps/io/connect/tsconfig.app.json",
         "assets": [
           "apps/io/connect/src/assets"
         ],
-        "isolatedConfig": true,
-        "webpackConfig": "apps/io/connect/webpack.config.js"
-      },
-      "configurations": {
-        "development": {},
-        "production": {}
+        "generateLockfile": true,
+        "esbuildOptions": {
+          "sourcemap": false,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
       }
     },
     "serve": {
       "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "io-connect:build"
+        "buildTarget": "io-connect:build:development"
       },
-      "configurations": {
-        "development": {
-          "buildTarget": "io-connect:build:development"
-        },
-        "production": {
-          "buildTarget": "io-connect:build:production"
+      "dependsOn": [
+        {
+          "projects": [
+            "channels"
+          ],
+          "target": "build"
         }
-      }
-    },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "apps/io/connect/**/*.ts"
-        ]
-      }
+      ]
     }
   },
   "tags": []
