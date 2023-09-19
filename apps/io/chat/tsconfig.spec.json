@@ -4,18 +4,20 @@
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": [
+      "jest",
       "node"
     ]
   },
-  "exclude": [
-    "jest.config.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "src/**/*.spec.js",
-    "src/**/*.test.js"
-  ],
   "include": [
-    "src/**/*.ts",
-    "src/**/*.js"
+    "jest.config.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.js",
+    "src/**/*.spec.js",
+    "src/**/*.test.jsx",
+    "src/**/*.spec.jsx",
+    "src/**/*.d.ts"
   ]
 }

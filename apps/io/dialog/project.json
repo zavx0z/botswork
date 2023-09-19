@@ -1,50 +1,64 @@
 {
-	"name": "io-dialog",
-	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
-	"sourceRoot": "apps/io/dialog/src",
-	"projectType": "application",
-	"targets": {
-		"build": {
-			"executor": "@nx/webpack:webpack",
-			"outputs": ["{options.outputPath}"],
-			"defaultConfiguration": "production",
-			"options": {
-				"target": "node",
-				"compiler": "tsc",
-				"outputPath": "dist/apps/io/dialog",
-				"main": "apps/io/dialog/src/main.ts",
-				"tsConfig": "apps/io/dialog/tsconfig.app.json",
-				"assets": ["apps/io/dialog/src/assets"],
-				"isolatedConfig": true,
-				"webpackConfig": "apps/io/dialog/webpack.config.js"
-			},
-			"configurations": {
-				"development": {},
-				"production": {}
-			}
-		},
-		"serve": {
-			"executor": "@nx/js:node",
-			"defaultConfiguration": "development",
-			"options": {
-				"buildTarget": "io-dialog:build"
-			},
-			"configurations": {
-				"development": {
-					"buildTarget": "io-dialog:build:development"
-				},
-				"production": {
-					"buildTarget": "io-dialog:build:production"
-				}
-			}
-		},
-		"lint": {
-			"executor": "@nx/linter:eslint",
-			"outputs": ["{options.outputFile}"],
-			"options": {
-				"lintFilePatterns": ["apps/io/dialog/**/*.ts"]
-			}
-		}
-	},
-	"tags": []
+  "name": "io-dialog",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/io/dialog/src",
+  "projectType": "application",
+  "targets": {
+    "rebuild": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx env-cmd --silent -x -f ./.env docker-compose up --build -d io-dialog",
+        "parallel": true
+      },
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "defaultConfiguration": "production",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "platform": "node",
+        "outputPath": "apps/io/dialog/dist",
+        "format": [
+          "cjs"
+        ],
+        "bundle": false,
+        "main": "apps/io/dialog/src/main.js",
+        "tsConfig": "apps/io/dialog/tsconfig.app.json",
+        "assets": [
+          "apps/io/dialog/src/assets"
+        ],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "generateLockfile": true,
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "io-dialog:build:development"
+      }
+    }
+  },
+  "tags": []
 }

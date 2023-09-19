@@ -16,6 +16,7 @@
     },
     "build": {
       "executor": "@nx/esbuild:esbuild",
+      "defaultConfiguration": "production",
       "outputs": [
         "{options.outputPath}"
       ],
@@ -31,11 +32,23 @@
         "assets": [
           "apps/io/connect/src/assets"
         ],
-        "generateLockfile": true,
+        "generatePackageJson": true,
         "esbuildOptions": {
-          "sourcemap": false,
+          "sourcemap": true,
           "outExtension": {
             ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "generateLockfile": true,
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
           }
         }
       }
@@ -44,15 +57,7 @@
       "executor": "@nx/js:node",
       "options": {
         "buildTarget": "io-connect:build:development"
-      },
-      "dependsOn": [
-        {
-          "projects": [
-            "channels"
-          ],
-          "target": "build"
-        }
-      ]
+      }
     }
   },
   "tags": []

@@ -8,7 +8,7 @@ import * as process from "process"
 import jwt_decode from "jwt-decode"
 // ========================================= PROJECT ENV =============================================
 const channel = Io.CONNECT
-const port = process.env.IO_CONNECT_PORT
+const port = process.env.SOCKET_PORT
 // ========================================= CONNECTIONS =============================================
 const app = express()
 const server = http.createServer(app)

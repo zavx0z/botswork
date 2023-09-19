@@ -7,7 +7,7 @@ import {Io, receive, redirect} from 'channels'
 import * as process from "process"
 // ========================================= PROJECT ENV =============================================
 const channel = Io.CHAT
-const port = process.env.IO_CHAT_PORT
+const port = process.env.SOCKET_PORT
 // ========================================= CONNECTIONS =============================================
 const app = express()
 const server = http.createServer(app)

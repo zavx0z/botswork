@@ -7,7 +7,52 @@ services:
       context: ./apps/io/connect
       dockerfile: Dockerfile
     environment:
-      IO_CONNECT_PORT: ${IO_CONNECT_PORT}
+      SOCKET_PORT: ${IO_CONNECT_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      restart: always
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  io-chat:
+    container_name: io-chat
+    build:
+      context: ./apps/io/chat
+      dockerfile: Dockerfile
+    environment:
+      SOCKET_PORT: ${IO_CHAT_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      restart: always
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  io-dialog:
+    container_name: io-dialog
+    build:
+      context: ./apps/io/dialog
+      dockerfile: Dockerfile
+    environment:
+      SOCKET_PORT: ${IO_DIALOG_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      restart: always
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  io-message:
+    container_name: io-message
+    build:
+      context: ./apps/io/message
+      dockerfile: Dockerfile
+    environment:
+      SOCKET_PORT: ${IO_MESSAGE_PORT}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
       restart: always

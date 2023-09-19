@@ -1,54 +1,64 @@
 {
-	"name": "io-chat",
-	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
-	"sourceRoot": "apps/io/chat/src",
-	"projectType": "application",
-	"targets": {
-		"build": {
-			"executor": "@nx/webpack:webpack",
-			"outputs": ["{options.outputPath}"],
-			"defaultConfiguration": "production",
-			"options": {
-				"target": "node",
-				"compiler": "tsc",
-				"outputPath": "dist/apps/io/chat",
-				"main": "apps/io/chat/src/main.ts",
-				"tsConfig": "apps/io/chat/tsconfig.app.json",
-				"assets": ["apps/io/chat/src/assets"],
-				"isolatedConfig": true,
-				"webpackConfig": "apps/io/chat/webpack.config.js"
-			},
-			"configurations": {
-				"development": {},
-				"production": {}
-			}
-		},
-		"serve": {
-			"executor": "@nx/js:node",
-			"defaultConfiguration": "development",
-			"options": {
-				"buildTarget": "io-chat:build"
-			},
-			"configurations": {
-				"development": {
-					"buildTarget": "io-chat:build:development"
-				},
-				"production": {
-					"buildTarget": "io-chat:build:production"
-				}
-			}
-		},
-		"lint": {
-			"executor": "@nx/linter:eslint",
-			"outputs": ["{options.outputFile}"],
-			"options": {
-				"lintFilePatterns": ["apps/io/chat/**/*.ts"]
-			}
-		},
-		"docker-build": {
-			"dependsOn": ["build"],
-			"command": "docker build -f apps/io/chat/Dockerfile . -t io-chat"
-		}
-	},
-	"tags": []
+  "name": "io-chat",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/io/chat/src",
+  "projectType": "application",
+  "targets": {
+    "rebuild": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx env-cmd --silent -x -f ./.env docker-compose up --build -d io-chat",
+        "parallel": true
+      },
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "defaultConfiguration": "production",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "platform": "node",
+        "outputPath": "apps/io/chat/dist",
+        "format": [
+          "cjs"
+        ],
+        "bundle": false,
+        "main": "apps/io/chat/src/main.js",
+        "tsConfig": "apps/io/chat/tsconfig.app.json",
+        "assets": [
+          "apps/io/chat/src/assets"
+        ],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "generateLockfile": true,
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "io-chat:build:development"
+      }
+    }
+  },
+  "tags": []
 }
