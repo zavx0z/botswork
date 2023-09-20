@@ -56,7 +56,8 @@
     "serve": {
       "executor": "@nx/js:node",
       "options": {
-        "buildTarget": "io-chat:build:development"
+        "buildTarget": "io-chat:build:development",
+        "inspect": false
       }
     }
   },

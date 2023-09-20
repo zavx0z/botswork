@@ -56,7 +56,8 @@
     "serve": {
       "executor": "@nx/js:node",
       "options": {
-        "buildTarget": "io-message:build:development"
+        "buildTarget": "io-message:build:development",
+        "inspect": false
       }
     }
   },

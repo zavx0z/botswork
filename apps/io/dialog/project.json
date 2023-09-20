@@ -56,7 +56,8 @@
     "serve": {
       "executor": "@nx/js:node",
       "options": {
-        "buildTarget": "io-dialog:build:development"
+        "buildTarget": "io-dialog:build:development",
+        "inspect": false
       }
     }
   },

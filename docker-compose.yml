@@ -7,7 +7,7 @@ services:
       context: ./apps/io/connect
       dockerfile: Dockerfile
     environment:
-      SOCKET_PORT: ${IO_CONNECT_PORT}
+      IO_CONNECT_PORT: ${IO_CONNECT_PORT}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
       restart: always
@@ -22,7 +22,7 @@ services:
       context: ./apps/io/chat
       dockerfile: Dockerfile
     environment:
-      SOCKET_PORT: ${IO_CHAT_PORT}
+      IO_CHAT_PORT: ${IO_CHAT_PORT}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
       restart: always
@@ -37,7 +37,7 @@ services:
       context: ./apps/io/dialog
       dockerfile: Dockerfile
     environment:
-      SOCKET_PORT: ${IO_DIALOG_PORT}
+      IO_DIALOG_PORT: ${IO_DIALOG_PORT}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
       restart: always
@@ -52,7 +52,7 @@ services:
       context: ./apps/io/message
       dockerfile: Dockerfile
     environment:
-      SOCKET_PORT: ${IO_MESSAGE_PORT}
+      IO_MESSAGE_PORT: ${IO_MESSAGE_PORT}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
       restart: always

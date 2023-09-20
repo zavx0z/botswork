@@ -1,0 +1,46 @@
+{
+  "name": "io",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/io",
+  "projectType": "application",
+  "targets": {
+    "rebuild": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": ""
+      },
+      "dependsOn": [
+        {
+          "projects": [
+            "io-chat",
+            "io-connect",
+            "io-dialog",
+            "io-message"
+          ],
+          "target": "rebuild"
+        }
+      ]
+    },
+    "dev_nginx": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx env-cmd --silent -x -f ./.env docker-compose up --force-recreate --no-deps -d nginx",
+        "cwd": "apps/io"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx serve io-chat",
+          "nx serve io-connect",
+          "nx serve io-dialog",
+          "nx serve io-message",
+          "nx dev_nginx io"
+        ],
+        "parallel": true
+      }
+    }
+  },
+  "tags": []
+}

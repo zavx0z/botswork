@@ -55,8 +55,19 @@
     },
     "serve": {
       "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "io-connect:build:development"
+        "buildTarget": "io-connect:build",
+
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "io-connect:build:development",
+          "inspect": false
+        },
+        "production": {
+          "buildTarget": "io-connect:build:production"
+        }
       }
     }
   },
