@@ -25,7 +25,7 @@ scrape_configs:
     enable_http2: true
     static_configs:
       - targets:
-          - localhost:9090
+          - host.docker.internal:9090
   - job_name: 'sso'
     scrape_interval: 5s
     metrics_path: /metrics
@@ -44,3 +44,18 @@ scrape_configs:
     metrics_path: '/metrics'
     static_configs:
       - targets: [ 'redis_exporter:9121' ]
+  - job_name: 'io'
+    scrape_interval: 5s
+    metrics_path: /metrics
+    static_configs:
+      - targets: [
+        'host.docker.internal:2000',
+        'host.docker.internal:2001',
+        'host.docker.internal:2002',
+        'host.docker.internal:2003',
+#        'io-chat:2000',
+#        'io-dialog:2001',
+#        'io-message:2002',
+#        'io-connect:2003',
+
+      ]

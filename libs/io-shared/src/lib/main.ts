@@ -5,6 +5,9 @@ import {createAdapter} from '@socket.io/redis-adapter'
 import {Redis} from 'ioredis'
 import {Io} from "channels"
 import {DefaultEventsMap, EventsMap} from "socket.io/dist/typed-events"
+import promClient from 'prom-client'
+import {clientCounter, register} from "./metrics"
+
 // import {redirect} from "./redirect"
 // import {receive} from "./receive"
 
@@ -27,6 +30,8 @@ export const SioRedisRestAPI = <
     pub: Redis
     sub: Redis
 } => {
+    register.setDefaultLabels({app: channelName})
+    clientCounter.set(0)
     const app = express()
     const server = http.createServer(app)
     const io = new Server<ListenEvents, EmitEvents, ServerSideEvents, SocketData>(server, {cors: {origin: "*"}})
@@ -55,13 +60,17 @@ export const SioRedisRestAPI = <
     })
 
     io.on('connection', async (socket) => {
+        clientCounter.inc()
         socket.join(Io.CONNECT)
         // const userAgent = socket.handshake.headers['user-agent']
         console.log("Connected:", socket.id)
         const sockets = await io.fetchSockets()
         console.log("FetchSockets:", sockets.length)
 
-        socket.on('disconnect', () => console.log("Disconnected:", socket.id))
+        socket.on('disconnect', () => {
+            clientCounter.dec()
+            console.log("Disconnected:", socket.id)
+        })
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         io.emit(Io.CONNECT, "Connection")
@@ -81,6 +90,10 @@ export const SioRedisRestAPI = <
 
     app.get(`/io/${channelName}`, (req, res) => {
         res.send({message: `Welcome to io-${channelName}!`})
+    })
+    app.get('/metrics', async (req, res) => {
+        res.setHeader('Content-Type', register.contentType)
+        res.send(await register.metrics())
     })
 
     server.on('error', console.error)
