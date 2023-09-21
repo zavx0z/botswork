@@ -68,6 +68,8 @@ services:
       - "80:80"
     volumes:
       - ./deploy/relay/default.conf:/etc/nginx/templates/default.conf.template
+      - ./deploy/relay/metrics.conf:/etc/nginx/templates/metrics.conf.template
+      - ./deploy/relay/sso.conf:/etc/nginx/templates/sso.conf.template
       - nginx:/var/log/nginx/
     environment:
       SSO_HOST: ${SSO_HOST}
