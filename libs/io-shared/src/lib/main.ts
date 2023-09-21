@@ -5,7 +5,6 @@ import {createAdapter} from '@socket.io/redis-adapter'
 import {Redis} from 'ioredis'
 import {Io} from "channels"
 import {DefaultEventsMap, EventsMap} from "socket.io/dist/typed-events"
-import promClient from 'prom-client'
 import {clientCounter, register} from "./metrics"
 
 // import {redirect} from "./redirect"

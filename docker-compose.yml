@@ -231,7 +231,7 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ${STORE_DIR}/grafana
+      device: ./deploy/grafana
   db:
     driver: local
     driver_opts:
