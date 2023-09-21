@@ -53,9 +53,17 @@ scrape_configs:
         'host.docker.internal:2001',
         'host.docker.internal:2002',
         'host.docker.internal:2003',
-#        'io-chat:2000',
-#        'io-dialog:2001',
-#        'io-message:2002',
-#        'io-connect:2003',
+        #        'io-chat:2000',
+        #        'io-dialog:2001',
+        #        'io-message:2002',
+        #        'io-connect:2003',
 
       ]
+  - job_name: "node"
+    static_configs:
+      - targets: [ "node-exporter:9100" ]
+
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'cadvisor:8080' ]
