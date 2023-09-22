@@ -1,0 +1,258 @@
+version: "3.9"
+
+services:
+  io-connect:
+    container_name: io-connect
+    build:
+      context: ./apps/io/connect
+      dockerfile: Dockerfile
+    environment:
+      IO_CONNECT_PORT: ${IO_CONNECT_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      restart: always
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  io-chat:
+    container_name: io-chat
+    build:
+      context: ./apps/io/chat
+      dockerfile: Dockerfile
+    environment:
+      IO_CHAT_PORT: ${IO_CHAT_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      restart: always
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  io-dialog:
+    container_name: io-dialog
+    build:
+      context: ./apps/io/dialog
+      dockerfile: Dockerfile
+    environment:
+      IO_DIALOG_PORT: ${IO_DIALOG_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      restart: always
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  io-message:
+    container_name: io-message
+    build:
+      context: ./apps/io/message
+      dockerfile: Dockerfile
+    environment:
+      IO_MESSAGE_PORT: ${IO_MESSAGE_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      restart: always
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/relay/default.conf:/etc/nginx/templates/default.conf.template
+      - ./deploy/relay/metrics.conf:/etc/nginx/templates/metrics.conf.template
+      - ./deploy/relay/sso.conf:/etc/nginx/templates/sso.conf.template
+      - nginx:/var/log/nginx/
+    environment:
+      SSO_HOST: ${SSO_HOST}
+      SSO_PORT: ${SSO_PORT}
+      IO_CHAT_HOST: ${IO_CHAT_HOST}
+      IO_CHAT_PORT: ${IO_CHAT_PORT}
+      IO_DIALOG_HOST: ${IO_DIALOG_HOST}
+      IO_DIALOG_PORT: ${IO_DIALOG_PORT}
+      IO_MESSAGE_HOST: ${IO_MESSAGE_HOST}
+      IO_MESSAGE_PORT: ${IO_MESSAGE_PORT}
+      IO_CONNECT_HOST: ${IO_CONNECT_HOST}
+      IO_CONNECT_PORT: ${IO_CONNECT_PORT}
+    depends_on:
+      - sso
+      - io-connect
+    networks:
+      - net
+
+  sso:
+    container_name: sso
+    build:
+      context: ./apps/server/sso
+      dockerfile: Dockerfile
+    environment:
+      SQLALCHEMY_DATABASE_URL: "postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}"
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+    depends_on:
+      - db
+    restart: always
+    entrypoint: [ "uvicorn", "sso.main:app", "--host", "0.0.0.0" ]
+    networks:
+      net:
+
+  db:
+    container_name: db
+    image: postgres:alpine
+    volumes:
+      - db:/var/lib/postgresql/data/
+      - ./libs/py/db/dist:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    restart: always
+    networks:
+      net:
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis:/data
+    restart: always
+    networks:
+      net:
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+    networks:
+      net:
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      net:
+
+  cadvisor:
+    image: google/cadvisor
+    container_name: cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - redis
+    networks:
+      net:
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "9100:9100"
+    networks:
+      net:
+
+  nginx_exporter:
+    container_name: nginx_exporter
+    image: nginx/nginx-prometheus-exporter:0.4.2
+    command:
+      - -nginx.scrape-uri
+      - http://nginx:8080/stub_status
+    depends_on:
+      - prometheus
+    networks:
+      net:
+
+  postgresql_exporter:
+    image: wrouesnel/postgres_exporter
+    container_name: postgres_exporter
+    ports:
+      - "9187:9187"
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable"
+    restart: always
+    networks:
+      - net
+
+  redis_exporter:
+    image: oliver006/redis_exporter
+    container_name: redis_exporter
+    ports:
+      - "9121:9121"
+    command:
+      - '-redis.addr=redis:6379'
+    restart: always
+    networks:
+      - net
+
+volumes:
+  prometheus:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${STORE_DIR}/prometheus
+  grafana:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./deploy/grafana
+  db:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${STORE_DIR}/db
+  redis:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${STORE_DIR}/redis
+  nginx:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${STORE_DIR}/nginx
+
+networks:
+  net:
+    driver: bridge
