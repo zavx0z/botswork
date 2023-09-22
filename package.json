@@ -1,0 +1,14 @@
+{
+  "name": "botswork",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "zavx0z",
+  "license": "ISC",
+  "engines": {
+    "pnpm": "^8.7.6"
+  },
+  "devDependencies": {
+    "nx": "16.8.0"
+  }
+}
