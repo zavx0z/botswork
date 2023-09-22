@@ -1,1 +1,0 @@
-export {default as PageLogin} from "./src/routes/(auth)/login/+page.svelte"

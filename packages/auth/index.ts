@@ -1,6 +1,0 @@
-export { default as AuthMachine } from './src/authMachine/AuthMachine'
-export { default as Login } from './src/routes/auth/login/+page.svelte'
-export { default as Logout } from './src/routes/auth/logout/+page.svelte'
-export { default as Join } from './src/routes/auth/join/+page.svelte'
-export { default as Reset } from './src/routes/auth/reset/+page.svelte'
-export { default as Profile } from './src/routes/profile/+page.svelte'
