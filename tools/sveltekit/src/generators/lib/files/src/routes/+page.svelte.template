@@ -1,0 +1,4 @@
+<script lang="ts">
+</script>
+
+<h1>lib <%= capitalizeFirstLetter(name) %></h1>
