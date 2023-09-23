@@ -1,4 +1,4 @@
-import {addProjectConfiguration, formatFiles, generateFiles, installPackagesTask, Tree} from "@nx/devkit"
+import {addDependenciesToPackageJson, addProjectConfiguration, joinPathFragments, formatFiles, generateFiles, installPackagesTask, Tree, runTasksInSerial} from "@nx/devkit"
 import * as path from "path"
 import {LibGeneratorSchema} from "./schema"
 
@@ -7,8 +7,8 @@ const capitalizeFirstLetter = (str: string): string => str ? str.charAt(0).toUpp
 export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
     const {name, port, type, libName} = options
     const projectRoot = `libs/${name}`
-    const libraryName = libName ? libName : name
-    addProjectConfiguration(tree, libName, {
+    const libraryName = libName ? libName : `@lib/${name}`
+    addProjectConfiguration(tree, libraryName, {
         root: projectRoot,
         projectType: "library",
         sourceRoot: `${projectRoot}/src`,
@@ -22,15 +22,21 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
         },
     })
     generateFiles(tree, path.join(__dirname, "files"), projectRoot, {
-        name: libName,
+        name: libraryName,
         capitalizeFirstLetter,
         template: '',
         typeLib: type === 'ui' ? "svelte" : "default"
     })
-    await formatFiles(tree)
-    return () => {
-        installPackagesTask(tree)
+
+    if (type === 'ui') {
+        generateFiles(tree, path.join(__dirname, "uiFiles"), projectRoot, {template: ''})
     }
+
+    await formatFiles(tree)
+    return runTasksInSerial(
+        addDependenciesToPackageJson(tree, {}, type === 'ui' ? {'@ui/tailwind': "workspace:*"} : {}, joinPathFragments(projectRoot, 'package.json')),
+        () => installPackagesTask(tree, true, projectRoot, 'pnpm')
+    )
 }
 
 export default libGenerator
