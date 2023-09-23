@@ -21,7 +21,7 @@ python-dotenv = "^1.0.0"
 prometheus-fastapi-instrumentator = "^6.1.0"
 
 [tool.poetry.dependencies.db]
-path = "../../lib/db"
+path = "../../libs/db"
 develop = true
 
 [build-system]

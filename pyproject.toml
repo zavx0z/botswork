@@ -20,7 +20,7 @@ python-dotenv = "^1.0.0"
 asyncio = "^3.4.3"
 
 [tool.poetry.dependencies.db]
-path = "lib/db"
+path = "libs/db"
 develop = true
 
 [tool.poetry.dependencies.sso]

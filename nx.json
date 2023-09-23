@@ -11,8 +11,17 @@
     "defaultBase": "master"
   },
   "targetDefaults": {
-    "sveltekit:dev": {
-      "executor": "@zavx0z/sveltekit:dev"
+    "sveltekit-dev": {
+      "executor": "@zavx0z/sveltekit:dev",
+      "options": {
+        "port": 1000,
+        "watchDepthSvelteProjects": "off"
+      },
+      "configurations": {
+        "watch-all": {
+          "watchDepthSvelteProjects": "all"
+        }
+      }
     },
     "lint": {
       "inputs": [

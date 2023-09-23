@@ -1,7 +1,7 @@
 {
   "name": "zavx0z/sveltekit",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "zavx0z/sveltekit/src",
+  "sourceRoot": "tools/sveltekit/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -10,28 +10,28 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "zavx0z/sveltekit/dist",
-        "main": "zavx0z/sveltekit/src/index.ts",
-        "tsConfig": "zavx0z/sveltekit/tsconfig.lib.json",
+        "outputPath": "tools/sveltekit/dist",
+        "main": "tools/sveltekit/src/index.ts",
+        "tsConfig": "tools/sveltekit/tsconfig.lib.json",
         "assets": [
-          "zavx0z/sveltekit/*.md",
+          "tools/sveltekit/*.md",
           {
-            "input": "./zavx0z/sveltekit/src",
+            "input": "./tools/sveltekit/src",
             "glob": "**/!(*.ts)",
             "output": "./src"
           },
           {
-            "input": "./zavx0z/sveltekit/src",
+            "input": "./tools/sveltekit/src",
             "glob": "**/*.d.ts",
             "output": "./src"
           },
           {
-            "input": "./zavx0z/sveltekit",
+            "input": "./tools/sveltekit",
             "glob": "generators.json",
             "output": "."
           },
           {
-            "input": "./zavx0z/sveltekit",
+            "input": "./tools/sveltekit",
             "glob": "executors.json",
             "output": "."
           }
@@ -45,8 +45,8 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "zavx0z/sveltekit/**/*.ts",
-          "zavx0z/sveltekit/package.json"
+          "tools/sveltekit/**/*.ts",
+          "tools/sveltekit/package.json"
         ]
       }
     }

@@ -1,5 +1,5 @@
 export enum Io {
-    CHAT = 'chat',
+    CHAT = '3ee',
     DIALOG = 'dialog',
     MESSAGE = 'message',
     CONNECT = 'connect'
