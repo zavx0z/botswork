@@ -1,5 +1,5 @@
 {
-  "name": "@conf/tailwind",
+  "name": "@ui/tailwind",
   "version": "0.0.1",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -7,7 +7,9 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./component.css": "./dist/component.css",
+    "./tailwind.css": "./dist/tailwind.css"
   },
   "files": [
     "dist",
@@ -21,6 +23,10 @@
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.0.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.30",
+    "postcss-import": "^15.1.0",
+    "postcss-nesting": "^12.0.1",
     "publint": "^0.1.9",
     "svelte": "^4.0.5",
     "svelte-check": "^3.4.3",
@@ -28,5 +34,7 @@
     "typescript": "^5.0.0",
     "vite": "^4.4.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tailwindcss": "^3.3.3"
+  }
 }

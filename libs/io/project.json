@@ -5,11 +5,6 @@
   "sourceRoot": "libs/io",
   "targets": {
     "sveltekit-dev": {
-      "options": {
-        "watchDepthSvelteProjects": [
-          "@io/channels"
-        ]
-      }
     }
   },
   "tags": []

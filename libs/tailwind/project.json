@@ -1,5 +1,5 @@
 {
-  "name": "@conf/tailwind",
+  "name": "@ui/tailwind",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/tailwind/src",
@@ -9,6 +9,9 @@
         "port": 1003,
         "watchDepthSvelteProjects": []
       }
+    },
+    "build": {
+      "executor": "@zavx0z/sveltekit:build"
     }
   }
 }
