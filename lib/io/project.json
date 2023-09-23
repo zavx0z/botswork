@@ -5,7 +5,6 @@
   "sourceRoot": "lib/io",
   "targets": {
     "sveltekit:dev": {
-      "executor": "@zavx0z/sveltekit:dev",
       "options": {
         "port": "1001"
       }

@@ -11,6 +11,9 @@
     "defaultBase": "master"
   },
   "targetDefaults": {
+    "sveltekit:dev": {
+      "executor": "@zavx0z/sveltekit:dev"
+    },
     "lint": {
       "inputs": [
         "default",
