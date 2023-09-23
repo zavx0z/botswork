@@ -6,9 +6,11 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
-        "outputPath": "dist/zavx0z/sveltekit",
+        "outputPath": "zavx0z/sveltekit/dist",
         "main": "zavx0z/sveltekit/src/index.ts",
         "tsConfig": "zavx0z/sveltekit/tsconfig.lib.json",
         "assets": [
@@ -38,7 +40,9 @@
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
         "lintFilePatterns": [
           "zavx0z/sveltekit/**/*.ts",
