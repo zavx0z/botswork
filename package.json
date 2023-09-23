@@ -9,6 +9,30 @@
     "pnpm": "^8.7.6"
   },
   "devDependencies": {
-    "nx": "16.8.0"
+    "@nx/devkit": "16.8.1",
+    "@nx/eslint-plugin": "16.8.1",
+    "@nx/jest": "16.8.1",
+    "@nx/js": "16.8.1",
+    "@nx/linter": "16.8.1",
+    "@nx/plugin": "^16.8.1",
+    "@nx/workspace": "^16.8.1",
+    "@swc-node/register": "~1.4.2",
+    "@swc/cli": "~0.1.62",
+    "@swc/core": "~1.3.51",
+    "@swc/helpers": "~0.5.0",
+    "@types/node": "18.7.1",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "~8.46.0",
+    "eslint-config-prettier": "8.1.0",
+    "nx": "16.8.0",
+    "prettier": "^2.6.2",
+    "tslib": "^2.3.0",
+    "typescript": "~5.1.3"
+  },
+  "scripts": {
+    "graph": "pnpm exec nx graph",
+    "visualization": "gource --hide dirnames,filenames,mouse,progress --default-user-image apps/client/desktop/src-tauri/icons/icon.png --font-file apps/client/web/src/RussoOne-Regular.ttf --font-colour 87ceeb --highlight-colour BFC8D1 --disable-input --camera-mode overview --background 1b2634 --seconds-per-day 0.1 --title BotsWork --auto-skip-seconds 1 --file-idle-time 0 --key -1920x1080 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 4 -bf 0  ../FullHD.mp4",
+    "docker-vis": "docker run --rm -it --name dcv -v .:/input pmsipilot/docker-compose-viz render -m image docker-compose.yml"
   }
 }

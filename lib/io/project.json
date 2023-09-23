@@ -4,15 +4,10 @@
   "projectType": "library",
   "sourceRoot": "lib/io",
   "targets": {
-    "dev": {
-      "executor": "nx:run-commands",
+    "sveltekit:dev": {
+      "executor": "@zavx0z/sveltekit:dev",
       "options": {
-        "commands": [
-          "pnpm run dev",
-          "nx run @io/channels:watch"
-        ],
-        "parallel": true,
-        "cwd": "lib/io"
+        "port": "1001"
       }
     }
   },

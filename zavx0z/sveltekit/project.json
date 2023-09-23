@@ -1,0 +1,51 @@
+{
+  "name": "zavx0z/sveltekit",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "zavx0z/sveltekit/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/zavx0z/sveltekit",
+        "main": "zavx0z/sveltekit/src/index.ts",
+        "tsConfig": "zavx0z/sveltekit/tsconfig.lib.json",
+        "assets": [
+          "zavx0z/sveltekit/*.md",
+          {
+            "input": "./zavx0z/sveltekit/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./zavx0z/sveltekit/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./zavx0z/sveltekit",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./zavx0z/sveltekit",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "zavx0z/sveltekit/**/*.ts",
+          "zavx0z/sveltekit/package.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
