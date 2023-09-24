@@ -21,14 +21,15 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
         template: '',
         typeLib: type === 'ui' ? "svelte" : "default"
     })
-
-    if (type === 'ui') {
-        generateFiles(tree, path.join(__dirname, "uiFiles"), projectRoot, {template: ''})
-    }
-
+    if (type === 'ui') generateFiles(tree, path.join(__dirname, "uiFiles"), projectRoot, {name: libraryName, template: ''})
     await formatFiles(tree)
     return runTasksInSerial(
-        addDependenciesToPackageJson(tree, {}, type === 'ui' ? {'@ui/tailwind': "workspace:*"} : {}, joinPathFragments(projectRoot, 'package.json')),
+        addDependenciesToPackageJson(
+            tree,
+            {},
+            type === 'ui' ? {'@ui/tailwind': "workspace:*"} : {},
+            joinPathFragments(projectRoot, 'package.json')
+        ),
         () => installPackagesTask(tree, true, projectRoot, 'pnpm')
     )
 }
