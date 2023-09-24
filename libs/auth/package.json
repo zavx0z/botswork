@@ -18,10 +18,12 @@
     "svelte": "^4.0.0"
   },
   "devDependencies": {
+    "@lib/icons": "workspace:^",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.0.0",
     "@ui/tailwind": "workspace:*",
+    "@xstate/inspect": "^0.8.0",
     "publint": "^0.1.9",
     "svelte": "^4.0.5",
     "svelte-check": "^3.4.3",
@@ -29,5 +31,7 @@
     "typescript": "^5.0.0",
     "vite": "^4.4.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "xstate": "^4.38.2"
+  }
 }

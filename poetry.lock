@@ -52,7 +52,7 @@ develop = true
 
 [package.source]
 type = "directory"
-url = "apps/sso"
+url = "backend/sso"
 
 [metadata]
 lock-version = "2.0"

@@ -7,8 +7,7 @@
     "dev": {
       "executor": "@zavx0z/sveltekit:dev",
       "options": {
-        "port": 1004,
-        "watchDepthSvelteProjects": []
+        "port": 1004
       }
     },
     "build": {

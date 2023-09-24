@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@zavx0z/nginx": ["tools/nginx/src/index.ts"],
       "@zavx0z/sveltekit": ["tools/sveltekit/src/index.ts"]
     }
   },

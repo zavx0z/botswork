@@ -17,7 +17,7 @@ readme = "README.md"
     develop = true
 
     [tool.poetry.dependencies.sso]
-    path = "apps/sso"
+    path = "backend/sso"
     develop = true
 
 [build-system]
