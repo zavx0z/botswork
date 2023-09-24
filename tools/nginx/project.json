@@ -6,9 +6,11 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
-        "outputPath": "dist/tools/nginx",
+        "outputPath": "tools/nginx/build",
         "main": "tools/nginx/src/index.ts",
         "tsConfig": "tools/nginx/tsconfig.lib.json",
         "assets": [
@@ -38,9 +40,14 @@
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["tools/nginx/**/*.ts", "tools/nginx/package.json"]
+        "lintFilePatterns": [
+          "tools/nginx/**/*.ts",
+          "tools/nginx/package.json"
+        ]
       }
     }
   },

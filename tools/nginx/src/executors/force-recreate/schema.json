@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "version": 2,
+  "title": "ForceRecreate executor",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "env": {
+      "type": "array",
+      "alias": "e",
+      "items": {
+        "type": "string"
+      },
+      "description": "Путь к файлу переменных окружения"
+    },
+    "cwd": {
+      "type": "string",
+      "description": "Путь запуска"
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

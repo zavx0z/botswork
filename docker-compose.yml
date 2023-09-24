@@ -67,9 +67,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./deploy/nginx/conf/default.conf:/etc/nginx/templates/default.conf.template
-      - ./deploy/nginx/conf/metrics.conf:/etc/nginx/templates/metrics.conf.template
-      - ./deploy/nginx/conf/sso.conf:/etc/nginx/templates/sso.conf.template
+      - ./docker/nginx/conf/default.conf:/etc/nginx/templates/default.conf.template
+      - ./docker/nginx/conf/metrics.conf:/etc/nginx/templates/metrics.conf.template
+      - ./docker/nginx/conf/sso.conf:/etc/nginx/templates/sso.conf.template
       - nginx:/var/log/nginx/
     environment:
       SSO_HOST: ${SSO_HOST}
@@ -147,7 +147,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -233,7 +233,7 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ./deploy/grafana
+      device: ${STORE_DIR}/grafana
   db:
     driver: local
     driver_opts:
