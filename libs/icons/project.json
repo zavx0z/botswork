@@ -1,17 +1,18 @@
 {
-  "name": "@ui/tailwind",
+  "name": "@lib/icons",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/tailwind/src",
+  "sourceRoot": "libs/icons/src",
   "targets": {
     "dev": {
       "options": {
-        "port": 1003,
+        "port": 1006,
         "watchDepthSvelteProjects": []
       }
     },
     "build": {
-      "executor": "@zavx0z/sveltekit:build"
+      "executor": "@zavx0z/sveltekit:build",
+      "options": {}
     }
   }
 }

@@ -1,6 +1,7 @@
 import {addDependenciesToPackageJson, addProjectConfiguration, joinPathFragments, formatFiles, generateFiles, installPackagesTask, Tree, runTasksInSerial} from "@nx/devkit"
 import * as path from "path"
 import {LibGeneratorSchema} from "./schema"
+import {build, dev} from "../../utils/targets"
 
 const capitalizeFirstLetter = (str: string): string => str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
 
@@ -12,14 +13,7 @@ export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
         root: projectRoot,
         projectType: "library",
         sourceRoot: `${projectRoot}/src`,
-        targets: {
-            "sveltekit-dev": {
-                "options": {
-                    "port": port,
-                    "watchDepthSvelteProjects": []
-                }
-            }
-        },
+        targets: {...dev({port, watchDepthSvelteProjects: []}), ...build({})},
     })
     generateFiles(tree, path.join(__dirname, "files"), projectRoot, {
         name: libraryName,
