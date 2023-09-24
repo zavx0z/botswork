@@ -1,34 +1,25 @@
+[tool.nx]
+autoActivate = true
+
 [tool.poetry]
 name = "botswork"
 version = "1.0.0"
 description = ""
-authors = ["zavx0z"]
+authors = [ ]
 license = "Proprietary"
 readme = "README.md"
 
-[tool.poetry.dependencies]
-python = "~=3.11.5"
-fastapi = "^0.103.1"
-uvicorn = { extras = ["standard"], version = "^0.23.2" }
-psycopg2-binary = "^2.9.7"
-asyncpg = "^0.28.0"
-sqlalchemy = "^2.0.20"
-bcrypt = "^4.0.1"
-fastapi-another-jwt-auth = { git = "https://github.com/GlitchCorp/fastapi-another-jwt-auth", rev = "refs/pull/20/merge" }
-passlib = "^1.7.4"
-python-dotenv = "^1.0.0"
-asyncio = "^3.4.3"
+  [tool.poetry.dependencies]
+  python = "~=3.11.5"
 
-[tool.poetry.dependencies.db]
-path = "libs/db"
-develop = true
+    [tool.poetry.dependencies.db]
+    path = "libs/db"
+    develop = true
 
-[tool.poetry.dependencies.sso]
-path = "backend/sso"
-develop = true
-
-[tool.poetry.group.dev.dependencies]
+    [tool.poetry.dependencies.sso]
+    path = "apps/sso"
+    develop = true
 
 [build-system]
-requires = ["poetry-core==1.1.0"]
+requires = [ "poetry-core==1.1.0" ]
 build-backend = "poetry.core.masonry.api"

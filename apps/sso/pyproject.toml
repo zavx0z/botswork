@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "sso"
+version = "1.0.0"
+description = "Single SignOn"
+authors = [ "zavx0z" ]
+license = "Proprietary"
+readme = "README.md"
+group = { }
+
+  [[tool.poetry.packages]]
+  include = "sso"
+
+  [tool.poetry.dependencies]
+  python = "~=3.11.5"
+  fastapi = "^0.103.1"
+  psycopg2-binary = "^2.9.7"
+  passlib = "^1.7.4"
+  python-dotenv = "^1.0.0"
+  prometheus-fastapi-instrumentator = "^6.1.0"
+
+    [tool.poetry.dependencies.uvicorn]
+    extras = [ "standard" ]
+    version = "^0.23.2"
+
+    [tool.poetry.dependencies.fastapi-another-jwt-auth]
+    git = "https://github.com/GlitchCorp/fastapi-another-jwt-auth"
+    rev = "refs/pull/20/merge"
+
+    [tool.poetry.dependencies.db]
+    path = "../../libs/db"
+    develop = true
+
+[build-system]
+requires = [ "poetry-core" ]
+build-backend = "poetry.core.masonry.api"

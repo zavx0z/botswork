@@ -49,3 +49,4 @@ __pycache__/
 .cache
 tmp
 /apps/node-express/
+.venv

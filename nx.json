@@ -22,14 +22,19 @@
           "watchDepthSvelteProjects": "all"
         }
       }
+    }
+  },
+  "plugins": [
+    "@nxlv/python"
+  ],
+  "generators": {
+    "@nxlv/python:poetry-project": {
+      "pyenvPythonVersion": "3.11.5",
+      "pyprojectPythonDependency": "~=3.11.5"
     },
-    "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.js"
-      ]
+    "@nxlv/python:migrate-to-shared-venv": {
+      "pyenvPythonVersion": "3.11.5",
+      "pyprojectPythonDependency": "~=3.11.5"
     }
   }
 }

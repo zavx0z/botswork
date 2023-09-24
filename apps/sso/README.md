@@ -1,3 +1,3 @@
-# server-sso
+# sso
 
 Project description here.
