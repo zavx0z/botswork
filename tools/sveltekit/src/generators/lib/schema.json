@@ -6,8 +6,8 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": "string",
       "description": "Имя директории",
+      "type": "string",
       "$default": {
         "$source": "argv",
         "index": 0
@@ -15,8 +15,8 @@
       "x-prompt": "Имя директории"
     },
     "libName": {
-      "type": "string",
       "description": "Название библиотеки",
+      "type": "string",
       "$default": {
         "$source": "argv",
         "index": 1
@@ -24,8 +24,8 @@
       "x-prompt": "Название библиотеки"
     },
     "type": {
-      "type": "string",
       "description": "Тип библиотеки",
+      "type": "string",
       "enum": [
         "logic",
         "ui"
@@ -47,14 +47,19 @@
       }
     },
     "port": {
-      "type": "number",
       "description": "Порт",
+      "type": "number",
       "default": 1000,
       "minimum": 1000,
       "maximum": 1999,
       "x-prompt": {
         "message": "Порт для сервера разработки"
       }
+    },
+    "xstate": {
+      "description": "Использовать библиотеку конечного автомата.",
+      "type": "boolean",
+      "default": true
     }
   },
   "required": [

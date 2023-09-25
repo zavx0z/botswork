@@ -3,4 +3,5 @@ export interface LibGeneratorSchema {
     libName: string
     port: number
     type?: 'ui' | 'logic'
+    xstate: boolean
 }
