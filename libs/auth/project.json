@@ -11,8 +11,10 @@
       }
     },
     "build": {
-      "executor": "@zavx0z/sveltekit:build",
-      "options": {}
+      "executor": "@zavx0z/sveltekit:build"
+    },
+    "typegen": {
+      "executor": "@zavx0z/machine:typegen"
     }
   }
 }

@@ -23,6 +23,15 @@
         }
       }
     },
+    "typegen": {
+      "executor": "@zavx0z/machine:typegen",
+
+      "configurations": {
+        "watch": {
+          "watch": true
+        }
+      }
+    },
     "lint": {
       "inputs": [
         "default",
@@ -32,10 +41,16 @@
       ]
     },
     "test": {
-      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/jest.preset.js"
+      ]
     }
   },
-  "plugins": ["@nxlv/python"],
+  "plugins": [
+    "@nxlv/python"
+  ],
   "generators": {
     "@nxlv/python:poetry-project": {
       "pyenvPythonVersion": "3.11.5",
