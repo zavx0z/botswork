@@ -1,7 +1,7 @@
 type Service = {
-    fetchResponseData: string
-}
+	fetchResponseData: string;
+};
 
 export type Services = {
-    invokeService: { data: Service }
-}
+	invokeService: { data: Service };
+};

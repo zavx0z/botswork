@@ -32,8 +32,8 @@ export interface Typegen0 {
     guard: '';
   };
   eventsCausingServices: {
-    invokeService: 'IDLE';
+    invokeService: 'FETCH';
   };
   matchesStates: 'anotherState' | 'idle';
-  tags: 'anyTag';
+  tags: 'Тег состояния';
 }

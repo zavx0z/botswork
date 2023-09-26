@@ -11,27 +11,6 @@
     "defaultBase": "master"
   },
   "targetDefaults": {
-    "dev": {
-      "executor": "@zavx0z/sveltekit:dev",
-      "options": {
-        "port": 1000,
-        "watchDepthSvelteProjects": "off"
-      },
-      "configurations": {
-        "watch-all": {
-          "watchDepthSvelteProjects": "all"
-        }
-      }
-    },
-    "typegen": {
-      "executor": "@zavx0z/machine:typegen",
-
-      "configurations": {
-        "watch": {
-          "watch": true
-        }
-      }
-    },
     "lint": {
       "inputs": [
         "default",

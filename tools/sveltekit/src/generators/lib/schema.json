@@ -30,7 +30,7 @@
         "logic",
         "ui"
       ],
-      "default": "logic",
+      "default": "ui",
       "x-prompt": {
         "message": "Какой тип?",
         "type": "list",
@@ -64,7 +64,9 @@
   },
   "required": [
     "name",
-    "type"
+    "type",
+    "port",
+    "xstate"
   ],
   "additionalProperties": false
 }

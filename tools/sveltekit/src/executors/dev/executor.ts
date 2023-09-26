@@ -1,42 +1,37 @@
 import {DevExecutorSchema} from "./schema"
-import type {ExecutorContext, ProjectGraphDependency} from '@nx/devkit'
+import type {ExecutorContext} from '@nx/devkit'
 import {logger, joinPathFragments} from '@nx/devkit'
 import {default as runCommands} from 'nx/src/executors/run-commands/run-commands.impl'
 
 
 export default async function runExecutor(options: DevExecutorSchema, context: ExecutorContext) {
-    const {projectName, root, workspace: {projects}, projectGraph: {dependencies}} = context
-    const {watchDepthSvelteProjects, port} = options
-    const portOptions = port ? `--port ${port}` : ''
+    logger.info('Сервер разработки запущен.')
+    let commands = [{command: `pnpm vite dev ${options.port ? `--port ${options.port}` : ''}`}]
+    if (options.typegenWatch) {
+        logger.info(`- Генерация типов конечного автомата отслеживает изменения.`)
+        commands.push({command: `xstate typegen "src/**/*.ts?(x)" --watch`})
+    }
+    if (typeof options.watchDepthSvelteProjects === "object") {
+        const commandFactory = (lib: any) => ({command: `cd ${joinPathFragments(context.root, lib.root)} && pnpm svelte-package --watch`, prefix: lib.name})
 
-    let countDependencies = 0
-    let dependenciesWatch: ({ command: string; forwardAllArgs?: boolean; description?: string; prefix?: string; color?: string; bgColor?: string; })[] = []
-    if (typeof watchDepthSvelteProjects === "object" && watchDepthSvelteProjects.length > 0) {
-        logger.info(`Сервер разработки запущен. Изменения отслеживаются.`)
-        const localDependencies = dependencies[projectName].filter((lib) => !lib.target.startsWith('npm')).map(lib => lib.target)
-        const svelteKitLibrariesName = localDependencies.filter(libName => !!dependencies[libName].find((lib: ProjectGraphDependency) => lib.target === 'npm:@sveltejs/kit'))
-        const customDependencies = svelteKitLibrariesName.filter(lib => watchDepthSvelteProjects.includes(lib))
-        const svelteKitLibraries = customDependencies.map(libName => projects[libName as string])
-        dependenciesWatch = svelteKitLibraries.map(lib => ({command: `cd ${joinPathFragments(root, lib.root)} && pnpm svelte-package --watch`, prefix: lib.name}))
-        svelteKitLibraries.forEach(lib => {
-            countDependencies += 1
-            logger.info(`${countDependencies}. ${lib.name}`)
-        })
-    } else if (options.watchDepthSvelteProjects === 'all') {
-        logger.info(`Сервер разработки запущен. Изменения во всех зависимостях отслеживаются.`)
-        const localDependencies = dependencies[projectName].filter((lib) => !lib.target.startsWith('npm')).map(lib => lib.target)
-        const svelteKitLibrariesName = localDependencies.filter(libName => !!dependencies[libName].find((lib: ProjectGraphDependency) => lib.target === 'npm:@sveltejs/kit'))
-        const svelteKitLibraries = svelteKitLibrariesName.map(libName => projects[libName as string])
-        dependenciesWatch = svelteKitLibraries.map(lib => ({command: `cd ${joinPathFragments(root, lib.root)} && pnpm svelte-package --watch`, prefix: lib.name}))
-        svelteKitLibraries.forEach(lib => {
-            countDependencies += 1
-            logger.info(`${countDependencies}. ${lib.name}`)
-        })
-    } else logger.info(`Сервер разработки запущен. Изменения в зависимостях не отслеживаются.`)
+        let depLibs = context.projectGraph.dependencies[context.projectName]
+            .map(depObj => depObj.target)
+            .filter(depName => Object.keys(context.projectGraph.nodes).includes(depName)) // workspace lib
+            .filter(depName => context.projectGraph.dependencies[depName].find(depObj => depObj.target === 'npm:@sveltejs/kit')) // lib dependencies sveltekit
+            .map(depName => context.workspace.projects[depName])
 
+        if (!options.watchDepthSvelteProjects.length && depLibs.length)
+            logger.info(`- Изменения во всех зависимых библиотеках отслеживаются.`)
+        else if (options.watchDepthSvelteProjects.length > 0) {
+            depLibs = depLibs.filter(lib => options.watchDepthSvelteProjects.includes(lib.name))
+            if (depLibs.length) logger.info(`- Изменения в зависимых библиотеках отслеживаются.`)
+        }
+        commands.push(...depLibs.map(commandFactory))
+        depLibs.forEach((lib, idx) => logger.info(`  ${idx + 1}. ${lib.name}`))
+    }
     const result = await runCommands({
-        commands: [...dependenciesWatch, {command: `pnpm vite dev ${portOptions}`}],
-        cwd: projects[context.projectName].root,
+        commands: commands,
+        cwd: context.workspace.projects[context.projectName].root,
         parallel: true,
         color: true,
         __unparsed__: [],

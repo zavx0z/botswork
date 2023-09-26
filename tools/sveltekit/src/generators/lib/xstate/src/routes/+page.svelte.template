@@ -1,9 +1,29 @@
-<script lang="ts">
-    export let data
-    const {machine} = data
+<script lang='ts'>
+	export let data
+	const { machine } = data
 </script>
 
-<h1 class="text-primary-400 m-4 text-center text-4xl"><%= capitalizeFirstLetter(name) %></h1>
-<div class="flex h-screen w-full flex-col items-center justify-center gap-2 text-2xl">
-	<a class="text-primary-500 underline" href=" ">Пакетное приложение</a>
+<div class='flex h-screen flex-col justify-between gap-4'>
+	<h1 class='m-4 text-center text-4xl text-primary-400'>@lib/secure</h1>
+
+	<div class='flex flex-1 flex-col items-center justify-center gap-2'>
+		<p class='m-4 text-center text-2xl text-primary-400'>
+			Состояние машины:
+			<span class='text-secondary-500'>
+				{$machine.value}
+			</span>
+		</p>
+		<p />
+		<button
+			class='max-w-fit rounded-md border-2 border-primary-500 p-2 text-primary-500'
+			on:click={() => machine.send('FETCH', { payload: 'payload' })}>
+			Изменить состояние машины
+		</button>
+	</div>
+
+	<div class='flex w-full flex-1 flex-col items-center gap-2 text-2xl'>
+		<a class='text-primary-500 underline' href=' '>
+			Ссылка
+		</a>
+	</div>
 </div>
