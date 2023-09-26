@@ -1,6 +1,6 @@
 <script lang="ts">
-    import "@ui/tailwind/component.css"
-    import "@ui/tailwind/tailwind.css"
+    import "@lib/ui/component.css"
+    import "@lib/ui/tailwind.css"
 </script>
 <svelte:head>
     <title>

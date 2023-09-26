@@ -5,9 +5,9 @@
   "sourceRoot": "libs/icons/src",
   "targets": {
     "dev": {
+      "executor": "@zavx0z/sveltekit:dev",
       "options": {
-        "port": 1006,
-        "watchDepthSvelteProjects": []
+        "port": 1006
       }
     },
     "build": {

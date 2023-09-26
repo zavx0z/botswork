@@ -18,11 +18,11 @@
     "svelte": "^4.0.0"
   },
   "devDependencies": {
-    "@lib/icons": "workspace:^",
+    "@lib/ui": "workspace:*",
+    "@lib/icons": "workspace:*",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.0.0",
-    "@ui/tailwind": "workspace:*",
     "@xstate/cli": "^0.5.2",
     "@xstate/inspect": "^0.8.0",
     "publint": "^0.1.9",

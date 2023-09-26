@@ -1,19 +1,23 @@
-import { addDependenciesToPackageJson, addProjectConfiguration, joinPathFragments, formatFiles, generateFiles, installPackagesTask, Tree, runTasksInSerial } from '@nx/devkit'
+import {
+	addDependenciesToPackageJson,
+	addProjectConfiguration,
+	joinPathFragments,
+	formatFiles,
+	generateFiles,
+	installPackagesTask,
+	Tree,
+	runTasksInSerial
+} from '@nx/devkit'
 import * as path from 'path'
 import { LibGeneratorSchema } from './schema'
 
 const capitalizeFirstLetter = (str: string): string => (str ? str.charAt(0).toUpperCase() + str.slice(1) : '')
 
 export default async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
-	const projectRoot = `libs/${options.name}`
-	const libraryName = options.libName ? options.libName : `@lib/${options.name}`
-	// команды проекта
-	let dependencies = {}
-	let devDependencies = {}
-	addProjectConfiguration(tree, libraryName, {
-		root: projectRoot,
+	addProjectConfiguration(tree, options.libName, {
+		root: options.directory,
 		projectType: 'library',
-		sourceRoot: `${projectRoot}/src`,
+		sourceRoot: `${options.directory}/src`,
 		targets: {
 			dev: {
 				executor: '@zavx0z/sveltekit:dev',
@@ -23,19 +27,9 @@ export default async function libGenerator(tree: Tree, options: LibGeneratorSche
 				configurations: {
 					watch: {
 						watchDepthSvelteProjects: [],
-						...(options.xstate
-							? {
-									typegenWatch: true
-							  }
-							: {})
+						...(options.xstate ? { typegenWatch: true } : {})
 					},
-					...(options.xstate
-						? {
-								'watch-typegen': {
-									typegenWatch: true
-								}
-						  }
-						: {})
+					...(options.xstate ? { 'watch-typegen': { typegenWatch: true } } : {})
 				}
 			},
 			...(options.xstate ? { typegen: { executor: '@zavx0z/machine:typegen' } } : {}),
@@ -44,27 +38,30 @@ export default async function libGenerator(tree: Tree, options: LibGeneratorSche
 			}
 		}
 	})
-	generateFiles(tree, path.join(__dirname, 'core'), projectRoot, {
+	generateFiles(tree, path.join(__dirname, 'core'), options.directory, {
 		typeLib: options.type === 'ui' ? 'svelte' : 'default',
 		capitalizeFirstLetter,
-		name: libraryName,
+		name: options.libName,
 		template: ''
 	})
-
-	if (options.xstate) {
-		generateFiles(tree, path.join(__dirname, 'xstate'), projectRoot, {
+	if (options.xstate)
+		generateFiles(tree, path.join(__dirname, 'xstate'), options.directory, {
 			template: '',
 			capitalizeFirstLetter,
-			name: libraryName
+			name: options.libName
 		})
-		dependencies = { ...dependencies, xstate: '^4.38.2' }
-		devDependencies = { ...devDependencies, '@xstate/cli': '^0.5.2', '@xstate/inspect': '^0.8.0' }
-	}
-	if (options.type === 'ui') {
-		generateFiles(tree, path.join(__dirname, 'ui'), projectRoot, { name: libraryName, template: '' })
-		devDependencies = { ...devDependencies, '@ui/tailwind': 'workspace:*' }
-	}
-	// запуск действий
 	await formatFiles(tree)
-	return runTasksInSerial(addDependenciesToPackageJson(tree, dependencies, devDependencies, joinPathFragments(projectRoot, 'package.json')), () => installPackagesTask(tree, true, projectRoot, 'pnpm'))
+
+	return runTasksInSerial(
+		addDependenciesToPackageJson(tree,
+			{
+				...(options.xstate ? { xstate: '^4.38.2' } : {})
+			},
+			{
+				'@lib/ui': 'workspace:*',
+				...(options.xstate ? { '@xstate/cli': '^0.5.2', '@xstate/inspect': '^0.8.0' } : {})
+			},
+			joinPathFragments(options.directory, 'package.json')
+		),
+		() => installPackagesTask(tree, true, options.directory, 'pnpm'))
 }

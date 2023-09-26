@@ -1,13 +1,18 @@
 {
-  "name": "@ui/tailwind",
+  "name": "@lib/ui",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/tailwind/src",
+  "sourceRoot": "libs/ui/src",
   "targets": {
     "dev": {
+      "executor": "@zavx0z/sveltekit:dev",
       "options": {
-        "port": 1003,
-        "watchDepthSvelteProjects": []
+        "port": 1000
+      },
+      "configurations": {
+        "watch": {
+          "watchDepthSvelteProjects": []
+        }
       }
     },
     "build": {

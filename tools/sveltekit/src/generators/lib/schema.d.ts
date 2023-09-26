@@ -1,5 +1,5 @@
 export interface LibGeneratorSchema {
-    name: string
+    directory: string
     libName: string
     port: number
     type?: 'ui' | 'logic'

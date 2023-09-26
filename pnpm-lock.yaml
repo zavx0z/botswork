@@ -102,15 +102,11 @@ importers:
         specifier: ~5.1.3
         version: 5.1.6
 
-  libs/auth:
-    dependencies:
-      xstate:
-        specifier: ^4.38.2
-        version: 4.38.2
+  data/dialog:
     devDependencies:
-      '@lib/icons':
-        specifier: workspace:^
-        version: link:../icons
+      '@lib/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
         version: 2.1.0(@sveltejs/kit@1.25.0)
@@ -120,12 +116,6 @@ importers:
       '@sveltejs/package':
         specifier: ^2.0.0
         version: 2.2.2(svelte@4.2.1)(typescript@5.1.6)
-      '@ui/tailwind':
-        specifier: workspace:*
-        version: link:../tailwind
-      '@xstate/inspect':
-        specifier: ^0.8.0
-        version: 0.8.0(ws@8.14.2)(xstate@4.38.2)
       publint:
         specifier: ^0.1.9
         version: 0.1.16
@@ -177,6 +167,9 @@ importers:
 
   libs/icons:
     devDependencies:
+      '@lib/ui':
+        specifier: workspace:*
+        version: link:../ui
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
         version: 2.1.0(@sveltejs/kit@1.25.0)
@@ -186,9 +179,6 @@ importers:
       '@sveltejs/package':
         specifier: ^2.0.0
         version: 2.2.2(svelte@4.2.1)(typescript@5.1.6)
-      '@ui/tailwind':
-        specifier: workspace:*
-        version: link:../tailwind
       publint:
         specifier: ^0.1.9
         version: 0.1.16
@@ -213,6 +203,9 @@ importers:
       '@io/channels':
         specifier: workspace:*
         version: link:../channels
+      '@lib/ui':
+        specifier: workspace:*
+        version: link:../ui
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
         version: 2.1.0(@sveltejs/kit@1.25.0)
@@ -222,9 +215,6 @@ importers:
       '@sveltejs/package':
         specifier: ^2.0.0
         version: 2.2.2(svelte@4.2.1)(typescript@5.1.6)
-      '@ui/tailwind':
-        specifier: workspace:*
-        version: link:../tailwind
       publint:
         specifier: ^0.1.9
         version: 0.1.16
@@ -250,6 +240,12 @@ importers:
         specifier: ^4.38.2
         version: 4.38.2
     devDependencies:
+      '@lib/icons':
+        specifier: workspace:*
+        version: link:../icons
+      '@lib/ui':
+        specifier: workspace:*
+        version: link:../ui
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
         version: 2.1.0(@sveltejs/kit@1.25.0)
@@ -259,9 +255,6 @@ importers:
       '@sveltejs/package':
         specifier: ^2.0.0
         version: 2.2.2(svelte@4.2.1)(typescript@5.1.6)
-      '@ui/tailwind':
-        specifier: workspace:*
-        version: link:../tailwind
       '@xstate/cli':
         specifier: ^0.5.2
         version: 0.5.2
@@ -287,7 +280,7 @@ importers:
         specifier: ^4.4.2
         version: 4.4.9(@types/node@18.7.1)
 
-  libs/tailwind:
+  libs/ui:
     dependencies:
       tailwindcss:
         specifier: ^3.3.3
