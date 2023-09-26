@@ -1,5 +1,5 @@
 {
-  "name": "@lib/auth",
+  "name": "@lib/secure",
   "version": "0.0.1",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -23,6 +23,7 @@
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.0.0",
     "@ui/tailwind": "workspace:*",
+    "@xstate/cli": "^0.5.2",
     "@xstate/inspect": "^0.8.0",
     "publint": "^0.1.9",
     "svelte": "^4.0.5",

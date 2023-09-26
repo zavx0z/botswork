@@ -1,0 +1,29 @@
+{
+  "name": "@lib/secure",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/secure/src",
+  "targets": {
+    "dev": {
+      "executor": "@zavx0z/sveltekit:dev",
+      "options": {
+        "port": 1111
+      },
+      "configurations": {
+        "watch": {
+          "watchDepthSvelteProjects": [],
+          "typegenWatch": true
+        },
+        "watch-typegen": {
+          "typegenWatch": true
+        }
+      }
+    },
+    "typegen": {
+      "executor": "@zavx0z/machine:typegen"
+    },
+    "build": {
+      "executor": "@zavx0z/sveltekit:build"
+    }
+  }
+}
