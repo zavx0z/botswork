@@ -15,8 +15,8 @@ class RefreshResponse(BaseModel):
 async def refresh(authjwt: AuthJWT = Depends()) -> RefreshResponse:
     """Обновление токена авторизации"""
     try:
-        authjwt.jwt_refresh_token_required()  # Получаем имя пользователя из токена обновления
-        user_id = authjwt.get_jwt_subject()  # Генерируем новый токен авторизации
+        authjwt.jwt_refresh_token_required()
+        user_id = authjwt.get_jwt_subject()
         access_token = authjwt.create_access_token(subject=user_id)
         refresh_token = authjwt.create_refresh_token(subject=user_id)
         return RefreshResponse(accessToken=access_token, refreshToken=refresh_token)

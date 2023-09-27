@@ -1,32 +1,23 @@
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi_another_jwt_auth import AuthJWT
 from fastapi_another_jwt_auth.exceptions import FreshTokenRequired, MissingTokenError, InvalidHeaderError, JWTDecodeError
-from sqlalchemy import select
-
-from db.user import User
-from db.shared.db import get_db
-from sso.schema.user import UserSchema
+from sso.models import UserSchema
 
 router = APIRouter()
 
 
 @router.get("/verify")
-async def get_user(request: Request, authjwt: AuthJWT = Depends(), db=Depends(get_db)):
+async def get_user(request: Request, authjwt: AuthJWT = Depends()):
     """Получение информации о текущем пользователе"""
+    db = request.app.state.pool
     try:
         authjwt.jwt_required()
         pk = authjwt.get_jwt_subject()
-        stmt = select(User).where(User.id == pk)
-        result = await db.execute(stmt)
-        user = result.scalars().first()
-        if user:
-            return UserSchema(
-                id=user.id,
-                username=user.username,
-                role=user.role.name
-            )
-        else:
-            raise HTTPException(status_code=401, detail="User not exist")
+        async with db.acquire() as session:
+            result = await session.fetchrow("SELECT id, username, role FROM public.user WHERE id=$1", pk)
+        if not result:
+            raise HTTPException(status_code=401, detail="Пользователь не найден.")
+        return UserSchema(**result)
     except FreshTokenRequired:
         raise HTTPException(status_code=401, detail="Access token has expired. Please request a new one using the provided refresh token.")
     except MissingTokenError:

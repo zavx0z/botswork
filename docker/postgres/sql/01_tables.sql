@@ -1,5 +1,7 @@
 BEGIN;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE browser
 (
     id         SERIAL                   NOT NULL,
@@ -38,22 +40,21 @@ CREATE TABLE os
 
 CREATE TYPE role AS ENUM ('client', 'developer', 'bot', 'moderator', 'admin', 'superuser');
 
-CREATE TABLE "user"
+create table "user"
 (
-    id              UUID                        NOT NULL,
-    username        VARCHAR(50)                 NOT NULL,
-    email           VARCHAR(320),
-    hashed_password VARCHAR(1024)               NOT NULL,
-    is_active       BOOLEAN                     NOT NULL,
-    is_verified     BOOLEAN                     NOT NULL,
-    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    role            role                        NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE (email),
-    UNIQUE (id)
+    id              uuid      default uuid_generate_v4() not null primary key,
+    username        varchar(50)                          not null,
+    email           varchar(320) unique,
+    hashed_password varchar(1024)                        not null,
+    is_active       boolean   default true               not null,
+    is_verified     boolean   default false              not null,
+    created_at      timestamp default now()              not null,
+    role            role      default 'client'::role     not null
 );
 
-CREATE UNIQUE INDEX ix_user_username ON "user" (username);
+alter table "user"
+    owner to zavx0z;
+create unique index ix_user_username on "user" (username);
 
 CREATE TABLE device_browser_os
 (
