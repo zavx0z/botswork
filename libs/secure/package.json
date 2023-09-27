@@ -15,7 +15,8 @@
     "!dist/**/*.spec.*"
   ],
   "peerDependencies": {
-    "svelte": "^4.0.0"
+    "svelte": "^4.0.0",
+    "xstate": "^4.38.2"
   },
   "devDependencies": {
     "@lib/ui": "workspace:*",

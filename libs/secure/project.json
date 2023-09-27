@@ -11,8 +11,8 @@
         "env": {
           "PUBLIC_HOST": "http://127.0.0.1:8000",
           "PUBLIC_XSTATE_DEBUG": true,
-          "PUBLIC_XSTATE_IFRAME": false,
-          "PUBLIC_XSTATE_PANEL": false
+          "PUBLIC_XSTATE_PANEL": true,
+          "PUBLIC_XSTATE_IFRAME": false
         }
       },
       "configurations": {

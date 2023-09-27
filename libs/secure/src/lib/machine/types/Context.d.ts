@@ -1,4 +1,8 @@
 export type Context = {
-    param: string
+    id: string | null
+    username: string | null
+    accessToken: string | null
+    refreshToken: string | null
     error: string | null
+    host: string
 }

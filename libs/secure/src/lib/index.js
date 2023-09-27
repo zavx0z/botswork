@@ -1,1 +1,1 @@
-export {default as AuthMachine} from './authMachine/AuthMachine'
+export { default as AuthMachine } from './machine/AuthMachine'

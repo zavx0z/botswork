@@ -7,7 +7,7 @@
 	<h1 class='m-4 text-center text-4xl text-primary-400'>@lib/secure</h1>
 
 	<div class='flex flex-1 flex-col items-center justify-center gap-2'>
-		{#if $auth.hasTag('authorized')}
+		{#if !$auth.hasTag('unauthorized')}
 			<h2 class='text-secondary-500 mt-4 text-center'>Авторизован: {$auth.context.username}</h2>
 			<h2 class='text-secondary-500 text-center'>ID пользователя: {$auth.context.id}</h2>
 		{:else}

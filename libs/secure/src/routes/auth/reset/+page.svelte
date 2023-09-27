@@ -1,33 +1,11 @@
-<script lang="ts">
-    import {enhance} from '$app/forms'
-    import UserName from "$lib/ui/input/UserName.svelte"
+<script lang='ts'>
+	import Reset from '$lib/Reset.svelte'
 
-    export let data
-    const {auth} = data
-
-    let username = ''
+	export let data
+	const { auth } = data
 </script>
 
 <svelte:head>
-    <title>BotsWork | Сброс пароля</title>
+	<title>BotsWork | Сброс пароля</title>
 </svelte:head>
-<form
-        action="?/reset"
-        method="POST"
-        use:enhance={({ cancel }) => {
-            auth.send('RESET')
-            cancel()
-    	}}
-        class="flex h-full flex-col justify-between"
->
-    <div class="flex h-full w-full flex-col justify-center">
-        <UserName bind:username/>
-    </div>
-    <button
-            title="сброс пароля"
-            type="submit"
-            class="bg-primary-500 text-surface-700 hover:bg-primary-400 focus-visible:bg-primary-400 rounded px-4 py-2 text-sm uppercase focus-visible:outline-offset-4"
-    >
-        Сбросить пароль
-    </button>
-</form>
+<Reset {auth} />
