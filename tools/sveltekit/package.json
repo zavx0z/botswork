@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "@nx/devkit": "16.8.1",
-    "tslib": "^2.3.0",
-    "@zavx0z/machine": "workspace:*"
+    "@zavx0z/machine": "workspace:*",
+    "cross-env": "^7.0.3",
+    "tslib": "^2.3.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",
