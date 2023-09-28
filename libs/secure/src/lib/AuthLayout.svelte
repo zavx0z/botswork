@@ -2,7 +2,7 @@
 	import { page } from '$app/stores'
 	import Modal from '$lib/ui/modal/Modal.svelte'
 
-	const tabs = [
+	export let tabs = [
 		{ title: 'Вход', id: 'login' },
 		{ title: 'Регистрация', id: 'join' },
 		{ title: 'Сброс', id: 'reset' }
