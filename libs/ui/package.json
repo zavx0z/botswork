@@ -12,8 +12,8 @@
       "types": "./dist/activity/index.d.ts",
       "svelte": "./dist/activity/index.js"
     },
-    "./tailwind.config.js": "./tailwind.config.js",
-    "./postcss.config.js": "./postcss.config.js",
+    "./tailwind.config.js": "./dist/tailwind.config.js",
+    "./postcss.config.js": "./dist/postcss.config.js",
     "./ui.css": "./dist/ui.css"
   },
   "files": [
