@@ -109,7 +109,7 @@ services:
     image: postgres:alpine
     volumes:
       - db:/var/lib/postgresql/data/
-      - ./libs/py/db/sql:/docker-entrypoint-initdb.d
+      - ./docker/postgres/sql:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}

@@ -11,11 +11,11 @@ async def register(item: UserCredentials, request: Request, authjwt: AuthJWT = D
     """Регистрация нового пользователя"""
     state = request.app.state
     async with state.pool.acquire() as session:
-        exist_user = await session.fetchrow("SELECT id FROM public.user WHERE username=$1", item.username)
+        exist_user = await session.fetchrow("SELECT id FROM public.profile WHERE username=$1", item.username)
         if exist_user:
             raise HTTPException(status_code=401, detail="Пользователь существует")
         result = await session.fetchrow(
-            "INSERT INTO public.user (username, hashed_password) VALUES ($1, $2) RETURNING id, username, role",
+            "INSERT INTO public.profile (username, hashed_password) VALUES ($1, $2) RETURNING id, username, role",
             item.username,
             state.pwd_context.hash(item.password)
         )

@@ -1,5 +1,5 @@
 create function client_get_or_create(
-    p_user_id uuid,
+    p_profile_id uuid,
     p_device_family character varying,
     p_device_brand character varying,
     p_device_model character varying,
@@ -77,11 +77,11 @@ BEGIN
 
     -- Get or create client
     RETURN QUERY
-        INSERT INTO client (user_id, device_browser_os_id, created_at)
-            VALUES (p_user_id, v_device_browser_os_id, NOW())
-            ON CONFLICT (user_id, device_browser_os_id)
+        INSERT INTO client (profile_id, device_browser_os_id, created_at)
+            VALUES (p_profile_id, v_device_browser_os_id, NOW())
+            ON CONFLICT (profile_id, device_browser_os_id)
                 DO UPDATE SET created_at = client.created_at
-            RETURNING client.id, client.created_at, client.user_id, client.device_browser_os_id;
+            RETURNING client.id, client.created_at, client.profile_id, client.device_browser_os_id;
 
 END;
 $$;

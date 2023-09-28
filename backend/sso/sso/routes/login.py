@@ -10,7 +10,7 @@ async def login(item: UserCredentials, request: Request, authjwt: AuthJWT = Depe
     """Аутентификация и выдача токена"""
     state = request.app.state
     async with state.pool.acquire() as session:
-        result = await session.fetchrow("SELECT id, username, hashed_password, role FROM public.user WHERE username=$1", item.username)
+        result = await session.fetchrow("SELECT id, username, hashed_password, role FROM public.profile WHERE username=$1", item.username)
     if not result:
         raise HTTPException(status_code=401, detail="Пользователь не существует")
     user = User(**result)

@@ -14,7 +14,7 @@ async def get_user(request: Request, authjwt: AuthJWT = Depends()):
         authjwt.jwt_required()
         pk = authjwt.get_jwt_subject()
         async with db.acquire() as session:
-            result = await session.fetchrow("SELECT id, username, role FROM public.user WHERE id=$1", pk)
+            result = await session.fetchrow("SELECT id, username, role FROM public.profile WHERE id=$1", pk)
         if not result:
             raise HTTPException(status_code=401, detail="Пользователь не найден.")
         return UserSchema(**result)
