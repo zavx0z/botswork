@@ -1,8 +1,8 @@
 {
-  "name": "@frontend/portal",
+  "name": "@web/portal",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "project",
-  "sourceRoot": "frontend/portal/src",
+  "sourceRoot": "web/portal/src",
   "targets": {
     "dev": {
       "executor": "@zavx0z/sveltekit:dev",

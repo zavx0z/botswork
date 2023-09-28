@@ -1,13 +1,9 @@
 {
-  "name": "@frontend/portal",
+  "name": "@web/portal",
   "author": "zavx0z",
   "version": "0.0.1",
   "private": false,
   "module": "src/index.ts",
-  "scripts": {
-    "dev": "vite dev --port 3000",
-    "build": "vite build"
-  },
   "devDependencies": {
     "@lib/secure": "workspace:*",
     "@lib/ui": "workspace:*",

@@ -1,7 +1,7 @@
 packages:
   - "backend/**/*"
-  - "frontend/**/*"
-  - "libs/**/*"
-  - "desktop/**/*"
-  - "tools/**/*"
   - "data/**/*"
+  - "desktop/**/*"
+  - "libs/**/*"
+  - "tools/**/*"
+  - "web/**/*"
