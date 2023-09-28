@@ -1,3 +1,2 @@
-import { postcssConfig } from "@lib/ui";
-
-export default postcssConfig;
+import postcssConfig from '@lib/ui/postcss.config.js'
+export default postcssConfig

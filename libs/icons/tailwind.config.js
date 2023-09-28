@@ -1,3 +1,2 @@
-import { tailwindConfig } from "@lib/ui";
-
-export default tailwindConfig;
+import tailwindConfig from '@lib/ui/tailwind.config.js'
+export default tailwindConfig
