@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import Logout from '$lib/Logout.svelte'
+	import Logout from '@lib/secure/Logout.svelte'
 
 	export let data
 	const { auth } = data

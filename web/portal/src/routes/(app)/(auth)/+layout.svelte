@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import AuthLayout from '$lib/Auth.svelte'
+import { AuthLayout } from '@lib/secure'
 </script>
 <AuthLayout>
 	<slot />

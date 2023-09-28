@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import Join from '@lib/secure/Join.svelte'
+	import { Join } from '@lib/secure'
 
 	export let data
 	const { auth } = data
