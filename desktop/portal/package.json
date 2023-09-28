@@ -1,5 +1,5 @@
 {
-  "name": "desktop",
+  "name": "@desktop/portal",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -12,13 +12,14 @@
     "format": "prettier --plugin-search-dir . --write ."
   },
   "devDependencies": {
+    "@lib/icons": "workspace:*",
     "@lib/secure": "workspace:*",
     "@lib/ui": "workspace:*",
-    "@lib/icons": "workspace:*",
-    "@types/three": "^0.154.0",
-    "@sveltejs/adapter-auto": "^2.0.0",
+    "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/kit": "^1.20.4",
+    "@tauri-apps/cli": "^1.4.0",
     "@sveltejs/package": "^2.0.0",
+    "@types/three": "^0.154.0",
     "@xstate/cli": "^0.5.2",
     "@xstate/inspect": "^0.8.0",
     "svelte": "^4.0.5",

@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import Login from '$lib/Login.svelte'
+	import { Login } from '@lib/secure'
 
 	export let data
 	let { auth } = data
