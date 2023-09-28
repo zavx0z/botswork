@@ -1,0 +1,34 @@
+{
+  "name": "desktop",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --plugin-search-dir . --check . && eslint .",
+    "format": "prettier --plugin-search-dir . --write ."
+  },
+  "devDependencies": {
+    "@lib/secure": "workspace:*",
+    "@lib/ui": "workspace:*",
+    "@lib/icons": "workspace:*",
+    "@types/three": "^0.154.0",
+    "@sveltejs/adapter-auto": "^2.0.0",
+    "@sveltejs/kit": "^1.20.4",
+    "@sveltejs/package": "^2.0.0",
+    "@xstate/cli": "^0.5.2",
+    "@xstate/inspect": "^0.8.0",
+    "svelte": "^4.0.5",
+    "svelte-check": "^3.4.3",
+    "tslib": "^2.4.1",
+    "typescript": "^5.0.0",
+    "vite": "^4.4.2"
+  },
+  "type": "module",
+  "dependencies": {
+    "xstate": "^4.38.2"
+  }
+}
