@@ -1,2 +1,9 @@
-import postcssConfig from "./src/lib/postcss.config.js"
-export default postcssConfig
+export default {
+    plugins: {
+      "postcss-import": {},
+      "tailwindcss/nesting": {},
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  }
+  

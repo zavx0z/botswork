@@ -1,3 +1,0 @@
-# sso
-
-Project description here.

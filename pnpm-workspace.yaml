@@ -1,7 +1,0 @@
-packages:
-  - "backend/**/*"
-  - "data/**/*"
-  - "desktop/**/*"
-  - "libs/**/*"
-  - "tools/**/*"
-  - "web/**/*"

@@ -1,9 +1,0 @@
-{
-  "executors": {
-    "force-recreate": {
-      "implementation": "./src/executors/force-recreate/executor",
-      "schema": "./src/executors/force-recreate/schema.json",
-      "description": "docker-compose up --force-recreate --no-deps -d nginx"
-    }
-  }
-}

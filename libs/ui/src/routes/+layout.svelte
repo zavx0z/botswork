@@ -1,4 +1,4 @@
-<script lang='ts'>
-	import '$lib/ui.css'
+<script>
+  import "../lib/app.css"
 </script>
-<slot />
+<slot/>

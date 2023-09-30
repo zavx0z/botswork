@@ -1,0 +1,1 @@
+export { tailwindConf } from "./tailwindd"
