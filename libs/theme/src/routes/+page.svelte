@@ -1,14 +1,40 @@
 <script lang="ts">
   import "../lib/app.css"
+  const extractColors = css => {
+    const colorRegex = /--color-(\w+)-(\d+): (\d+ \d+ \d+);/g
+    const colors = {}
+    let match
+    while (match = colorRegex.exec(css)) {
+      const [_, colorName, colorWeight, colorValues] = match
+      if (!colors[colorName])
+        colors[colorName] = {}
+      colors[colorName][colorWeight] = colorValues.split(" ").map(Number)
+    }
+    return colors
+  }
+  let colors = {}
+  import("$lib/css/tailwind.css").then(module => (colors = extractColors(module.default)))
 </script>
 <svelte:head>
   <title>
     @lib/theme
   </title>
 </svelte:head>
-<div class="flex h-screen flex-col justify-between gap-4">
+<div class="flex h-screen flex-col justify-between items-center w-screen gap-4">
   <h1 class="m-4 text-center text-4xl text-primary-400">@lib/theme</h1>
-  <div class="flex w-full flex-1 flex-col items-center gap-2 text-2xl">
-    <a class="underline text-primary-500" href=" ">ссылка</a>
+  <div class="flex gap-2 w-1/2 flex-1 items-center">
+    {#each Object.keys(colors) as colorName}
+      <div class="flex flex-col w-full">
+        <h2>{colorName}</h2>
+        {#each Object.keys(colors[colorName]) as colorWeight}
+          <div class="h-7" style="background-color: rgb({colors[colorName][colorWeight].join(',')})">
+            {colorWeight}
+          </div>
+        {/each}
+      </div>
+    {/each}
   </div>
+  <!--  <div class="flex w-full flex-1 flex-col items-center gap-2 text-2xl">-->
+  <!--    <a class="underline text-primary-500" href=" ">ссылка</a>-->
+  <!--  </div>-->
 </div>

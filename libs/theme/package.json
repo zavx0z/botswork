@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "watch": "svelte-package --watch",
-    "dev": "bun --bun run vite dev --host 0.0.0.0",
-    "build": "vite build && npm run package",
+    "dev": "vite dev --host 0.0.0.0",
+    "build": "bun --bun run vite build && bun --bun run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
     "prepublishOnly": "npm run package",
