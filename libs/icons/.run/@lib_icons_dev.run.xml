@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="@lib/icons:dev" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/libs/icons/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="dev" />
+    </scripts>
+    <node-interpreter value="wsl://Ubuntu-22.04@/home/zavx0z/.bun/bin/bunx" />
+    <package-manager value="\\wsl$\Ubuntu-22.04\home\zavx0z\.bun\bin\bun" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>

@@ -1,9 +1,9 @@
 {
-  "name": "@lib/ui",
+  "name": "@lib/theme",
   "version": "0.0.1",
   "scripts": {
     "watch": "svelte-package --watch",
-    "dev": "vite dev --host 0.0.0.0",
+    "dev": "bun --bun run vite dev --host 0.0.0.0",
     "build": "vite build && npm run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",

@@ -1,4 +1,4 @@
 <script lang="ts">
-    import '@lib/ui/app.css'
+    import '@lib/theme/app.css'
 </script>
 <slot/>

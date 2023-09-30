@@ -10,9 +10,10 @@
   },
   "scripts": {
     "clearCache": "bun pm cache rm",
-    "graph": "bun run nx graph"
+    "graph": "nx graph"
   },
   "workspaces": [
-    "libs/*"
+    "libs/*",
+    "server/*"
   ]
 }
