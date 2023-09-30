@@ -1,19 +1,29 @@
 <script lang="ts">
   import "../lib/app.css"
-  const extractColors = css => {
+  import style from "../lib/css/tailwind.css?inline"
+
+  type ColorType = {
+    [colorName: string]: {
+      [colorWeight: string]: number[];
+    };
+  };
+
+  const extractColors = (css: string): ColorType => {
     const colorRegex = /--color-(\w+)-(\d+): (\d+ \d+ \d+);/g
-    const colors = {}
-    let match
+    const colors: ColorType = {}
+    let match: RegExpExecArray | null
+
     while (match = colorRegex.exec(css)) {
       const [_, colorName, colorWeight, colorValues] = match
+
       if (!colors[colorName])
         colors[colorName] = {}
+
       colors[colorName][colorWeight] = colorValues.split(" ").map(Number)
     }
     return colors
   }
-  let colors = {}
-  import("$lib/css/tailwind.css").then(module => (colors = extractColors(module.default)))
+  let colors = extractColors(style)
 </script>
 <svelte:head>
   <title>
