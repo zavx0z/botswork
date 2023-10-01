@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores"
-  import Modal from "$lib/ui/modal/Modal.svelte"
+  import { Modal } from "@lib/ui/modal"
   import { ripple } from "svelte-ripple-action"
 
   export let tabs = [

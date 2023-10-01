@@ -14,7 +14,7 @@
     "@module/secure": "workspace:*"
   },
   "workspaces": [
-    "libs/*",
+    "lib/*",
     "server/*",
     "module/*"
   ],

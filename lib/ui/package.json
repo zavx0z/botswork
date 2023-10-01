@@ -1,23 +1,35 @@
 {
-  "name": "@module/secure",
+  "name": "@lib/ui",
   "version": "0.0.1",
   "type": "module",
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite dev --host",
+    "watch": "svelte-package --watch",
     "build": "vite build && npm run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
     "prepublishOnly": "npm run package",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "typegen": "xstate typegen \"src/**/*.ts?(x)\""
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
+    },
+    "./input": {
+      "types": "./dist/input/index.d.ts",
+      "svelte": "./dist/input/index.js"
+    },
+    "./activity": {
+      "types": "./dist/activity/index.d.ts",
+      "svelte": "./dist/activity/index.js"
+    },
+    "./modal": {
+      "types": "./dist/modal/index.d.ts",
+      "svelte": "./dist/modal/index.js"
     }
   },
   "files": [
@@ -27,9 +39,8 @@
   ],
   "peerDependencies": {
     "svelte": "^4.0.0",
-    "@lib/icons": "workspace:*",
-    "@lib/ui": "workspace:*",
-    "@lib/theme": "workspace:*"
+    "@lib/theme": "workspace:*",
+    "@lib/icons": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",
@@ -43,6 +54,6 @@
     "vite": "^4.4.2"
   },
   "dependencies": {
-    "xstate": "^4.38.2"
+    "svelte-ripple-action": "^1.0.4"
   }
 }

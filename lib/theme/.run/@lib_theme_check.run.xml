@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="@lib/theme:check" type="js.build_tools.npm" folderName="@lib/theme">
-    <package-json value="$PROJECT_DIR$/libs/theme/package.json" />
+    <package-json value="$PROJECT_DIR$/lib/theme/package.json" />
     <command value="run" />
     <scripts>
       <script value="check" />

@@ -3,7 +3,7 @@
 </script>
 <svelte:head>
   <title>
-    @module/secure
+    @lib/ui
   </title>
 </svelte:head>
 <slot />

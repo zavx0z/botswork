@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="@lib/icons:dev@lib/theme:watch" type="CompoundRunConfigurationType">
-    <toRun name="@lib/icons:dev" type="js.build_tools.npm" />
-    <toRun name="@lib/theme:watch" type="js.build_tools.npm" />
-    <method v="2" />
-  </configuration>
-</component>
