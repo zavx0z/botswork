@@ -1,14 +1,15 @@
 {
-  "name": "@lib/icons",
+  "name": "@module/secure",
   "version": "0.0.1",
   "scripts": {
-    "dev": "bun --bun run vite dev --host",
-    "build": "vite build && bun run package",
+    "dev": "vite dev --host",
+    "build": "vite build && npm run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
-    "prepublishOnly": "bun run package",
+    "prepublishOnly": "npm run package",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "typegen": "xstate typegen \"src/**/*.ts?(x)\""
   },
   "exports": {
     ".": {
@@ -23,7 +24,8 @@
   ],
   "peerDependencies": {
     "svelte": "^4.0.0",
-    "@lib/theme": "workspace:*"
+    "@lib/icons": "workspace:*",
+    "@lib/theme": "workspace:*",
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",
@@ -40,5 +42,6 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "dependencies": {
+    "xstate": "^4.38.2"
   }
 }

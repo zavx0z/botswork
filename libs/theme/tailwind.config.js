@@ -1,6 +1,7 @@
 export default {
   content: [
-    "../../libs/*/src/**/*.{html,js,svelte,ts}"
+    "../../libs/*/src/**/*.{html,js,svelte,ts}",
+    "../../module/*/src/**/*.{html,js,svelte,ts}"
   ],
   theme: {
     extend: {

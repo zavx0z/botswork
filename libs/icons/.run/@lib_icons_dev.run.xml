@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="@lib/icons:dev" type="js.build_tools.npm">
+  <configuration default="false" name="@lib/icons:dev" type="js.build_tools.npm" folderName="@lib/icons">
     <package-json value="$PROJECT_DIR$/libs/icons/package.json" />
     <command value="run" />
     <scripts>

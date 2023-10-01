@@ -3,14 +3,20 @@
   "type": "module",
   "devDependencies": {
     "bun-types": "latest",
-    "nx": "^16.9.1"
+    "nx": "^16.9.1",
+    "@xstate/cli": "^0.5.2",
+    "@xstate/inspect": "^0.8.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "@lib/icons": "workspace:*",
+    "@lib/theme": "workspace:*",
+    "@module/secure": "workspace:*"
   },
   "workspaces": [
     "libs/*",
-    "server/*"
+    "server/*",
+    "module/*"
   ],
   "scripts": {
     "clearCache": "bun pm cache rm",
