@@ -21,7 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env
 **/.env.dev
 **/.env.local
 **/.env.development.local
@@ -50,3 +49,4 @@ __pycache__/
 tmp
 /apps/node-express/
 .venv
+/.env
