@@ -11,12 +11,18 @@
     "typescript": "^5.0.0",
     "@lib/icons": "workspace:*",
     "@lib/theme": "workspace:*",
-    "@module/secure": "workspace:*"
+    "@lib/ui": "workspace:*",
+    "@module/secure": "workspace:*",
+    "@web/portal": "workspace:*",
+    "@desktop/portal": "workspace:*",
+    "@server/io": "workspace:*"
   },
   "workspaces": [
     "lib/*",
     "server/*",
-    "module/*"
+    "module/*",
+    "web/*",
+    "desktop/*"
   ],
   "scripts": {
     "clearCache": "bun pm cache rm",

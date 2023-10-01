@@ -1,6 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms"
-  import UserName from "$lib/ui/input/UserName.svelte"
+  import { UserName } from "@lib/ui/input"
   import type { InterpreterFrom } from "xstate"
   import { ripple } from "svelte-ripple-action"
   // @ts-ignore

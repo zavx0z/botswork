@@ -1,1 +1,6 @@
 export { default as AuthMachine } from './machine/AuthMachine'
+export { default as AuthLayout } from './AuthLayout.svelte'
+export { default as Join } from './Join.svelte'
+export { default as Login } from './Login.svelte'
+export { default as Logout } from './Logout.svelte'
+export { default as Reset } from './Reset.svelte'

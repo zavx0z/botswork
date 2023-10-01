@@ -4,7 +4,7 @@
 </script>
 
 <div class='flex h-screen flex-col justify-between gap-4'>
-	<h1 class='m-4 text-center text-4xl text-primary-400'>@lib/secure</h1>
+	<h1 class='m-4 text-center text-4xl text-primary-400'>@module/secure</h1>
 
 	<div class='flex flex-1 flex-col items-center justify-center gap-2'>
 		{#if !$auth.hasTag('unauthorized')}
