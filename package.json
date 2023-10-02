@@ -2,19 +2,13 @@
   "name": "botswork",
   "type": "module",
   "devDependencies": {
-    "bun-types": "latest",
     "@xstate/cli": "^0.5.2",
-    "@xstate/inspect": "^0.8.0"
+    "@xstate/inspect": "^0.8.0",
+    "bun-types": "latest",
+    "svelte-adapter-bun": "^0.5.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0",
-    "@lib/icons": "workspace:*",
-    "@lib/theme": "workspace:*",
-    "@lib/ui": "workspace:*",
-    "@module/secure": "workspace:*",
-    "@web/portal": "workspace:*",
-    "@desktop/portal": "workspace:*",
-    "@server/io": "workspace:*"
+    "typescript": "^5.0.0"
   },
   "workspaces": [
     "lib/*",
@@ -22,8 +16,5 @@
     "module/*",
     "web/*",
     "desktop/*"
-  ],
-  "scripts": {
-    "clearCache": "bun pm cache rm"
-  }
+  ]
 }

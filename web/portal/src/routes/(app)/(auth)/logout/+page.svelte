@@ -1,11 +1,11 @@
-<script lang='ts'>
-	import Logout from '@module/secure/Logout.svelte'
+<script lang="ts">
+  import { Logout } from "@module/secure"
 
-	export let data
-	const { auth } = data
+  export let data
+  const { auth } = data
 </script>
 
 <svelte:head>
-	<title>BotsWork | Выход</title>
+  <title>BotsWork | Выход</title>
 </svelte:head>
-<Logout {auth} redirectTo='/auth/login' />
+<Logout {auth} redirectTo="/auth/login" />

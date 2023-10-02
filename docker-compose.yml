@@ -12,6 +12,7 @@ services:
     environment:
       SSO_HOST: ${SSO_HOST}
       SSO_PORT: ${SSO_PORT}
+    restart: always
     depends_on:
       - sso
     networks:
