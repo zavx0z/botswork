@@ -86,7 +86,8 @@
         "zavx0z",
         "Катюлечька",
         "пирингового",
-        "промиса"
+        "промиса",
+        "venv"
     ],
     "files.watcherExclude": {
         "**/.git/objects/**": true,
@@ -130,16 +131,13 @@
         "*.cts": "${capture}.typegen.ts"
     },
     "xstate.useDeclarationFileForTypegenData": true,
-    "workbench.colorTheme": "One Dark Pro Darker",
+    "workbench.colorTheme": "GitHub Dark",
     "[typescript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "explorer.confirmDelete": false,
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.autopep8"
     },
     "autopep8.args": [
         "--max-line-length",
@@ -167,14 +165,5 @@
     },
     "files.autoSaveDelay": 4000,
     "explorer.autoReveal": false,
-    "a-file-icon-vscode.folderTheme": "classic",
-    "pgsql.debugServerPort": 3001,
-    "pgsql.connections": [
-        {
-            "server": "localhost",
-            "database": "BotsWorkDB",
-            "user": "zavx0z",
-            "password": "ZICREFCTnZE4yNhd"
-        }
-    ],
+    "a-file-icon-vscode.folderTheme": "classic"
 }
