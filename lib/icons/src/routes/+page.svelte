@@ -12,7 +12,7 @@
     {#each Object.keys(icons) as iconName}
         <span class="flex gap-1 text-primary-500">
                 <svelte:component this={getIcon(icons, iconName)} />
-            <span>{iconName}</span>
+            <span class="cursor-default">{iconName}</span>
         </span>
     {/each}
   {:catch error}

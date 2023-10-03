@@ -2,20 +2,18 @@
   "name": "botswork",
   "type": "module",
   "devDependencies": {
+<<<<<<< HEAD
     "bun-types": "latest",
     "nx": "^16.9.1",
+=======
+>>>>>>> origin/master
     "@xstate/cli": "^0.5.2",
-    "@xstate/inspect": "^0.8.0"
+    "@xstate/inspect": "^0.8.0",
+    "bun-types": "latest",
+    "svelte-adapter-bun": "^0.5.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0",
-    "@lib/icons": "workspace:*",
-    "@lib/theme": "workspace:*",
-    "@lib/ui": "workspace:*",
-    "@module/secure": "workspace:*",
-    "@web/portal": "workspace:*",
-    "@desktop/portal": "workspace:*",
-    "@server/io": "workspace:*"
+    "typescript": "^5.0.0"
   },
   "workspaces": [
     "lib/*",
@@ -23,6 +21,7 @@
     "module/*",
     "web/*",
     "desktop/*"
+<<<<<<< HEAD
   ],
   "scripts": {
     "clearCache": "bun pm cache rm",
@@ -31,4 +30,7 @@
     "visAllMeta": "gource --hide mouse,progress,filenames --filename-time 10 --font-colour 87ceeb --highlight-colour BFC8D1 --disable-input --camera-mode overview --background 1b2634 --seconds-per-day 0.1 --title BotsWork --auto-skip-seconds 1 --file-idle-time 0 --key -1920x1080 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 4 -bf 0  ./tmp/all_meta.mp4",
     "docker-vis": "docker run --rm -it --name dcv -v .:/input pmsipilot/docker-compose-viz render -m image docker-compose.yml"
   }
+=======
+  ]
+>>>>>>> origin/master
 }

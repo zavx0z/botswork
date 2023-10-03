@@ -1,0 +1,195 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/*.crswap": true,
+        "**/node_modules": true,
+        "**/__pycache__": true,
+        ".vscode": true,
+        ".venv": true,
+        "**/.venv": true,
+        "server/sso/.venv": true
+    },
+    "hide-files.files": [
+        "**/.venv",
+        "server/sso/.venv",
+        "web/portal/.svelte-kit"
+    ],
+    "workbench.iconTheme": "a-file-icon-vscode",
+    "a-file-icon-vscode.folderTheme": "specific",
+    "a-file-icon-vscode.folders.associations": {
+        "sso": "./extensions/icons/sso.svg"
+    },
+    // BUN
+    "bun.runtime": "home/zavx0z/.bun/bin/bun",
+    "bun.debugTerminal.enabled": true, // If support for Bun should be added to the default "JavaScript Debug Terminal".
+    "bun.debugTerminal.stopOnEntry": false, // If the debugger should stop on the first line of the program.
+    // ==========================================
+    "css.lint.unknownAtRules": "ignore",
+    "editor.bracketPairColorization.enabled": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "files.autoSave": "afterDelay",
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "editor.minimap.autohide": true,
+    "cSpell.language": "en,ru",
+    "vscodeGoogleTranslate.preferredLanguage": "Russian",
+    "cSpell.userWords": [
+        "asyncpg",
+        "authjwt",
+        "autofetch",
+        "autohide",
+        "autoimport",
+        "autopep",
+        "backref",
+        "benic",
+        "botik",
+        "botswork",
+        "bucketname",
+        "canvaskit",
+        "clientjs",
+        "clsx",
+        "crswap",
+        "dbname",
+        "dotenv",
+        "dramatiq",
+        "esbenp",
+        "fastapi",
+        "Fira",
+        "iconify",
+        "isnot",
+        "jsify",
+        "jwtkey",
+        "killport",
+        "lucide",
+        "passlib",
+        "pkey",
+        "plpgsql",
+        "pswd",
+        "publint",
+        "pycache",
+        "pydantic",
+        "pylint",
+        "selectinload",
+        "signout",
+        "socketio",
+        "sortcolumn",
+        "sortorder",
+        "sqlalchemy",
+        "supabase",
+        "tabnine",
+        "tailwindcss",
+        "tauri",
+        "threlte",
+        "treenode",
+        "typegen",
+        "unplugin",
+        "uselist",
+        "vsync",
+        "xstate",
+        "zavx0z",
+        "Катюлечька",
+        "пирингового",
+        "промиса",
+        "venv"
+    ],
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+    },
+    "editor.fontFamily": "JetBrains Mono",
+    "editor.fontLigatures": true,
+    "editor.lineHeight": 1.5,
+    "prettier.semi": false,
+    "editor.wordWrapColumn": 120,
+    "prettier.printWidth": 120,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.bracketSameLine": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "remote.tunnels.access.hostNameOverride": "zavx0z",
+    "svelte.enable-ts-plugin": true,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.ts": "${capture}.js, ${capture}.typegen.ts, ${capture}.typegen.d.ts",
+        "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+        "*.jsx": "${capture}.js",
+        "*.tsx": "${capture}.ts, ${capture}.typegen.ts",
+        "tsconfig.json": "tsconfig.*.json",
+        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml",
+        "*.mts": "${capture}.typegen.ts",
+        "*.cts": "${capture}.typegen.ts"
+    },
+    "xstate.useDeclarationFileForTypegenData": true,
+    "workbench.colorTheme": "GitHub Dark",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "explorer.confirmDelete": false,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "autopep8.args": [
+        "--max-line-length",
+        "120"
+    ],
+    "pylint.args": [
+        "--disable=C0103",
+        "--disable=C0114", // module doc string
+        "--disable=C0115", //class doc sting
+        "--disable=C0116", //function doc sting
+        "--disable=C0301" //line-too-long
+    ],
+    "explorer.confirmDragAndDrop": false,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "workbench.startupEditor": "none",
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.linkedEditing": true,
+    "svelte-autoimport.useSemiColon": false,
+    "svelte-autoimport.autoComplete": false,
+    "database-client.highlightSQLBlock": true,
+    "tailwind-fold.autoFold": false,
+    "tailwind-fold.foldedText": "",
+    "editor.unicodeHighlight.allowedLocales": {
+        "ru": true
+    },
+    "files.autoSaveDelay": 4000,
+    "explorer.autoReveal": false,
+    "cSpell.words": [
+        "eruda"
+    ],
+    "a-file-icon-vscode.activeIconPacks": [
+        "angular",
+        "ngrx",
+        "nest",
+        "react",
+        "redux",
+        "recoil",
+        "vue",
+        "vuex",
+        "rails",
+        "phalcon",
+        "volt",
+        "none"
+    ]
+}

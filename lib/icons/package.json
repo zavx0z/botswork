@@ -2,7 +2,7 @@
   "name": "@lib/icons",
   "version": "0.0.1",
   "scripts": {
-    "dev": "bun --bun run vite dev --host",
+    "dev": "vite dev --host 0.0.0.0",
     "build": "vite build && bun run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
@@ -22,10 +22,11 @@
     "!dist/**/*.spec.*"
   ],
   "peerDependencies": {
-    "svelte": "^4.0.0",
-    "@lib/theme": "workspace:*"
+    "svelte": "^4.0.0"
   },
   "devDependencies": {
+    "@lib/theme": "workspace:*",
+    "@lib/dev": "workspace:*",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.0.0",
