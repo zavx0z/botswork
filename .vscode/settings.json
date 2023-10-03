@@ -165,5 +165,8 @@
     },
     "files.autoSaveDelay": 4000,
     "explorer.autoReveal": false,
-    "a-file-icon-vscode.folderTheme": "classic"
+    "a-file-icon-vscode.folderTheme": "specific",
+    "cSpell.words": [
+        "eruda"
+    ]
 }
