@@ -9,7 +9,7 @@
         "**/*.crswap": true,
         "**/node_modules": true,
         "**/__pycache__": true,
-        ".vscode": false,
+        ".vscode": true,
         ".venv": true
     },
     "hide-files.files": [],
@@ -133,7 +133,7 @@
     "xstate.useDeclarationFileForTypegenData": true,
     "workbench.colorTheme": "GitHub Dark",
     "[typescript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "explorer.confirmDelete": false,
     "[json]": {
