@@ -26,6 +26,7 @@
 		"svelte": "^4.0.0"
 	},
 	"devDependencies": {
+		"@lib/dev": "workspace:*",
 		"@lib/icons": "workspace:*",
 		"@lib/ui": "workspace:*",
 		"@lib/theme": "workspace:*",

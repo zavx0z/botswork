@@ -1,8 +1,10 @@
 <script lang="ts">
-	import '@lib/theme/app.css'
+  import "@lib/theme/app.css"
+  import { devTools } from "@lib/dev"
 </script>
 
+<div use:devTools />
 <svelte:head>
-	<title>@module/screen-share</title>
+  <title>@module/screen-share</title>
 </svelte:head>
 <slot />

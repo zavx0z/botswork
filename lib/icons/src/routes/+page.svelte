@@ -1,5 +1,5 @@
 <script lang="ts">
-  const getIcon = (icons: {[key: string]: any}, iconName: string) => {
+  const getIcon = (icons: { [key: string]: any }, iconName: string) => {
     return icons[iconName as keyof typeof icons]
   }
 </script>
@@ -10,10 +10,10 @@
     <div />
   {:then icons}
     {#each Object.keys(icons) as iconName}
-        <span class="flex gap-1 text-primary-500">
-                <svelte:component this={getIcon(icons, iconName)} />
-            <span class="cursor-default">{iconName}</span>
-        </span>
+      <span class="flex gap-1 text-primary-500">
+        <svelte:component this={getIcon(icons, iconName)} />
+        <span class="cursor-default">{iconName}</span>
+      </span>
     {/each}
   {:catch error}
     <div>
