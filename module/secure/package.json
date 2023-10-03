@@ -31,6 +31,7 @@
     "@sveltejs/kit": "^1.20.4"
   },
   "devDependencies": {
+    "@lib/dev": "workspace:*",
     "@lib/icons": "workspace:*",
     "@lib/ui": "workspace:*",
     "@lib/theme": "workspace:*",
