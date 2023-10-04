@@ -9,14 +9,30 @@ import {
   WebRTCReceiverMachine,
   MediaDeviceMachine,
 } from "@lib/peer"
-// import {io} from 'socket.io-client'
-// import {Io} from 'channels'
 import type { LayoutLoad } from "./$types"
-import { PUBLIC_HOST } from "$env/static/public"
+import { PUBLIC_IO_HOST } from "$env/static/public"
 
 export const load: LayoutLoad = async ({ parent }) => {
   const { auth } = await parent()
   const { accessToken } = auth.getSnapshot().context
+  document.cookie = `accessToken=${accessToken}`
+  
+  const socket = new WebSocket(PUBLIC_IO_HOST)
+  socket.addEventListener("message", (event) => {
+    console.log("message", event.data)
+  })
+  socket.addEventListener("open", (event) => {
+    console.log("open", event)
+  })
+  socket.addEventListener("close", (event) => {
+    console.log("close", event)
+  })
+  socket.addEventListener("error", (event) => {
+    console.log("error", event)
+  })
+  setTimeout(() => {
+    socket.send("message")
+  }, 1000)
   // const sio = io(PUBLIC_HOST, {
   //     transportOptions: {polling: {extraHeaders: {Authorization: 'Bearer ' + accessToken}}}
   // }).on('connect_error', (err) => {
