@@ -3,7 +3,7 @@ export type Cookies = {
 };export interface Data {
   createdAt: number
   channelId: string | null
-  uuid: string
+  uuid: string | null
   client: string
 }
 

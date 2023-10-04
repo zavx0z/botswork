@@ -14,9 +14,9 @@ import { PUBLIC_IO_HOST } from "$env/static/public"
 
 export const load: LayoutLoad = async ({ parent }) => {
   const { auth } = await parent()
-  const { accessToken } = auth.getSnapshot().context
+  const { accessToken, id } = auth.getSnapshot().context
   document.cookie = `accessToken=${accessToken}`
-  
+
   const socket = new WebSocket(PUBLIC_IO_HOST)
   socket.addEventListener("message", (event) => {
     console.log("message", event.data)
@@ -25,23 +25,14 @@ export const load: LayoutLoad = async ({ parent }) => {
     console.log("open", event)
   })
   socket.addEventListener("close", (event) => {
-    console.log("close", event)
+    console.log("close", event.code, event.reason)
   })
   socket.addEventListener("error", (event) => {
-    console.log("error", event)
+    console.log("error", event.type)
   })
   setTimeout(() => {
     socket.send("message")
   }, 1000)
-  // const sio = io(PUBLIC_HOST, {
-  //     transportOptions: {polling: {extraHeaders: {Authorization: 'Bearer ' + accessToken}}}
-  // }).on('connect_error', (err) => {
-  //     sio.disconnect()
-  //     console.dir(err)
-  // })
-  // sio.on('connect', () => console.log('Connect'))
-  // sio.on('disconnect', () => console.log('Disconnect'))
-  // sio.on(Io.CONNECT, (message) => console.log(message))
 
   const connection = new RTCPeerConnection({
     iceServers: [
