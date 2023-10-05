@@ -4,5 +4,5 @@
   let { webRTCReceiver } = data
   console.log("webRTCReceiver", $webRTCReceiver.value)
 </script>
-
+<a href="/" class="text-primary-500">На главную</a>
 <slot />

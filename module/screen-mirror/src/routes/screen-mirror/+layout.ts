@@ -1,5 +1,3 @@
-// https://webrtc.github.io/samples/
-// import {inspect} from '@xstate/inspect'
 export let ssr = false
 import { interpret } from "xstate"
 import {

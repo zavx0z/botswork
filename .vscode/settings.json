@@ -9,16 +9,9 @@
         "**/*.crswap": true,
         "**/node_modules": true,
         "**/__pycache__": true,
-        ".vscode": true,
         ".venv": true,
-        "**/.venv": true,
-        "server/sso/.venv": true
+        "**/.venv": true
     },
-    "hide-files.files": [
-        "**/.venv",
-        "server/sso/.venv",
-        "web/portal/.svelte-kit"
-    ],
     "workbench.iconTheme": "a-file-icon-vscode",
     "a-file-icon-vscode.folderTheme": "specific",
     "a-file-icon-vscode.folders.associations": {
@@ -176,7 +169,8 @@
     "files.autoSaveDelay": 4000,
     "explorer.autoReveal": false,
     "cSpell.words": [
-        "eruda"
+        "eruda",
+        "Monokai"
     ],
     "a-file-icon-vscode.activeIconPacks": [
         "angular",
@@ -191,5 +185,31 @@
         "phalcon",
         "volt",
         "none"
+    ],
+    "taskExplorer.exclude": [
+        "**/.vscode-test/**",
+        "**/Assets/**",
+        "**/bin/**",
+        "**/build/**",
+        "**/dist/**",
+        "**/doc/**",
+        "**/example/**",
+        "**/examples/**",
+        "**/ext/**",
+        "**/obj/**",
+        "**/out/**",
+        "**/output/**",
+        "**/packages/**",
+        "**/release/**",
+        "**/releases/**",
+        "**/samples/**",
+        "**/sdks/**",
+        "**/static/**",
+        "**/target/**",
+        "**/test/**",
+        "**/third_party/**",
+        "**/vendor/**",
+        "**/work/**",
+        "/home/zavx0z/botswork/server/sso/sso/routes/refresh.py"
     ]
 }

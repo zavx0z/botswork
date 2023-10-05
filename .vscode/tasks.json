@@ -1,17 +1,87 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run as Bash Script",
+            "label": "@server/io:dev",
             "type": "shell",
-            "command": "/bin/bash ${file}",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
+            "command": "bun --watch index.ts",
+            "options": {
+                "cwd": "${workspaceFolder}/server/io"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "сокет сервер"
+                }
             }
+        },
+        {
+            "label": "@module/screen-share:dev",
+            "type": "shell",
+            "command": "bun --bun run dev",
+            "options": {
+                "cwd": "${workspaceFolder}/module/screen-share"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "ready in"
+                }
+            },
+            "dependsOn": [
+                "@server/io:dev"
+            ]
+        },
+        {
+            "label": "@module/screen-mirror:dev",
+            "type": "shell",
+            "command": "bun --bun run dev",
+            "options": {
+                "cwd": "${workspaceFolder}/module/screen-mirror"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "ready in"
+                }
+            },
+            "dependsOn": [
+                "@server/io:dev"
+            ],
+            "dependsOrder": "sequence"
         }
     ]
 }
