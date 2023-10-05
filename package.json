@@ -7,9 +7,6 @@
     "bun-types": "latest",
     "svelte-adapter-bun": "^0.5.0"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
   "workspaces": [
     "lib/*",
     "server/*",
