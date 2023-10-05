@@ -2,6 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "@lib/dev:build",
+            "type": "shell",
+            "command": "bun --bun run build",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/dev"
+            },
+        },
+        {
             "label": "@server/io:dev",
             "type": "shell",
             "command": "bun --watch index.ts",
