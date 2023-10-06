@@ -11,7 +11,7 @@
   export let content: Readable<string> | Writable<string>
   export let hFull = true
   export let readOnly = false
-
+  export let language: "typescript" | "javascript" | "html" | "css" = "typescript"
   let subscriptions: Array<(text: string) => void> = []
   let divEl: HTMLDivElement
   let editor: editor.IStandaloneCodeEditor
@@ -55,7 +55,7 @@
     Monaco = await import("monaco-editor")
     editor = Monaco.editor.create(divEl, {
       value: $content,
-      language: "java",
+      language: language,
       theme: "vs-dark",
       readOnly: readOnly,
 
