@@ -42,7 +42,7 @@
         {/each}
       </div>
       <!-- Действия входа stateNode-actions -->
-      <div class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden" data-viz-actions="entry">
+      <div data-viz-actions="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden">
         {#each definition.entry as action}
           <div data-viz="action" data-viz-action="entry">
             <div data-viz="action-type">{action.type}</div>
@@ -50,7 +50,7 @@
         {/each}
       </div>
       <!-- Действия выхода stateNode-actions -->
-      <div class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden" data-viz-actions="exit">
+      <div data-viz-actions="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden">
         {#each definition.exit as action}
           <div data-viz="action" data-viz-action="exit">
             <div data-viz="action-type">{action.type}</div>
