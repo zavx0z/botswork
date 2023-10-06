@@ -9,7 +9,8 @@
   import type { Readable, Writable } from "svelte/store"
 
   export let content: Readable<string> | Writable<string>
-  let hFull = true
+  export let hFull = true
+  export let readOnly = false
 
   let subscriptions: Array<(text: string) => void> = []
   let divEl: HTMLDivElement
@@ -56,7 +57,7 @@
       value: $content,
       language: "java",
       theme: "vs-dark",
-      readOnly: false,
+      readOnly: readOnly,
 
       scrollBeyondLastLine: false,
       wordWrap: "on",
