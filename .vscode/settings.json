@@ -104,7 +104,7 @@
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[svelte]": {
-        "editor.defaultFormatter": "svelte.svelte-vscode"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "editor.fontFamily": "JetBrains Mono",
     "editor.fontLigatures": true,
@@ -156,7 +156,7 @@
     "explorer.confirmDragAndDrop": false,
     "typescript.updateImportsOnFileMove.enabled": "always",
     "workbench.startupEditor": "none",
-    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.multiCursorModifier": "alt",
     "editor.linkedEditing": true,
     "svelte-autoimport.useSemiColon": false,
     "svelte-autoimport.autoComplete": false,

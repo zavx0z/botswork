@@ -1,5 +1,8 @@
 {
     "recommendations": [
-        "spmeesseman.vscode-taskexplorer"
+        "spmeesseman.vscode-taskexplorer",
+        "stivo.tailwind-fold",
+        "oven.bun-vscode",
+        "mhutchie.git-graph"
     ]
 }
