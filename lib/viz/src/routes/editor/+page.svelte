@@ -8,7 +8,7 @@
   }
   `)
 </script>
-
+<a href="/" class="text-primary-500">home</a>
 <div class="h-96 w-96">
   <Editor bind:content hFull={false} language='typescript'/>
 </div>
