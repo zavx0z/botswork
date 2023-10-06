@@ -58,6 +58,9 @@
       language: language,
       theme: "vs-dark",
       readOnly: readOnly,
+      minimap: {
+        enabled: false,
+      },
 
       scrollBeyondLastLine: false,
       wordWrap: "on",
