@@ -8,16 +8,8 @@ import { interpret } from "xstate"
 import { WebSocketMachine } from "$lib"
 
 export const load = (() => {
-  if (PUBLIC_XSTATE_DEBUG === "true")
-    inspect({
-      ...(PUBLIC_XSTATE_IFRAME === "true" ? {} : { iframe: undefined }),
-      ...(PUBLIC_XSTATE_PANEL === "true"
-        ? {}
-        : {
-            url: "https://stately.ai/viz/embed?zoom=1&panel=full&showOriginalLink=0&mode=viz&pan=1&controls=1&inspect",
-          }),
-    })
-  const ws = interpret(WebSocketMachine, { devTools: PUBLIC_XSTATE_DEBUG === "true" }).start()
+
+  
 
   const socket = new WebSocket(PUBLIC_IO_HOST)
   socket.addEventListener("message", (event) => {
@@ -35,6 +27,5 @@ export const load = (() => {
   setTimeout(() => {
     socket.send("message")
   }, 1000)
-
-  return { ws }
+  return { }
 }) satisfies LayoutLoad
