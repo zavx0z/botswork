@@ -11,8 +11,9 @@ export default createMachine({
       cond: (ctx) => ctx.zoom > 0.5,
     },
     "ZOOM.IN": {
-        actions: assign({ zoom: (ctx) => ctx.zoom + 0.1 }),
-        cond: (ctx) => ctx.zoom < 1,
-      },
+      actions: assign({ zoom: (ctx) => ctx.zoom + 0.1 }),
+      cond: (ctx) => ctx.zoom < 1,
     },
+  },
+  predictableActionArguments: true,
 })

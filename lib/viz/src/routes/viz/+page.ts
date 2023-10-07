@@ -1,7 +1,7 @@
 import { interpret } from "xstate"
 import type { PageLoad } from "./$types"
 import CanvasMachine from "$lib/machine/CanvasMachine"
-import { createSimulationMachine } from "$lib/machine/SimMachine"
+import { createSimulationMachine } from "$lib/machine/sumulation/SimMachine"
 import TestMachine from "$lib/machine/TestMachine"
 
 export const load = (async () => {

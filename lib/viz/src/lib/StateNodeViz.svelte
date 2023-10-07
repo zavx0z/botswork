@@ -1,13 +1,23 @@
 <script lang="ts">
   import type { StateNodeDefinition } from "xstate"
-  import EventViz from "./EventViz.svelte"
+  import TransitionViz from "./TransitionViz.svelte"
 
   export let definition: StateNodeDefinition<any, any, any>
   export let parent: StateNodeDef | undefined = undefined
   export let service: any
 
+  let { machine } = $service.context
+  $: machine = $service.context.machine
+
   let active: boolean
   $: active = Boolean($service.context.state.configuration.find((n: any) => n.id === definition.id))
+  let preview: boolean
+  $: {
+    if ($service.context.previewEvent) {
+      const previewState = machine.transition($service.context.state, $service.context.previewEvent)
+      preview = Boolean(previewState.configuration.find((n: any) => n.id === definition.id))
+    } else preview = false
+  }
 </script>
 
 <!-- Группа stateNodeGroup -->
@@ -16,8 +26,9 @@
   <div
     data-viz-parent-type={parent?.type}
     data-viz-active={active}
+    data-viz-previewed={preview}
     title={`#${definition.id}`}
-    class="inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 data-[viz-active=true]:border-primary-500 data-[viz-active=false]:opacity-60"
+    class="inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 data-[viz-previewed=true]:border-primary-500 data-[viz-active=true]:border-primary-500 data-[viz-active=false]:opacity-60"
   >
     <!-- Заголовок ноды stateNode-header -->
     <div class="grid grid-cols-[auto_1fr] items-center bg-surface-700">
@@ -67,9 +78,9 @@
     {/if}
   </div>
   <!-- transitions -->
-  <div class="transitions">
+  <div class="flex flex-col items-start justify-start gap-2">
     {#each definition.transitions as transition}
-      <EventViz definition={transition} />
+      <TransitionViz definition={transition} {service} />
     {/each}
   </div>
 </div>
