@@ -1,0 +1,16 @@
+{
+  "name": "@service/telegram",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "input": "^1.0.1",
+    "prompts": "^2.4.2",
+    "telegram": "^2.19.6"
+  }
+}

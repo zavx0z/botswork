@@ -169,8 +169,14 @@
     "files.autoSaveDelay": 4000,
     "explorer.autoReveal": false,
     "cSpell.words": [
+        "aiohttp",
+        "cryptg",
         "eruda",
-        "Monokai"
+        "hachoir",
+        "libdir",
+        "Monokai",
+        "noforwards",
+        "tdjson"
     ],
     "a-file-icon-vscode.activeIconPacks": [
         "angular",
