@@ -1,15 +1,8 @@
 # @service/telegram
 
-To install dependencies:
+`.env`
 
-```bash
-bun install
+```shell
+TELEGRAM_API_ID=
+TELEGRAM_API_HASH=
 ```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.0.4. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
