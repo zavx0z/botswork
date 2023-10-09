@@ -43,22 +43,19 @@ const createGoogleSpreadSheetMachine = (serviceAccount: JWT) => {
 }
 const machine = createGoogleSpreadSheetMachine(serviceAccountAuth)
 
-const SpreadSheetActor = createActor(machine, {
-  input: { path: "1dV8t0o9ENfrXCLIXtPjIZfa7cJ_EQCsTcIy_vSm-864" },
-})
-
+const SpreadSheetActor = createActor(machine, { input: { path: "1dV8t0o9ENfrXCLIXtPjIZfa7cJ_EQCsTcIy_vSm-864" } })
 SpreadSheetActor.subscribe((state) => {
   const persistedState = SpreadSheetActor.getPersistedState()
   console.log(JSON.stringify(persistedState))
   // console.log(state)
 })
 SpreadSheetActor.start()
-SpreadSheetActor.send({ type: "doc.open", path: "1dV8t0o9ENfrXCLIXtPjIZfa7cJ_EQCsTcIy_vSm-864" })
-await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches("opened"))
+// SpreadSheetActor.send({ type: "doc.init", path: "1dV8t0o9ENfrXCLIXtPjIZfa7cJ_EQCsTcIy_vSm-864" })
+await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches("open"))
 
-SpreadSheetActor.send({ type: "document.title.update", title: "Вопросы" })
-const { context } = await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches({ opened: "titleUpdated" }))
-console.log(context.docTitle)
+SpreadSheetActor.send({ type: "doc.title.update", title: "Вопросы" })
+const { context } = await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches({ open: "titleUpdated" }))
+console.log(context.title)
 // console.log(JSON.stringify(GoogleSheetActor.getSnapshot().toJSON()))
 
 // const doc = new GoogleSpreadsheet("1dV8t0o9ENfrXCLIXtPjIZfa7cJ_EQCsTcIy_vSm-864", serviceAccountAuth)
