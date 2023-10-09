@@ -18,21 +18,24 @@ const createGoogleSpreadSheetMachine = (serviceAccount: JWT) => {
         ({ input }) =>
           new Promise(async (resolve, reject) => {
             try {
-              const googleSpreadsheet = new GoogleSpreadsheet(input.path, serviceAccount)
+              const googleSpreadsheet = new GoogleSpreadsheet(input, serviceAccount)
               await googleSpreadsheet.loadInfo()
               doc = googleSpreadsheet
-              return resolve("success")
+              return resolve({
+                title: doc.title,
+                sheets: doc.sheetsByIndex.map(({ sheetId, title }) => ({ id: sheetId, title })),
+              })
             } catch (e: any) {
               return reject(e.message)
             }
           }),
       ),
       docTitleUpdate: fromPromise(
-        ({ input }) =>
+        ({ input: { title } }) =>
           new Promise(async (resolve, reject) => {
             try {
-              await doc.updateProperties({ title: input })
-              return resolve(input)
+              await doc.updateProperties({ title })
+              return resolve({ title })
             } catch (e: any) {
               return reject(e.message)
             }
@@ -50,11 +53,9 @@ SpreadSheetActor.subscribe((state) => {
   // console.log(state)
 })
 SpreadSheetActor.start()
-// SpreadSheetActor.send({ type: "doc.init", path: "1dV8t0o9ENfrXCLIXtPjIZfa7cJ_EQCsTcIy_vSm-864" })
-await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches("open"))
-
-SpreadSheetActor.send({ type: "doc.title.update", title: "Вопросы" })
-const { context } = await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches({ open: "titleUpdated" }))
+await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches("doc"), { timeout: 40000 })
+SpreadSheetActor.send({ type: "doc.title.rename", title: "Вопросы" })
+const { context } = await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches({ doc: "idle" }))
 console.log(context.title)
 // console.log(JSON.stringify(GoogleSheetActor.getSnapshot().toJSON()))
 

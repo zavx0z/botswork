@@ -1,72 +1,80 @@
 import { createMachine, assign } from "xstate"
+type sheets = {
+  id: string
+  title: string
+}[]
 type Types = {
-  events: { type: "doc.init"; path: string } | { type: "doc.close" } | { type: "doc.title.update"; title: string }
+  events: { type: "doc.open"; path: string } | { type: "doc.close" } | { type: "doc.title.rename"; title: string }
   context: {
     path: string | null
     error: string | null
     title: string | null
+    sheets: sheets
   }
-  actions: { type: "pathSave" } | { type: "pathClear" } | { type: "errorSave" } | { type: "errorClear" }
+  actions: { type: "pathSave" } | { type: "pathClear" } | { type: "errorSave" } | { type: "errorClear" } | { type: "sheetsSave" } | { type: "titleSave" }
   input: { path?: string }
 }
 export default createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwA4CcwEMIFpYAswwAXAOgEsA7c4gYggHtKwLKA3BgaxcYGMBXALZhKxANoAGALqJQKBrBrkmskAA9EAZgBMAVlLaAbLsPaJADgDsl3RO3aANCACeiACyGJpAJzbvlw2tvAEZzbVDDAF9Ip1QMbDxCElYaWjA0NAY0UhQAG0xiADMswVI+IRFxaVV5RWJlSlUNBF1HF0RgiV1LUmNDHW1NW383S2jY9CxcAiIyBhQRegZeUl5chTBJGSQQWqUVHebTJ1cEf30+zU1gw19Nc1HxkDipxNnSecW+UnriXJZ+CgIAVNtUdnt6gdQM1WoZSJZNG5NNZgto3N5EZoTu4PD4-NYwpYQvdgk8XgkZslPpQfjR-gBVIEgpbMVgcbhlZYAFTpYEZwOIoO2cgU+0ahw6EnupGCllCugVljcsus2IQyuCpDcumu3kCCox5kRZMmFKScwWNN+DKZgrSGSyOXyRRKnN4PL+fNtQpqosh4uhkulsvliuV1ksap1XksUuCerMRgk8ZN8Wm5o+ltpnv5IIgtDUsGIINImEKgrQAApOgBKWjk9PvanZm0CyBbX11BpNDr3OEBA1WMzBeNtU5ItwyokDrrKwz9VOvSlkNYbJYrKg0Dvgv3diUIa76IwmMxWGx2McdPQ+by37wWNzmWWjczRGIgSgMCBwVQNt4kTsxR7BAcEMNUcH0O8oOgkJdEXM13k3YhAP9YC3EvFpgguExEUfcwdVfd8-2XTMRBQvdA3VSxzHhTEUTRDEkTVNF9G1HQ7DCCxbiiIjTUbKks3ICB-nIqF1A6XRUVIJ80XMfwET0bxzDVNw3C8dDzmsOcTEIiY03-C0RBbL021EgNxIQWN9AkDxzEMOybifJ8VMGPFznvPRJPwtx4P4wyrV5XNBQgMzgNRdDSAkaiorCbwFVwlSrineSFWVR80R4vSlwzVdYDAUL9zRbQtXCGTbm1XQkQwuL9Cw-orkMUIVU0N9IiAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwA4CcwEMIFpYAswwAXAOgHsUwA7AYgnOrFIEtqA3cga2YYGMArgFsaxANoAGALqJQKcrBbEWjWSAAeiAMwAmAKykdANj1GdADnMBGACxGAnAHYdjgDQgAntq3nSTkzZWelb2ViYSNgC+ke6oGNh4hCQUVHRgaGjkaKQoADaYxABmWUKk-MKikjJIIPKKyqo1mgh6Ou5eCFYSjvakWnr2Wlo29jamjuaO0bHoWLgERGT8rBC5YPTkfKR8uQpgVWp1SirUas1m7Yj2Tn0DQyNjRhNTMSBxc4mLZZsraxtbymIa1IGGomBEBxqRwapyaiEmNlI5juNlR5h0Nh0VnMlwQWkcjlIYy0Ens+kcem6uiir3eCQWyWWgL+DCYrA43F4mwAKko1gBVFAQAr7aSHBTHRqgZoIpEotEYrE4zyIPStIkSMy6cxDcxa6ZvWb0pJLH7M9bpTLZPIFYpoUr8XlAsCC4XEUXVOQSmFneGORHIwaomzozHY3FjXrE0nkymOakGunzE3bXawdbLSg0SFe+onX14-SGExmSy2BzONwqzpF67XAlWRvWIw017UcgQOBqJOfEjivNSjSIHBGXEjxNG5NfLOw3OS2dDhCY3FBLSkZwmYbmGzDBUT+JTxmbfvzgs2Cbr4Y+Yw6QajPRaXEYgzR+xGHxORwSPT7j4M01bCwqxgCePpwp0XS+PYmo6DouhOI2oQRqiRK3iYljmJ+36-saXxMnyIFQt6+bga0RiXju6JmHeYy4teRIPqSmpPM4dg4YeZA7HsoEkdKiCKqh2JPPimrfueuL+HKgxWDo37+vYwTRNEQA */
     id: "spread-sheet",
-    context: ({ input }) => {
-      console.log("input ", input.path ? input.path : null)
-      return {
-        path: input.path ? input.path : null,
-        title: null,
-        error: null,
-      }
-    },
-    initial: "init",
+    context: ({ input }) => ({
+      path: input.path || null,
+      title: null,
+      sheets: [],
+      error: null,
+    }),
+    initial: "open",
     states: {
-      init: {
+      open: {
         description: `Инициализация документа`,
         invoke: {
           id: "document",
           src: "document",
-          onDone: { target: "open" },
-          onError: {
-            target: "close",
-            actions: "errorSave",
+          onDone: {
+            target: "#spread-sheet.doc",
+            actions: ["titleSave", "sheetsSave"],
           },
-          input: ({ context }) => ({ path: context.path }),
+          onError: {
+            target: "#spread-sheet.close",
+            actions: ["errorSave"],
+          },
+          input: ({ context }) => context.path,
         },
       },
-      open: {
+      doc: {
         description: `Документ открыт`,
-        entry: "errorClear",
-        on: {
-          "doc.close": {
-            target: "close",
-            description: `Закрыть документ`,
-          },
-          "doc.title.update": ".titleUpdate",
-        },
         initial: "idle",
         states: {
-          idle: {},
-          titleUpdate: {
-            invoke: {
-              id: "docTitleUpdate",
-              src: "docTitleUpdate",
-              input: ({ event }) => event.type === "doc.title.update" && event.title,
-              onDone: {
-                target: "#spread-sheet.open.titleUpdated",
-                actions: assign(({ context, event }) => ({ ...context, title: event.output })),
+          idle: {
+            description: `Ожидание ввода команды`,
+            entry: "errorClear",
+            on: {
+              "doc.close": {
+                description: `Закрыть документ`,
+                target: "#spread-sheet.close",
               },
-              onError: {
-                target: "#spread-sheet.open.idle",
-                actions: "errorSave",
+              "doc.title.rename": {
+                description: "Переименовать документа",
+                target: "#spread-sheet.doc.title",
               },
             },
           },
-          titleUpdated: {
-            after: {
-              10: { target: "#spread-sheet.open.idle" },
+          title: {
+            description: "Обновление заголовка документа",
+            invoke: {
+              id: "docTitleUpdate",
+              src: "docTitleUpdate",
+              // @ts-ignore
+              input: ({ event: { title } }) => ({ title }),
+              onDone: {
+                target: "#spread-sheet.doc.idle",
+                actions: "titleSave",
+              },
+              onError: {
+                target: "#spread-sheet.doc.idle",
+                actions: "errorSave",
+              },
             },
           },
         },
@@ -75,9 +83,9 @@ export default createMachine(
         entry: ["pathClear"],
         description: `Документ закрыт`,
         on: {
-          "doc.init": {
+          "doc.open": {
             description: `Открыть документ`,
-            target: "init",
+            target: "open",
             actions: ["pathSave"],
           },
         },
@@ -89,23 +97,17 @@ export default createMachine(
   },
   {
     actions: {
+      //@ts-ignore
+      titleSave: assign(({ context, event }) => ({ ...context, title: event.output.title })),
+      //@ts-ignore
+      sheetsSave: assign(({ context, event }) => ({ ...context, sheets: event.output.sheets })),
+      // @ts-ignore
+      errorSave: assign(({ context, event }) => ({ ...context, error: event.data })),
       errorClear: assign(({ context }) => ({ ...context, error: null })),
-      errorSave: assign(({ context, event }) => {
-        // @ts-ignore
-        const { data } = event
-        return { ...context, error: data }
-      }),
+
+      // @ts-ignore
+      pathSave: assign(({ context, event }) => ({ ...context, path: event.path })),
       pathClear: assign(({ context }) => ({ ...context, path: null })),
-      pathSave: assign(({ context, event }) => {
-        switch (event.type) {
-          case "doc.init":
-            return { ...context, path: event.path }
-          case "doc.close":
-            return { ...context, path: null }
-          default:
-            return context
-        }
-      }),
     },
   },
 )
