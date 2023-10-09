@@ -11,12 +11,20 @@ type Types = {
     title: string | null
     sheets: sheets
   }
-  actions: { type: "pathSave" } | { type: "pathClear" } | { type: "errorSave" } | { type: "errorClear" } | { type: "sheetsSave" } | { type: "titleSave" }
+  actions:
+    | { type: "pathSave" }
+    | { type: "pathClear" }
+    | { type: "errorSave" }
+    | { type: "errorClear" }
+    | { type: "sheetsSave" }
+    | { type: "titleSave" }
+    | { type: "titleClear" }
+    | { type: "sheetsClear" }
   input: { path?: string }
 }
 export default createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwA4CcwEMIFpYAswwAXAOgHsUwA7AYgnOrFIEtqA3cga2YYGMArgFsaxANoAGALqJQKcrBbEWjWSAAeiAMwAmAKykdANj1GdADnMBGACxGAnAHYdjgDQgAntq3nSTkzZWelb2ViYSNgC+ke6oGNh4hCQUVHRgaGjkaKQoADaYxABmWUKk-MKikjJIIPKKyqo1mgh6Ou5eCFYSjvakWnr2Wlo29jamjuaO0bHoWLgERGT8rBC5YPTkfKR8uQpgVWp1SirUas1m7Yj2Tn0DQyNjRhNTMSBxc4mLZZsraxtbymIa1IGGomBEBxqRwapyaiEmNlI5juNlR5h0Nh0VnMlwQWkcjlIYy0Ens+kcem6uiir3eCQWyWWgL+DCYrA43F4mwAKko1gBVFAQAr7aSHBTHRqgZoIpEotEYrE4zyIPStIkSMy6cxDcxa6ZvWb0pJLH7M9bpTLZPIFYpoUr8XlAsCC4XEUXVOQSmFneGORHIwaomzozHY3FjXrE0nkymOakGunzE3bXawdbLSg0SFe+onX14-SGExmSy2BzONwqzpF67XAlWRvWIw017UcgQOBqJOfEjivNSjSIHBGXEjxNG5NfLOw3OS2dDhCY3FBLSkZwmYbmGzDBUT+JTxmbfvzgs2Cbr4Y+Yw6QajPRaXEYgzR+xGHxORwSPT7j4M01bCwqxgCePpwp0XS+PYmo6DouhOI2oQRqiRK3iYljmJ+36-saXxMnyIFQt6+bga0RiXju6JmHeYy4teRIPqSmpPM4dg4YeZA7HsoEkdKiCKqh2JPPimrfueuL+HKgxWDo37+vYwTRNEQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwA4CcwEMIFpYAswwAXAOgHsUwA7AYgnOrFIEtqA3cga2YYGMArgFsaxANoAGALqJQKcrBbEWjWSAAeiAMwAWAKykAbPoCMAdi0AOHZYBMek4cMAaEAE9Exy6Tu2AnCZ6hhJmenYmAL4RrqgY2HiEJBRUdGBoaORopCgANpjEAGaZQqT8wqKSMkgg8orKqtWaCCaktjq2ITo6EoZ+hlq2tsauHgiWgaRmJpZaWn5mfvr2llEx6Fi4BERk-PTkfKR8OQpglWq1SirUak26LY6Wen4hhuYStlojiCY-fqQS5hM7Qkjy0UzMqxAsQ2CW2pX2ewOymIOWYGGomBEZ2qF3q10anneRjMhgsZg6JMsfj0X2aPS0-ypXXM1h+lgh0Sh63iWyS-FYEFRtHUsGI+WYmAKxDSAAoOhIAJS0aE8xI7fYC1HYuQKS4NUBNExaRw+KZMmx6PQ6Aa0vx2HzvPx+LTvHRmUKRTkqzZq+FIpRChhMUii8Uh7k+uH85Fa6TnXV4m7fRy2HzU9paQxUq1WWk-CQSYm2MxU8ndckrL0R2F8jUxsB7YNsTg8P0AFQDYAAqigIOLtTUE1ck2M+qa7UCJMans7bYZUzpeoZLf4rB8tJDvTX1f6UQ20hksrl8kU0CV+B29z2+9KB7jhwTR2ZSJbHH0nCXnp93IhLL0X44VrBAWAR9Ju1a8mQRwnIiyQ0HeQ76ho3xuqQOjTFY1pPBINh+La9hoWCsyWAWZgSGEnqctQ5AQHAahbpB8Z1A+BqIDgi6THoCz2E8LqZu6Oi0g4qbvMEJi2CYiyhBJ4FxJGSSUDQTF6virEIO0tLGDo-xDO8Ek-DYPyyTCkF+spiaPpa2mkqSYIUlm1KaQ4AHLl0YKScaHJrHJ25+pqYDmSxyHNMWz5BOSZEWEaljWHmIKFqErzvJ5pJ+MZqpRnWnaBUhTR2H87o4V0bR6BJIJxcEaGDCS+h-hFtjpfJUHHLAAU4ohqnBVmpB+LYMzTACLq4TSP7ND8BjieM1p-rofUclEQA */
     id: "spread-sheet",
     context: ({ input }) => ({
       path: input.path || null,
@@ -44,21 +52,22 @@ export default createMachine(
       },
       doc: {
         description: `Документ открыт`,
+        on: {
+          "doc.close": {
+            description: `Закрыть документ`,
+            target: "#spread-sheet.close",
+          },
+          "doc.title.rename": {
+            description: "Переименовать документ",
+            target: "#spread-sheet.doc.title",
+          },
+        },
         initial: "idle",
         states: {
           idle: {
             description: `Ожидание ввода команды`,
             entry: "errorClear",
-            on: {
-              "doc.close": {
-                description: `Закрыть документ`,
-                target: "#spread-sheet.close",
-              },
-              "doc.title.rename": {
-                description: "Переименовать документа",
-                target: "#spread-sheet.doc.title",
-              },
-            },
+            after: { 200: { actions: "errorClear" } },
           },
           title: {
             description: "Обновление заголовка документа",
@@ -67,17 +76,13 @@ export default createMachine(
               src: "docTitleUpdate",
               // @ts-ignore
               input: ({ event: { title } }) => ({ title }),
-              onDone: {
-                target: "#spread-sheet.doc.idle",
-                actions: "titleSave",
-              },
-              onError: {
-                target: "#spread-sheet.doc.idle",
-                actions: "errorSave",
-              },
+              onDone: { actions: "titleSave" },
+              onError: { actions: "errorSave" },
             },
+            onDone: "#spread-sheet.doc.idle",
           },
         },
+        exit: ["errorClear", "titleClear", "sheetsClear"],
       },
       close: {
         entry: ["pathClear"],
@@ -99,8 +104,10 @@ export default createMachine(
     actions: {
       //@ts-ignore
       titleSave: assign(({ context, event }) => ({ ...context, title: event.output.title })),
+      titleClear: assign(({ context, event }) => ({ ...context, title: null })),
       //@ts-ignore
       sheetsSave: assign(({ context, event }) => ({ ...context, sheets: event.output.sheets })),
+      sheetsClear: assign(({ context, event }) => ({ ...context, sheets: [] })),
       // @ts-ignore
       errorSave: assign(({ context, event }) => ({ ...context, error: event.data })),
       errorClear: assign(({ context }) => ({ ...context, error: null })),

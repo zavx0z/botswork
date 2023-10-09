@@ -59,16 +59,6 @@ const { context } = await waitFor(SpreadSheetActor, (snapshot) => snapshot.match
 console.log(context.title)
 // console.log(JSON.stringify(GoogleSheetActor.getSnapshot().toJSON()))
 
-// const doc = new GoogleSpreadsheet("1dV8t0o9ENfrXCLIXtPjIZfa7cJ_EQCsTcIy_vSm-864", serviceAccountAuth)
-
-// await doc.loadInfo() // loads document properties and worksheets
-// console.log(doc.title)
-// await doc.updateProperties({ title: "renamed doc" })
-
-// // Вывод имен всех вкладок
-// doc.sheetsByIndex.forEach((sheet, index) => {
-//   console.log(`Вкладка ${index + 1}: ${sheet.title}`)
-// })
 
 // const sheet = doc.sheetsByIndex[0] // or use `doc.sheetsById[id]` or `doc.sheetsByTitle[title]`
 // console.log(sheet.title)
