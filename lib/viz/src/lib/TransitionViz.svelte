@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { TransitionDefinition, Guard } from "xstate"
+  import type { TransitionDefinition } from "xstate"
 
   export let definition: TransitionDefinition<any, any>
   export let service: any
@@ -15,9 +15,9 @@
   on:click={() => service.send({ type: "EVENT", event: { type: definition.eventType } })}
 >
   <div data-viz="transition-event" class="bg-primary-500 px-2 py-1">{definition.eventType}</div>
-  {#if definition.cond?.name}
+  <!-- {#if definition.guard?.name}
     <div data-viz="transition-guard" class="px-2 bg-transparent before:content-['['] after:content-[']'] text-primary-100">
-      {definition.cond?.name}
+      {definition.guard?.name}
     </div>
-  {/if}
+  {/if} -->
 </div>

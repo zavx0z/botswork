@@ -7,13 +7,12 @@ export default createMachine({
   },
   on: {
     "ZOOM.OUT": {
-      actions: assign({ zoom: (ctx) => ctx.zoom - 0.1 }),
-      cond: (ctx) => ctx.zoom > 0.5,
+      actions: assign({ zoom: ({ context }) => context.zoom - 0.1 }),
+      guard: ({ context }) => context.zoom > 0.5,
     },
     "ZOOM.IN": {
-      actions: assign({ zoom: (ctx) => ctx.zoom + 0.1 }),
-      cond: (ctx) => ctx.zoom < 1,
+      actions: assign({ zoom: ({ context }) => context.zoom + 0.1 }),
+      guard: ({ context }) => context.zoom < 1,
     },
   },
-  predictableActionArguments: true,
 })

@@ -4,8 +4,8 @@ type Events = { type: "INC"; value: number } | { type: "ROOT.EVENT" } | { type: 
 export default createMachine(
   {
     id: "testMachine",
-    schema: {
-      events: {} as { type: "INC"; value: number } | { type: "ROOT.EVENT" } | { type: "EVENT" } | { type: "NEXT" } | { type: "PREV" },
+    types: {} as {
+      events: Events
     },
     context: {
       count: 0,
@@ -22,10 +22,10 @@ export default createMachine(
         exit: ["anotherAction", "action4"],
         on: {
           NEXT: "compound",
-          INC: [{ target: "compound", cond: (_, e) => e.value > 10 }, { target: "final" }],
+          INC: [{ target: "compound", guard: ({ event }) => event.value > 10 }, { target: "final" }],
           EVENT: {
             target: "final",
-            cond: function somethingIsTrue() {
+            guard: function somethingIsTrue() {
               return true
             },
           },
@@ -74,7 +74,6 @@ export default createMachine(
         type: "final",
       },
     },
-    predictableActionArguments: true,
   },
   {
     actions: {

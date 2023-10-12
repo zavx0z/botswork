@@ -2,22 +2,25 @@
   import type { StateNodeDefinition } from "xstate"
   import TransitionViz from "./TransitionViz.svelte"
 
-  export let definition: StateNodeDefinition<any, any, any>
+  export let definition: StateNodeDefinition<any, any>
   export let parent: StateNodeDef | undefined = undefined
   export let service: any
 
-  let { machine } = $service.context
-  $: machine = $service.context.machine
+  let { machine } = service.getSnapshot().context
 
-  let active: boolean
-  $: active = Boolean($service.context.state.configuration.find((n: any) => n.id === definition.id))
-  let preview: boolean
-  $: {
-    if ($service.context.previewEvent) {
-      const previewState = machine.transition($service.context.state, $service.context.previewEvent)
-      preview = Boolean(previewState.configuration.find((n: any) => n.id === definition.id))
+  let active: boolean = false
+  let preview: boolean = false
+
+  service.subscribe((state: any) => {
+    machine = state.context.machine
+    active = Boolean(state.configuration.find((n: any) => n.id === definition.id))
+    // console.log(state.context.state)
+    if (state.context.previewEvent) {
+      console.log(machine)
+      // const previewState = machine.transition(state.context.state, state.context.previewEvent)
+    //   preview = Boolean(previewState.configuration.find((n: any) => n.id === definition.id))
     } else preview = false
-  }
+  })
 </script>
 
 <!-- Группа stateNodeGroup -->
@@ -28,7 +31,7 @@
     data-viz-active={active}
     data-viz-previewed={preview}
     title={`#${definition.id}`}
-    class="inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 data-[viz-previewed=true]:border-primary-500 data-[viz-active=true]:border-primary-500 data-[viz-active=false]:opacity-60"
+    class="inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 data-[viz-active=true]:border-primary-500 data-[viz-previewed=true]:border-primary-500 data-[viz-active=false]:opacity-60"
   >
     <!-- Заголовок ноды stateNode-header -->
     <div class="grid grid-cols-[auto_1fr] items-center bg-surface-700">
@@ -56,7 +59,8 @@
       <div data-viz-actions="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden">
         {#each definition.entry as action}
           <div data-viz="action" data-viz-action="entry">
-            <div data-viz="action-type">{action.type}</div>
+            <!-- <div data-viz="action-type">{action.type}</div> -->
+            <div data-viz="action-type">{action}</div>
           </div>
         {/each}
       </div>
@@ -64,7 +68,8 @@
       <div data-viz-actions="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden">
         {#each definition.exit as action}
           <div data-viz="action" data-viz-action="exit">
-            <div data-viz="action-type">{action.type}</div>
+            <!-- <div data-viz="action-type">{action.type}</div> -->
+            <div data-viz="action-type">{action}</div>
           </div>
         {/each}
       </div>

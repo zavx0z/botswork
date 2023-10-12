@@ -5,35 +5,26 @@
   import StateNodeViz from "$lib/StateNodeViz.svelte"
 
   export let data: PageData
-  let { simService, testMachine, canvas } = data
+  let { simService, canvasActor } = data
+
+  let { definition } = simService.getSnapshot().context.machine
+  let { zoom } = canvasActor.getSnapshot().context
+  canvasActor.subscribe((state) => {
+    zoom = state.context.zoom
+  })
+
   let content = writable("// some comment")
 </script>
 
-<main class="h-screen w-screen grid grid-cols-2 grid-rows-1">
-  <div style="transform: scale({$canvas.context.zoom})">
+<main class="grid h-screen w-screen grid-cols-2 grid-rows-1">
+  <div style="transform: scale({zoom})">
     <div class="flex gap-2">
-      <button
-        class="rounded-sm text-surface-900 bg-primary-500 px-2 min-w-[50px]"
-        on:click={() => canvas.send("ZOOM.OUT")}>-</button
-      >
-      <button
-        class="rounded-sm text-surface-900 bg-primary-500 px-2 min-w-[50px]"
-        on:click={() => canvas.send("ZOOM.IN")}>+</button
-      >
-      <button
-        class="rounded-sm text-surface-900 bg-primary-500 px-2 min-w-[50px]"
-        on:click={() => simService.send({ type: "EVENT", event: { type: "NEXT" } })}
-      >
-        NEXT
-      </button>
-      <button
-        class="rounded-sm text-surface-900 bg-primary-500 px-2 min-w-[50px]"
-        on:click={() => simService.send("MACHINE.UPDATE")}
-      >
-        MACHINE
-      </button>
+      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.OUT" })}>-</button>
+      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.IN" })}>+</button>
+      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => simService.send({ type: "EVENT", event: { type: "NEXT" } })}> NEXT </button>
+      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => simService.send({ type: "MACHINE.UPDATE" })}> MACHINE </button>
     </div>
-    <StateNodeViz definition={$simService.context.machine.definition} service={simService} />
+    <StateNodeViz {definition} service={simService} />
   </div>
   <Editor {content} language="typescript" />
 </main>
