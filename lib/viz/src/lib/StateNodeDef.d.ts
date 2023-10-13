@@ -26,9 +26,5 @@ interface HistoryStateNodeDef extends BaseStateNodeDef {
   type: "history"
 }
 
-type StateNodeDef =
-  | AtomicStateNodeDef
-  | CompoundStateNodeDef
-  | ParallelStateNodeDef
-  | FinalStateNodeDef
-  | HistoryStateNodeDef
+type StateNodeDef = AtomicStateNodeDef | CompoundStateNodeDef | ParallelStateNodeDef | FinalStateNodeDef | HistoryStateNodeDef
+type ActionsWithType = { type: string }[]

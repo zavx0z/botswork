@@ -1,25 +1,43 @@
 <script lang="ts">
-  import type { StateNodeDefinition } from "xstate"
+  import type { AnyStateNodeDefinition, AnyActor, AnyState } from "xstate"
   import TransitionViz from "./TransitionViz.svelte"
+  import { mockActorContext } from "./utils"
+  import { onDestroy, onMount } from "svelte"
 
-  export let definition: StateNodeDefinition<any, any>
+  const isActive = (state: AnyState, currentId: string) => Boolean(state.configuration.find(({ id }) => id === currentId))
+
+  export let definition: AnyStateNodeDefinition
+  export let service: AnyActor
+
+  let entry = definition.entry as ActionsWithType
+  let exit = definition.exit as ActionsWithType
+
+  let active: boolean = isActive(service.getSnapshot().context.state, definition.id)
+
   export let parent: StateNodeDef | undefined = undefined
-  export let service: any
 
-  let { machine } = service.getSnapshot().context
-
-  let active: boolean = false
   let preview: boolean = false
 
-  service.subscribe((state: any) => {
-    machine = state.context.machine
-    active = Boolean(state.configuration.find((n: any) => n.id === definition.id))
-    // console.log(state.context.state)
-    if (state.context.previewEvent) {
-      console.log(machine)
-      // const previewState = machine.transition(state.context.state, state.context.previewEvent)
-    //   preview = Boolean(previewState.configuration.find((n: any) => n.id === definition.id))
-    } else preview = false
+  $: {
+    console.log(definition.id)
+    // isActive(service.getSnapshot().context.state, definition.id)
+    entry = definition.entry as ActionsWithType
+    exit = definition.exit as ActionsWithType
+  }
+
+  onMount(() => {
+    const subscribe = service.subscribe((state) => {
+      const { state: machineState, machine, previewEvent } = state.context
+      console.log(definition.id)
+      active = isActive(state.context.state, definition.id)
+      if (previewEvent) {
+        const previewState: AnyState = machine.transition(machineState, { type: previewEvent }, mockActorContext)
+        preview = Boolean(previewState.configuration.find(({ id }) => id === definition.id))
+      } else preview = false
+    })
+    return () => {
+      subscribe.unsubscribe()
+    }
   })
 </script>
 
@@ -31,7 +49,7 @@
     data-viz-active={active}
     data-viz-previewed={preview}
     title={`#${definition.id}`}
-    class="inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 data-[viz-active=true]:border-primary-500 data-[viz-previewed=true]:border-primary-500 data-[viz-active=false]:opacity-60"
+    class="delay-400 inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 transition-colors data-[viz-active=true]:border-primary-500 data-[viz-previewed=true]:border-primary-500 data-[viz-active=false]:opacity-60"
   >
     <!-- Заголовок ноды stateNode-header -->
     <div class="grid grid-cols-[auto_1fr] items-center bg-surface-700">
@@ -57,19 +75,17 @@
       </div>
       <!-- Действия входа stateNode-actions -->
       <div data-viz-actions="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden">
-        {#each definition.entry as action}
+        {#each entry as action}
           <div data-viz="action" data-viz-action="entry">
-            <!-- <div data-viz="action-type">{action.type}</div> -->
-            <div data-viz="action-type">{action}</div>
+            <div data-viz="action-type">{action.type}</div>
           </div>
         {/each}
       </div>
       <!-- Действия выхода stateNode-actions -->
       <div data-viz-actions="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden">
-        {#each definition.exit as action}
+        {#each exit as action}
           <div data-viz="action" data-viz-action="exit">
-            <!-- <div data-viz="action-type">{action.type}</div> -->
-            <div data-viz="action-type">{action}</div>
+            <div data-viz="action-type">{action.type}</div>
           </div>
         {/each}
       </div>

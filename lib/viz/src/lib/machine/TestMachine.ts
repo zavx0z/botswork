@@ -1,4 +1,4 @@
-import { createMachine } from "xstate"
+import { createMachine, fromCallback } from "xstate"
 type Events = { type: "INC"; value: number } | { type: "ROOT.EVENT" } | { type: "EVENT" } | { type: "NEXT" } | { type: "PREV" }
 
 export default createMachine(
@@ -33,6 +33,7 @@ export default createMachine(
       },
       compound: {
         invoke: {
+          id: "fooSrc",
           src: "fooSrc",
         },
         initial: "one",
@@ -83,6 +84,9 @@ export default createMachine(
       action3: () => {},
       anotherAction: () => {},
       action4: () => {},
+    },
+    actors: {
+      fooSrc: fromCallback(() => {}),
     },
   },
 )

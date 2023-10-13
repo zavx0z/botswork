@@ -3,16 +3,21 @@
   import { writable } from "svelte/store"
   import type { PageData } from "./$types"
   import StateNodeViz from "$lib/StateNodeViz.svelte"
+  import { onMount } from "svelte"
 
   export let data: PageData
   let { simService, canvasActor } = data
-
-  let { definition } = simService.getSnapshot().context.machine
   let { zoom } = canvasActor.getSnapshot().context
   canvasActor.subscribe((state) => {
     zoom = state.context.zoom
   })
-
+  let definition = simService.getSnapshot().context.machine.definition
+  simService.subscribe((state) => {
+    definition = state.context.machine.definition
+  })
+  onMount(()=>{
+    console.log(simService)
+  })
   let content = writable("// some comment")
 </script>
 
