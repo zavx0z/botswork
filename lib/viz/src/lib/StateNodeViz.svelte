@@ -2,42 +2,28 @@
   import type { AnyStateNodeDefinition, AnyActor, AnyState } from "xstate"
   import TransitionViz from "./TransitionViz.svelte"
   import { mockActorContext } from "./utils"
-  import { onDestroy, onMount } from "svelte"
-
-  const isActive = (state: AnyState, currentId: string) => Boolean(state.configuration.find(({ id }) => id === currentId))
+  import { useSelector } from "@xstate/svelte"
 
   export let definition: AnyStateNodeDefinition
   export let service: AnyActor
-
-  let entry = definition.entry as ActionsWithType
-  let exit = definition.exit as ActionsWithType
-
-  let active: boolean = isActive(service.getSnapshot().context.state, definition.id)
-
   export let parent: StateNodeDef | undefined = undefined
 
-  let preview: boolean = false
-
+  let entry: ActionsWithType
+  let exit: ActionsWithType
   $: {
-    console.log(definition.id)
-    // isActive(service.getSnapshot().context.state, definition.id)
     entry = definition.entry as ActionsWithType
     exit = definition.exit as ActionsWithType
   }
 
-  onMount(() => {
-    const subscribe = service.subscribe((state) => {
-      const { state: machineState, machine, previewEvent } = state.context
-      console.log(definition.id)
-      active = isActive(state.context.state, definition.id)
-      if (previewEvent) {
-        const previewState: AnyState = machine.transition(machineState, { type: previewEvent }, mockActorContext)
-        preview = Boolean(previewState.configuration.find(({ id }) => id === definition.id))
-      } else preview = false
-    })
-    return () => {
-      subscribe.unsubscribe()
-    }
+  let active: Boolean
+  const machineState = useSelector(service, (state) => state.context.state)
+  $: active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === definition.id))
+
+  let preview = useSelector(service, (state) => {
+    const { previewEvent, machine, state: machineState } = state.context
+    if (!previewEvent) return false
+    const previewState: AnyState = machine.transition(machineState, { type: previewEvent }, mockActorContext)
+    return Boolean(previewState.configuration.find(({ id }) => id === definition.id))
   })
 </script>
 
@@ -47,7 +33,7 @@
   <div
     data-viz-parent-type={parent?.type}
     data-viz-active={active}
-    data-viz-previewed={preview}
+    data-viz-previewed={$preview}
     title={`#${definition.id}`}
     class="delay-400 inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 transition-colors data-[viz-active=true]:border-primary-500 data-[viz-previewed=true]:border-primary-500 data-[viz-active=false]:opacity-60"
   >

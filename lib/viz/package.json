@@ -41,7 +41,8 @@
   },
   "dependencies": {
     "@xstate/graph": "beta",
+    "@xstate/svelte": "^2.1.0",
     "monaco-editor": "^0.43.0",
-    "xstate": "beta"
+    "xstate": "5.0.0-beta.34"
   }
 }

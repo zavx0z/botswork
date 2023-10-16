@@ -1,8 +1,4 @@
 <script lang="ts">
-  import TestMachine from "$lib/machine/TestMachine"
-  const initialState = TestMachine.getInitialState(null as any)
-
-  TestMachine.transition(initialState, { type: "NEXT" }, null as any)
 </script>
 
 <div class="flex h-screen flex-col justify-between gap-4">

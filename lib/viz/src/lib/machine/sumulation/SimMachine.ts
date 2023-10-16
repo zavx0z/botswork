@@ -49,10 +49,10 @@ export const SimulationMachine = createMachine({
         src: fromCallback(({ sendBack, receive, input }) => {
           console.log("starting again")
           const actor = createActor(input.machine)
-          actor.start()
           const sub = actor.subscribe((state) => {
             sendBack({ type: "STATE.UPDATE", state })
           })
+          actor.start()
           receive((event) => {
             actor.getSnapshot().status === "active" && actor.send(event)
           })
