@@ -2,6 +2,7 @@
   "name": "@service/google-spreadsheet",
   "module": "index.ts",
   "type": "module",
+  "main": "index.ts",
   "devDependencies": {
     "bun-types": "latest",
     "google-auth-library": "^9.1.0"

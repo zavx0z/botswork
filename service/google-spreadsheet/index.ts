@@ -1,6 +1,6 @@
 import { GoogleSpreadsheet } from "google-spreadsheet"
 import { JWT } from "google-auth-library"
-import { createActor, fromPromise, waitFor } from "xstate"
+import { fromPromise } from "xstate"
 import sheetMachine from "./src/machine/sheetMachine"
 
 const serviceAccountAuth = new JWT({
@@ -9,13 +9,19 @@ const serviceAccountAuth = new JWT({
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 })
 
+type CellType = {
+  a1Address: string
+  rowIndex: number
+  columnIndex: number
+  value: number | string | boolean
+}
 const createGoogleSpreadSheetMachine = (serviceAccount: JWT) => {
   let doc: GoogleSpreadsheet
 
   return sheetMachine.provide({
     actors: {
-      document: fromPromise(
-        ({ input }) =>
+      spreadsheet_open: fromPromise(
+        ({ input, system }) =>
           new Promise(async (resolve, reject) => {
             try {
               const googleSpreadsheet = new GoogleSpreadsheet(input, serviceAccount)
@@ -30,7 +36,7 @@ const createGoogleSpreadSheetMachine = (serviceAccount: JWT) => {
             }
           }),
       ),
-      docTitleUpdate: fromPromise(
+      spreadsheet_title: fromPromise(
         ({ input: { title } }) =>
           new Promise(async (resolve, reject) => {
             try {
@@ -41,29 +47,32 @@ const createGoogleSpreadSheetMachine = (serviceAccount: JWT) => {
             }
           }),
       ),
+      cols: fromPromise(
+        ({ input }) =>
+          new Promise(async (resolve, reject) => {
+            try {
+              const { index, sheetName, type } = input
+              const sheet = doc.sheetsByTitle[sheetName]
+              await sheet.loadCells({ startColumnIndex: index - 1 })
+              const rowIndexes = [...Array(sheet.rowCount).keys()]
+              let cells: CellType[] = []
+              rowIndexes.forEach((rowIndex: number) => {
+                const cell = sheet.getCell(rowIndex, index - 1)
+                if (typeof cell.value === "number" || typeof cell.value === "string" || typeof cell.value === "boolean")
+                  cells.push({
+                    a1Address: cell.a1Address,
+                    rowIndex,
+                    columnIndex: index,
+                    value: cell.value,
+                  })
+              })
+              return resolve(cells)
+            } catch (e: any) {
+              return reject(e.message)
+            }
+          }),
+      ),
     },
   })
 }
-const machine = createGoogleSpreadSheetMachine(serviceAccountAuth)
-
-const SpreadSheetActor = createActor(machine, { input: { path: "1dV8t0o9ENfrXCLIXtPjIZfa7cJ_EQCsTcIy_vSm-864" } })
-SpreadSheetActor.subscribe((state) => {
-  const persistedState = SpreadSheetActor.getPersistedState()
-  console.log(JSON.stringify(persistedState))
-  // console.log(state)
-})
-SpreadSheetActor.start()
-await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches("doc"), { timeout: 40000 })
-SpreadSheetActor.send({ type: "doc.title.rename", title: "Вопросы" })
-const { context } = await waitFor(SpreadSheetActor, (snapshot) => snapshot.matches({ doc: "idle" }))
-console.log(context.title)
-// console.log(JSON.stringify(GoogleSheetActor.getSnapshot().toJSON()))
-
-
-// const sheet = doc.sheetsByIndex[0] // or use `doc.sheetsById[id]` or `doc.sheetsByTitle[title]`
-// console.log(sheet.title)
-// console.log(sheet.rowCount)
-
-// // adding / removing sheets
-// const newSheet = await doc.addSheet({ title: "another sheet" })
-// await newSheet.delete()
+export const GoogleSpreadSheetMachine = createGoogleSpreadSheetMachine(serviceAccountAuth)
