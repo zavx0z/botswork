@@ -6,6 +6,9 @@ export default createMachine(
     id: "testMachine",
     types: {} as {
       events: Events
+      context: {
+        count: number
+      }
     },
     context: {
       count: 0,

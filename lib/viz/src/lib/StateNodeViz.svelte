@@ -3,6 +3,7 @@
   import TransitionViz from "./TransitionViz.svelte"
   import { mockActorContext } from "./utils"
   import { useSelector } from "@xstate/svelte"
+  import { setRect } from "./getRect"
 
   export let definition: AnyStateNodeDefinition
   export let service: AnyActor
@@ -28,7 +29,7 @@
 </script>
 
 <!-- Группа stateNodeGroup -->
-<div class="grid grid-cols-[auto_auto] gap-x-4">
+<div use:setRect={definition.id} class="grid grid-cols-[auto_auto] gap-x-4">
   <!-- Нода stateNode-->
   <div
     data-viz-parent-type={parent?.type}
