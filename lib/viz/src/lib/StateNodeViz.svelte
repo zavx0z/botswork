@@ -8,9 +8,9 @@
   export let definition: AnyStateNodeDefinition
   export let service: AnyActor
   export let parent: StateNodeDef | undefined = undefined
-
   let entry: ActionsWithType
   let exit: ActionsWithType
+
   $: {
     entry = definition.entry as ActionsWithType
     exit = definition.exit as ActionsWithType
@@ -34,18 +34,17 @@
   <div
     use:setRect={definition.id}
     data-viz-parent-type={parent?.type}
-    data-viz-active={active}
-    data-viz-previewed={$preview}
+    data-active={active}
+    data-previewed={$preview}
     title={`#${definition.id}`}
-    class="delay-400 inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 transition-colors data-[viz-active=true]:border-primary-500 data-[viz-previewed=true]:border-primary-500 data-[viz-active=false]:opacity-60"
+    class="delay-400 inline-grid self-start rounded border-2 border-solid border-surface-700 text-primary-50 transition-colors data-[active=true]:border-primary-500 data-[previewed=true]:border-primary-500 data-[active=false]:opacity-60"
   >
     <!-- Заголовок ноды stateNode-header -->
     <div class="grid grid-cols-[auto_1fr] items-center bg-surface-700">
       {#if ["history", "final"].includes(definition.type)}
-        <!-- Тип ноды stateNode-type -->
         <div
-          data-viz-type={definition.type}
-          class="flex h-8 w-8 items-center justify-center rounded-md bg-tertiary-700 before:block before:font-bold data-[viz-type=final]:before:content-['F'] data-[viz-type=history]:before:content-['H']"
+          data-node-type={definition.type}
+          class="flex h-8 w-8 items-center justify-center rounded-md bg-tertiary-700 before:block before:font-bold data-[node-type=final]:before:content-['F'] data-[node-type=history]:before:content-['H']"
         />
       {/if}
       <!-- Имя ноды stateNode-key -->
@@ -53,28 +52,19 @@
     </div>
     <!-- Контент stateNode-content-->
     <div class="bg-surface-700 p-2">
-      <!-- Вызываемые сервисы stateNode-invocations-->
-      <div class="">
+      <div data-type="invoke" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
         {#each definition.invoke as invocation}
-          <div data-viz="invoke">
-            <div data-viz="invoke-id">{invocation.id}</div>
-          </div>
+          <div>{invocation.id}</div>
         {/each}
       </div>
-      <!-- Действия входа stateNode-actions -->
-      <div data-viz-actions="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden">
+      <div data-type="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
         {#each entry as action}
-          <div data-viz="action" data-viz-action="entry">
-            <div data-viz="action-type">{action.type}</div>
-          </div>
+          <div>{action.type}</div>
         {/each}
       </div>
-      <!-- Действия выхода stateNode-actions -->
-      <div data-viz-actions="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-viz-actions)'\a0/'] empty:hidden">
+      <div data-type="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
         {#each exit as action}
-          <div data-viz="action" data-viz-action="exit">
-            <div data-viz="action-type">{action.type}</div>
-          </div>
+          <div>{action.type}</div>
         {/each}
       </div>
     </div>
@@ -86,10 +76,9 @@
       </div>
     {/if}
   </div>
-  <!-- transitions -->
   <div class="flex flex-col items-start justify-start gap-2">
     {#each definition.transitions as transition, idx (idx)}
-      <TransitionViz definition={transition} {service} {idx} />
+      <TransitionViz definition={transition} {service} {idx} {active} />
     {/each}
   </div>
 </div>

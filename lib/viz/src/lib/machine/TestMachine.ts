@@ -38,6 +38,8 @@ export default createMachine(
         invoke: {
           id: "fooSrc",
           src: "fooSrc",
+          onDone: "final",
+          onError: "failure",
         },
         initial: "one",
         states: {
@@ -49,10 +51,17 @@ export default createMachine(
           two: {
             on: {
               PREV: "one",
+              NEXT: "three",
             },
           },
           three: {
             initial: "atomic",
+            always: {
+              target: "one",
+              guard: function gua() {
+                return true
+              },
+            },
             states: {
               atomic: {},
               history: {
@@ -77,6 +86,7 @@ export default createMachine(
       final: {
         type: "final",
       },
+      failure: {},
     },
   },
   {
