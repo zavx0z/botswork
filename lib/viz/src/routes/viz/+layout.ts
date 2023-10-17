@@ -3,6 +3,7 @@ import type { LayoutLoad } from "./$types"
 import CanvasMachine from "$lib/machine/CanvasMachine"
 import { SimulationMachine } from "$lib/machine/sumulation/SimMachine"
 import TestMachine from "$lib/machine/TestMachine"
+import { getAllEdges } from "$lib/utils"
 
 export const load = (async () => {
   const canvasActor = createActor(CanvasMachine).start()
@@ -12,5 +13,6 @@ export const load = (async () => {
       state: TestMachine.getInitialState(null as any),
     },
   }).start()
-  return { testMachine: TestMachine, simService, canvasActor }
+  const edges = getAllEdges(TestMachine as any)
+  return { testMachine: TestMachine, simService, canvasActor, edges }
 }) satisfies LayoutLoad

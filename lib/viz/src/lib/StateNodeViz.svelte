@@ -29,9 +29,10 @@
 </script>
 
 <!-- Группа stateNodeGroup -->
-<div use:setRect={definition.id} class="grid grid-cols-[auto_auto] gap-x-4">
+<div class="grid grid-cols-[auto_auto] gap-x-4">
   <!-- Нода stateNode-->
   <div
+    use:setRect={definition.id}
     data-viz-parent-type={parent?.type}
     data-viz-active={active}
     data-viz-previewed={$preview}
@@ -87,8 +88,8 @@
   </div>
   <!-- transitions -->
   <div class="flex flex-col items-start justify-start gap-2">
-    {#each definition.transitions as transition}
-      <TransitionViz definition={transition} {service} />
+    {#each definition.transitions as transition, idx (idx)}
+      <TransitionViz definition={transition} {service} {idx} />
     {/each}
   </div>
 </div>
