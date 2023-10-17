@@ -66,7 +66,7 @@ export const SimulationMachine = createMachine({
         "MACHINE.UPDATE": {
           target: "active",
           reenter: true,
-          actions: assign({ machine: createMachine({ initial: "foo", states: { foo: { on: { NEXT: "bar" } }, bar: { on: { NEXT: "foo" } } } }) }),
+          actions: assign({ machine: ({ event }) => event.machine }),
         },
         "EVENT.PREVIEW": {
           actions: assign({ previewEvent: ({ event }) => event.eventType }),

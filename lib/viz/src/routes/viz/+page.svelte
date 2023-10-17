@@ -5,15 +5,46 @@
   import StateNodeViz from "$lib/StateNodeViz.svelte"
   import { useSelector } from "@xstate/svelte"
   import Edges from "$lib/Edges.svelte"
+  import { parseMachines } from "$lib/parseMachine"
 
   export let data: PageData
-  let { simService, canvasActor, edges } = data
+  let { simService, canvasActor } = data
 
   let definition = useSelector(simService, (state) => state.context.machine.definition)
   let zoom = useSelector(canvasActor, (state) => state.context.zoom)
   let dx = useSelector(canvasActor, (state) => state.context.pan.dx)
   let dy = useSelector(canvasActor, (state) => state.context.pan.dy)
-  let content = writable("// some comment")
+  let content = writable(`const machine = createMachine(
+  {
+    context: {
+      count: 0,
+    },
+    id: "testMachine",
+    entry: {
+      type: "rootAction1",
+    },
+    exit: {
+      type: "rootAction1",
+    },
+    initial: "final",
+    states: {
+      final: {
+        type: "final",
+      },
+      one:{
+        on: {HELLO: "two"}
+      },
+      two:{}
+    },
+  },
+  {
+    actions: { rootAction1: ({ context, event }) => {} },
+    actors: {},
+    guards: {},
+    delays: {},
+  },
+);
+  `)
 </script>
 
 <main class="grid h-screen w-screen grid-cols-2 grid-rows-1">
@@ -22,12 +53,12 @@
       <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.OUT" })}>-</button>
       <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.IN" })}>+</button>
       <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => simService.send({ type: "EVENT", event: { type: "NEXT" } })}> NEXT </button>
-      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => simService.send({ type: "MACHINE.UPDATE" })}> MACHINE </button>
+      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => simService.send({ type: "MACHINE.UPDATE", machine: parseMachines($content)[0] })}> MACHINE </button>
     </div>
     <div style="transform: scale({$zoom}) translate({$dx}px, {$dy}px)" class="transition-transform duration-200 ease-in-out">
       <StateNodeViz definition={$definition} service={simService} />
     </div>
-    <Edges {edges} />
+    <Edges service={simService} />
   </div>
   <Editor {content} language="typescript" />
 </main>
