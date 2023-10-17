@@ -1,13 +1,17 @@
 <script lang="ts">
-  import type { SvgPath } from "./pathUtils.ts"
+  import type { SvgPath } from "./pathUtils"
   import { getRect, onRect, readRect } from "./getRect"
   import { getPath, pathToD } from "./pathUtils"
   import type { Edge } from "./utils"
   import { onMount } from "svelte"
+  import type { AnyActor } from "xstate"
+  import { useSelector } from "@xstate/svelte"
+  import ArrowMarker from "./ArrowMarker.svelte"
 
+  export let service: AnyActor
   export let edge: Edge<any, any, any>
   let path: SvgPath | undefined
-
+  let isActive = useSelector(service, (state) => state.context.state.configuration.includes(edge.source) || undefined)
   onMount(() => {
     let sourceRect = getRect(`${edge.source.id}`)
     let edgeRect = getRect(`${edge.source.id}:${edge.order}`)
@@ -26,8 +30,15 @@
       edgeRectSub.unsubscribe()
     }
   })
+
+  const markerId = edge.event + edge.order
 </script>
 
 {#if path}
-  <path stroke="#fff4" stroke-width={2} fill="none" d={pathToD(path)}></path>
+  <g data-active={$isActive} stroke={"#fff"} class="fill-tertiary-900 stroke-tertiary-900 data-[active=true]:fill-primary-500 data-[active=true]:stroke-primary-500">
+    <defs>
+      <ArrowMarker id={markerId} />
+    </defs>
+    <path stroke-width={2} fill="none" d={pathToD(path)} marker-end={`url(#${markerId})`}></path>
+  </g>
 {/if}

@@ -185,10 +185,17 @@ export const roundOneCorner = (p1: Point, corner: Point, p2: Point, radius: numb
   const corner_to_p2 = lineToVector(corner, p2)
   const p1dist = Math.hypot(corner_to_p1.x, corner_to_p1.y)
   const p2dist = Math.hypot(corner_to_p2.x, corner_to_p2.y)
-  if (p1dist * p2dist === 0) return { p1: corner, p2: corner, p: corner }
+  if (p1dist * p2dist === 0) {
+    return {
+      p1: corner,
+      p2: corner,
+      p: corner,
+    }
+  }
   const resolvedRadius = Math.min(radius, p1dist - 0.1, p2dist - 0.1)
   const corner_to_p1_unit = vectorToUnitVector(corner_to_p1)
   const corner_to_p2_unit = vectorToUnitVector(corner_to_p2)
+
   const curve_p1 = {
     x: corner.x + corner_to_p1_unit.x * resolvedRadius,
     y: corner.y + corner_to_p1_unit.y * resolvedRadius,
@@ -212,15 +219,31 @@ export function getPath(sourceRect: DOMRect, targetRect: DOMRect, targetPoint?: 
     x: sourceRect.right,
     y: sourceRect.top + sourceRect.height / 2,
   }
+
   // self-transition
-  if (sourceRect === targetRect)
+  if (sourceRect === targetRect) {
     return [
       ["M", sourcePoint],
-      ["Q", { x: sourcePoint.x + 10, y: sourcePoint.y - 10 }, { x: sourcePoint.x + 20, y: sourcePoint.y }],
-      ["Q", { x: sourcePoint.x + 10, y: sourcePoint.y + 10 }, sourcePoint],
+      [
+        "Q",
+        {
+          x: sourcePoint.x + 10,
+          y: sourcePoint.y - 10,
+        },
+        { x: sourcePoint.x + 20, y: sourcePoint.y },
+      ],
+      [
+        "Q",
+        {
+          x: sourcePoint.x + 10,
+          y: sourcePoint.y + 10,
+        },
+        sourcePoint,
+      ],
     ]
-  // sourcePoint.x += 10;
-  const ix = closestRectIntersections(
+  }
+
+  const intersections = closestRectIntersections(
     [
       sourcePoint,
       {
@@ -231,14 +254,35 @@ export function getPath(sourceRect: DOMRect, targetRect: DOMRect, targetPoint?: 
     targetRect,
   )
 
-  if (!ix) return undefined
+  if (!intersections) {
+    return undefined
+  }
 
-  targetPoint = targetPoint ?? ix[0].point
+  targetPoint = targetPoint ?? intersections[0].point
 
   const endPoint = targetPoint
-  const endSide = ix[0].side
+  const endSide = intersections[0].side
 
-  return getSvgPath(sourcePoint, endPoint, endSide)
+  switch (endSide) {
+    case Sides.Top:
+      endPoint.y -= 10
+      break
+    case Sides.Left:
+      endPoint.x -= 10
+      break
+    case Sides.Bottom:
+      endPoint.y += 10
+      break
+    case Sides.Right:
+      endPoint.x += 10
+      break
+    default:
+      break
+  }
+
+  const svgPath = getSvgPath(sourcePoint, endPoint, endSide)
+
+  return svgPath
 }
 
 export function pathToD(path: SvgPath): string {
