@@ -2,18 +2,10 @@
   import Editor from "$lib/editor/Editor.svelte"
   import { writable } from "svelte/store"
   import type { PageData } from "./$types"
-  import StateNodeViz from "$lib/StateNodeViz.svelte"
-  import { useSelector } from "@xstate/svelte"
-  import Edges from "$lib/Edges.svelte"
-  import { parseMachines } from "$lib/parseMachine"
+  import Canvas from "$lib/Canvas.svelte"
 
   export let data: PageData
-  let { simService, canvasActor } = data
-
-  let definition = useSelector(simService, (state) => state.context.machine.definition)
-  let zoom = useSelector(canvasActor, (state) => state.context.zoom)
-  let dx = useSelector(canvasActor, (state) => state.context.pan.dx)
-  let dy = useSelector(canvasActor, (state) => state.context.pan.dy)
+  let { service } = data
   let content = writable(`const machine = createMachine(
   {
     context: {
@@ -48,17 +40,8 @@
 </script>
 
 <main class="grid h-screen w-screen grid-cols-2 grid-rows-1">
-  <div on:wheel={(e) => canvasActor.send({ type: "PAN", dx: e.deltaX, dy: e.deltaY })}>
-    <div class="flex gap-2">
-      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.OUT" })}>-</button>
-      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.IN" })}>+</button>
-      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => simService.send({ type: "EVENT", event: { type: "NEXT" } })}> NEXT </button>
-      <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => simService.send({ type: "MACHINE.UPDATE", machine: parseMachines($content)[0] })}> MACHINE </button>
-    </div>
-    <div style="transform: scale({$zoom}) translate({$dx}px, {$dy}px)" class="transition-transform duration-200 ease-in-out">
-      <StateNodeViz definition={$definition} service={simService} />
-    </div>
-    <Edges service={simService} />
-  </div>
+  <Canvas {service} />
   <Editor {content} language="typescript" />
+  <!-- <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => service.send({ type: "EVENT", event: { type: "NEXT" } })}> NEXT </button> -->
+  <!-- <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => service.send({ type: "MACHINE.UPDATE", machine: parseMachines($content)[0] })}> MACHINE </button> -->
 </main>

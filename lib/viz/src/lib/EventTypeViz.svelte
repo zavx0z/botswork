@@ -2,15 +2,16 @@
   export const toDelayString = (delay: string | number): string => (typeof delay === "number" || !isNaN(+delay) ? `${delay}ms` : delay)
   export const formatInvocationId = (id: string): string => {
     if (isUnnamed(id)) {
-      //@ts-ignore
-      const [, index] = id.match(/:invocation\[(\d+)\]$/)
+      const match = id.match(/:invocation\[(\d+)\]$/)
+      if (!match) return id
+      const [, index] = match
       return `anonymous [${index}]`
     }
     return id
   }
   const isUnnamed = (id: string): boolean => /:invocation\[/.test(id)
   export let eventType: string
-//   console.log("event", eventType)
+  //   console.log("event", eventType)
 </script>
 
 {#if eventType.startsWith("done.state.")}
@@ -33,10 +34,15 @@
   </div>
 {:else if eventType.startsWith("xstate.after")}
   {@const match = eventType.match(/^xstate\.after\((.*)\)#.*$/)}
-  <div data-viz-keyword="after">
-    <em>after</em>{" "}
-    <div>{toDelayString(match ? match[1] : 0)}</div>
-  </div>
+  {#if !match}
+    <div>{eventType}</div>
+  {:else}
+    {@const delay = match[1]}
+    <div data-viz-keyword="after">
+      <em>after</em>{" "}
+      <div>{toDelayString(delay)}</div>
+    </div>
+  {/if}
 {:else if eventType === ""}
   <div data-viz-keyword="always">
     <em>always</em>

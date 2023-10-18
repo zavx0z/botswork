@@ -33,7 +33,98 @@
     "editor.minimap.autohide": true,
     "cSpell.language": "en,ru",
     "vscodeGoogleTranslate.preferredLanguage": "Russian",
-    "cSpell.userWords": [
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[svelte]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.fontFamily": "JetBrains Mono",
+    "editor.fontLigatures": true,
+    "editor.lineHeight": 1.5,
+    "prettier.semi": false,
+    "editor.wordWrapColumn": 120,
+    "prettier.printWidth": 120,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.bracketSameLine": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "remote.tunnels.access.hostNameOverride": "zavx0z",
+    "svelte.enable-ts-plugin": true,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.ts": "${capture}.js, ${capture}.typegen.ts, ${capture}.typegen.d.ts",
+        "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+        "*.jsx": "${capture}.js",
+        "*.tsx": "${capture}.ts, ${capture}.typegen.ts",
+        "tsconfig.json": "tsconfig.*.json",
+        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml",
+        "*.mts": "${capture}.typegen.ts",
+        "*.cts": "${capture}.typegen.ts"
+    },
+    "xstate.useDeclarationFileForTypegenData": true,
+    "workbench.colorTheme": "GitHub Dark",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "explorer.confirmDelete": false,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    },
+    "autopep8.args": [
+        "--max-line-length",
+        "120"
+    ],
+    "pylint.args": [
+        "--disable=C0103",
+        "--disable=C0114", // module doc string
+        "--disable=C0115", //class doc sting
+        "--disable=C0116", //function doc sting
+        "--disable=C0301" //line-too-long
+    ],
+    "explorer.confirmDragAndDrop": false,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "workbench.startupEditor": "none",
+    "editor.multiCursorModifier": "alt",
+    "editor.linkedEditing": true,
+    "svelte-autoimport.useSemiColon": false,
+    "svelte-autoimport.autoComplete": false,
+    "database-client.highlightSQLBlock": true,
+    "tailwind-fold.autoFold": false,
+    "tailwind-fold.foldedText": "",
+    "editor.unicodeHighlight.allowedLocales": {
+        "ru": true
+    },
+    "files.autoSaveDelay": 4000,
+    "explorer.autoReveal": false,
+    "cSpell.words": [
+        "aiohttp",
+        "cryptg",
+        "DATETIME",
+        "elkjs",
+        "eruda",
+        "hachoir",
+        "libdir",
+        "microstep",
+        "midpt",
+        "Monokai",
+        "noforwards",
+        "sumulation",
+        "tdjson",
         "asyncpg",
         "authjwt",
         "autofetch",
@@ -91,96 +182,6 @@
         "пирингового",
         "промиса",
         "venv"
-    ],
-    "files.watcherExclude": {
-        "**/.git/objects/**": true,
-        "**/.git/subtree-cache/**": true,
-        "**/node_modules/*/**": true
-    },
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    },
-    "[svelte]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "editor.fontFamily": "JetBrains Mono",
-    "editor.fontLigatures": true,
-    "editor.lineHeight": 1.5,
-    "prettier.semi": false,
-    "editor.wordWrapColumn": 120,
-    "prettier.printWidth": 120,
-    "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "prettier.bracketSameLine": true,
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "[css]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "remote.tunnels.access.hostNameOverride": "zavx0z",
-    "svelte.enable-ts-plugin": true,
-    "explorer.fileNesting.enabled": true,
-    "explorer.fileNesting.patterns": {
-        "*.ts": "${capture}.js, ${capture}.typegen.ts, ${capture}.typegen.d.ts",
-        "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
-        "*.jsx": "${capture}.js",
-        "*.tsx": "${capture}.ts, ${capture}.typegen.ts",
-        "tsconfig.json": "tsconfig.*.json",
-        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml",
-        "*.mts": "${capture}.typegen.ts",
-        "*.cts": "${capture}.typegen.ts"
-    },
-    "xstate.useDeclarationFileForTypegenData": true,
-    "workbench.colorTheme": "GitHub Dark",
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "explorer.confirmDelete": false,
-    "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "autopep8.args": [
-        "--max-line-length",
-        "120"
-    ],
-    "pylint.args": [
-        "--disable=C0103",
-        "--disable=C0114", // module doc string
-        "--disable=C0115", //class doc sting
-        "--disable=C0116", //function doc sting
-        "--disable=C0301" //line-too-long
-    ],
-    "explorer.confirmDragAndDrop": false,
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "workbench.startupEditor": "none",
-    "editor.multiCursorModifier": "alt",
-    "editor.linkedEditing": true,
-    "svelte-autoimport.useSemiColon": false,
-    "svelte-autoimport.autoComplete": false,
-    "database-client.highlightSQLBlock": true,
-    "tailwind-fold.autoFold": false,
-    "tailwind-fold.foldedText": "",
-    "editor.unicodeHighlight.allowedLocales": {
-        "ru": true
-    },
-    "files.autoSaveDelay": 4000,
-    "explorer.autoReveal": false,
-    "cSpell.words": [
-        "aiohttp",
-        "cryptg",
-        "DATETIME",
-        "eruda",
-        "hachoir",
-        "libdir",
-        "microstep",
-        "midpt",
-        "Monokai",
-        "noforwards",
-        "sumulation",
-        "tdjson"
     ],
     "a-file-icon-vscode.activeIconPacks": [
         "angular",

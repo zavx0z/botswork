@@ -1,6 +1,6 @@
 import { browser } from "$app/environment"
 
-const rectMap: Map<string, DOMRect> = new Map()
+export const rectMap: Map<string, DOMRect> = new Map()
 type RectListener = (rect: DOMRect) => void
 const rectListenersMap = new Map<string, Set<RectListener>>()
 if (browser) {

@@ -40,9 +40,11 @@
     "vite": "^4.4.2"
   },
   "dependencies": {
-    "@xstate/graph": "beta",
+    "@xstate/graph": "^1.4.2",
     "@xstate/svelte": "^2.1.0",
+    "elkjs": "^0.8.2",
     "monaco-editor": "^0.43.0",
-    "xstate": "5.0.0-beta.34"
+    "web-worker": "^1.2.0",
+    "xstate": "beta"
   }
 }

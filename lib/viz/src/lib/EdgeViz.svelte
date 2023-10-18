@@ -31,7 +31,7 @@
     }
   })
 
-  const markerId = edge.event + edge.order
+  const markerId = `${edge.source.order}-${edge.order}`
 </script>
 
 {#if path}
