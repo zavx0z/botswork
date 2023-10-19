@@ -213,39 +213,29 @@ export const roundOneCorner = (p1: Point, corner: Point, p2: Point, radius: numb
   return path
 }
 
-export function getPath(sourceRect: DOMRect, targetRect: DOMRect, targetPoint?: Point): SvgPath | undefined {
+export function getPath(sourceRect: DOMRect, labelRect: DOMRect, targetRect: DOMRect, targetPoint?: Point): SvgPath | undefined {
   // const sourcePoint = r.point('right', 'center');
-  const sourcePoint = {
-    x: sourceRect.right,
-    y: sourceRect.top + sourceRect.height / 2,
+  const edgeEntryPoint = {
+    x: labelRect.left,
+    y: labelRect.top + labelRect.height / 2,
+  }
+  const edgeExitPoint = {
+    x: labelRect.right,
+    y: labelRect.top + labelRect.height / 2,
   }
 
   // self-transition
-  if (sourceRect === targetRect) {
+  if (labelRect === targetRect) {
     return [
-      ["M", sourcePoint],
-      [
-        "Q",
-        {
-          x: sourcePoint.x + 10,
-          y: sourcePoint.y - 10,
-        },
-        { x: sourcePoint.x + 20, y: sourcePoint.y },
-      ],
-      [
-        "Q",
-        {
-          x: sourcePoint.x + 10,
-          y: sourcePoint.y + 10,
-        },
-        sourcePoint,
-      ],
+      ["M", edgeExitPoint],
+      ["Q", { x: edgeExitPoint.x + 10, y: edgeExitPoint.y - 10 }, { x: edgeExitPoint.x + 20, y: edgeExitPoint.y }],
+      ["Q", { x: edgeExitPoint.x + 10, y: edgeExitPoint.y + 10 }, edgeExitPoint],
     ]
   }
 
   const intersections = closestRectIntersections(
     [
-      sourcePoint,
+      edgeExitPoint,
       {
         x: targetRect.left + targetRect.width / 2,
         y: targetRect.top + targetRect.height / 2,
@@ -279,10 +269,11 @@ export function getPath(sourceRect: DOMRect, targetRect: DOMRect, targetPoint?: 
     default:
       break
   }
-
-  const svgPath = getSvgPath(sourcePoint, endPoint, endSide)
-
-  return svgPath
+  const preSvgPath = getSvgPath({ x: sourceRect.right, y: sourceRect.top }, edgeEntryPoint, Sides.Left)
+  const svgPath = getSvgPath(edgeExitPoint, endPoint, endSide)
+  // @ts-ignore
+  // return svgPath;
+  return preSvgPath.concat(svgPath)
 }
 
 export function pathToD(path: SvgPath): string {

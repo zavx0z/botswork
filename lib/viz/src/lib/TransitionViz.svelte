@@ -1,23 +1,41 @@
 <script lang="ts">
-  import type { AnyTransitionDefinition } from "xstate"
   import type { SimulationActor } from "./machine/sumulation/types/Events"
-  import { setRect } from "./getRect"
+  import { rect } from "./getRect"
   import EventTypeViz from "./EventTypeViz.svelte"
+  import { getContext } from "svelte"
+  import type { DirectedGraphEdge } from "@xstate/graph"
+  import type { Point } from "./pathUtils"
 
-  export let definition: AnyTransitionDefinition
-  export let idx: number
-  export let service: SimulationActor
-  export let active: Boolean
+  export let edge: DirectedGraphEdge
+  let definition = edge.transition
+  //@ts-ignore
+  let position: Point | undefined = edge.label ? { x: edge.label.x, y: edge.label.y } : undefined
+
+  let active = false
+
+  const service: SimulationActor = getContext("service")
   // console.log(definition)
+  //@ts-ignore
   let guard = (definition.guard || null) as { name: string } | null
+
+  const setPosition = (node: HTMLElement, position: Point | undefined) => {
+    if (position) {
+      console.log(position)
+      node.style.left = `${position.x}px`
+      node.style.top = `${position.y}px`
+    }
+  }
+  // class="flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
+
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
+  use:rect={edge.id}
+  use:setPosition={position}
   data-active={active}
-  use:setRect={`${definition.source.id}:${idx}`}
-  class="flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
+  class="fixed"
   on:mouseenter={() => service.send({ type: "EVENT.PREVIEW", eventType: definition.eventType })}
   on:mouseleave={() => service.send({ type: "PREVIEW.CLEAR" })}
   on:click={() => service.send({ type: "EVENT", event: { type: definition.eventType } })}

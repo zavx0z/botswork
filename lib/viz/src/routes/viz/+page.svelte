@@ -3,9 +3,11 @@
   import { writable } from "svelte/store"
   import type { PageData } from "./$types"
   import Canvas from "$lib/Canvas.svelte"
+  import { setContext } from "svelte"
 
   export let data: PageData
-  let { service } = data
+  setContext("service", data.service)
+
   let content = writable(`const machine = createMachine(
   {
     context: {
@@ -40,8 +42,8 @@
 </script>
 
 <main class="grid h-screen w-screen grid-cols-2 grid-rows-1">
-  <Canvas {service} />
-  <Editor {content} language="typescript" />
+  <Canvas />
+  <!-- <Editor {content} language="typescript" /> -->
   <!-- <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => service.send({ type: "EVENT", event: { type: "NEXT" } })}> NEXT </button> -->
   <!-- <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => service.send({ type: "MACHINE.UPDATE", machine: parseMachines($content)[0] })}> MACHINE </button> -->
 </main>

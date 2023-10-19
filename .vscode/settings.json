@@ -222,5 +222,9 @@
         "**/vendor/**",
         "**/work/**",
         "/home/zavx0z/botswork/server/sso/sso/routes/refresh.py"
-    ]
+    ],
+    "gitlens.currentLine.enabled": false,
+    "gitlens.currentLine.pullRequests.enabled": false,
+    "gitlens.currentLine.scrollable": false,
+    "gitlens.currentLine.dateFormat": ""
 }

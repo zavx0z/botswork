@@ -1,5 +1,5 @@
 import * as XState from "xstate"
-import { StateNode, createMachine, createActor, assign, sendParent, raise, sendTo, fromCallback } from "xstate"
+import { createMachine, createActor, assign, sendParent, raise, sendTo, fromCallback } from "xstate"
 
 type machines = Array<XState.AnyStateMachine>
 

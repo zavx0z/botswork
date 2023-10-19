@@ -1,7 +1,7 @@
 import { browser } from "$app/environment"
 
 export const rectMap: Map<string, DOMRect> = new Map()
-type RectListener = (rect: DOMRect) => void
+type RectListener = (rect: DOMRect | undefined) => void
 const rectListenersMap = new Map<string, Set<RectListener>>()
 if (browser) {
   ;(window as any).rectMap = rectMap
@@ -34,6 +34,20 @@ export const setRect = (el: HTMLElement, id: string) => {
   const rect = el.getBoundingClientRect()
   rectMap.set(id, rect)
   if (!prevRect || !rectsEqual(prevRect, rect)) rectListenersMap.get(id)?.forEach((listener) => listener(rect))
+}
+
+export const deleteRect = (id: string) => {
+  rectMap.delete(id)
+  rectListenersMap.get(id)?.forEach((listener) => listener(undefined))
+}
+
+export const rect = (node: HTMLElement, id: string) => {
+  setRect(node, id)
+  return {
+    destroy() {
+      deleteRect(id)
+    },
+  }
 }
 
 export const onRect = (id: string, listener: RectListener) => {

@@ -3,8 +3,9 @@ import { expect, test, describe } from "bun:test"
 
 describe("xstate-graph", () => {
   test("toDirectedGraph", () => {
-    TestMachine
-
-    expect(true).toBeBoolean
+    expect(TestMachine)
+  })
+  test("snap", () => {
+    expect("foo").toMatchSnapshot()
   })
 })

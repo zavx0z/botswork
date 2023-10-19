@@ -1,7 +1,7 @@
 import type { DirectedGraphNode } from "@xstate/graph"
 import { assign, createMachine, fromPromise } from "xstate"
 import { getElkGraph } from "./elk"
-import type { ElkNode } from "elkjs"
+import type { StateElkNode } from "./types"
 
 export default createMachine(
   {
@@ -11,12 +11,13 @@ export default createMachine(
     }),
     types: {} as {
       context: {
-        elkGraph: ElkNode | undefined
+        elkGraph: StateElkNode | undefined
         digraph: DirectedGraphNode
       }
       input: {
         digraph: DirectedGraphNode
       }
+      events: { type: "GRAPH_UPDATED"; digraph: DirectedGraphNode }
     },
     initial: "loading",
     states: {
@@ -26,16 +27,31 @@ export default createMachine(
           input: ({ context }) => context.digraph,
           onDone: {
             target: "success",
-            actions: assign({ elkGraph: ({ event: { output } }: { event: { output: ElkNode } }) => output }),
+            actions: assign({ elkGraph: ({ event: { output } }: { event: { output: StateElkNode } }) => output }),
           },
         },
       },
-      success: {},
+      success: {
+        on: {
+          GRAPH_UPDATED: {
+            target: "loading",
+            actions: assign({
+              digraph: ({ event }) => {
+                console.log(event)
+                return event.digraph
+              },
+            }),
+          },
+        },
+      },
     },
   },
   {
     actors: {
-      getElk: fromPromise(({ input }) => getElkGraph(input as DirectedGraphNode)),
+      getElk: fromPromise(async ({ input }) => {
+        const data = await getElkGraph(input as DirectedGraphNode)
+        return data
+      }),
     },
   },
 )
