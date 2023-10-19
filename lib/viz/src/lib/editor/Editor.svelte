@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte"
   import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
+  import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
   import type { editor } from "monaco-editor"
-  import type { Writable } from "svelte/store"
 
-  export let content: Writable<string>
+  export let content: string
   export let hFull = true
   export let readOnly = false
-  export let language: "typescript" | "javascript" | "html" | "css" = "typescript"
+  export let language: "typescript" | "javascript" | "json" | "html" | "css" = "typescript"
   let divEl: HTMLDivElement
   let editor: editor.IStandaloneCodeEditor
   let Monaco: typeof import("monaco-editor")
@@ -27,7 +27,14 @@
   onMount(async () => {
     self.MonacoEnvironment = {
       getWorker: function (_moduleId, label) {
-        return new tsWorker()
+        switch (language) {
+          case "json":
+            return new jsonWorker()
+          case "javascript":
+          case "typescript":
+          default:
+            return new tsWorker()
+        }
       },
     }
 
@@ -35,7 +42,7 @@
     const indexFile = await fetch(`/xstate.d.ts.txt`).then((res) => res.text())
     Monaco.languages.typescript.typescriptDefaults.addExtraLib(`${indexFile}`)
     editor = Monaco.editor.create(divEl, {
-      value: $content,
+      value: content,
       language: language,
       theme: "vs-dark",
       readOnly: readOnly,
@@ -48,9 +55,10 @@
       wrappingStrategy: "advanced",
       overviewRulerLanes: 0,
     })
+
     editor.onDidChangeModelContent(() => {
       const text = editor.getValue()
-      $content = text
+      content = text
     })
 
     if (!hFull) {
@@ -61,6 +69,9 @@
   onDestroy(() => {
     editor?.dispose()
   })
+  $: {
+    if (content !== editor?.getValue()) editor?.setValue(content)
+  }
 </script>
 
 <div bind:this={divEl} class="h-full w-full" />

@@ -7,6 +7,7 @@
     <div class="flex h-full w-full flex-col items-center justify-center">
       <a class="text-primary-500 underline" href="/editor">Monaco</a>
       <a class="text-primary-500 underline" href="/viz">Viz</a>
+      <a class="text-primary-500 underline" href="/playground">playground</a>
     </div>
   </div>
 </div>
