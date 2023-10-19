@@ -1,19 +1,19 @@
 html {
-    @apply bg-surface-900 text-primary-50;
+  @apply bg-surface-900 text-primary-50;
 }
 
 body {
-    height: 100svh;
-    width: 100svw;
-    overflow: hidden;
+  height: 100svh;
+  width: 100svw;
+  overflow: hidden;
 }
 
 label {
-    @apply mb-2 block text-sm capitalize text-primary-500
+  @apply mb-2 block text-sm capitalize text-primary-500;
 }
 
 input {
-    @apply flex h-10 w-full rounded-md border border-surface-600
+  @apply flex h-10 w-full rounded-md border border-surface-600
     bg-transparent px-3 py-2 text-sm text-primary-100 transition-colors
     file:border-0 file:bg-transparent file:text-sm file:font-medium
     placeholder:text-primary-800
@@ -22,14 +22,15 @@ input {
 }
 
 button {
-    @apply
-    select-none
-    font-bold
+  @apply select-none rounded-md border border-primary-500 px-4 py-1 font-bold text-primary-400 hover:border-primary-200;
 }
 
-h1, h2, h3, h4, p {
-    @apply
-    text-tertiary-500
+h1,
+h2,
+h3,
+h4,
+p {
+  @apply text-tertiary-500;
 }
 
 /* @font-face {
