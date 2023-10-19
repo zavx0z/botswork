@@ -27,6 +27,8 @@
   },
   "devDependencies": {
     "@lib/dev": "workspace:*",
+    "@lib/icons": "workspace:*",
+    "@lib/ui": "workspace:*",
     "@lib/theme": "workspace:*",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
