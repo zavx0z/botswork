@@ -1,7 +1,10 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte"
-  import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
+  import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
   import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
+  // import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
+  // import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
+  import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
   import type { editor } from "monaco-editor"
 
   export let content: string
@@ -27,13 +30,14 @@
   onMount(async () => {
     self.MonacoEnvironment = {
       getWorker: function (_moduleId, label) {
-        switch (language) {
+        switch (label) {
           case "json":
             return new jsonWorker()
           case "javascript":
           case "typescript":
-          default:
             return new tsWorker()
+          default:
+            return new editorWorker()
         }
       },
     }
