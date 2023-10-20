@@ -12,13 +12,13 @@
 
 {#if session}
   <Button href={profileHref} label="Профиль пользователя" active={profileActive}>
-    <div class="bg-surface-800 flex h-8 w-8 items-center justify-center rounded-3xl">
+    <div class="flex h-8 w-8 items-center justify-center rounded-3xl bg-surface-800">
       {#if src}
         <img {alt} class="h-full w-full rounded-[inherit]" {src} />
       {:else}
-				<span class="text-primary-500 text-sm font-medium uppercase">
-					{alt.slice(0, 2)}
-				</span>
+        <span class="text-sm font-medium uppercase text-primary-500">
+          {alt.slice(0, 2)}
+        </span>
       {/if}
     </div>
   </Button>

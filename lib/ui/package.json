@@ -6,7 +6,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite dev --host",
-    "watch": "svelte-package --watch",
+    "watch": "bunx --bun svelte-package --watch",
     "build": "vite build && npm run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
