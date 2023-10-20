@@ -15,6 +15,7 @@
   export let language: "typescript" | "javascript" | "json" | "html" | "css" = "typescript"
   export let minimapEnabled = false
   export let foldPanel = false
+  export let foldLevel: undefined | 1 | 2 | 3 | 4 | 5 | 6 | 7 = undefined
 
   let editor: editor.IStandaloneCodeEditor
 
@@ -59,6 +60,10 @@
       const text = editor.getValue()
       content = text
     })
+
+    if (foldLevel) {
+      editor.getAction(`editor.foldLevel${foldLevel}`)?.run()
+    }
 
     if (!hFull) {
       editor.onDidContentSizeChange(updateHeight)
