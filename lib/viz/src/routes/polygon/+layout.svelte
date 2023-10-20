@@ -1,14 +1,17 @@
 <script lang="ts">
   import { page } from "$app/stores"
-  import type { LayoutData } from "./$types"
   import { Panel, PanelItem } from "@lib/ui/activity"
 
-  export let data: LayoutData
+  const menuItems = [
+    { title: "из машины в направленный граф", link: "/polygon/machine-definition-directed-graph" },
+    { title: "структура направленного графа", link: "/polygon/directed-graph" },
+  ]
 </script>
 
 <Panel>
-  <PanelItem href="/polygon" active={$page.url.pathname.includes("polygon")} label="Machine">1. machine</PanelItem>
-  <PanelItem href="/polygon" active={$page.url.pathname.includes("polygon")} label="Machine">2. machine.definition</PanelItem>
+  {#each menuItems as item}
+    <PanelItem href={item.link} active={$page.url.pathname === item.link} label={item.title}>{item.title}</PanelItem>
+  {/each}
 </Panel>
 <div class="ml-80">
   <slot />
