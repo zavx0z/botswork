@@ -74,7 +74,6 @@
         "*.mts": "${capture}.typegen.ts",
         "*.cts": "${capture}.typegen.ts"
     },
-    "xstate.useDeclarationFileForTypegenData": true,
     "workbench.colorTheme": "GitHub Dark",
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -223,8 +222,5 @@
         "**/work/**",
         "/home/zavx0z/botswork/server/sso/sso/routes/refresh.py"
     ],
-    "gitlens.currentLine.enabled": false,
-    "gitlens.currentLine.pullRequests.enabled": false,
-    "gitlens.currentLine.scrollable": false,
-    "gitlens.currentLine.dateFormat": ""
+    "taskExplorer.groupSeparator": ":"
 }
