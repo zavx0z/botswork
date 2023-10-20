@@ -1,6 +1,5 @@
 {
-  "name": "@lib/viz",
-  "type": "module",
+  "name": "@lib/editor",
   "version": "0.0.1",
   "scripts": {
     "dev": "vite dev",
@@ -27,14 +26,12 @@
   },
   "devDependencies": {
     "@lib/dev": "workspace:*",
-    "@lib/editor": "workspace:*",
     "@lib/icons": "workspace:*",
     "@lib/ui": "workspace:*",
     "@lib/theme": "workspace:*",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.0.0",
-    "bun-types": "^1.0.6",
     "publint": "^0.1.9",
     "svelte": "^4.0.5",
     "svelte-check": "^3.4.3",
@@ -43,11 +40,10 @@
     "vite": "^4.4.2"
   },
   "dependencies": {
-    "@xstate/graph": "^1.4.2",
-    "@xstate/svelte": "^2.1.0",
-    "elkjs": "^0.8.2",
-    "javascript-stringify": "^2.1.0",
-    "web-worker": "^1.2.0",
-    "xstate": "beta"
-  }
+    "monaco-editor": "0.44.0",
+    "monaco-types": "^0.1.0"
+  },
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module"
 }

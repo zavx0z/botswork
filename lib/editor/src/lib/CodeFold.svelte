@@ -1,11 +1,10 @@
 <script lang="ts">
+  import type { editor } from "monaco-types"
   import AllLines from "./icons/AllLines.svelte"
   import FoldDown from "./icons/FoldDown.svelte"
   import FoldUp from "./icons/FoldUp.svelte"
-  interface createFoldPanel {
-    editor: any
-  }
-  export let editor: any
+
+  export let editor: editor.IStandaloneCodeEditor
   const foldPanel = [
     {
       icon: AllLines,
@@ -95,7 +94,7 @@
         <svelte:component this={group.icon} />
       {/if}
       {#each Object.entries(group.actions) as [key, action], idx (idx)}
-        <button title={action.title} class="block border-0 px-1 py-0 text-xs" on:click={() => editor.getAction(action.cmd).run()}>
+        <button title={action.title} class="block border-0 px-1 py-0 text-xs" on:click={() => editor.getAction(action.cmd)?.run()}>
           {#if key === "fold"}
             <FoldUp size={12} />
           {:else if key === "unfold"}

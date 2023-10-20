@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Editor from "$lib/editor/Editor.svelte"
+  import { Editor } from "@lib/editor"
   import { parseMachines } from "$lib/editor/parseMachine"
   import { useSelector } from "@xstate/svelte"
   import type { Readable } from "svelte/store"

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Editor from "$lib/editor/Editor.svelte"
   import type { PageData } from "./$types"
   import Canvas from "$lib/Canvas.svelte"
   import { setContext } from "svelte"
+  import { Editor } from "@lib/editor"
 
   export let data: PageData
   setContext("service", data.service)

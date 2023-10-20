@@ -7,6 +7,7 @@
   import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
   import CodeFold from "./CodeFold.svelte"
   import { debounce } from "@lib/ui/utils"
+  import type { editor, MonacoEditor } from "monaco-types"
 
   export let content: string
   export let hFull = true
@@ -14,22 +15,13 @@
   export let language: "typescript" | "javascript" | "json" | "html" | "css" = "typescript"
   export let minimapEnabled = false
   export let foldPanel = false
+
+  let editor: editor.IStandaloneCodeEditor
+
   let divEl: HTMLDivElement
-  let editor: any
-  let Monaco: typeof import("monaco-editor")
+  let Monaco: MonacoEditor
 
   let ignoreEvent = false
-  const updateHeight = () => {
-    const contentHeight = Math.min(divEl.parentElement?.getBoundingClientRect().height ?? 0, window.innerHeight, editor.getContentHeight())
-    const rect = divEl.getBoundingClientRect()
-    divEl.style.height = `${contentHeight}px`
-    try {
-      ignoreEvent = true
-      editor.layout({ width: rect.width, height: contentHeight })
-    } finally {
-      ignoreEvent = false
-    }
-  }
 
   onMount(async () => {
     self.MonacoEnvironment = {
@@ -47,8 +39,8 @@
     }
 
     Monaco = await import("monaco-editor")
-    const indexFile = await fetch(`/xstate.d.ts.txt`).then((res) => res.text())
-    Monaco.languages.typescript.typescriptDefaults.addExtraLib(`${indexFile}`)
+    // const indexFile = await fetch(`/xstate.d.ts.txt`).then((res) => res.text())
+    // Monaco.languages.typescript.typescriptDefaults.addExtraLib(`${indexFile}`)
     editor = Monaco.editor.create(divEl, {
       value: content,
       language: language,
@@ -79,20 +71,25 @@
   $: {
     if (content !== editor?.getValue()) editor?.setValue(content)
   }
+
+  const updateHeight = () => {
+    const contentHeight = Math.min(divEl.parentElement?.getBoundingClientRect().height ?? 0, window.innerHeight, editor.getContentHeight())
+    const rect = divEl.getBoundingClientRect()
+    divEl.style.height = `${contentHeight}px`
+    try {
+      ignoreEvent = true
+      editor.layout({ width: rect.width, height: contentHeight })
+    } finally {
+      ignoreEvent = false
+    }
+  }
   const onResize = () => {
     console.log("resize")
     editor.layout({ width: 0, height: 0 })
     if (hFull) {
-      window.requestAnimationFrame(() => {
-        const rect = divEl.parentElement?.getBoundingClientRect()
-        rect && editor.layout({ width: rect.width, height: rect.height })
-      })
-    } else
-      window.requestAnimationFrame(() => {
-        updateHeight()
-        const rect = divEl.parentElement?.getBoundingClientRect()
-        rect && editor.layout({ width: rect.width })
-      })
+      const rect = divEl.parentElement?.getBoundingClientRect()
+      rect && editor.layout({ width: rect.width, height: rect.height })
+    } else updateHeight()
   }
 </script>
 

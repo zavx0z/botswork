@@ -2,6 +2,76 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "@lib/editor:dev",
+            "type": "shell",
+            "command": "bun vite dev --host 0.0.0.0",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/editor"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "ready in"
+                }
+            },
+        },
+        {
+            "label": "@lib/editor:watch",
+            "type": "shell",
+            "command": "bunx --bun svelte-package --watch",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/editor"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "ParseError",
+                    "endsPattern": "Watching"
+                }
+            },
+        },
+        {
+            "label": "@lib/editor:build",
+            "type": "shell",
+            "command": "bunx --bun vite build && bunx svelte-kit sync && bunx svelte-package && bunx publint",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/editor"
+            },
+            "isBackground": false,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+            },
+        },
+        {
             "label": "@lib/ui:build",
             "type": "shell",
             "command": "bunx --bun vite build && bunx svelte-kit sync && bunx svelte-package && bunx publint",

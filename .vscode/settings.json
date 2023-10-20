@@ -222,5 +222,11 @@
         "**/work/**",
         "/home/zavx0z/botswork/server/sso/sso/routes/refresh.py"
     ],
-    "taskExplorer.groupSeparator": ":"
+    "taskExplorer.groupSeparator": ":",
+    "taskExplorer.enabledTasks": {
+        "perl": false,
+        "pipenv": false,
+        "ruby": false,
+        "tsc": false
+    }
 }
