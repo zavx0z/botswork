@@ -1,5 +1,9 @@
-import type { PageLoad } from "./$types"
-let machineAsString = `const machine = createMachine(
+import { createMachine } from "xstate"
+import type { LayoutLoad } from "./$types"
+import { toDirectedGraph, type DirectedGraphNode } from "@xstate/graph"
+
+export const load: LayoutLoad = async () => {
+  const machine = createMachine(
     {
       context: {
         count: 0,
@@ -16,8 +20,8 @@ let machineAsString = `const machine = createMachine(
               target: "final",
             },
             increment: {
-              actions: "inc"
-            }
+              actions: "inc",
+            },
           },
         },
         final: {
@@ -31,7 +35,7 @@ let machineAsString = `const machine = createMachine(
       guards: {},
       delays: {},
     },
-  );`
-export const load = (async () => {
-  return { machineAsString }
-}) satisfies PageLoad
+  )
+  const directedGraph: DirectedGraphNode = toDirectedGraph(machine.definition as any)
+  return { machine, directedGraph }
+}

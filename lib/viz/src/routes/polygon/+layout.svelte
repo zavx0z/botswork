@@ -5,6 +5,7 @@
   const menuItems = [
     { title: "из машины в направленный граф", link: "/polygon/machine-definition-directed-graph" },
     { title: "структура направленного графа", link: "/polygon/directed-graph" },
+    { title: "edge", link: "/polygon/edge" },
   ]
 </script>
 

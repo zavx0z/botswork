@@ -1,8 +1,6 @@
-import { createMachine } from "xstate"
-import type { PageLoad } from "./$types"
-
-export const load = (async () => {
-  const machine = createMachine(
+<script lang="ts">
+  import { Editor } from "$lib"
+  let content = `const machine = createMachine(
     {
       context: {
         count: 0,
@@ -19,8 +17,8 @@ export const load = (async () => {
               target: "final",
             },
             increment: {
-              actions: "inc",
-            },
+              actions: "inc"
+            }
           },
         },
         final: {
@@ -28,12 +26,9 @@ export const load = (async () => {
         },
       },
     },
-    {
-      actions: { inc: ({ context, event }) => {} },
-      actors: {},
-      guards: {},
-      delays: {},
-    },
-  )
-  return { machine }
-}) satisfies PageLoad
+  );`
+</script>
+
+<div class="flex h-screen">
+  <Editor bind:content hFull={false} language="typescript" />
+</div>

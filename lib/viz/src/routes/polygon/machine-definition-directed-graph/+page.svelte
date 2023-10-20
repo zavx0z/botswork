@@ -2,11 +2,11 @@
   import { toDirectedGraph, type DirectedGraphNode } from "@xstate/graph"
   import { Editor } from "@lib/editor"
   import { parseMachines } from "$lib/editor/parseMachine"
-  import type { PageData } from "../$types"
   import { stringify } from "javascript-stringify"
-  export let data: PageData
 
-  let content = data.machine
+  export let data
+
+  let content = data.machineAsString
   let Machine
   let definition: string
   let directedGraph: string | undefined = undefined

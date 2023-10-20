@@ -1,12 +1,8 @@
 <script lang="ts">
-  import { toDirectedGraph, type DirectedGraphNode } from "@xstate/graph"
-  import type { PageData } from "./$types"
   import { Editor } from "@lib/editor"
   import { stringify } from "javascript-stringify"
-
-  export let data: PageData
-  const { machine } = data
-  const directedGraph: DirectedGraphNode = toDirectedGraph(machine.definition as any)
+  export let data
+  const { directedGraph } = data
 </script>
 
 <div class="grid h-screen grid-flow-col grid-cols-3 grid-rows-3 gap-x-1">

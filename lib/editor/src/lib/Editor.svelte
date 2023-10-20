@@ -40,8 +40,11 @@
     }
 
     Monaco = await import("monaco-editor")
-    // const indexFile = await fetch(`/xstate.d.ts.txt`).then((res) => res.text())
-    // Monaco.languages.typescript.typescriptDefaults.addExtraLib(`${indexFile}`)
+
+    // fetch(`/xstate.d.ts.txt`)
+    //   .then((res) => res.text())
+    //   .then((indexFile) => Monaco.languages.typescript.typescriptDefaults.addExtraLib(`${indexFile}`))
+
     editor = Monaco.editor.create(divEl, {
       value: content,
       language: language,
