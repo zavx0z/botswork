@@ -5,7 +5,7 @@
   // import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
   // import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
   import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
-  import CodeFold from "../../routes/editor/CodeFold.svelte"
+  import CodeFold from "./CodeFold.svelte"
   import { debounce } from "@lib/ui/utils"
 
   export let content: string
