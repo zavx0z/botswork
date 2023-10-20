@@ -8,7 +8,6 @@
   let content = data.machine
   let machine: AnyStateMachine
   let provide = data.provide
-  let machineJson: string
   let actor: AnyActor
   let count: Readable<number>
   let definition: any
@@ -22,7 +21,6 @@
     <button
       on:click={() => {
         machine = parseMachines(content)[0]
-        machineJson = JSON.stringify(machine.toJSON(), null, 2)
         definition = JSON.stringify(machine.definition, null, 2)
       }}>Создать машину</button
     >
@@ -65,7 +63,7 @@
   <div class="flex w-[500px] flex-col">
     <pre class="text-center">machine.definition</pre>
     <div class="flex-1">
-      {#if machineJson}
+      {#if definition}
         <Editor bind:content={definition} language="json" />
       {/if}
     </div>

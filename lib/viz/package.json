@@ -45,7 +45,8 @@
     "@xstate/graph": "^1.4.2",
     "@xstate/svelte": "^2.1.0",
     "elkjs": "^0.8.2",
-    "monaco-editor": "^0.43.0",
+    "javascript-stringify": "^2.1.0",
+    "monaco-editor": "0.44.0",
     "web-worker": "^1.2.0",
     "xstate": "beta"
   }

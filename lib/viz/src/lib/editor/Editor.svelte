@@ -5,14 +5,17 @@
   // import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
   // import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
   import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
-  import type { editor } from "monaco-editor"
+  import CodeFold from "../../routes/editor/CodeFold.svelte"
+  import { debounce } from "@lib/ui/utils"
 
   export let content: string
   export let hFull = true
   export let readOnly = false
   export let language: "typescript" | "javascript" | "json" | "html" | "css" = "typescript"
+  export let minimapEnabled = false
+  export let foldPanel = false
   let divEl: HTMLDivElement
-  let editor: editor.IStandaloneCodeEditor
+  let editor: any
   let Monaco: typeof import("monaco-editor")
 
   let ignoreEvent = false
@@ -27,6 +30,7 @@
       ignoreEvent = false
     }
   }
+
   onMount(async () => {
     self.MonacoEnvironment = {
       getWorker: function (_moduleId, label) {
@@ -51,15 +55,14 @@
       theme: "vs-dark",
       readOnly: readOnly,
       minimap: {
-        enabled: false,
+        enabled: minimapEnabled,
       },
-
+      folding: true,
       scrollBeyondLastLine: false,
       wordWrap: "on",
       wrappingStrategy: "advanced",
       overviewRulerLanes: 0,
     })
-
     editor.onDidChangeModelContent(() => {
       const text = editor.getValue()
       content = text
@@ -76,17 +79,28 @@
   $: {
     if (content !== editor?.getValue()) editor?.setValue(content)
   }
-</script>
-
-<div bind:this={divEl} class="h-full w-full" />
-<svelte:window
-  on:resize={() => {
+  const onResize = () => {
+    console.log("resize")
+    editor.layout({ width: 0, height: 0 })
     if (hFull) {
-      editor.layout({ width: 0, height: 0 })
       window.requestAnimationFrame(() => {
         const rect = divEl.parentElement?.getBoundingClientRect()
         rect && editor.layout({ width: rect.width, height: rect.height })
       })
-    } else updateHeight()
-  }}
-/>
+    } else
+      window.requestAnimationFrame(() => {
+        updateHeight()
+        const rect = divEl.parentElement?.getBoundingClientRect()
+        rect && editor.layout({ width: rect.width })
+      })
+  }
+</script>
+
+<div class="flex h-full w-full flex-col">
+  {#if foldPanel}
+    <CodeFold {editor} />
+  {/if}
+  <div bind:this={divEl} class="w-full flex-1" />
+</div>
+
+<svelte:window on:resize={debounce(onResize, 200)} />
