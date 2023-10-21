@@ -1,0 +1,19 @@
+/* width */
+::-webkit-scrollbar {
+  @apply h-3 w-3;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply rounded-[4px] bg-surface-900;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply rounded-[4px] bg-surface-700;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-surface-500;
+}
