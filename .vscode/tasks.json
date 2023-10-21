@@ -72,6 +72,31 @@
             },
         },
         {
+            "label": "@lib/ui:dev",
+            "type": "shell",
+            "command": "bun vite dev --host 0.0.0.0",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/ui"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "ready in"
+                }
+            },
+        },
+        {
             "label": "@lib/ui:build",
             "type": "shell",
             "command": "bunx --bun vite build && bunx svelte-kit sync && bunx svelte-package && bunx publint",
