@@ -154,6 +154,7 @@
         "Monokai",
         "nocompatible",
         "noforwards",
+        "parseable",
         "passlib",
         "pkey",
         "plpgsql",

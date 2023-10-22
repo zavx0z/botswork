@@ -2,6 +2,76 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "@lib/theme:dev",
+            "type": "shell",
+            "command": "bun vite dev --host 0.0.0.0",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/theme"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "ready in"
+                }
+            },
+        },
+        {
+            "label": "@lib/theme:build",
+            "type": "shell",
+            "command": "bunx --bun vite build && bunx svelte-kit sync && bunx svelte-package && bunx publint",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/theme"
+            },
+            "isBackground": false,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+            },
+        },
+        {
+            "label": "@lib/code:dev",
+            "type": "shell",
+            "command": "bun vite dev --host 0.0.0.0",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/code"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "ready in"
+                }
+            },
+        },
+        {
             "label": "@lib/editor:dev",
             "type": "shell",
             "command": "bun vite dev --host 0.0.0.0",
