@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/plugins/keep-markup/prism-keep-markup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prism-js-fold@1.0.1/prism-js-fold.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism.css" integrity="sha256-h/qtq9bUnXbOOwP4EcbLtYM9Mk3iQQcHZAZ+Jz5y0WQ=" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/prism-js-fold@1.0.1/prism-js-fold.css" rel="stylesheet" />
+  </head>
+  <body>
+    <pre class="line-numbers language-javascript"><code id="wtf" class="language-javascript">const machine = {
+    "id": "machine",
+    "key": "machine",
+    "type": "compound",
+    "initial": {
+        "target": [
+            "#machine.started"
+        ],
+        "source": "#machine",
+        "actions": [],
+        "eventType": null
+    },
+    "history": false,
+    "states": {
+        "started": {
+            "id": "machine.started",
+            "key": "started",
+            "type": "atomic",
+            "initial": {
+                "target": [],
+                "source": "#machine.started",
+                "actions": [],
+                "eventType": null
+            },
+            "history": false,
+            "states": {},
+            "on": {
+                "finish": [
+                    {
+                        "target": [
+                            "#machine.final"
+                        ],
+                        "actions": [],
+                        "source": "#machine.started",
+                        "reenter": false,
+                        "eventType": "finish"
+                    }
+                ],
+                "increment": [
+                    {
+                        "actions": [
+                            "inc"
+                        ],
+                        "source": "#machine.started",
+                        "reenter": false,
+                        "eventType": "increment"
+                    }
+                ]
+            },
+            "transitions": [
+                {
+                    "target": [
+                        "#machine.final"
+                    ],
+                    "actions": [],
+                    "source": "#machine.started",
+                    "reenter": false,
+                    "eventType": "finish"
+                },
+                {
+                    "actions": [
+                        "inc"
+                    ],
+                    "source": "#machine.started",
+                    "reenter": false,
+                    "eventType": "increment"
+                }
+            ],
+            "entry": [],
+            "exit": [],
+            "order": 1,
+            "invoke": [],
+            "tags": []
+        },
+        "final": {
+            "id": "machine.final",
+            "key": "final",
+            "type": "final",
+            "initial": {
+                "target": [],
+                "source": "#machine.final",
+                "actions": [],
+                "eventType": null
+            },
+            "history": false,
+            "states": {},
+            "on": {},
+            "transitions": [],
+            "entry": [],
+            "exit": [],
+            "order": 2,
+            "invoke": [],
+            "tags": []
+        }
+    },
+    "on": {},
+    "transitions": [],
+    "entry": [
+        {
+            "type": "inc"
+        }
+    ],
+    "exit": [],
+    "order": -1,
+    "invoke": [],
+    "tags": []
+  }</code></pre>
+  </body>
+</html>

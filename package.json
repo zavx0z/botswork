@@ -2,6 +2,7 @@
   "name": "botswork",
   "type": "module",
   "devDependencies": {
+    "@happy-dom/global-registrator": "^12.9.1",
     "@xstate/cli": "^0.5.2",
     "@xstate/inspect": "^0.8.0",
     "bun-types": "^1.0.6",
@@ -20,6 +21,7 @@
     "workflow/*"
   ],
   "dependencies": {
-    "@xstate/graph": "beta"
+    "@xstate/graph": "beta",
+    "happy-dom": "^12.9.1"
   }
 }

@@ -4,6 +4,7 @@
   import { Code } from "@lib/ui/card"
   import "prism-themes/themes/prism-coldark-dark.css"
   import "./lineNum.css"
+  import "./fold.css"
   import PlaceholderText from "./PlaceholderText.svelte"
   import PlaceholderImage from "./PlaceholderImage.svelte"
 

@@ -1,27 +1,41 @@
 import { createMachine } from "xstate"
 import type { PageServerLoad } from "./$types"
-import { Window, type IElement } from "happy-dom"
+import { Window } from "happy-dom"
 import { toDirectedGraph, type DirectedGraphNode } from "@xstate/graph"
 import { stringify } from "javascript-stringify"
 import { img } from "./img"
+
 const window = new Window()
 const document = window.document
-document.write(`
-<!doctype html>
+
+document.write(`<!doctype html>
 <html>
-  <body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="https://unpkg.com/prismjs@1.29.0/components/prism-typescript.min.js"></script>
     <script src="https://unpkg.com/prismjs@1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://unpkg.com/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/plugins/keep-markup/prism-keep-markup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prism-js-fold@1.0.1/prism-js-fold.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism.css" integrity="sha256-h/qtq9bUnXbOOwP4EcbLtYM9Mk3iQQcHZAZ+Jz5y0WQ=" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/prism-js-fold@1.0.1/prism-js-fold.css" rel="stylesheet" />
+  </head>
+  <body>
   </body>
-</html>
+  </html>
 `)
+
 await window.happyDOM.whenAsyncComplete()
+//@ts-ignore
+window.Prism.manual = true
+
 function renderCode(code: string, lang: "javascript" | "typescript" = "typescript"): Promise<string> {
   code = code.trimStart()
   const tempPre = document.createElement("pre")
-  tempPre.className = "line-numbers"
+  tempPre.className = `line-numbers language-${lang}`
   const tempCode = document.createElement("code")
   tempCode.className = `language-${lang}`
   tempCode.textContent = code
@@ -32,12 +46,15 @@ function renderCode(code: string, lang: "javascript" | "typescript" = "typescrip
       //@ts-ignore
       window.Prism.highlightElement(tempCode, true, () => {
         console.log("wait result")
-        const result = tempCode.getInnerHTML()
-        document.body.removeChild(tempPre)
-        resolve(result)
+        setTimeout(() => {
+          const result = tempCode.getInnerHTML()
+          document.body.removeChild(tempPre)
+          resolve(result)
+        }, 2000)
       })
-    } catch {
-      reject("Не получилось)")
+    } catch (err) {
+      console.log(err)
+      reject("😒")
     }
   })
 }
@@ -98,9 +115,7 @@ export const load = (async () => {
       Edge: renderCode(`const childrenFirstEdgeFirst = ${stringify(directedGraph.children[0].edges[0], null, 2)}`, "javascript"),
       DirectedGraphEdge,
       TransitionDefinition,
-      img: new Promise<string>((resolve) => {
-        setTimeout(() => resolve(img), 7000)
-      }),
+      img: new Promise<string>((resolve) => setTimeout(() => resolve(img), 0)),
     },
   }
 }) satisfies PageServerLoad
