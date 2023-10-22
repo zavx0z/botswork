@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte"
+  import { hexThemeColor } from "@lib/theme"
   import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
   import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker"
-  // import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
-  // import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
+  import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker"
+  import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
   import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
   import CodeFold from "./CodeFold.svelte"
   import { debounce } from "@lib/ui/utils"
@@ -28,6 +29,10 @@
     self.MonacoEnvironment = {
       getWorker: function (_moduleId, label) {
         switch (label) {
+          case "html":
+            return new htmlWorker()
+          case "css":
+            return new cssWorker()
           case "json":
             return new jsonWorker()
           case "javascript":
@@ -44,11 +49,34 @@
     // fetch(`/xstate.d.ts.txt`)
     //   .then((res) => res.text())
     //   .then((indexFile) => Monaco.languages.typescript.typescriptDefaults.addExtraLib(`${indexFile}`))
-
+    // все цвета тут
+    // https://github.com/fabiospampinato/khroma/blob/fa81639c242fdcf6492c36e2fb85f04664e042da/src/color/keyword.ts#L13-L161
+    Monaco.editor.defineTheme("BotsWork", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [
+        {
+          token: "identifier",
+          foreground: "9CDCFE",
+        },
+        {
+          token: "identifier.function",
+          foreground: "DCDCAA",
+        },
+        {
+          token: "type",
+          foreground: "1AAFB0",
+        },
+      ],
+      colors: {
+        "editor.background": hexThemeColor("--color-surface-900"),
+      },
+    })
+    Monaco.editor.setTheme("BotsWork")
     editor = Monaco.editor.create(divEl, {
       value: content,
       language: language,
-      theme: "vs-dark",
+      theme: "BotsWork",
       readOnly: readOnly,
       minimap: {
         enabled: minimapEnabled,

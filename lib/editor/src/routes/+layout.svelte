@@ -33,6 +33,7 @@
         </svg>
       </span>
     </Button>
+    <Button href="/colors" label="colors" active={$page.url.pathname.includes("colors")}>colors</Button>
   </div>
 </Activity>
 <div class="ml-12">
