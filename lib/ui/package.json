@@ -39,6 +39,10 @@
       "types": "./dist/button/index.d.ts",
       "svelte": "./dist/button/index.js"
     },
+    "./layout/info": {
+      "types": "./dist/layout/info/index.d.ts",
+      "svelte": "./dist/layout/info/index.js"
+    },
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "svelte": "./dist/utils/index.js"
