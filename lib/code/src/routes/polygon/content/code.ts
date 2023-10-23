@@ -1,7 +1,7 @@
 const machine = createMachine(
   {
     context: {
-      count: 44,
+      count: 42,
     },
     id: "machine",
     entry: {

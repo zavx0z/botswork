@@ -1,30 +1,27 @@
-import {Environment} from "@types/prismjs"
 // inspects code elements from prism during pre-render hook. if it's JS or JSON we try to insert details/summary tags to
 // allow code folding
-
-const lastLineWrapperOpen = "<span class='ll'>".split() // wrap portion of last line preceding the closing symbol so we can conditionally hide it, needed to make non-square hidden regions collapse nicely.
-const lastLineWrapperClose = "</span>".split()
-const firstLineContentWrapperOpen = "<span class='fl'>".split() // wrapper beginning at first **visible** character on first line where opening symbol is found. needed so we can align opening toggle nicely
-const firstLineContentWrapperClose = "</span>".split()
-const detailsOpenFragmentActive = "<details open><summary>".split()
-const detailsOpenFragmentInactive = "<details><summary>".split()
-const summaryCloseFragment = "</summary>".split()
-const detailsCloseFragment = "</details>".split()
-
-const symbolPairMap = {
+const lastLineWrapperOpen = ["<span class='ll'>"] // wrap portion of last line preceding the closing symbol so we can conditionally hide it, needed to make non-square hidden regions collapse nicely.
+const lastLineWrapperClose = ["</span>"]
+const firstLineContentWrapperOpen = ["<span class='fl'>"] // wrapper beginning at first **visible** character on first line where opening symbol is found. needed so we can align opening toggle nicely
+const firstLineContentWrapperClose = ["</span>"]
+const detailsOpenFragmentActive = ["<details open><summary>"]
+// const detailsOpenFragmentActive = ["<details><summary>"]
+const detailsOpenFragmentInactive = ["<details><summary>"]
+const summaryCloseFragment = ["</summary>"]
+const detailsCloseFragment = ["</details>"]
+const symbolPairMap: { [key: string]: string } = {
   "{": "}",
   "[": "]",
 }
-
-// folding `context` type contains:
-//  - minimumDepth:int - depth value that must be met or exceeded for folding to occur
-
-function insertFold(inputBuffer, depth, context) {
-  const output = []
+type contextType = {
+  minimumDepth: number // depth value that must be met or exceeded for folding to occur
+  lineCount: number
+}
+function insertFold(inputBuffer: string[], depth: number, context: contextType) {
+  const output: string[] = []
   let remaining = inputBuffer
   let current
-
-  function createFold(symbol) {
+  function createFold(symbol: string) {
     const [result, resultRemaining] = insertFold(remaining, depth + 1, context)
     const currentLineEndIndex = result.indexOf("\n")
     // only create fold if symbol pair crossed a '\n'. only insert fold if at required depth.
@@ -57,7 +54,6 @@ function insertFold(inputBuffer, depth, context) {
       remaining = resultRemaining
     }
   }
-
   while ((current = remaining.shift()) !== undefined) {
     switch (current) {
       case "[":
@@ -72,21 +68,15 @@ function insertFold(inputBuffer, depth, context) {
         output.push(current)
     }
   }
-
   return [output, remaining]
 }
-
 // takes a code element and begins recursion if it's a parsable format
-export function insertFolds(codeElement: Environment) {
+export function insertFolds(codeElement: HTMLElement) {
   const parseable = Array.from(codeElement.classList).find((cls) => cls.endsWith("json") || cls.endsWith("js") || cls.endsWith("javascript")) !== undefined
   if (parseable) {
     const inputBuffer = codeElement.innerText.split("")
-    const [result] = insertFold(inputBuffer, 1, {
-      minimumDepth: 2,
-      lineCount: inputBuffer.filter((c) => c === "\n").length,
-    })
+    const [result] = insertFold(inputBuffer, 1, { minimumDepth: 2, lineCount: inputBuffer.filter((c) => c === "\n").length })
     codeElement.innerHTML = result.join("")
   }
 }
-
 // Prism.hooks.add("before-all-elements-highlight", ({ elements }) => elements.forEach(insertFolds))

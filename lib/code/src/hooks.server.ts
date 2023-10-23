@@ -1,10 +1,8 @@
-import { Window } from "happy-dom"
-import prismTemplate from "./routes/playground/index.html?raw"
+import { CodeRenderer } from "$lib"
 
-const window = new Window()
-window.document.write(prismTemplate)
+const renderer = await CodeRenderer()
 
 export async function handle({ event, resolve }) {
-  event.locals.happyDOM = window
+  event.locals.CodeRenderer = renderer
   return await resolve(event)
 }

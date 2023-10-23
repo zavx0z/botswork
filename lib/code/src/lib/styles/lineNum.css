@@ -1,15 +1,15 @@
-.line-numbers {
+.line-num {
   position: relative;
   padding-left: 3.8em;
   counter-reset: linenumber;
 }
 
-.line-numbers > code {
+.line-num > code {
   position: relative;
   white-space: inherit;
 }
 
-.line-numbers .line-numbers-rows {
+.line-num .line-numbers-rows {
   position: absolute;
   pointer-events: none;
   top: 0;

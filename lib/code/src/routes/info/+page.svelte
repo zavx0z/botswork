@@ -28,6 +28,14 @@
       name: "before-append",
       description: "Событие происходит перед добавлением подсвеченного кода к DOM.",
     },
+    {
+      name: "before-highlightall",
+      description: ""
+    },
+    {
+      name: "wrap",
+      description: ""
+    },
   ]
 </script>
 

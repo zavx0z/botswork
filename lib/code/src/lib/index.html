@@ -2,124 +2,217 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Title</title>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="https://unpkg.com/prismjs@1.29.0/components/prism-typescript.min.js"></script>
     <script src="https://unpkg.com/prismjs@1.29.0/components/prism-javascript.min.js"></script>
-    <script src="https://unpkg.com/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
-    <script src="https://unpkg.com/prismjs@1.29.0/plugins/keep-markup/prism-keep-markup.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prism-js-fold@1.0.1/prism-js-fold.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism.css" integrity="sha256-h/qtq9bUnXbOOwP4EcbLtYM9Mk3iQQcHZAZ+Jz5y0WQ=" crossorigin="anonymous" />
-    <link href="https://cdn.jsdelivr.net/npm/prism-js-fold@1.0.1/prism-js-fold.css" rel="stylesheet" />
-  </head>
-  <body>
-    <pre class="line-numbers language-javascript"><code id="machine" class="language-javascript">const machine = {
-    "id": "machine",
-    "key": "machine",
-    "type": "compound",
-    "initial": {
-        "target": [
-            "#machine.started"
-        ],
-        "source": "#machine",
-        "actions": [],
-        "eventType": null
-    },
-    "history": false,
-    "states": {
-        "started": {
-            "id": "machine.started",
-            "key": "started",
-            "type": "atomic",
-            "initial": {
-                "target": [],
-                "source": "#machine.started",
-                "actions": [],
-                "eventType": null
-            },
-            "history": false,
-            "states": {},
-            "on": {
-                "finish": [
-                    {
-                        "target": [
-                            "#machine.final"
-                        ],
-                        "actions": [],
-                        "source": "#machine.started",
-                        "reenter": false,
-                        "eventType": "finish"
-                    }
-                ],
-                "increment": [
-                    {
-                        "actions": [
-                            "inc"
-                        ],
-                        "source": "#machine.started",
-                        "reenter": false,
-                        "eventType": "increment"
-                    }
-                ]
-            },
-            "transitions": [
-                {
-                    "target": [
-                        "#machine.final"
-                    ],
-                    "actions": [],
-                    "source": "#machine.started",
-                    "reenter": false,
-                    "eventType": "finish"
-                },
-                {
-                    "actions": [
-                        "inc"
-                    ],
-                    "source": "#machine.started",
-                    "reenter": false,
-                    "eventType": "increment"
+    <script>
+      !(function () {
+        if ("undefined" != typeof Prism && "undefined" != typeof document) {
+          var e = "line-numbers",
+            n = /\n(?!$)/g,
+            t = (Prism.plugins.lineNumbers = {
+              getLine: function (n, t) {
+                if ("PRE" === n.tagName && n.classList.contains(e)) {
+                  var i = n.querySelector(".line-numbers-rows")
+                  if (i) {
+                    var r = parseInt(n.getAttribute("data-start"), 10) || 1,
+                      s = r + (i.children.length - 1)
+                    t < r && (t = r), t > s && (t = s)
+                    var l = t - r
+                    return i.children[l]
+                  }
                 }
-            ],
-            "entry": [],
-            "exit": [],
-            "order": 1,
-            "invoke": [],
-            "tags": []
-        },
-        "final": {
-            "id": "machine.final",
-            "key": "final",
-            "type": "final",
-            "initial": {
-                "target": [],
-                "source": "#machine.final",
-                "actions": [],
-                "eventType": null
-            },
-            "history": false,
-            "states": {},
-            "on": {},
-            "transitions": [],
-            "entry": [],
-            "exit": [],
-            "order": 2,
-            "invoke": [],
-            "tags": []
+              },
+              resize: function (e) {
+                r([e])
+              },
+              assumeViewportIndependence: !0,
+            }),
+            i = void 0
+          window.addEventListener("resize", function () {
+            ;(t.assumeViewportIndependence && i === window.innerWidth) || ((i = window.innerWidth), r(Array.prototype.slice.call(document.querySelectorAll("pre.line-numbers"))))
+          }),
+            Prism.hooks.add("complete", function (t) {
+              if (t.code) {
+                var i = t.element,
+                  s = i.parentNode
+                if (s && /pre/i.test(s.nodeName) && !i.querySelector(".line-numbers-rows") && Prism.util.isActive(i, e)) {
+                  i.classList.remove(e), s.classList.add(e)
+                  var l,
+                    o = t.code.match(n),
+                    a = o ? o.length + 1 : 1,
+                    u = new Array(a + 1).join("<span></span>")
+                  ;(l = document.createElement("span")).setAttribute("aria-hidden", "true"),
+                    (l.className = "line-numbers-rows"),
+                    (l.innerHTML = u),
+                    s.hasAttribute("data-start") && (s.style.counterReset = "linenumber " + (parseInt(s.getAttribute("data-start"), 10) - 1)),
+                    t.element.appendChild(l),
+                    r([s]),
+                    Prism.hooks.run("line-numbers", t)
+                }
+              }
+            }),
+            Prism.hooks.add("line-numbers", function (e) {
+              ;(e.plugins = e.plugins || {}), (e.plugins.lineNumbers = !0)
+            })
         }
-    },
-    "on": {},
-    "transitions": [],
-    "entry": [
-        {
-            "type": "inc"
+        function r(e) {
+          if (
+            0 !=
+            (e = e.filter(function (e) {
+              var n,
+                t = ((n = e), n ? (window.getComputedStyle ? getComputedStyle(n) : n.currentStyle || null) : null)["white-space"]
+              return "pre-wrap" === t || "pre-line" === t
+            })).length
+          ) {
+            var t = e
+              .map(function (e) {
+                var t = e.querySelector("code"),
+                  i = e.querySelector(".line-numbers-rows")
+                if (t && i) {
+                  var r = e.querySelector(".line-numbers-sizer"),
+                    s = t.textContent.split(n)
+                  r || (((r = document.createElement("span")).className = "line-numbers-sizer"), t.appendChild(r)), (r.innerHTML = "0"), (r.style.display = "block")
+                  var l = r.getBoundingClientRect().height
+                  return (r.innerHTML = ""), { element: e, lines: s, lineHeights: [], oneLinerHeight: l, sizer: r }
+                }
+              })
+              .filter(Boolean)
+            t.forEach(function (e) {
+              var n = e.sizer,
+                t = e.lines,
+                i = e.lineHeights,
+                r = e.oneLinerHeight
+              ;(i[t.length - 1] = void 0),
+                t.forEach(function (e, t) {
+                  if (e && e.length > 1) {
+                    var s = n.appendChild(document.createElement("span"))
+                    ;(s.style.display = "block"), (s.textContent = e)
+                  } else i[t] = r
+                })
+            }),
+              t.forEach(function (e) {
+                for (var n = e.sizer, t = e.lineHeights, i = 0, r = 0; r < t.length; r++) void 0 === t[r] && (t[r] = n.children[i++].getBoundingClientRect().height)
+              }),
+              t.forEach(function (e) {
+                var n = e.sizer,
+                  t = e.element.querySelector(".line-numbers-rows")
+                ;(n.style.display = "none"),
+                  (n.innerHTML = ""),
+                  e.lineHeights.forEach(function (e, n) {
+                    t.children[n].style.height = e + "px"
+                  })
+              })
+          }
         }
-    ],
-    "exit": [],
-    "order": -1,
-    "invoke": [],
-    "tags": []
-  }</code></pre>
-  </body>
+      })()
+    </script>
+    <script>
+      ;(function () {
+        if (typeof Prism === "undefined" || typeof document === "undefined" || !document.createRange) return
+        Prism.plugins.KeepMarkup = true
+        Prism.hooks.add("before-highlight", function (env) {
+          if (!env.element.children.length) return
+          if (!Prism.util.isActive(env.element, "keep-markup", true)) return
+          var dropTokens = Prism.util.isActive(env.element, "drop-tokens", false)
+          /**
+           * Returns whether the given element should be kept.
+           *
+           * @param {HTMLElement} element
+           * @returns {boolean}
+           */
+          function shouldKeep(element) {
+            if (dropTokens && element.nodeName.toLowerCase() === "span" && element.classList.contains("token")) return false
+            return true
+          }
+          var pos = 0
+          var data = []
+          function processElement(element) {
+            if (!shouldKeep(element)) {
+              // don't keep this element and just process its children
+              processChildren(element)
+              return
+            }
+            var o = {
+              // Store original element so we can restore it after highlighting
+              element: element,
+              posOpen: pos,
+            }
+            data.push(o)
+            processChildren(element)
+            o.posClose = pos
+          }
+          function processChildren(element) {
+            for (var i = 0, l = element.childNodes.length; i < l; i++) {
+              var child = element.childNodes[i]
+              if (child.nodeType === 1) {
+                // element
+                processElement(child)
+              } else if (child.nodeType === 3) {
+                // text
+                pos += child.data.length
+              }
+            }
+          }
+          processChildren(env.element)
+          if (data.length) {
+            // data is an array of all existing tags
+            env.keepMarkup = data
+          }
+        })
+        Prism.hooks.add("after-highlight", function (env) {
+          if (env.keepMarkup && env.keepMarkup.length) {
+            var walk = function (elt, nodeState) {
+              for (var i = 0, l = elt.childNodes.length; i < l; i++) {
+                var child = elt.childNodes[i]
+                if (child.nodeType === 1) {
+                  // element
+                  if (!walk(child, nodeState)) {
+                    return false
+                  }
+                } else if (child.nodeType === 3) {
+                  // text
+                  if (!nodeState.nodeStart && nodeState.pos + child.data.length > nodeState.node.posOpen) {
+                    // We found the start position
+                    nodeState.nodeStart = child
+                    nodeState.nodeStartPos = nodeState.node.posOpen - nodeState.pos
+                  }
+                  if (nodeState.nodeStart && nodeState.pos + child.data.length >= nodeState.node.posClose) {
+                    // We found the end position
+                    nodeState.nodeEnd = child
+                    nodeState.nodeEndPos = nodeState.node.posClose - nodeState.pos
+                  }
+                  nodeState.pos += child.data.length
+                }
+                if (nodeState.nodeStart && nodeState.nodeEnd) {
+                  // Select the range and wrap it with the element
+                  var range = document.createRange()
+                  range.setStart(nodeState.nodeStart, nodeState.nodeStartPos)
+                  range.setEnd(nodeState.nodeEnd, nodeState.nodeEndPos)
+                  nodeState.node.element.innerHTML = ""
+                  nodeState.node.element.appendChild(range.extractContents())
+                  range.insertNode(nodeState.node.element)
+                  range.detach()
+                  // Process is over
+                  return false
+                }
+              }
+              return true
+            }
+            // For each tag, we walk the DOM to reinsert it
+            env.keepMarkup.forEach(function (node) {
+              walk(env.element, {
+                node: node,
+                pos: 0,
+              })
+            })
+            // Store new highlightedCode for later hooks calls
+            env.highlightedCode = env.element.innerHTML
+          }
+        })
+      })()
+    </script>
+  </head>
+
+  <body></body>
 </html>
