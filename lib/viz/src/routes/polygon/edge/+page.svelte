@@ -1,12 +1,9 @@
 <script lang="ts">
   import { Editor } from "@lib/editor"
   import { stringify } from "javascript-stringify"
-  import { Code } from "@lib/ui/card"
-  import "prism-themes/themes/prism-coldark-dark.css"
-  import "./lineNum.css"
-  import "./fold.css"
   import PlaceholderText from "./PlaceholderText.svelte"
   import PlaceholderImage from "./PlaceholderImage.svelte"
+  import { Code } from "@lib/code/ui"
 
   export let data
 </script>

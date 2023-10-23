@@ -152,6 +152,7 @@
         "microstep",
         "midpt",
         "Monokai",
+        "nocheck",
         "nocompatible",
         "noforwards",
         "parseable",

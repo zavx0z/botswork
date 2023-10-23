@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@lib/dev": "workspace:*",
+    "@lib/code": "workspace:*",
     "@lib/editor": "workspace:*",
     "@lib/icons": "workspace:*",
     "@lib/theme": "workspace:*",

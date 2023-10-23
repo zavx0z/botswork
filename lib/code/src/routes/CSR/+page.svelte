@@ -1,10 +1,7 @@
 <script lang="ts">
   import { Editor } from "@lib/editor"
-  import { Code } from "@lib/ui/card"
-  import "$lib/styles/fold.css"
-  import "$lib/styles/lineNum.css"
-  import "prism-themes/themes/prism-coldark-dark.css"
   import { formatHtmlTags } from "../../utils.js"
+  import Code from "$lib/ui/Code.svelte"
   export let data
 </script>
 

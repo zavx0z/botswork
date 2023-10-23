@@ -1,5 +1,6 @@
 <script lang="ts">
   import "@lib/theme/app.css"
+  import "@lib/code/styles.css"
   import { Activity, Button } from "@lib/ui/activity"
   import { BotikIcon } from "@lib/icons"
   import { page } from "$app/stores"

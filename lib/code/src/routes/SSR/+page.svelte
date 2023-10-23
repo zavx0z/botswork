@@ -1,25 +1,9 @@
 <script lang="ts">
   import { Editor } from "@lib/editor"
-  import { Code } from "@lib/ui/card"
-  import { saveData as saveDataToFs } from "./utils.js"
-  import "$lib/styles/fold.css"
-  import "$lib/styles/lineNum.css"
+  import { saveData } from "./utils.js"
   import { invalidate } from "$app/navigation"
-  import "prism-themes/themes/prism-coldark-dark.css"
-
-  function formatHtmlTags(html: string): string {
-    const tagRegex = /(<[^>]*>)/g
-    const tags = html.split(tagRegex)
-    let formattedHtml = ""
-    for (const tag of tags) {
-      if (tag.endsWith(">") && tag.includes("/")) {
-        formattedHtml += tag.trim() + "\n"
-      } else {
-        formattedHtml += tag.trim()
-      }
-    }
-    return formattedHtml
-  }
+  import {Code} from "$lib/ui"
+  import { formatHtmlTags } from "../../utils.js"
 
   export let data
   let content = data.src
@@ -32,7 +16,7 @@
     if (e.ctrlKey && e.which == 83) {
       e.preventDefault()
       if (edited) {
-        await saveDataToFs(content)
+        await saveData(content)
         invalidate("machine")
         prevContent = content
         edited = false
@@ -42,7 +26,7 @@
 </script>
 
 <svelte:document on:keydown={saveCode} />
-<div class="grid h-screen grid-cols-4 auto-cols-auto">
+<div class="grid h-screen auto-cols-auto grid-cols-4">
   <Editor bind:content language={"javascript"} />
   <Editor content={data.dst} language={"html"} />
   <Editor content={formatHtmlTags(data.dst)} language={"html"} />

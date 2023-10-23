@@ -8,7 +8,6 @@ export const POST: RequestHandler = async (event) => {
   const { content } = await event.request.json()
   try {
     await writeFile(path.join(path.dirname(fileURLToPath(import.meta.url)), "content/code.ts"), content, "utf-8")
-    console.log('write')
     return json({ status: "success" })
   } catch (e) {
     console.log(e)
