@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [sveltekit()],
   server: {
 		watch: {
-			ignored: ['**.html']
+			ignored: ['**/content/*']
 		}
 	}
 })

@@ -42,7 +42,7 @@
     <Button href="/info" label="info" active={$page.url.pathname.includes("info")}>info</Button>
   </div>
 </Activity>
-<InfoBar></InfoBar>
-<div class="ml-12 mt-4">
+<!-- <InfoBar></InfoBar> -->
+<div class="ml-12 ">
   <slot />
 </div>
