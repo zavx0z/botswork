@@ -8,13 +8,13 @@
   import type { AnyActor } from "xstate"
 
   const actors: { ref: String; actor: AnyActor }[] = [
-    { ref: "left", actor: createActor(machine, { input: { position: [-4, 0, 0] } }) },
-    { ref: "right", actor: createActor(machine, { input: { position: [4, 0, 0] } }) },
+    { ref: "left", actor: createActor(machine, { input: { position: [0, 0, 0] } }) },
+    // { ref: "right", actor: createActor(machine, { input: { position: [6, 0, 0] } }) },
   ]
   interactivity()
 </script>
 
-<T.PerspectiveCamera makeDefault position={[0, 0, 22]} on:create={({ ref }) => ref.lookAt(0, 0, 0)}>
+<T.PerspectiveCamera makeDefault position={[0, 0, 25]} on:create={({ ref }) => ref.lookAt(0, 0, 0)}>
   <OrbitControls enableDamping />
 </T.PerspectiveCamera>
 
