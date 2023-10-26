@@ -29,7 +29,6 @@
     }
   }
   let selected: string
-  let code: string
 
   const systemId = "codeRender"
   const restoredState = JSON.parse(localStorage.getItem(systemId) || "{}")
@@ -37,12 +36,14 @@
   const state = useSelector(Actor, (state) => state)
   state.subscribe((state) => localStorage.setItem("codeRender", JSON.stringify(Actor.getPersistedState())))
 
-  $: {
-    if (code) {
-      console.log("send")
-      Actor.send({ type: "input.text", params: code })
-    }
-  }
+  let code = $state.context.input.text
+  let fold = $state.context.input.fold
+  let lineno = $state.context.input.lineno
+  $:console.log(fold)
+  $: Actor.send({ type: "input.fold", params: fold })
+  $: Actor.send({ type: "input.lineno", params: lineno })
+  $: Actor.send({ type: "input.text", params: code || "" })
+  // $: console.log($state.context.output.text)
 </script>
 
 <T.Mesh position={$position}>
@@ -53,7 +54,40 @@
       </div>
       <div aria-label="тело" class="grid grid-cols-1 grid-rows-[max-content_12rem_max-content] gap-2 rounded-b-md p-3">
         <div aria-label="входы" class="flex flex-col gap-2">
-          <CodeSource bind:selected bind:code />
+          <!-- <textarea bind:value={code} placeholder="ctrl+v" class="flex appearance-none whitespace-pre-wrap rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none" id="text" /> -->
+          <!-- <CodeSource bind:selected bind:code /> -->
+          <div class="relative flex justify-between gap-2">
+            <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-sky-500" />
+            <label class="flex shrink drop-shadow-lg" for="text">Код</label>
+            <!-- <input bind:value={code} class="flex appearance-none rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none" type="text" id="text" placeholder=" " /> -->
+            <textarea
+              rows="1"
+              bind:value={code}
+              placeholder="ctrl+v"
+              class="flex grow appearance-none whitespace-pre-wrap rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none"
+              id="text"
+            />
+          </div>
+          <div class="relative flex h-7 items-center">
+            <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-pink-500" />
+            <input
+              id="fold"
+              type="checkbox"
+              bind:checked={fold}
+              class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+            />
+            <label for="fold" class="ml-2 drop-shadow-lg">Свернуть строки</label>
+          </div>
+          <div class="relative flex h-7 items-center">
+            <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-pink-500" />
+            <input
+              id="lineno"
+              type="checkbox"
+              bind:checked={lineno}
+              class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+            />
+            <label for="lineno" class="ml-2 drop-shadow-lg">Номера строк</label>
+          </div>
         </div>
         <div aria-label="предпросмотр" class="overflow-y-auto overflow-x-hidden rounded-sm bg-surface-900 p-1 shadow-inner shadow-slate-900">
           <div class="invisible min-h-fit min-w-fit origin-top-left" use:content>
@@ -63,7 +97,10 @@
           </div>
         </div>
         <div aria-label="выходы" class="flex flex-col gap-2">
-          <div class="relative"></div>
+          <div class="relative">
+            <div class="absolute -right-[17px] top-2 h-3 w-3 rounded-full bg-sky-500" />
+            <p class="text-right drop-shadow-lg">Форматированный код</p>
+          </div>
         </div>
       </div>
     </div>

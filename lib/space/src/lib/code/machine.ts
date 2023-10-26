@@ -43,9 +43,21 @@ export const machine = createMachine(
         guard: ({ event }) => Boolean(event.params.length),
         actions: assign(({ context, event: { params } }) => ({ ...context, input: { ...context.input, text: params } })),
       },
-      "input.language": { target: ".process", guard: { type: "inputComplete" }, reenter: true },
-      "input.lineno": { target: ".process", guard: { type: "inputComplete" }, reenter: true },
-      "input.fold": { target: ".process", guard: { type: "inputComplete" }, reenter: true },
+      "input.language": {
+        target: ".process",
+        guard: ({ context, event }) => Boolean(context.input.text && context.input.language !== event.params),
+        actions: assign(({ context, event: { params } }) => ({ ...context, input: { ...context.input, language: params } })),
+      },
+      "input.lineno": {
+        target: ".process",
+        guard: ({ context, event }) => Boolean(context.input.lineno !== event.params),
+        actions: assign(({ context, event: { params } }) => ({ ...context, input: { ...context.input, lineno: params } })),
+      },
+      "input.fold": {
+        target: ".process",
+        guard: ({ context, event }) => Boolean(context.input.fold !== event.params),
+        actions: assign(({ context, event: { params } }) => ({ ...context, input: { ...context.input, fold: params } })),
+      },
       restart: { target: ".process" },
     },
     initial: "idle",
@@ -59,7 +71,7 @@ export const machine = createMachine(
         invoke: {
           src: "codeRender",
           input: ({ context }) => context.input,
-          onDone: { actions: assign(({ context, event: { output } }) => ({ ...context, output: { text: output } })), target: "idle" },
+          onDone: { actions: assign(({ context, event: { output } }) => ({ ...context, output: { text: output } })), target: "complete" },
           onError: { actions: assign(({ context, event: { data } }) => ({ ...context, error: { message: data as string } })), target: "error" },
         },
       },
