@@ -14,6 +14,9 @@ export default () => {
           const pluginKeepMarkup = (await import("prismjs/plugins/keep-markup/prism-keep-markup?raw")).default
           await eval(pluginKeepMarkup)
 
+          const lineNumbers = (await import("prismjs/plugins/line-numbers/prism-line-numbers?raw")).default
+          await eval(lineNumbers)
+
           const { insertFolds } = await import("./plugins/prismFold")
           Prism.hooks.add("before-all-elements-highlight", ({ elements }) => {
             if (elements[0].parentNode.className.includes("fold")) elements.forEach(insertFolds)

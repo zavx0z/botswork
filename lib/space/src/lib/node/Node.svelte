@@ -39,11 +39,9 @@
   let code = $state.context.input.text
   let fold = $state.context.input.fold
   let lineno = $state.context.input.lineno
-  $:console.log(fold)
   $: Actor.send({ type: "input.fold", params: fold })
   $: Actor.send({ type: "input.lineno", params: lineno })
   $: Actor.send({ type: "input.text", params: code || "" })
-  // $: console.log($state.context.output.text)
 </script>
 
 <T.Mesh position={$position}>
@@ -54,12 +52,9 @@
       </div>
       <div aria-label="тело" class="grid grid-cols-1 grid-rows-[max-content_12rem_max-content] gap-2 rounded-b-md p-3">
         <div aria-label="входы" class="flex flex-col gap-2">
-          <!-- <textarea bind:value={code} placeholder="ctrl+v" class="flex appearance-none whitespace-pre-wrap rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none" id="text" /> -->
-          <!-- <CodeSource bind:selected bind:code /> -->
           <div class="relative flex justify-between gap-2">
             <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-sky-500" />
             <label class="flex shrink drop-shadow-lg" for="text">Код</label>
-            <!-- <input bind:value={code} class="flex appearance-none rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none" type="text" id="text" placeholder=" " /> -->
             <textarea
               rows="1"
               bind:value={code}
@@ -92,7 +87,7 @@
         <div aria-label="предпросмотр" class="overflow-y-auto overflow-x-hidden rounded-sm bg-surface-900 p-1 shadow-inner shadow-slate-900">
           <div class="invisible min-h-fit min-w-fit origin-top-left" use:content>
             {#if $state.context.output.text}
-              <pre><code>{@html $state.context.output.text}</code></pre>
+              <pre class={lineno ? "line-num" : ""}><code>{@html $state.context.output.text}</code></pre>
             {/if}
           </div>
         </div>
