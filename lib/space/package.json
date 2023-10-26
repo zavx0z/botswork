@@ -54,6 +54,7 @@
     "@tweakpane/core": "^2.0.1",
     "@types/three": "^0.157.2",
     "@xstate/svelte": "^2.1.0",
+    "prismjs": "^1.29.0",
     "three": "^0.157.0",
     "tweakpane": "^3.1.0",
     "xstate": "beta"

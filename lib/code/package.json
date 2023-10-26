@@ -48,10 +48,11 @@
     "svelte-check": "^3.4.3",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
+    "happy-dom": "^12.9.1",
     "vite": "^4.4.2"
   },
   "dependencies": {
-    "happy-dom": "^12.9.1",
+    "@xstate/svelte": "^2.1.0",
     "prismjs": "^1.29.0"
   }
 }

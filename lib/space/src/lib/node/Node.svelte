@@ -5,6 +5,8 @@
   import { useSelector } from "@xstate/svelte"
   import CodeSource from "./inputs/CodeSource.svelte"
   export let actor: AnyActor
+  import { SvelteCodeRenderer } from "@lib/code"
+
   actor.start()
   const position = useSelector(actor, (state) => state.context.position)
 
@@ -27,12 +29,14 @@
     }
   }
   let selected: string
-  let code: string = ''
-  $: console.log(code)
+  let code: string = ""
+  // $: console.log(code)
+  let actorCodeRender: any
 </script>
 
 <T.Mesh position={$position}>
   <HTML transform>
+    <SvelteCodeRenderer bind:actorCodeRender />
     <div aria-label="нода" class="grid w-96 grid-cols-1 grid-rows-[2rem_max-content] rounded-md bg-surface-800 shadow-lg shadow-slate-900">
       <div on:scroll|preventDefault aria-label="панель заголовка" class="flex items-center rounded-t-md bg-secondary-900 p-2">
         <h1 class="select-none drop-shadow-lg">Просмотр кода</h1>
@@ -47,8 +51,7 @@
           </div>
         </div>
         <div aria-label="выходы" class="flex flex-col gap-2">
-          <div class="relative">
-          </div>
+          <div class="relative"></div>
         </div>
       </div>
     </div>

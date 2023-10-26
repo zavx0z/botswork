@@ -22,8 +22,10 @@
     "workflow/*"
   ],
   "dependencies": {
+    "@theatre/studio": "^0.7.0",
     "@xstate/graph": "beta",
     "happy-dom": "^12.9.1",
-    "prismjs": "^1.29.0"
+    "prismjs": "^1.29.0",
+    "xstate": "beta"
   }
 }

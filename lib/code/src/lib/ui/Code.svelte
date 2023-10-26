@@ -3,7 +3,9 @@
   export let title: string | undefined = undefined
 </script>
 
-<div class=" h-auto w-full flex-col rounded-lg border border-gray-700 bg-gray-800 p-0 px-1 shadow">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div on:click class=" h-auto w-full flex-col rounded-lg border border-gray-700 bg-gray-800 p-0 px-1 shadow">
   {#if title}
     <h5 class="pb-1 pl-6 pt-4 text-2xl font-bold tracking-tight text-primary-500">{title}</h5>
   {/if}

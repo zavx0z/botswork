@@ -1,3 +1,4 @@
+//@ts-nocheck
 function createDependencyResolver(entryMap) {
       
   /** @type {Object<string, StringSet>} */

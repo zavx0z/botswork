@@ -5,12 +5,12 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  @apply rounded-[4px] bg-surface-900;
+  @apply  opacity-100 blur-sm;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  @apply rounded-[4px] bg-surface-700;
+  @apply rounded-[4px] bg-surface-500;
 }
 
 /* Handle on hover */

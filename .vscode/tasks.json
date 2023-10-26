@@ -27,6 +27,31 @@
             },
         },
         {
+            "label": "@lib/theme:watch",
+            "type": "shell",
+            "command": "bunx --bun svelte-package --watch",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/theme"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "ParseError",
+                    "endsPattern": "Watching"
+                }
+            },
+        },
+        {
             "label": "@lib/theme:build",
             "type": "shell",
             "command": "bunx --bun vite build && bunx svelte-kit sync && bunx svelte-package && bunx publint",
