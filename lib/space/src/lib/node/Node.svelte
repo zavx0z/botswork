@@ -1,13 +1,12 @@
 <script lang="ts">
   import { T } from "@threlte/core"
   import { HTML } from "@threlte/extras"
-  import type { AnyActor } from "xstate"
-  import { useSelector } from "@xstate/svelte"
+  import { createActor, type AnyActor } from "xstate"
+  import { useSelector, useMachine } from "@xstate/svelte"
   import CodeSource from "./inputs/CodeSource.svelte"
-  export let actor: AnyActor
-  import SvelteCodeRenderer from "../code/SvelteCodeRenderer.svelte"
-  import type { codeRenderType } from "$lib/code/svelteCodeRender"
+  import provideMachine from "$lib/code/provideMachine"
 
+  export let actor: AnyActor
   actor.start()
   const position = useSelector(actor, (state) => state.context.position)
 
@@ -31,27 +30,22 @@
   }
   let selected: string
   let code: string
-  let dst: string = ""
-  // $: console.log(code)
-  let actorCodeRender: codeRenderType
+
+  const Actor = createActor(provideMachine()).start()
+  const state = useSelector(Actor, (state) => state)
+  state.subscribe((snapshot) => {
+    console.log(snapshot.value, snapshot.context)
+  })
   $: {
     if (code) {
-      console.log(code)
-      actorCodeRender.send({ type: "render", code })
-    }
-    if (actorCodeRender) {
-      actorCodeRender.subscribe((state) => {
-        console.log(state.value, state.context.err)
-        dst = state.context.code
-        console.log(dst)
-      })
+      console.log("send")
+      Actor.send({ type: "input.text", params: code })
     }
   }
 </script>
 
 <T.Mesh position={$position}>
   <HTML transform>
-    <SvelteCodeRenderer bind:actorCodeRender />
     <div aria-label="нода" class="grid w-96 grid-cols-1 grid-rows-[2rem_max-content] rounded-md bg-surface-800 shadow-lg shadow-slate-900">
       <div on:scroll|preventDefault aria-label="панель заголовка" class="flex items-center rounded-t-md bg-secondary-900 p-2">
         <h1 class="select-none drop-shadow-lg">Просмотр кода</h1>
@@ -62,7 +56,9 @@
         </div>
         <div aria-label="предпросмотр" class="overflow-y-auto overflow-x-hidden rounded-sm bg-surface-900 p-1 shadow-inner shadow-slate-900">
           <div class="invisible min-h-fit min-w-fit origin-top-left" use:content>
-            <pre><code>{@html dst}</code></pre>
+            {#if $state.context.output.text}
+              <pre><code>{@html $state.context.output.text}</code></pre>
+            {/if}
           </div>
         </div>
         <div aria-label="выходы" class="flex flex-col gap-2">
