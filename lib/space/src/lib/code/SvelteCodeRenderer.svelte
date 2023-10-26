@@ -1,16 +1,11 @@
 <script lang="ts">
-  import Prism from "prismjs"
-  import "prismjs/components/prism-javascript.js"
-  import "prismjs/plugins/keep-markup/prism-keep-markup"
-  import { insertFolds } from "./plugins/prismFold"
-  import { assign, createActor, fromPromise } from "xstate"
   import { useSelector } from "@xstate/svelte"
-  import type { codeRenderType } from "./svelteCodeRender"
+  import { assign, createActor, fromPromise, log } from "xstate"
   import { machine } from "./machine"
+  import type { codeRenderType } from "./svelteCodeRender"
 
-  Prism.manual = true
-  Prism.hooks.add("before-all-elements-highlight", ({ elements }) => elements.forEach(insertFolds))
   let codeElement: HTMLElement
+  let Prism: typeof import("prismjs")
 
   export let actorCodeRender: codeRenderType = createActor(
     machine.provide({
@@ -27,7 +22,20 @@
         ),
       },
       actions: {
-        initial: () => {},
+        initial: async () => {
+          if (!window.Prism) {
+            console.log("initialize Prismjs")
+            Prism = await import("prismjs")
+            Prism.manual = true
+            const langJS = (await import("prismjs/components/prism-javascript.js?raw")).default
+            await eval(langJS)
+            const pluginKeepMarkup = (await import("prismjs/plugins/keep-markup/prism-keep-markup?raw")).default
+            await eval(pluginKeepMarkup)
+
+            const { insertFolds } = await import("./plugins/prismFold")
+            Prism.hooks.add("before-all-elements-highlight", ({ elements }) => elements.forEach(insertFolds))
+          }
+        },
         srcToElement: ({ event }) => (codeElement.innerHTML = event.code),
         done: assign({ code: () => codeElement.innerHTML }),
       },
