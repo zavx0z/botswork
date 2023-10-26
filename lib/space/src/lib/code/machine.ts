@@ -1,6 +1,5 @@
 import { assign, createMachine } from "xstate"
-
-type lang = "ts" | "js" | "html" | "css"
+export type lang = "ts" | "js" | "html" | "css"
 export const machine = createMachine(
   {
     types: {} as {

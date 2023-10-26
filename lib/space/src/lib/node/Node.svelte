@@ -15,7 +15,7 @@
       const width = el[0].contentRect.width
       const parentWidth = element.parentElement?.offsetWidth
       if (parentWidth) {
-        const scale = (parentWidth - 12) / width
+        const scale = (parentWidth - 16) / width
         element.style.transform = `scale(${scale})`
       }
       element.classList.remove("invisible")
@@ -28,14 +28,20 @@
       },
     }
   }
-  let selected: string
+  let selected = "js"
+  const types = [
+    { value: "js", title: "JavaScript" },
+    { value: "ts", title: "TypeScript" },
+    { value: "css", title: "CSS" },
+    { value: "html", title: "HTML" },
+  ]
+  const selectId = crypto.randomUUID()
 
   const systemId = "codeRender"
   const restoredState = JSON.parse(localStorage.getItem(systemId) || "{}")
   const Actor = createActor(provideMachine(), { systemId, state: restoredState }).start()
   const state = useSelector(Actor, (state) => state)
   state.subscribe((state) => localStorage.setItem("codeRender", JSON.stringify(Actor.getPersistedState())))
-
   let code = $state.context.input.text
   let fold = $state.context.input.fold
   let lineno = $state.context.input.lineno
@@ -52,6 +58,14 @@
       </div>
       <div aria-label="тело" class="grid grid-cols-1 grid-rows-[max-content_12rem_max-content] gap-2 rounded-b-md p-3">
         <div aria-label="входы" class="flex flex-col gap-2">
+          <div class="relative">
+            <label for={selectId} class="absolute -top-2.5 right-5 z-40 text-xs">язык программирования</label>
+            <select id={selectId} bind:value={selected} class="block w-full rounded-md bg-surface-700 px-1 pb-1 hover:opacity-75 focus:outline-none">
+              {#each types as typeSrc}
+                <option value={typeSrc.value}>{typeSrc.title}</option>
+              {/each}
+            </select>
+          </div>
           <div class="relative flex justify-between gap-2">
             <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-sky-500" />
             <label class="flex shrink drop-shadow-lg" for="text">Код</label>
@@ -59,11 +73,11 @@
               rows="1"
               bind:value={code}
               placeholder="ctrl+v"
-              class="flex min-h-[24px] grow resize appearance-none whitespace-pre-wrap rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none"
+              class="flex min-h-[26px] grow resize appearance-none whitespace-pre-wrap rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none"
               id="text"
             />
           </div>
-          <div class="relative flex h-7 items-center">
+          <div class="relative flex h-6 items-center">
             <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-pink-500" />
             <input
               id="fold"
@@ -137,4 +151,3 @@ on:wheel={(e) => console.log("wheel")} -->
     >Floating filled</label
   >
 </div> -->
-
