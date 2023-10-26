@@ -25,6 +25,7 @@ button {
   @apply select-none rounded-md border border-primary-500 px-4 py-1 font-bold text-primary-400 hover:border-primary-200;
 }
 
+
 h1,
 h2,
 h3,

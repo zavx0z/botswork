@@ -59,7 +59,7 @@
               rows="1"
               bind:value={code}
               placeholder="ctrl+v"
-              class="flex grow appearance-none whitespace-pre-wrap rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none"
+              class="flex min-h-[24px] grow resize appearance-none whitespace-pre-wrap rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none"
               id="text"
             />
           </div>
@@ -101,7 +101,6 @@
     </div>
   </HTML>
 </T.Mesh>
-
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- on:dragstart={(e) => console.log(e)}
@@ -138,3 +137,4 @@ on:wheel={(e) => console.log("wheel")} -->
     >Floating filled</label
   >
 </div> -->
+

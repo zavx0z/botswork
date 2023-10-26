@@ -5,7 +5,7 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  @apply  opacity-100 blur-sm;
+  @apply opacity-100 blur-sm;
 }
 
 /* Handle */
@@ -16,4 +16,8 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-surface-500;
+}
+
+::-webkit-resizer {
+  @apply  bg-surface-900;
 }
