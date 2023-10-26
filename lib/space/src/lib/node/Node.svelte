@@ -85,7 +85,7 @@
           </div>
         </div>
         <div aria-label="предпросмотр" class="overflow-y-auto overflow-x-hidden rounded-sm bg-surface-900 p-1 shadow-inner shadow-slate-900">
-          <div class="invisible min-h-fit min-w-fit origin-top-left" use:content>
+          <div class="invisible h-44 min-h-fit min-w-fit origin-top-left" use:content>
             {#if $state.context.output.text}
               <pre class={lineno ? "line-num" : ""}><code>{@html $state.context.output.text}</code></pre>
             {/if}

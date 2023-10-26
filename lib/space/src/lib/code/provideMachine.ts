@@ -22,7 +22,6 @@ export default () => {
             if (elements[0].parentNode.className.includes("fold")) elements.forEach(insertFolds)
           })
         }
-        console.log(Prism)
         const elementPre = document.createElement("pre")
         elementPre.className = `language-${input.language}`
         if (input.lineno) elementPre.className += " line-numbers"
@@ -39,7 +38,6 @@ export default () => {
             Prism.highlightAllUnder(elementPre, false, () => {
               const result = elementCode.innerHTML
               document.body.removeChild(elementPre)
-              // console.log(result)
               resolve(result)
             })
           } catch (err) {
