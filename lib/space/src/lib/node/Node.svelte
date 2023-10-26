@@ -31,11 +31,12 @@
   let selected: string
   let code: string
 
-  const Actor = createActor(provideMachine()).start()
+  const systemId = "codeRender"
+  const restoredState = JSON.parse(localStorage.getItem(systemId) || "{}")
+  const Actor = createActor(provideMachine(), { systemId, state: restoredState }).start()
   const state = useSelector(Actor, (state) => state)
-  state.subscribe((snapshot) => {
-    console.log(snapshot.value, snapshot.context)
-  })
+  state.subscribe((state) => localStorage.setItem("codeRender", JSON.stringify(Actor.getPersistedState())))
+
   $: {
     if (code) {
       console.log("send")

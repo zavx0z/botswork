@@ -37,7 +37,6 @@ export const machine = createMachine(
         text: undefined,
       },
     },
-    entry: "onEntry",
     on: {
       "input.text": {
         target: ".process",
@@ -57,7 +56,6 @@ export const machine = createMachine(
         },
       },
       process: {
-        entry: "onEntry",
         invoke: {
           src: "codeRender",
           input: ({ context }) => context.input,
