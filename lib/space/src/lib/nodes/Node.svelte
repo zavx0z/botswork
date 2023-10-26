@@ -3,8 +3,11 @@
   import { HTML } from "@threlte/extras"
   import { createActor, type AnyActor } from "xstate"
   import { useSelector, useMachine } from "@xstate/svelte"
-  import CodeSource from "./inputs/CodeSource.svelte"
   import provideMachine from "$lib/code/provideMachine"
+  import Boolean from "$lib/input/InputBoolean.svelte"
+  import OutputString from "$lib/output/OutputString.svelte"
+  import InputText from "$lib/input/InputText.svelte"
+  import PropSelect from "../prop/PropSelect.svelte"
 
   export let actor: AnyActor
   actor.start()
@@ -35,8 +38,6 @@
     { value: "css", title: "CSS" },
     { value: "html", title: "HTML" },
   ]
-  const selectId = crypto.randomUUID()
-
   const systemId = "codeRender"
   const restoredState = JSON.parse(localStorage.getItem(systemId) || "{}")
   const Actor = createActor(provideMachine(), { systemId, state: restoredState }).start()
@@ -54,49 +55,14 @@
   <HTML transform>
     <div aria-label="нода" class="grid w-96 grid-cols-1 grid-rows-[2rem_max-content] rounded-md bg-surface-800 shadow-lg shadow-slate-900">
       <div on:scroll|preventDefault aria-label="панель заголовка" class="flex items-center rounded-t-md bg-secondary-900 p-2">
-        <h1 class="select-none drop-shadow-lg">Просмотр кода</h1>
+        <h1 class="select-none drop-shadow-lg">HTML подсветка синтаксиса</h1>
       </div>
       <div aria-label="тело" class="grid grid-cols-1 grid-rows-[max-content_12rem_max-content] gap-2 rounded-b-md p-3">
         <div aria-label="входы" class="flex flex-col gap-2">
-          <div class="relative">
-            <label for={selectId} class="absolute -top-2.5 right-5 z-40 text-xs">язык программирования</label>
-            <select id={selectId} bind:value={selected} class="block w-full rounded-md bg-surface-700 px-1 pb-1 hover:opacity-75 focus:outline-none">
-              {#each types as typeSrc}
-                <option value={typeSrc.value}>{typeSrc.title}</option>
-              {/each}
-            </select>
-          </div>
-          <div class="relative flex justify-between gap-2">
-            <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-sky-500" />
-            <label class="flex shrink drop-shadow-lg" for="text">Код</label>
-            <textarea
-              rows="1"
-              bind:value={code}
-              placeholder="ctrl+v"
-              class="flex min-h-[26px] grow resize appearance-none whitespace-pre-wrap rounded-md bg-surface-900 px-2 hover:opacity-75 focus:outline-none"
-              id="text"
-            />
-          </div>
-          <div class="relative flex h-6 items-center">
-            <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-pink-500" />
-            <input
-              id="fold"
-              type="checkbox"
-              bind:checked={fold}
-              class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-            />
-            <label for="fold" class="ml-2 drop-shadow-lg">Свернуть строки</label>
-          </div>
-          <div class="relative flex h-7 items-center">
-            <div class="absolute -left-[17px] top-2 h-3 w-3 rounded-full bg-pink-500" />
-            <input
-              id="lineno"
-              type="checkbox"
-              bind:checked={lineno}
-              class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-            />
-            <label for="lineno" class="ml-2 drop-shadow-lg">Номера строк</label>
-          </div>
+          <PropSelect title="язык программирования" bind:selected options={types} />
+          <InputText bind:value={code} title="Код" placeholder="ctrl+v" />
+          <Boolean title="Свертки строк" bind:checked={fold} />
+          <Boolean title="Номера строк" bind:checked={lineno} />
         </div>
         <div aria-label="предпросмотр" class="overflow-y-auto overflow-x-hidden rounded-sm bg-surface-900 p-1 shadow-inner shadow-slate-900">
           <div class="invisible h-44 min-h-fit min-w-fit origin-top-left" use:content>
@@ -106,10 +72,7 @@
           </div>
         </div>
         <div aria-label="выходы" class="flex flex-col gap-2">
-          <div class="relative">
-            <div class="absolute -right-[17px] top-2 h-3 w-3 rounded-full bg-sky-500" />
-            <p class="text-right drop-shadow-lg">Форматированный код</p>
-          </div>
+          <OutputString title="Форматированный код" />
         </div>
       </div>
     </div>

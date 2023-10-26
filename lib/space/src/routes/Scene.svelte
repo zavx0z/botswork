@@ -2,9 +2,9 @@
   import { T } from "@threlte/core"
   import { OrbitControls } from "@threlte/extras"
   import { interactivity } from "@threlte/extras"
-  import Node from "$lib/node/Node.svelte"
+  import Node from "$lib/nodes/Node.svelte"
   import { createActor } from "xstate"
-  import { machine } from "$lib/node/machine"
+  import { machine } from "$lib/nodes/machine"
   import type { AnyActor } from "xstate"
 
   const actors: { ref: String; actor: AnyActor }[] = [
