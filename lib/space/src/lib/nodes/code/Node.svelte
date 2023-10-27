@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createActor, type AnyActor } from "xstate"
+  import { createActor, type AnyActorRef } from "xstate"
   import { useSelector } from "@xstate/svelte"
   import provideMachine from "./logic/provideMachine"
   import Boolean from "../../node/input/InputCheckBox.svelte"
@@ -8,9 +8,8 @@
   import PropSelect from "../../node/prop/PropSelect.svelte"
   import Node from "../../node/Node.svelte"
 
-  export let actor: AnyActor
-  actor.start()
-  const position = useSelector(actor, (state) => state.context.position)
+  export let atom: AnyActorRef
+  const position = useSelector(atom, (state) => state.context.position)
   let selected = "js"
 
   const systemId = "codeRender"
@@ -30,26 +29,6 @@
 <Node {position} let:Input let:Output let:Preview>
   <Title slot="title" title="Подсветка синтаксиса кода" let:Title />
   <Input>
-    <PropSelect
-      title="язык"
-      bind:selected
-      options={[
-        { value: "js", title: "JavaScript" },
-        { value: "ts", title: "TypeScript" },
-        { value: "css", title: "CSS" },
-        { value: "html", title: "HTML" },
-      ]}
-    />
-    <PropSelect
-      title="программирования"
-      bind:selected
-      options={[
-        { value: "js", title: "JavaScript JavaScript JavaScript JavaScript" },
-        { value: "ts", title: "TypeScript" },
-        { value: "css", title: "CSS" },
-        { value: "html", title: "HTML" },
-      ]}
-    />
     <PropSelect
       title="язык программирования"
       bind:selected
