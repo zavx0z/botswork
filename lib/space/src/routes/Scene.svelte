@@ -3,9 +3,19 @@
   import { OrbitControls } from "@threlte/extras"
   import { interactivity } from "@threlte/extras"
   import Node from "$lib/nodes/code/Node.svelte"
-  import { createActor } from "xstate"
+  import { createActor, createMachine } from "xstate"
   import { machine } from "$lib/node/machine"
   import type { AnyActor } from "xstate"
+
+  const everythingMachine = createMachine({
+    id: "everything",
+    context: {},
+    initial: "BigBoom",
+    states: {
+      BigBoom: {},
+    },
+  })
+  const everything = createActor(everythingMachine).start()
 
   const actors: { ref: String; actor: AnyActor }[] = [
     { ref: "left", actor: createActor(machine, { input: { position: [0, 0, 0] } }) },

@@ -31,6 +31,26 @@
   <Title slot="title" title="Подсветка синтаксиса кода" let:Title />
   <Input>
     <PropSelect
+      title="язык"
+      bind:selected
+      options={[
+        { value: "js", title: "JavaScript" },
+        { value: "ts", title: "TypeScript" },
+        { value: "css", title: "CSS" },
+        { value: "html", title: "HTML" },
+      ]}
+    />
+    <PropSelect
+      title="программирования"
+      bind:selected
+      options={[
+        { value: "js", title: "JavaScript JavaScript JavaScript JavaScript" },
+        { value: "ts", title: "TypeScript" },
+        { value: "css", title: "CSS" },
+        { value: "html", title: "HTML" },
+      ]}
+    />
+    <PropSelect
       title="язык программирования"
       bind:selected
       options={[
