@@ -4,11 +4,13 @@
   import { createActor, type AnyActor } from "xstate"
   import { useSelector, useMachine } from "@xstate/svelte"
   import provideMachine from "$lib/code/provideMachine"
-  import Boolean from "$lib/input/InputBoolean.svelte"
+  import Boolean from "$lib/input/InputCheckBox.svelte"
   import OutputString from "$lib/output/OutputString.svelte"
   import InputText from "$lib/input/InputText.svelte"
   import PropSelect from "../prop/PropSelect.svelte"
+  import Title from "../Title.svelte"
 
+  let title = "Подсветка синтаксиса кода"
   export let actor: AnyActor
   actor.start()
   const position = useSelector(actor, (state) => state.context.position)
@@ -54,11 +56,9 @@
 <T.Mesh position={$position}>
   <HTML transform>
     <div aria-label="нода" class="grid w-96 grid-cols-1 grid-rows-[2rem_max-content] rounded-md bg-surface-800 shadow-lg shadow-slate-900">
-      <div on:scroll|preventDefault aria-label="панель заголовка" class="flex items-center rounded-t-md bg-secondary-900 p-2">
-        <h1 class="select-none drop-shadow-lg">HTML подсветка синтаксиса</h1>
-      </div>
-      <div aria-label="тело" class="grid grid-cols-1 grid-rows-[max-content_12rem_max-content] gap-2 rounded-b-md p-3">
-        <div aria-label="входы" class="flex flex-col gap-2">
+      <Title {title} />
+      <div aria-label="тело" class="grid grid-cols-1 grid-rows-[max-content_12rem_max-content] gap-1 rounded-b-md px-3 py-2">
+        <div aria-label="входы" class="grid grid-cols-1 gap-1 py-1">
           <PropSelect title="язык программирования" bind:selected options={types} />
           <InputText bind:value={code} title="Код" placeholder="ctrl+v" />
           <Boolean title="Свертки строк" bind:checked={fold} />
@@ -71,7 +71,7 @@
             {/if}
           </div>
         </div>
-        <div aria-label="выходы" class="flex flex-col gap-2">
+        <div aria-label="выходы" class="grid grid-cols-1 gap-2">
           <OutputString title="Форматированный код" />
         </div>
       </div>
