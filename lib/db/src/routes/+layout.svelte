@@ -6,8 +6,9 @@
 
   let isOpen = false
 
-  onMount(() => {
-    initWorker()
+  onMount(async () => {
+    const workerImp = (await import("$lib/sqlite/worker/worker.ts?worker")).default
+    initWorker(workerImp)
   })
 </script>
 

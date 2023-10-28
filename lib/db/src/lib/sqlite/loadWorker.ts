@@ -1,9 +1,7 @@
 import { WorkerMessageTypes, type WorkerMessage } from "./types"
 
-export default async function initWorker() {
-  const workerImp = await import("$lib/sqlite/worker/worker.ts?worker")
-
-  const worker = new workerImp.default()
+export default function initWorker(workerImp: any) {
+  const worker = new workerImp()
 
   const msg: WorkerMessage = { type: WorkerMessageTypes.INIT_DB }
   console.log(`Sending message to worker:`, msg)
