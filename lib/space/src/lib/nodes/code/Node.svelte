@@ -13,8 +13,8 @@
   let selected = "js"
 
   const systemId = "codeRender"
-  const restoredState = JSON.parse(localStorage.getItem(systemId) || "{}")
-  const Actor = createActor(provideMachine(), { systemId, state: restoredState }).start()
+  const persistentState = localStorage.getItem(systemId)
+  const Actor = createActor(provideMachine(), { systemId, ...(persistentState ? { state: JSON.parse(persistentState) } : {}) }).start()
   const state = useSelector(Actor, (state) => state)
   state.subscribe((state) => localStorage.setItem("codeRender", JSON.stringify(Actor.getPersistedState())))
 

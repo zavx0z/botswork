@@ -1,7 +1,6 @@
 <script lang="ts">
   import { T } from "@threlte/core"
   import { OrbitControls } from "@threlte/extras"
-  import { interactivity } from "@threlte/extras"
   import Node from "$lib/nodes/code/Node.svelte"
   import { assign, createActor, createMachine } from "xstate"
   import { machine } from "$lib/node/machine"
@@ -46,9 +45,14 @@
     },
   })
   const everything = createActor(everythingMachine)
-  everything.subscribe((state) => Object.keys(state.context.atoms).length && console.log(everything.system.get("code-render")))
+  everything.subscribe((state) => {
+    if (Object.keys(state.context.atoms).length) {
+      console.log(state.children)
+      console.log(everything.system.get("code-render"))
+    }
+  })
   everything.start()
-  everything.send({ type: "atom.put", params: { atom: machine, options: { systemId: "code-render", input: { position: [-1, 0, 0] } } } })
+  everything.send({ type: "atom.put", params: { atom: machine, options: { systemId: "code-render", id: "atom", input: { position: [-1, 0, 0] } } } })
   const atoms = useSelector(everything, (state) => state.context.atoms)
 </script>
 
