@@ -3,7 +3,6 @@ import { createMachine } from "xstate"
 type Vec3Arr = [number, number, number]
 
 export const machine = createMachine({
-  id: "node",
   context: ({ input }) => ({
     position: input.position || [0, 0, 0],
   }),

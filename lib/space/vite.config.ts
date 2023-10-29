@@ -10,6 +10,7 @@ export default defineConfig({
   ssr: {
     noExternal: ["three"],
   },
+  // publicDir: "static",
   server: {
     fs: {
       allow: ["../db/src/lib/sqlite/jswasm/"],
