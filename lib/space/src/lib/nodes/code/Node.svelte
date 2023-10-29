@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createActor, type AnyActorRef } from "xstate"
   import { useSelector } from "@xstate/svelte"
   import provideMachine from "./logic/provideMachine"
   import Boolean from "../../node/input/InputCheckBox.svelte"
@@ -7,28 +6,22 @@
   import InputText from "../../node/input/InputText.svelte"
   import PropSelect from "../../node/prop/PropSelect.svelte"
   import Node from "../../node/Node.svelte"
+  import type { NodeMachine } from "@lib/everything"
 
-  export let atom: AnyActorRef
-  console.log(atom)
-  const position = useSelector(atom, (state) => state.context.position)
+  export let node: NodeMachine
+  const actor = node.attach(provideMachine())
+  const state = useSelector(actor, (state) => state)
+
   let selected = "js"
-
-  const systemId = "codeRender"
-  const persistentState = localStorage.getItem(systemId)
-  const Actor = createActor(provideMachine(), { systemId, ...(persistentState ? { state: JSON.parse(persistentState) } : {}) }).start()
-  // const Actor = createActor(provideMachine(), { systemId }).start()
-  const state = useSelector(Actor, (state) => state)
-  state.subscribe((state) => localStorage.setItem("codeRender", JSON.stringify(Actor.getPersistedState())))
-
   let code = $state.context.input.text
   let fold = $state.context.input.fold
   let lineno = $state.context.input.lineno
-  $: Actor.send({ type: "input.fold", params: fold })
-  $: Actor.send({ type: "input.lineno", params: lineno })
-  $: Actor.send({ type: "input.text", params: code || "" })
+  $: actor.send({ type: "input.fold", params: fold })
+  $: actor.send({ type: "input.lineno", params: lineno })
+  $: actor.send({ type: "input.text", params: code || "" })
 </script>
 
-<Node {position} let:Input let:Output let:Preview>
+<Node {node} let:Input let:Output let:Preview>
   <Title slot="title" title="Подсветка синтаксиса кода" let:Title />
   <Input>
     <PropSelect

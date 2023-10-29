@@ -14,6 +14,6 @@
   <OrbitControls enableDamping />
 </T.PerspectiveCamera>
 
-{#each $stuff as atom (atom.id)}
-  <Node {atom} />
+{#each $stuff as node (node.id)}
+  <Node {node} />
 {/each}

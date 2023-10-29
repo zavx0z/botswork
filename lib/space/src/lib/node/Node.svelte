@@ -6,7 +6,11 @@
   import Preview from "./Preview.svelte"
   import Title from "./Title.svelte"
   import Body from "./Body.svelte"
-  export let position
+  import { useSelector } from "@xstate/svelte"
+  import type { NodeMachine } from "@lib/everything"
+
+  export let node: NodeMachine
+  const position = useSelector(node, (state) => state.context.position)
 </script>
 
 <T.Mesh position={$position}>
