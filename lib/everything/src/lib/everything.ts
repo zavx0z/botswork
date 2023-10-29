@@ -1,48 +1,14 @@
 import { onDestroy } from "svelte"
 import { readable, writable } from "svelte/store"
-import {
-  createActor,
-  createMachine,
-  type AnyActor,
-  type AnyStateMachine,
-  type Actor,
-  type AnyActorLogic,
-  type AreAllImplementationsAssumedToBeProvided,
-  type MissingImplementationsError,
-} from "xstate"
-
-function attach<TMachine extends AnyStateMachine>(
-  machine: AreAllImplementationsAssumedToBeProvided<TMachine["__TResolvedTypesMeta"]> extends true ? TMachine : MissingImplementationsError<TMachine["__TResolvedTypesMeta"]>,
-): Actor<TMachine> {
-  const systemId = "codeRender"
-  const persistentState = localStorage.getItem(systemId)
-  const actor = createActor(machine, { systemId, ...(persistentState ? { state: JSON.parse(persistentState) } : {}) })
-  actor.subscribe((state) => localStorage.setItem("codeRender", JSON.stringify(actor.getPersistedState())))
-  actor.start()
-  return actor
-}
-
-export interface NodeMachine extends AnyActor {
-  attach: typeof attach
-}
-
+import { createActor, createMachine } from "xstate"
+import machine from "./machine"
+import { attach, type NodeMachine } from "./extendXstate"
 const stuff = writable<NodeMachine[]>([])
 const confusion = readable([])
 
-const everythingMachine = createMachine({
-  initial: "idle",
-  on: {
-    "stuff.put": {
-      actions: ["createStuff"],
-    },
-  },
-  states: {
-    idle: {},
-  },
-})
 
 const everything = createActor(
-  everythingMachine.provide({
+  machine.provide({
     actions: {
       createStuff: ({ event }) => {
         const actor: NodeMachine = createActor(event.params.machine, event.params.options) as NodeMachine

@@ -9,16 +9,16 @@
   import type { NodeMachine } from "@lib/everything"
 
   export let node: NodeMachine
-  const actor = node.attach(provideMachine())
-  const state = useSelector(actor, (state) => state)
+  const service = node.attach(provideMachine())
+  const state = useSelector(service, (state) => state)
 
   let selected = "js"
   let code = $state.context.input.text
   let fold = $state.context.input.fold
   let lineno = $state.context.input.lineno
-  $: actor.send({ type: "input.fold", params: fold })
-  $: actor.send({ type: "input.lineno", params: lineno })
-  $: actor.send({ type: "input.text", params: code || "" })
+  $: service.send({ type: "input.fold", params: fold })
+  $: service.send({ type: "input.lineno", params: lineno })
+  $: service.send({ type: "input.text", params: code || "" })
 </script>
 
 <Node {node} let:Input let:Output let:Preview>
