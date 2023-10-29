@@ -1,10 +1,6 @@
 <script lang="ts">
   import { useSelector } from "@xstate/svelte"
   import provideMachine from "./logic/provideMachine"
-  import Boolean from "../../node/input/InputCheckBox.svelte"
-  import OutputString from "../../node/output/OutputString.svelte"
-  import InputText from "../../node/input/InputText.svelte"
-  import PropSelect from "../../node/prop/PropSelect.svelte"
   import Node from "../../node/Node.svelte"
   import type { NodeMachine } from "@lib/everything"
 
@@ -21,10 +17,9 @@
   $: service.send({ type: "input.text", params: code || "" })
 </script>
 
-<Node {node} let:Input let:Output let:Preview>
-  <Title slot="title" title="Подсветка синтаксиса кода" let:Title />
-  <Input>
-    <PropSelect
+<Node {node} title="Подсветка синтаксиса кода" let:Input let:Output let:Preview>
+  <Input let:Select let:Text let:CheckBox>
+    <Select
       title="язык программирования"
       bind:selected
       options={[
@@ -34,16 +29,16 @@
         { value: "html", title: "HTML" },
       ]}
     />
-    <InputText bind:value={code} title="Код" placeholder="ctrl+v" />
-    <Boolean title="Свертки строк" bind:checked={fold} />
-    <Boolean title="Номера строк" bind:checked={lineno} />
+    <Text bind:value={code} title="Код" placeholder="ctrl+v" />
+    <CheckBox title="Свертки строк" bind:checked={fold} />
+    <CheckBox title="Номера строк" bind:checked={lineno} />
   </Input>
   <Preview>
     {#if $state.context.output.text}
       <pre class={lineno ? "line-num" : ""}><code>{@html $state.context.output.text}</code></pre>
     {/if}
   </Preview>
-  <Output>
-    <OutputString title="Форматированный код" />
+  <Output let:String>
+    <String title="Форматированный код" />
   </Output>
 </Node>

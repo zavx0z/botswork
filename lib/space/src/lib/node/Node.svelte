@@ -10,13 +10,14 @@
   import type { NodeMachine } from "@lib/everything"
 
   export let node: NodeMachine
+  export let title: string = ""
   const position = useSelector(node, (state) => state.context.position)
 </script>
 
 <T.Mesh position={$position}>
   <HTML transform>
     <div aria-label="нода" class="grid w-96 grid-cols-1 grid-rows-[2rem_max-content] rounded-md bg-surface-800 shadow-lg shadow-slate-900">
-      <slot name="title" {Title} />
+      <Title {title} />
       <Body>
         <slot {Input} {Preview} {Output} />
       </Body>
