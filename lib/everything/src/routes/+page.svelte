@@ -1,30 +1,8 @@
 <script lang="ts">
-  import { createMachine, type AnyActorRef, type AnyActorLogic, assign, createActor } from "xstate"
+  import { createEverything } from "$lib/everything"
+  import { createMachine } from "xstate"
 
-  const rootMachine = createMachine({
-    context: {
-      atoms: {},
-    },
-    on: {
-      "actor.put": {
-        actions: assign(({ context, event, spawn }) => {
-          const { atoms } = context
-          atoms["atom"] = spawn(event.params.atom, event.params.options)
-          return { ...context, atoms: { ...atoms } }
-        }),
-      },
-    },
-    initial: "idle",
-    states: {
-      idle: {},
-    },
-  })
-
-  const actor = createActor(rootMachine, { systemId: "root-actor" })
-  actor.subscribe((state) => {
-    console.log(actor.getPersistedState())
-  })
-  actor.start()
+  let everything = createEverything()
 
   const childMachine = createMachine({
     initial: "idle",
@@ -32,10 +10,10 @@
       idle: {},
     },
   })
-
-  actor.send({ type: "actor.put", params: { atom: childMachine, options: { systemId: "child-id", id: "child" } } })
+  const { stuff, confusion } = everything
 </script>
 
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<button on:click={() => stuff.put(childMachine, { systemId: "atom-system1" + crypto.randomUUID(), id: "atom" + crypto.randomUUID() })}> add atom </button>
+{#each $stuff as atom (atom.id)}
+  <li>{atom.id}</li>
+{/each}

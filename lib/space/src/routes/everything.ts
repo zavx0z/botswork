@@ -42,15 +42,4 @@ export const everything = createActor(everythingMachine, { systemId: "root-id" }
 
 everything.subscribe((state) => {
   console.log(state)
-  console.log(everything.getPersistedState())
-  // if (Object.keys(state.context.atoms).length) {
-  //   console.log(state.children)
-  //   console.log(everything.system.get("code-render"))
-  // }
 })
-
-// const systemId = "codeRender"
-// const persistentState = localStorage.getItem(systemId)
-// const Actor = createActor(provideMachine(), { systemId, ...(persistentState ? { state: JSON.parse(persistentState) } : {}) }).start()
-// const state = useSelector(Actor, (state) => state)
-// state.subscribe((state) => localStorage.setItem("codeRender", JSON.stringify(Actor.getPersistedState())))

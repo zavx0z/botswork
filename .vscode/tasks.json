@@ -2,6 +2,146 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "@lib/db:dev",
+            "type": "shell",
+            "command": "bun vite dev --host 0.0.0.0",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/db"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "ready in"
+                }
+            },
+        },
+        {
+            "label": "@lib/db:watch",
+            "type": "shell",
+            "command": "bunx --bun svelte-package --watch",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/db"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "ParseError",
+                    "endsPattern": "Watching"
+                }
+            },
+        },
+        {
+            "label": "@lib/db:build",
+            "type": "shell",
+            "command": "bunx --bun vite build && bunx svelte-kit sync && bunx svelte-package && bunx publint",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/db"
+            },
+            "isBackground": false,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+            },
+        },
+        {
+            "label": "@lib/everything:dev",
+            "type": "shell",
+            "command": "bun vite dev --host 0.0.0.0",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/everything"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "invalid",
+                    "endsPattern": "ready in"
+                }
+            },
+        },
+        {
+            "label": "@lib/everything:watch",
+            "type": "shell",
+            "command": "bunx --bun svelte-package --watch",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/everything"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "ParseError",
+                    "endsPattern": "Watching"
+                }
+            },
+        },
+        {
+            "label": "@lib/everything:build",
+            "type": "shell",
+            "command": "bunx --bun vite build && bunx svelte-kit sync && bunx svelte-package && bunx publint",
+            "options": {
+                "cwd": "${workspaceFolder}/lib/everything"
+            },
+            "isBackground": false,
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+            },
+        },
+        {
             "label": "@lib/theme:dev",
             "type": "shell",
             "command": "bun vite dev --host 0.0.0.0",
