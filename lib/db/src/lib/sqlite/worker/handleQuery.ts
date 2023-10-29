@@ -1,4 +1,4 @@
-import getErrorMessage from "$lib/util/getErrorMsg"
+import getErrorMessage from "../../util/getErrorMsg"
 import type { DataRow, QueryRequestData, QueryResponseData, QueryStorageRequestData, QueryStorageResponseData, WorkerMessage } from "../types"
 import { db } from "./initDb"
 

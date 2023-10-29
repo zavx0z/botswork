@@ -3,18 +3,17 @@
   import Node from "$lib/nodes/code/Node.svelte"
   import { T } from "@threlte/core"
   import { OrbitControls } from "@threlte/extras"
-  import { useSelector } from "@xstate/svelte"
-  import { everything } from "./everything"
-  everything.start()
+  import { createEverything } from "@lib/everything"
 
-  everything.send({ type: "atom.put", params: { atom: machine, options: { systemId: "code-render", id: "atom", input: { position: [-1, 0, 0] } } } })
-  const atoms = useSelector(everything, (state) => state.context.atoms)
+  const everything = createEverything()
+  const { confusion, stuff } = everything
+  stuff.put(machine, { systemId: "code-render", id: "atom", input: { position: [0, 0, 0] } })
 </script>
 
 <T.PerspectiveCamera makeDefault position={[0, 0, 25]} on:create={({ ref }) => ref.lookAt(0, 0, 0)}>
   <OrbitControls enableDamping />
 </T.PerspectiveCamera>
 
-{#each Object.entries($atoms) as [ref, atom] (ref)}
+{#each $stuff as atom (atom.id)}
   <Node {atom} />
 {/each}
