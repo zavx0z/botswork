@@ -9,13 +9,14 @@
   import Node from "../../node/Node.svelte"
 
   export let atom: AnyActorRef
+  console.log(atom)
   const position = useSelector(atom, (state) => state.context.position)
   let selected = "js"
 
   const systemId = "codeRender"
   const persistentState = localStorage.getItem(systemId)
-  // const Actor = createActor(provideMachine(), { systemId, ...(persistentState ? { state: JSON.parse(persistentState) } : {}) }).start()
-  const Actor = createActor(provideMachine(), { systemId }).start()
+  const Actor = createActor(provideMachine(), { systemId, ...(persistentState ? { state: JSON.parse(persistentState) } : {}) }).start()
+  // const Actor = createActor(provideMachine(), { systemId }).start()
   const state = useSelector(Actor, (state) => state)
   state.subscribe((state) => localStorage.setItem("codeRender", JSON.stringify(Actor.getPersistedState())))
 

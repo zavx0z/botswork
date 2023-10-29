@@ -5,9 +5,9 @@
   import { OrbitControls } from "@threlte/extras"
   import { createEverything } from "@lib/everything"
 
-  const everything = createEverything()
-  const { confusion, stuff } = everything
-  stuff.put(machine, { systemId: "code-render", id: "atom", input: { position: [0, 0, 0] } })
+  const { confusion, stuff, state, send } = createEverything()
+
+  send({ type: "stuff.put", params: { machine, options: { systemId: "code-render", id: "atom", input: { position: [0, 0, 0] } } } })
 </script>
 
 <T.PerspectiveCamera makeDefault position={[0, 0, 25]} on:create={({ ref }) => ref.lookAt(0, 0, 0)}>
