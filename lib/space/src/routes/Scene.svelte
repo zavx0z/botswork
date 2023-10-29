@@ -5,7 +5,7 @@
   import { OrbitControls } from "@threlte/extras"
   import { createEverything } from "@lib/everything"
 
-  const { confusion, stuff, state, send } = createEverything()
+  const { stuff, send } = createEverything()
 
   send({ type: "stuff.put", params: { machine, options: { systemId: "code-render", id: "atom", input: { position: [0, 0, 0] } } } })
 </script>
