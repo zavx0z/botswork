@@ -1,20 +1,17 @@
 <script lang="ts">
-  import { useSelector } from "@xstate/svelte"
   import provideMachine from "./logic/provideMachine"
   import Node from "../../node/Node.svelte"
   import type { NodeMachine } from "@lib/everything"
 
   export let node: NodeMachine
-  const service = node.attach(provideMachine())
-  const state = useSelector(service, (state) => state)
-
+  const { state, send } = node.attach(provideMachine())
   let selected = "js"
   let code = $state.context.input.text
   let fold = $state.context.input.fold
   let lineno = $state.context.input.lineno
-  $: service.send({ type: "input.fold", params: fold })
-  $: service.send({ type: "input.lineno", params: lineno })
-  $: service.send({ type: "input.text", params: code || "" })
+  $: send({ type: "input.fold", params: fold })
+  $: send({ type: "input.text", params: code || "" })
+  $: send({ type: "input.lineno", params: lineno })
 </script>
 
 <Node {node} title="Подсветка синтаксиса кода" let:Input let:Output let:Preview>
