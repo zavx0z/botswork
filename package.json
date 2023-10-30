@@ -19,7 +19,8 @@
     "web/*",
     "desktop/*",
     "service/*",
-    "workflow/*"
+    "workflow/*",
+    "nodes/*"
   ],
   "dependencies": {
     "@theatre/studio": "^0.7.0",
