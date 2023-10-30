@@ -1,6 +1,6 @@
 <script lang="ts">
   import { machine } from "$lib/node/machine"
-  import Node from "$lib/nodes/code/Node.svelte"
+  import NodeCode from "$lib/nodes/code/NodeCode.svelte"
   import { T } from "@threlte/core"
   import { OrbitControls } from "@threlte/extras"
   import { createEverything } from "@lib/everything"
@@ -15,5 +15,5 @@
 </T.PerspectiveCamera>
 
 {#each $stuff as node (node.id)}
-  <Node {node} />
+  <NodeCode {node} />
 {/each}
