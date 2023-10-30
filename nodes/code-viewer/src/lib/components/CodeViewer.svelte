@@ -1,30 +1,16 @@
-<svelte:options
-  customElement={{
-    tag: "code-viewer",
-    props: {
-      hi: {
-        reflect: true,
-        type: "String",
-        attribute: "name-attr",
-      },
-    },
-  }}
-/>
+<svelte:options customElement={{ tag: "code-viewer" }} />
 
 <script lang="ts">
-  let title: HTMLElement
-  setTimeout(() => {
-    name = "bad"
-    title.dispatchEvent(new CustomEvent("m4-update", { composed: true, detail: "success" }))
-  }, 1000)
-  export let name = "Cool"
-  $: console.log(name)
-
+  export let code = ""
   function click(e: Event) {
     e.target?.dispatchEvent(new CustomEvent("m4-update", { composed: true, detail: "success" }))
   }
 </script>
 
-<h1 bind:this={title} class="color-primary-500">Hello {name}!</h1>
-<button on:click={click}>click</button>
+<pre class="language-js"><code class="language-js">{@html code}</code></pre>
 <slot />
+<button on:click={click}>click</button>
+
+<style lang="scss" global>
+  @import "../styles/global.scss";
+</style>

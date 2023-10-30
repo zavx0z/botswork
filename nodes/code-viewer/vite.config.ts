@@ -6,13 +6,14 @@ const entries = readdirSync("./src/lib/components")
 const entry = Object.fromEntries(entries.map((entry) => [entry.replace(".svelte", ".js"), `./src/lib/components/${entry}`]))
 export default defineConfig({
   build: {
+    copyPublicDir: false,
     lib: {
       entry,
-      fileName(format, entryName) {
+      fileName(_, entryName) {
         return entryName
       },
       formats: ["es"],
     },
   },
-  plugins: [svelte({ compilerOptions: { customElement: true } })],
+  plugins: [svelte()],
 })
