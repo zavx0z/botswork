@@ -16,20 +16,17 @@
   $: send({ type: "input.lineno", params: lineno })
 
   const uri = useSelector(node, (state) => state.context.uri)
-  console.log($uri)
+  const tagName = useSelector(node, (state) => state.context.tagName)
+
+  let nodeShadowLoaded = false
+  if (!nodeShadowLoaded)
+    import($uri).then((i) => {
+      console.log(i.default.element.observedAttributes)
+      nodeShadowLoaded = true
+    })
 
   const useNode = (node: HTMLElement, code: string | undefined) => {
-    let nodeShadowLoaded = false
-    if (!nodeShadowLoaded)
-      import($uri).then((i) => {
-        // console.log(i.default.element.observedAttributes)
-        nodeShadowLoaded = true
-      })
-
     if (code) node.setAttribute("input-html-code", code)
-    node.addEventListener("m4-update", (e) => {
-      console.log(e)
-    })
     return {
       update(code: string | undefined) {
         if (code) node.setAttribute("input-html-code", code)
@@ -55,12 +52,7 @@
     <CheckBox title="Номера строк" bind:checked={lineno} />
   </Input>
   <Preview>
-    <!-- <metafor-code-viewer use:useNode={$state.context.output.text} /> -->
-    {#if $state.context.output.text}
-    <!-- <metafor-code-viewer use:useNode={$state.context.output.text} /> -->
-
-    <pre class={lineno ? "line-num" : ""}><code>{@html $state.context.output.text}</code></pre>
-    {/if}
+    <svelte:element this={$tagName} use:useNode={$state.context.output.text} />
   </Preview>
   <Output let:String>
     <String title="Форматированный код" />

@@ -19,6 +19,7 @@
           position: [0, 0, 0],
           // uri: "https://esm.veryfront.com/@metafor/code-viewer@0.0.6/dist/CodeViewer.js",
           uri: "/home/zavx0z/botswork/nodes/code-viewer/dist/CodeViewer.js",
+          tagName: "metafor-code-viewer"
         },
       },
     },
