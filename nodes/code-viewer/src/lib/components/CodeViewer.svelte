@@ -1,16 +1,26 @@
-<svelte:options customElement={{ tag: "code-viewer" }} />
+<svelte:options
+  customElement={{
+    tag: "metafor-code-viewer",
+    shadow: "none",
+    props: {
+      inputCode: { reflect: true, attribute: "input-html-code", type: "String" },
+    },
+  }}
+/>
 
 <script lang="ts">
-  export let code = ""
-  function click(e: Event) {
-    e.target?.dispatchEvent(new CustomEvent("m4-update", { composed: true, detail: "success" }))
-  }
+  export let inputCode = ""
+  // function click(e: Event) {
+  //   e.target?.dispatchEvent(new CustomEvent("m4-update", { composed: true, detail: "success" }))
+  // }
 </script>
 
-<pre class="language-js"><code class="language-js">{@html code}</code></pre>
+<pre class="line-num"><code>{@html inputCode}</code></pre>
 <slot />
-<button on:click={click}>click</button>
+
+<!-- <button on:click={click}>click</button> -->
 
 <style lang="scss" global>
-  @import "../styles/global.scss";
+  // @import "../styles/global.scss";
+  // @import "../styles/lineNum.scss";
 </style>

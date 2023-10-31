@@ -25,6 +25,7 @@
     "svelte": "^4.0.0"
   },
   "devDependencies": {
+    "@metafor/code-viewer":"workspace:*",
     "@lib/db": "workspace:*",
     "@lib/everything": "workspace:*",
     "@lib/dev": "workspace:*",

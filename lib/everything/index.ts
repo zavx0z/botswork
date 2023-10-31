@@ -21,7 +21,7 @@ const rootMachine = createMachine({
 
 const actor = createActor(rootMachine, { systemId: "root-actor" })
 actor.subscribe((state) => {
-  console.log(actor.getPersistedState())
+  // console.log(actor.getPersistedState())
 })
 actor.start()
 

@@ -1,6 +1,7 @@
 <script lang="ts">
   //@ts-ignore
-  import("https://esm.veryfront.com/@metafor/code-viewer@latest/dist/CodeViewer.js")
+  // import("https://esm.veryfront.com/@metafor/code-viewer@latest/dist/CodeViewer.js")
+  import("../dist/CodeViewer.js")
 
   let code = `<span class="token keyword">const</span>  customElement<span class="token operator">=</span><span class="token punctuation">{</span>
     <span class="token literal-property property">tag</span><span class="token operator">:</span> <span class="token string">"code-viewer"</span><span class="token punctuation">,</span>
@@ -14,6 +15,8 @@
   <span class="token punctuation">}</span>`
 
   const useNode = (node: HTMLElement) => {
+    console.dir(node)
+    node.setAttribute("input-code", code)
     node.addEventListener("m4-update", (e) => {
       console.log(e)
     })
@@ -21,5 +24,5 @@
 </script>
 
 <main>
-  <code-viewer use:useNode {code}> </code-viewer>
+  <metafor-code-viewer use:useNode> </metafor-code-viewer>
 </main>
