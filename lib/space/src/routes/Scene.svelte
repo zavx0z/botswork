@@ -2,7 +2,7 @@
   import { machine } from "$lib/node/machine"
   import NodeCode from "$lib/nodes/code/NodeCode.svelte"
   import { T } from "@threlte/core"
-  import { HTML, OrbitControls } from "@threlte/extras"
+  import { OrbitControls } from "@threlte/extras"
   import { createEverything } from "@lib/everything"
   const { stuff, send } = createEverything()
 
@@ -19,7 +19,7 @@
           position: [0, 0, 0],
           // uri: "https://esm.veryfront.com/@metafor/code-viewer@0.0.6/dist/CodeViewer.js",
           uri: "/home/zavx0z/botswork/nodes/code-viewer/dist/CodeViewer.js",
-          tagName: "metafor-code-viewer"
+          tagName: "metafor-code-viewer",
         },
       },
     },

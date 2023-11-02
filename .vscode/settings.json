@@ -241,5 +241,7 @@
         "pipenv": false,
         "ruby": false,
         "tsc": false
-    }
+    },
+    "workbench.editor.pinnedTabSizing": "compact",
+    "window.density.editorTabHeight": "compact"
 }

@@ -1,7 +1,9 @@
 <script lang="ts">
   //@ts-ignore
   // import("https://esm.veryfront.com/@metafor/code-viewer@latest/dist/CodeViewer.js")
-  import("../dist/CodeViewer.js")
+  import("../dist/CodeViewer.js").then((module) => {
+    console.log(module)
+  })
 
   let code = `<span class="token keyword">const</span>  customElement<span class="token operator">=</span><span class="token punctuation">{</span>
     <span class="token literal-property property">tag</span><span class="token operator">:</span> <span class="token string">"code-viewer"</span><span class="token punctuation">,</span>
@@ -16,8 +18,8 @@
 
   const useNode = (node: HTMLElement) => {
     console.dir(node)
-    node.setAttribute("input-code", code)
-    node.addEventListener("m4-update", (e) => {
+    node.setAttribute("input-html-code", code)
+    node.addEventListener("prototype", (e) => {
       console.log(e)
     })
   }
@@ -26,3 +28,16 @@
 <main>
   <metafor-code-viewer use:useNode> </metafor-code-viewer>
 </main>
+
+<style>
+  /* metafor-code-viewer::part(code-viewer) {
+    color: brown;
+    position: relative;
+  } */
+  /* metafor-code-viewer::part(input-text)::after {
+    content: " ";
+    width: 10px;
+    height: 10px;
+    background-color: black;
+  } */
+</style>
