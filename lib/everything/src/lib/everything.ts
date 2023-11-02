@@ -1,9 +1,9 @@
 import { onDestroy } from "svelte"
 import { readable, writable } from "svelte/store"
-import { createActor, createMachine } from "xstate"
+import { createActor, type AnyActor } from "xstate"
 import machine from "./machine"
-import { attach, type NodeMachine } from "./extendXstate"
-const stuff = writable<NodeMachine[]>([])
+
+const stuff = writable<AnyActor[]>([])
 const confusion = readable([])
 
 export function createEverything() {
@@ -11,8 +11,7 @@ export function createEverything() {
     machine.provide({
       actions: {
         createStuff: ({ event }) => {
-          const actor: NodeMachine = createActor(event.params.machine, event.params.options) as NodeMachine
-          actor["attach"] = attach
+          const actor: AnyActor = createActor(event.params.machine, event.params.options)
           actor.start()
           stuff.update((stuff) => [...stuff, actor])
         },

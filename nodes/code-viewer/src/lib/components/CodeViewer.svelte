@@ -1,7 +1,7 @@
 <svelte:options customElement="metafor-code-viewer" />
 
 <script context="module">
-  export let proto = {
+  export let meta = {
     tag: "metafor-code-viewer",
     title: "Подсветка синтаксиса кода",
     input: {
@@ -25,7 +25,6 @@
       code: {
         title: "Код",
         type: "Text",
-        default: "",
       },
     },
   }

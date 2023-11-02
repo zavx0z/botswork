@@ -1,6 +1,6 @@
 <script lang="ts">
   import { machine } from "$lib/node/machine"
-  import NodeCode from "$lib/nodes/code/NodeCode.svelte"
+  import NodeCode from "$lib/node/NodeFabric.svelte"
   import { T } from "@threlte/core"
   import { OrbitControls } from "@threlte/extras"
   import { createEverything } from "@lib/everything"
