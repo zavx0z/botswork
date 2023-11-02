@@ -4,6 +4,7 @@
     // shadow: "none",
     props: {
       inputCode: { reflect: false, attribute: "input-html-code", type: "String" },
+      output: { reflect: false, attribute: "output", type: "String" },
       fold: { reflect: false, attribute: "fold", type: "Boolean" },
     },
     // extend: (/** @type {any} */ customElementConstructor) => {
@@ -23,17 +24,23 @@
     title: "Подсветка синтаксиса кода",
     input: {
       fold: {
-        type: "Boolean",
         title: "Свертки строк",
+        type: "Boolean",
         default: false,
       },
       lineno: {
-        type: "Boolean",
         title: "Номера строк",
+        type: "Boolean",
         default: true,
       },
     },
-    output: {},
+    output: {
+      code: {
+        title: "Код",
+        type: "Text",
+        default: "",
+      },
+    },
   }
 </script>
 
@@ -42,6 +49,7 @@
   export let inputCode = ""
   export let fold = false
   export let lineno = true
+  export let code = ""
   /**
    * @type {HTMLPreElement}
    */
@@ -50,19 +58,17 @@
    * @param {string} result
    */
   function updateResult(result) {
-    preElement.dispatchEvent(new CustomEvent("output", { composed: true, detail: result }))
+    preElement.dispatchEvent(new CustomEvent("code", { composed: true, detail: result }))
   }
-  $: {
-    console.log("!!!!!!!!!!!!!!!")
-    process(fold, lineno, inputCode, "js").then((result) => {
-      console.log("Set Result!")
-      updateResult(result)
-    })
-  }
+  $: process(fold, lineno, inputCode, "js").then((result) => {
+    console.log("✨ Send Result")
+    code = result
+    updateResult(result)
+  })
 </script>
 
 <!-- <input type="checkbox" bind:checked={fold} /> -->
-<pre bind:this={preElement} class:line-num={inputCode.includes("line-numbers-rows")}><code>{@html inputCode}</code></pre>
+<pre bind:this={preElement} class:line-num={code.includes("line-numbers-rows")}><code>{@html code}</code></pre>
 
 <style lang="scss" global>
   @import "../styles/global.scss";

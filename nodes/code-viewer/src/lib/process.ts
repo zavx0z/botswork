@@ -1,7 +1,7 @@
 let Prism: typeof import("prismjs")
 type lang = "js" | "ts"
+
 export async function process(fold: Boolean, lineno: Boolean, text: string, language: lang): Promise<string> {
-  console.log("fold - ", "change: ", fold, "\nlineno - ", "change: ", lineno)
   if (!Prism) {
     Prism = (await import("prismjs")).default
     Prism.manual = true

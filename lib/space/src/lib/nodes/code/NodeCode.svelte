@@ -6,20 +6,16 @@
   import { T } from "@threlte/core"
   import { Node, Preview, Title, Body, Input, Output } from "$lib/node"
   import { InputBoolean } from "$lib/node/input"
+  import { OutputText } from "$lib/node/output"
 
   export let node: NodeMachine
+  const uri = useSelector(node, (state) => state.context.uri)
 
   const { state, send } = node.attach(provideMachine())
 
   let selected = "js"
   let code = $state.context.input.text
-  let fold = $state.context.input.fold
-  let lineno = $state.context.input.lineno
-  $: send({ type: "input.fold", params: fold })
   $: send({ type: "input.text", params: code || "" })
-  $: send({ type: "input.lineno", params: lineno })
-
-  const uri = useSelector(node, (state) => state.context.uri)
 
   type protoType = {
     tag: string
@@ -27,16 +23,18 @@
     input?: {
       [key: string]: { title: string; type: "Boolean" | "Text"; default: unknown }
     }
+    output?: {
+      [key: string]: { title: string; type: "Boolean" | "Text"; default: unknown }
+    }
   }
   let proto: protoType
   import(/* @vite-ignore */ $uri).then((module) => {
-    console.log(module)
+    // console.log(module)
     proto = module.proto
   })
-
   const useNode = (node: HTMLElement, code: string | undefined) => {
-    node.addEventListener("output", (e: any) => {
-      // node.setAttribute("input-html-code", e.detail)
+    node.addEventListener("code", (e: any) => {
+      // output = e.detail
     })
     //@ts-ignore
     if (proto.input) Object.entries(proto.input).map(([key, item]) => (node[key] = item.default))
@@ -44,7 +42,7 @@
     return {
       update(code: string | undefined) {
         console.log(code)
-        if (code) node.setAttribute("input-html-code", code)
+        // if (code) node.setAttribute("input-html-code", code)
       },
     }
   }
@@ -72,6 +70,15 @@
           <Preview>
             <svelte:element this={proto.tag} bind:this={customElement} use:useNode={code} />
           </Preview>
+          {#if proto.output}
+            <Output>
+              {#each Object.entries(proto.output) as [key, item] (key)}
+                {#if item.type === "Text"}
+                  <OutputText title={item.title} />
+                {/if}
+              {/each}
+            </Output>
+          {/if}
         </Body>
       </Node>
     {/if}
