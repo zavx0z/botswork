@@ -1,13 +1,13 @@
 <script lang="ts">
   import "@lib/theme/app.css"
-  import initWorker from "$lib/sqlite/loadWorker"
+  // import initWorker from "$lib/sqlite/loadWorker"
   import { onMount } from "svelte"
   import actor from "./actor"
 
   onMount(async () => {
     actor.start()
-    const workerImp = (await import("$lib/sqlite/worker/worker.ts?worker")).default
-    initWorker(workerImp)
+    // const workerImp = (await import("$lib/sqlite/worker/worker.ts?worker")).default
+    // initWorker(workerImp)
   })
 </script>
 

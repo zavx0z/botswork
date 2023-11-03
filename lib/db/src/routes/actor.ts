@@ -10,9 +10,11 @@ const actor = createActor(
       loadWorker: fromPromise(function () {
         return new Promise(async (resolve, reject) => {
           try {
-            const Worker = (await import("$lib/worker.ts?worker")).default
+            const Worker = (await import("$lib/db/worker/actor.ts?worker")).default
             worker = new Worker()
-            resolve({ success: "ok" })
+            const listener = worker.addEventListener("message", (message) => {
+              resolve({ success: "ok" })
+            })
           } catch (error) {
             reject(JSON.stringify(error))
           }
@@ -38,14 +40,7 @@ const actor = createActor(
         // console.log("🔎 @xstate.snapshot", inspectionEvent)
         if (inspectionEvent.snapshot.status === "active") {
           const snapshotValue = inspectionEvent.snapshot as typeof inspectionEvent.snapshot & { value: string }
-          switch (snapshotValue.value) {
-            case "worker-loading":
-              console.log("⚒️ 🔃 worker loading")
-              break
-            case "worker-loaded":
-              console.log("⚒️ ✅ worker loaded")
-              break
-          }
+          if (snapshotValue.value) console.log("⚒️", snapshotValue.value)
         }
       }
     },

@@ -1,3 +1,6 @@
+declare global {
+  function sqlite3InitModule(options: { print: object; printErr: object }): Promise<void>
+}
 export type ColType = "string" | "number"
 
 export type ColumnInfo = {

@@ -1,16 +1,16 @@
 import { createMachine } from "xstate"
 
 export default createMachine({
-  initial: "worker-loading",
+  initial: "loading",
   states: {
-    "worker-loading": {
+    loading: {
       invoke: {
         src: "loadWorker",
-        onDone: { target: "worker-loaded" },
-        onError: { target: "worker-error" },
+        onDone: { target: "idle" },
+        onError: { target: "error" },
       },
     },
-    "worker-loaded": {},
-    "worker-error": {},
+    idle: {},
+    error: {},
   },
 })
