@@ -37,10 +37,10 @@ const actor = createActor(
       OPFSallow: () => Boolean(capi.sqlite3_vfs_find("opfs")),
     },
     actions: {
-      sendMessage: () => postMessage({}),
       newOPFS: ({ context }) => (db = new oo1.OpfsDb(context.input.dbName) as DB),
       newVFS: ({ context }) => (db = new oo1.DB(context.input.dbName, "ct") as DB),
       optimize: () => db.exec(["PRAGMA journal_mode = wal;", "PRAGMA synchronous = normal;"]),
+      msgIDLE: ({ context }) => postMessage({ type: "IDLE", status: "success", payload: { version: context.output.version } }),
     },
   }),
   {
@@ -53,9 +53,6 @@ const actor = createActor(
           const snapshotValue = inspectionEvent.snapshot as typeof inspectionEvent.snapshot & { value: string; context: any }
           if (snapshotValue.value)
             switch (snapshotValue.value) {
-              // case "idle":
-              //   console.log("💽", snapshotValue.value, snapshotValue.context)
-              //   break
               default:
                 console.log("💽", snapshotValue.value, snapshotValue.context)
             }
@@ -64,8 +61,5 @@ const actor = createActor(
     },
   },
 )
-// actor.subscribe((state) => {
-//   console.log(state.value)
-// })
 actor.start()
 export default actor

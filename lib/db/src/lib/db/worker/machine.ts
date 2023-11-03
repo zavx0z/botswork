@@ -56,7 +56,7 @@ export default createMachine(
         },
       },
       idle: {
-        entry: "optimize",
+        entry: ["optimize", "msgIDLE"],
         on: {
           "table-check-exist": {},
           "table-create": {},

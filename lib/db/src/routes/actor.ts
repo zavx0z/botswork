@@ -12,9 +12,14 @@ const actor = createActor(
           try {
             const Worker = (await import("$lib/db/worker/actor.ts?worker")).default
             worker = new Worker()
-            const listener = worker.addEventListener("message", (message) => {
-              resolve({ success: "ok" })
-            })
+            const IDLEsuccess = (message: any) => {
+              if (message.data.type === "IDLE") {
+                worker.removeEventListener("message", IDLEsuccess)
+                if (message.data.status === "success") resolve({ version: message.data.payload.version })
+                else reject(message.data.payload)
+              }
+            }
+            worker.addEventListener("message", IDLEsuccess)
           } catch (error) {
             reject(JSON.stringify(error))
           }
@@ -39,8 +44,8 @@ const actor = createActor(
         // console.log("🔎", inspectionEvent.snapshot)
         // console.log("🔎 @xstate.snapshot", inspectionEvent)
         if (inspectionEvent.snapshot.status === "active") {
-          const snapshotValue = inspectionEvent.snapshot as typeof inspectionEvent.snapshot & { value: string }
-          if (snapshotValue.value) console.log("⚒️", snapshotValue.value)
+          const snapshotValue = inspectionEvent.snapshot as typeof inspectionEvent.snapshot & { value: string; context: {} }
+          if (snapshotValue.value) console.log("⚒️", snapshotValue.value, snapshotValue.context)
         }
       }
     },
