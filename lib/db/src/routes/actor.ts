@@ -7,11 +7,20 @@ let worker: Worker
 const actor = createActor(
   machine.provide({
     actors: {
-      loadWorker: fromPromise(function () {
+      import: fromPromise(function () {
         return new Promise(async (resolve, reject) => {
           try {
             const Worker = (await import("$lib/db/worker/actor.ts?worker")).default
             worker = new Worker()
+            resolve({ status: "success" })
+          } catch (error) {
+            reject({ code: 1, message: JSON.stringify(error) })
+          }
+        })
+      }),
+      loadWorker: fromPromise(function () {
+        return new Promise(async (resolve, reject) => {
+          try {
             const IDLEsuccess = (message: any) => {
               if (message.data.type === "IDLE") {
                 worker.removeEventListener("message", IDLEsuccess)
@@ -21,7 +30,7 @@ const actor = createActor(
             }
             worker.addEventListener("message", IDLEsuccess)
           } catch (error) {
-            reject(JSON.stringify(error))
+            reject({ code: 1, message: JSON.stringify(error) })
           }
         })
       }),

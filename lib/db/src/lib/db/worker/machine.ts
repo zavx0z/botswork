@@ -34,7 +34,7 @@ export default createMachine(
         invoke: {
           src: "import",
           onDone: { target: "init" },
-          onError: { target: "error", actions: "setError" },
+          onError: { target: "error", actions: "error_ctx" },
         },
       },
       init: {
@@ -43,16 +43,16 @@ export default createMachine(
           onDone: [
             {
               target: "idle",
-              actions: [assign(({ context }) => ({ output: { ...context.output, fs: "VFS" } })), "setVersion", "newVFS"],
+              actions: ["VFS_ctx", "version_ctx", "newVFS"],
               guard: not("OPFSallow"),
             },
             {
               target: "idle",
-              actions: [assign(({ context }) => ({ output: { ...context.output, fs: "OPFS" } })), "setVersion", "newOPFS"],
+              actions: ["OPFS_ctx", "version_ctx", "newOPFS"],
               guard: "OPFSallow",
             },
           ],
-          onError: { target: "error", actions: "setError" },
+          onError: { target: "error", actions: "error_ctx" },
         },
       },
       idle: {
@@ -70,8 +70,10 @@ export default createMachine(
   },
   {
     actions: {
-      setVersion: assign(({ event, context }) => ({ output: { ...context.output, version: event.output.version } })),
-      setError: assign({ error: ({ event }) => event.data }),
+      version_ctx: assign(({ event, context }) => ({ output: { ...context.output, version: event.output.version } })),
+      VFS_ctx: assign(({ context }) => ({ output: { ...context.output, fs: "VFS" } })),
+      OPFS_ctx: assign(({ context }) => ({ output: { ...context.output, fs: "OPFS" } })),
+      error_ctx: assign({ error: ({ event }) => event.data }),
     },
   },
 )
