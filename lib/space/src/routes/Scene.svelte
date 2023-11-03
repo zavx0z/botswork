@@ -15,9 +15,23 @@
         systemId: uuid,
         id: uuid,
         input: {
-          position: [0, 0, 0],
-          // uri: "https://esm.veryfront.com/@metafor/code-viewer@0.0.6/dist/CodeViewer.js",
-          uri: "/home/zavx0z/botswork/nodes/code-viewer/dist/CodeViewer.js",
+          position: [5, 0, 0],
+          uri: "https://esm.veryfront.com/@metafor/code-viewer@0.0.7/dist/CodeViewer.js",
+        },
+      },
+    },
+  })
+  const uuid2 = crypto.randomUUID()
+  send({
+    type: "stuff.put",
+    params: {
+      machine,
+      options: {
+        systemId: uuid2,
+        id: uuid2,
+        input: {
+          position: [-5, 0, 0],
+          uri: "https://esm.veryfront.com/@metafor/code-viewer@0.0.7/dist/CodeViewer.js",
         },
       },
     },

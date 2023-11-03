@@ -1,20 +1,7 @@
 <script lang="ts">
-  import OpfsExplorer from "$lib/components/opfs-explorer.svelte"
-  import Logger, { type LogLevel } from "$lib/logger"
-  import { Dialog, DialogOverlay, DialogTitle, DialogDescription, TransitionChild, Transition } from "@rgossiaux/svelte-headlessui"
-  import { onMount } from "svelte"
+  import { Dialog, DialogOverlay, DialogTitle, TransitionChild, Transition } from "@rgossiaux/svelte-headlessui"
 
   export let isOpen: boolean
-  let allLevels: LogLevel[]
-  let currLevel: LogLevel
-  let logger: Logger
-
-  onMount(() => {
-    logger = Logger.getInstance()
-
-    allLevels = logger.getAllLevels()
-    currLevel = logger.getLevel()
-  })
 </script>
 
 <Transition show={isOpen}>
@@ -55,34 +42,6 @@
               </button>
             </div>
             <div class="mt-4">
-              <fieldset>
-                <legend class="text-sm font-semibold leading-6 text-gray-900">Log Level</legend>
-                <p class="mt-1 text-sm leading-6 text-gray-600">Choose the level of logs to display in console.</p>
-                <div class="mt-1 space-y-1">
-                  {#each allLevels as level}
-                    <div class="flex items-center gap-x-3">
-                      <input
-                        id="pref-{level}"
-                        name="pref-loglevel"
-                        type="radio"
-                        class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        bind:group={currLevel}
-                        value={level}
-                        on:change={() => {
-                          logger.setLogLevel(currLevel)
-                        }}
-                      />
-                      <label for="pref-{level}" class="block text-sm font-medium leading-6 text-gray-700">
-                        {level}
-                      </label>
-                    </div>
-                  {/each}
-                </div>
-              </fieldset>
-            </div>
-
-            <div class="mt-4">
-              <OpfsExplorer />
             </div>
           </div>
         </TransitionChild>

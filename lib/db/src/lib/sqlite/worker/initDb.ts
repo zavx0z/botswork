@@ -1,18 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DB } from "sqlite3oo1"
-
-const DB_NAME = "file:///offline-db.sqlite"
-export let db: DB
-
 declare global {
   function sqlite3InitModule(options: { print: object; printErr: object }): Promise<void>
 }
+type InitDbReturn = { ok: boolean; error?: string }
 
-type InitDbReturn = {
-  ok: boolean
-  error?: string
-}
+const DB_NAME = "file:///offline-db.sqlite"
 
+export let db: DB
 export async function initDb(): Promise<InitDbReturn> {
   return new Promise((resolve) => {
     try {
@@ -32,10 +26,8 @@ export async function initDb(): Promise<InitDbReturn> {
             console.log("The OPFS is not available.")
           }
           console.log("transient db =", (db as any).filename)
-
           // optimize for speed (with safety): https://cj.rs/blog/sqlite-pragma-cheatsheet-for-performance-and-consistency/
           db.exec(["PRAGMA journal_mode = wal;", "PRAGMA synchronous = normal;"])
-
           resolve({ ok: true })
         } catch (e: any) {
           console.error(`Could not initialize database: ${e.message}`)

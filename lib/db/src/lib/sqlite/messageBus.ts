@@ -16,7 +16,8 @@ export function initMsgBus(_worker: Worker) {
   })
 }
 const addCallback = ({ messageId, cb }: { messageId: string; cb: WorkerMsgCb }) => cbMap.set(messageId, cb)
-type TypeSendMsgToWorker = {
+
+export type TypeSendMsgToWorker = {
   storageId: string
   type: WorkerMessageTypes
   data: unknown

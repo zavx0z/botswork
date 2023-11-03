@@ -98,6 +98,7 @@
   async function saveFile(path: string) {
     const fileHandle = getFileHandle(path).handle
     try {
+      //@ts-ignore
       const handle = await window.showSaveFilePicker({
         suggestedName: fileHandle.name,
       })

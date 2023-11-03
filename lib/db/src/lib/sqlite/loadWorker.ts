@@ -14,5 +14,5 @@ export default async function initWorker(workerImp: any) {
 
   console.log("Init worker response:", res)
 
-  // initStorages()
+  initStorages()
 }
