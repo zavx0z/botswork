@@ -19,7 +19,7 @@ type types = {
 }
 export default createMachine(
   {
-    initial: "import",
+    id: "sqlite",
     context: ({ input }) => ({
       input: {
         dbName: input.dbName,
@@ -29,30 +29,43 @@ export default createMachine(
         fs: null,
       },
     }),
+    initial: "activate",
     states: {
-      import: {
-        invoke: {
-          src: "import",
-          onDone: { target: "init" },
-          onError: { target: "error", actions: "error_ctx" },
+      activate: {
+        initial: "import",
+        states: {
+          import: {
+            invoke: {
+              src: "import",
+              onDone: { target: "init" },
+              onError: { target: "#sqlite.error", actions: "error_ctx" },
+            },
+          },
+          init: {
+            invoke: {
+              src: "init",
+              onDone: [
+                {
+                  target: "#sqlite.idle",
+                  actions: ["VFS_ctx", "version_ctx", "newVFS"],
+                  guard: not("OPFSallow"),
+                },
+                {
+                  target: "#sqlite.idle",
+                  actions: ["OPFS_ctx", "version_ctx", "newOPFS"],
+                  guard: "OPFSallow",
+                },
+              ],
+              onError: { target: "#sqlite.error", actions: "error_ctx" },
+            },
+          },
         },
       },
-      init: {
-        invoke: {
-          src: "init",
-          onDone: [
-            {
-              target: "idle",
-              actions: ["VFS_ctx", "version_ctx", "newVFS"],
-              guard: not("OPFSallow"),
-            },
-            {
-              target: "idle",
-              actions: ["OPFS_ctx", "version_ctx", "newOPFS"],
-              guard: "OPFSallow",
-            },
-          ],
-          onError: { target: "error", actions: "error_ctx" },
+      sync: {
+        initial: "structure",
+        states: {
+          structure: {},
+          data: {},
         },
       },
       idle: {

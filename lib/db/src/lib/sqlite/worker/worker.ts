@@ -11,7 +11,6 @@ import {
   type QueryStorageRequestData,
 } from "../types"
 import { handleQuery, handleStorageQuery } from "./handleQuery"
-import { initDb } from "./initDb"
 import { handleCreateTable, handleFillStorage, handleTableExists } from "./storageHandlers"
 
 console.log("worker loaded")
@@ -24,20 +23,6 @@ function sendMsgToMain(obj: WorkerMessage<unknown>) {
     console.log("worker received message:", data)
 
     switch (data.type) {
-      case WorkerMessageTypes.INIT_DB:
-        await import("../jswasm/sqlite3-bundler-friendly.mjs")
-
-        const initRes = await initDb()
-        console.log("worker initDb result:", initRes)
-
-        const initResult: WorkerMessage<undefined> = {
-          type: WorkerMessageTypes.INIT_DB_RESPONSE,
-          messageId: data.messageId,
-          storageId: data.storageId,
-          data: undefined,
-        }
-        sendMsgToMain(initResult)
-        break
       case WorkerMessageTypes.TABLE_EXISTS:
         const tableExistData = handleTableExists(data)
         const tableExistsResult: WorkerMessage<TableExistsResponseData> = {

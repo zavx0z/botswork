@@ -40,3 +40,6 @@ declare module "sqlite3oo1" {
     prepare(sql: string): Statement
   }
 }
+declare global {
+  function sqlite3InitModule(options: { print: object; printErr: object }): Promise<void>
+}

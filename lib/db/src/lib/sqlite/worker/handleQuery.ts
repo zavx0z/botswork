@@ -1,6 +1,7 @@
 import getErrorMessage from "../../util/getErrorMsg"
 import type { DataRow, QueryRequestData, QueryResponseData, QueryStorageRequestData, QueryStorageResponseData, WorkerMessage } from "../types"
-import { db } from "./initDb"
+
+const db: any
 
 export function handleQuery(msg: WorkerMessage<QueryRequestData>): QueryResponseData {
   try {

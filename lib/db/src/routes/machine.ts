@@ -32,7 +32,9 @@ export default createMachine(
           onError: { target: "error", actions: "error_ctx" },
         },
       },
-      idle: {},
+      idle: {
+        invoke: { src: "msg" },
+      },
       error: {},
     },
     types: {} as types,

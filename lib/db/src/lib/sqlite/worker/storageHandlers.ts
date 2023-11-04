@@ -1,9 +1,10 @@
 import type { CreateTableRequestData, CreateTableResponseData, FillStorageRequestData, FillStorageResponseData, TableExistsResponseData, WorkerMessage } from "../types"
-import { db } from "./initDb"
 import genInsertSql from "./util/genInsertSql"
 import genTabSrc from "./util/genTabSrc"
 import getBindObject from "./util/getBindObject"
 import { tableExists, tableHasData } from "./util/tableInfo"
+
+let db: any
 
 export function handleTableExists(data: WorkerMessage<unknown>): TableExistsResponseData {
   try {
