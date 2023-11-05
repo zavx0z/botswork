@@ -28,7 +28,6 @@
   "devDependencies": {
     "@lib/theme": "workspace:*",
     "@lib/ui": "workspace:*",
-    "@rgossiaux/svelte-headlessui": "^2.0.0",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.0.0",
@@ -45,6 +44,6 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "dependencies": {
-    "xstate": "beta"
+    "xstate": "5.0.0-beta.40"
   }
 }

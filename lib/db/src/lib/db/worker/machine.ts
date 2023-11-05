@@ -46,12 +46,12 @@ export default createMachine(
               src: "init",
               onDone: [
                 {
-                  target: "#sqlite.idle",
+                  target: "#sqlite.sync",
                   actions: ["VFS_ctx", "version_ctx", "newVFS"],
                   guard: not("OPFSallow"),
                 },
                 {
-                  target: "#sqlite.idle",
+                  target: "#sqlite.sync",
                   actions: ["OPFS_ctx", "version_ctx", "newOPFS"],
                   guard: "OPFSallow",
                 },
@@ -64,8 +64,12 @@ export default createMachine(
       sync: {
         initial: "structure",
         states: {
-          structure: {},
-          data: {},
+          structure: {
+            after: { 0: { target: "data" } },
+          },
+          data: {
+            after: { 0: { target: "#sqlite.idle" } },
+          },
         },
       },
       idle: {
