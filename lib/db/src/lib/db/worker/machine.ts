@@ -2,11 +2,12 @@ import { assign, createMachine, not, pure } from "xstate"
 type types = {
   context: {
     input: {
-      dbName: string
+      path: string
     }
     output: {
       version: string | null
       fs: string | null
+      size: number | undefined
     }
     error?: {
       code: number
@@ -14,7 +15,7 @@ type types = {
     }
   }
   input: {
-    dbName: string
+    path: string
   }
 }
 export default createMachine(
@@ -22,11 +23,12 @@ export default createMachine(
     id: "db",
     context: ({ input }) => ({
       input: {
-        dbName: input.dbName,
+        path: input.path,
       },
       output: {
         version: null,
         fs: null,
+        size: undefined,
       },
     }),
     initial: "db-module-init",
@@ -40,6 +42,7 @@ export default createMachine(
         },
       },
       "db-fs-check": {
+        entry: "ctx_size",
         after: {
           0: [
             { target: "db-fs-opfs", guard: "allow_OPFS", actions: "ctx_fs_OPFS" },
@@ -70,7 +73,7 @@ export default createMachine(
         initial: "idle",
         states: {
           idle: {
-            entry: ["optimize", "msgIDLE"],
+            entry: ["optimize", "send_ctx"],
             on: {
               "table-check-exist": {
                 target: "idle",
@@ -93,6 +96,9 @@ export default createMachine(
     types: {} as types,
   },
   {
+    guards: {
+      allow_OPFS: ({ context }) => Boolean(context.output.size),
+    },
     actions: {
       ctx_version: assign(({ event, context }) => ({ output: { ...context.output, version: event.output.version } })),
       ctx_fs_VFS: assign(({ context }) => ({ output: { ...context.output, fs: "VFS" } })),

@@ -1,9 +1,12 @@
 import { assign, createMachine } from "xstate"
-type types = {
+export type types = {
   context: {
     input: {}
     output: {
-      version: string | null
+      path: string | undefined
+      version: string | undefined
+      fs: string | undefined
+      size: number | undefined
     }
     error?: {}
   }
@@ -13,7 +16,10 @@ export default createMachine(
     context: {
       input: {},
       output: {
-        version: null,
+        path: undefined,
+        version: undefined,
+        fs: undefined,
+        size: undefined,
       },
     },
     initial: "db-worker-load",
@@ -22,7 +28,7 @@ export default createMachine(
         invoke: {
           id: "worker-import",
           src: "worker-import",
-          onDone: { target: "db-worker-active" },
+          onDone: { target: "db-worker-active", actions: "ctx_output" },
           onError: { target: "error", actions: "error_ctx" },
         },
       },
@@ -35,7 +41,7 @@ export default createMachine(
   },
   {
     actions: {
-      version_ctx: assign(({ event }) => ({ output: { version: event.output.version } })),
+      ctx_output: assign(({ event }) => ({ output: event.output })),
       error_ctx: assign(({ event }) => ({ error: event.data as object })),
     },
   },

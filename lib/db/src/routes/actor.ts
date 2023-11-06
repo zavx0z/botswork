@@ -14,14 +14,13 @@ const workerProvider = machine.provide({
         try {
           const Worker = (await import("$lib/db?worker")).default
           worker = new Worker()
-          const IDLEsuccess = (message: any) => {
-            if (message.data.type === "IDLE") {
-              worker.removeEventListener("message", IDLEsuccess)
-              if (message.data.status === "success") resolve({ version: message.data.payload.version })
-              else reject(message.data.payload)
+          const receiveContext = (message: any) => {
+            if (message.data.type === "active") {
+              worker.removeEventListener("message", receiveContext)
+              message.data.status === "success" ? resolve(message.data.payload) : reject(message.data.payload)
             }
           }
-          worker.addEventListener("message", IDLEsuccess)
+          worker.addEventListener("message", receiveContext)
         } catch (error) {
           reject({ code: 1, message: JSON.stringify(error) })
         }
@@ -45,13 +44,7 @@ const actor = createActor(workerProvider, {
       },
     ],
   },
-  inspect: (inspectionEvent) => {
-    if (inspectionEvent.type === "@xstate.snapshot") {
-      if (inspectionEvent.snapshot.status === "active") {
-        const snapshotValue = inspectionEvent.snapshot as typeof inspectionEvent.snapshot & { value: string; context: {} }
-        if (snapshotValue.value) console.log("⚒️", snapshotValue.value, snapshotValue.context)
-      }
-    }
-  },
 })
+actor.subscribe((state) => console.log("⚒️", state.value, state.context))
 export default actor
+export type dbType = typeof actor
