@@ -1,10 +1,38 @@
 import "@lib/theme/app.css"
 import { createActor, fromCallback, fromPromise } from "xstate"
 import machine from "./machine"
+import queryMachine from "$lib/client/machine/queryMachine"
+import activateMachine from "$lib/client/machine/activateMachine"
 
 let worker: Worker
 
-const provider = machine.provide({
+const providerQuery = queryMachine.provide({
+  actors: {
+    "message-listener": fromCallback(({ sendBack, receive, self, system, input }) => {
+      receive((event) => {
+        switch (event.type) {
+          case "put":
+            worker.postMessage("put")
+            break
+          default:
+            break
+        }
+      })
+
+      const fn = (message: any) => {
+        console.log(message)
+      }
+      worker.addEventListener("message", fn)
+      return () => {
+        worker.removeEventListener("message", fn)
+      }
+    }),
+  },
+})
+export const queryActor = createActor(providerQuery)
+queryActor.subscribe((state) => console.log("📝", state.value, state.context))
+
+const provider = activateMachine.provide({
   actors: {
     "worker-import": fromPromise(function () {
       return new Promise(async (resolve, reject) => {
@@ -26,22 +54,7 @@ const provider = machine.provide({
   },
 })
 
-const actor = createActor(provider, {
-  input: {
-    tables: [
-      {
-        name: "stuff",
-        pk: "id",
-        columns: [{ name: "id", type: "string" }],
-      },
-      {
-        name: "confusion",
-        pk: "id",
-        columns: [{ name: "id", type: "string" }],
-      },
-    ],
-  },
-})
+const actor = createActor(provider, {})
 actor.subscribe((state) => console.log("⚒️", state.value, state.context))
 export default actor
 export type dbType = typeof actor

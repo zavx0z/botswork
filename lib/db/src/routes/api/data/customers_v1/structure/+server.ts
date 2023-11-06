@@ -1,4 +1,4 @@
-import type { TableStructure } from "$lib/sqlite/types"
+import type { TableStructure } from "$lib/types"
 import { json, type RequestHandler } from "@sveltejs/kit"
 
 export const GET = (() => {

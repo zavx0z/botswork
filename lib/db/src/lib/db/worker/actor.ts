@@ -1,5 +1,6 @@
 import { createActor, fromPromise, assign } from "xstate"
 import machine from "./machine"
+
 import "../../sqlite/jswasm/sqlite3-bundler-friendly.mjs"
 import type { DB } from "sqlite3oo1"
 
@@ -29,6 +30,11 @@ const provider = machine.provide({
     new_VFS: ({ context }) => (db = new oo1.DB(context.input.path, "ct") as DB),
     optimize: () => db.exec(["PRAGMA journal_mode = wal;", "PRAGMA synchronous = normal;"]),
     send_ctx: ({ context }) => postMessage({ type: "active", status: "success", payload: { ...context.input, ...context.output } }),
+    addEventListener: () => {
+      addEventListener("message", (message) => {
+        console.log(message)
+      })
+    },
   },
 })
 
