@@ -19,7 +19,7 @@ type types = {
 }
 export default createMachine(
   {
-    id: "sqlite",
+    id: "db",
     context: ({ input }) => ({
       input: {
         dbName: input.dbName,
@@ -29,37 +29,31 @@ export default createMachine(
         fs: null,
       },
     }),
-    initial: "activate",
+    initial: "db-module-init",
     states: {
-      activate: {
-        initial: "import",
-        states: {
-          import: {
-            invoke: {
-              src: "import",
-              onDone: { target: "init" },
-              onError: { target: "#sqlite.error", actions: "error_ctx" },
-            },
-          },
-          init: {
-            invoke: {
-              src: "init",
-              onDone: [
-                {
-                  target: "#sqlite.sync",
-                  actions: ["VFS_ctx", "version_ctx", "newVFS"],
-                  guard: not("OPFSallow"),
-                },
-                {
-                  target: "#sqlite.sync",
-                  actions: ["OPFS_ctx", "version_ctx", "newOPFS"],
-                  guard: "OPFSallow",
-                },
-              ],
-              onError: { target: "#sqlite.error", actions: "error_ctx" },
-            },
-          },
+      "db-module-init": {
+        invoke: {
+          id: "db-init",
+          src: "db-init",
+          onDone: { target: "#db.db-fs-check", actions: "ctx_version" },
+          onError: { target: "#db.error", actions: "ctx_error" },
         },
+      },
+      "db-fs-check": {
+        after: {
+          0: [
+            { target: "db-fs-opfs", guard: "allow_OPFS", actions: "ctx_fs_OPFS" },
+            { target: "db-fs-vfs", guard: not("allow_OPFS"), actions: "ctx_fs_VFS" },
+          ],
+        },
+      },
+      "db-fs-opfs": {
+        entry: "new_OPFS",
+        after: { 0: { target: "active" } },
+      },
+      "db-fs-vfs": {
+        entry: "new_VFS",
+        after: { 0: { target: "active" } },
       },
       sync: {
         initial: "structure",
@@ -68,17 +62,30 @@ export default createMachine(
             after: { 0: { target: "data" } },
           },
           data: {
-            after: { 0: { target: "#sqlite.idle" } },
+            after: { 0: { target: "#db.active" } },
           },
         },
       },
-      idle: {
-        entry: ["optimize", "msgIDLE"],
-        on: {
-          "table-check-exist": {},
-          "table-create": {},
-          "table-fill": {},
-          query: {},
+      active: {
+        initial: "idle",
+        states: {
+          idle: {
+            entry: ["optimize", "msgIDLE"],
+            on: {
+              "table-check-exist": {
+                target: "idle",
+              },
+              "table-create": {
+                target: "idle",
+              },
+              "table-fill": {
+                target: "idle",
+              },
+              query: {
+                target: "idle",
+              },
+            },
+          },
         },
       },
       error: {},
@@ -87,10 +94,10 @@ export default createMachine(
   },
   {
     actions: {
-      version_ctx: assign(({ event, context }) => ({ output: { ...context.output, version: event.output.version } })),
-      VFS_ctx: assign(({ context }) => ({ output: { ...context.output, fs: "VFS" } })),
-      OPFS_ctx: assign(({ context }) => ({ output: { ...context.output, fs: "OPFS" } })),
-      error_ctx: assign({ error: ({ event }) => event.data }),
+      ctx_version: assign(({ event, context }) => ({ output: { ...context.output, version: event.output.version } })),
+      ctx_fs_VFS: assign(({ context }) => ({ output: { ...context.output, fs: "VFS" } })),
+      ctx_fs_OPFS: assign(({ context }) => ({ output: { ...context.output, fs: "OPFS" } })),
+      ctx_error: assign({ error: ({ event }) => event.data }),
     },
   },
 )

@@ -1,5 +1,6 @@
 import { createActor, fromPromise } from "xstate"
 import machine from "./machine"
+import "../../sqlite/jswasm/sqlite3-bundler-friendly.mjs"
 import type { DB } from "sqlite3oo1"
 
 let sqlite3: any
@@ -10,17 +11,7 @@ let db: DB
 const actor = createActor(
   machine.provide({
     actors: {
-      import: fromPromise(function () {
-        return new Promise(async (resolve, reject) => {
-          try {
-            await import("../../sqlite/jswasm/sqlite3-bundler-friendly.mjs")
-            resolve({ success: "ok" })
-          } catch (err) {
-            reject(JSON.stringify(err))
-          }
-        })
-      }),
-      init: fromPromise(function () {
+      "db-init": fromPromise(function () {
         return new Promise(async (resolve, reject) => {
           try {
             sqlite3 = await self.sqlite3InitModule({ print: console.log, printErr: console.error })
@@ -34,11 +25,11 @@ const actor = createActor(
       }),
     },
     guards: {
-      OPFSallow: () => Boolean(capi.sqlite3_vfs_find("opfs")),
+      allow_OPFS: () => Boolean(capi.sqlite3_vfs_find("opfs")),
     },
     actions: {
-      newOPFS: ({ context }) => (db = new oo1.OpfsDb(context.input.dbName) as DB),
-      newVFS: ({ context }) => (db = new oo1.DB(context.input.dbName, "ct") as DB),
+      new_OPFS: ({ context }) => (db = new oo1.OpfsDb(context.input.dbName) as DB),
+      new_VFS: ({ context }) => (db = new oo1.DB(context.input.dbName, "ct") as DB),
       optimize: () => db.exec(["PRAGMA journal_mode = wal;", "PRAGMA synchronous = normal;"]),
       msgIDLE: ({ context }) => postMessage({ type: "IDLE", status: "success", payload: { version: context.output.version } }),
     },

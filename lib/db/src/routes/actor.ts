@@ -8,22 +8,12 @@ const workerProvider = machine.provide({
   actors: {
     msg: fromCallback(() => {
       worker.addEventListener("message", (message) => console.log(message))
-
     }),
-    import: fromPromise(function () {
+    "worker-import": fromPromise(function () {
       return new Promise(async (resolve, reject) => {
         try {
-          const Worker = (await import("$lib/db/worker/actor.ts?worker")).default
+          const Worker = (await import("$lib/db?worker")).default
           worker = new Worker()
-          resolve({ status: "success" })
-        } catch (error) {
-          reject({ code: 1, message: JSON.stringify(error) })
-        }
-      })
-    }),
-    loadWorker: fromPromise(function () {
-      return new Promise(async (resolve, reject) => {
-        try {
           const IDLEsuccess = (message: any) => {
             if (message.data.type === "IDLE") {
               worker.removeEventListener("message", IDLEsuccess)
@@ -56,20 +46,7 @@ const actor = createActor(workerProvider, {
     ],
   },
   inspect: (inspectionEvent) => {
-    if (inspectionEvent.type === "@xstate.actor") {
-      // console.log("🔎 @xstate.actor", inspectionEvent)
-    }
-    if (inspectionEvent.type === "@xstate.event") {
-      // console.log("🔎", inspectionEvent.sourceRef)
-      // console.log("🔎", inspectionEvent.targetRef)
-      // console.log("🔎", inspectionEvent.event)
-      // console.log("🔎 @xstate.event", inspectionEvent)
-    }
     if (inspectionEvent.type === "@xstate.snapshot") {
-      // console.log("🔎", inspectionEvent.actorRef)
-      // console.log("🔎", inspectionEvent.event)
-      // console.log("🔎", inspectionEvent.snapshot)
-      // console.log("🔎 @xstate.snapshot", inspectionEvent)
       if (inspectionEvent.snapshot.status === "active") {
         const snapshotValue = inspectionEvent.snapshot as typeof inspectionEvent.snapshot & { value: string; context: {} }
         if (snapshotValue.value) console.log("⚒️", snapshotValue.value, snapshotValue.context)

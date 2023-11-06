@@ -1,14 +1,8 @@
 <script lang="ts">
   import "@lib/theme/app.css"
-  // import initWorker from "$lib/sqlite/loadWorker"
-  import { onMount } from "svelte"
-  import actor from "./actor"
+  import db from "./actor"
 
-  onMount(async () => {
-    actor.start()
-    // const workerImp = (await import("$lib/sqlite/worker/worker.ts?worker")).default
-    // initWorker(workerImp)
-  })
+  db.start()
 </script>
 
 <div class="flex min-h-screen flex-col">

@@ -16,23 +16,17 @@ export default createMachine(
         version: null,
       },
     },
-    initial: "import",
+    initial: "db-worker-load",
     states: {
-      import: {
+      "db-worker-load": {
         invoke: {
-          src: "import",
-          onDone: { target: "init" },
+          id: "worker-import",
+          src: "worker-import",
+          onDone: { target: "db-worker-active" },
           onError: { target: "error", actions: "error_ctx" },
         },
       },
-      init: {
-        invoke: {
-          src: "loadWorker",
-          onDone: { target: "idle", actions: ["version_ctx"] },
-          onError: { target: "error", actions: "error_ctx" },
-        },
-      },
-      idle: {
+      "db-worker-active": {
         invoke: { src: "msg" },
       },
       error: {},
