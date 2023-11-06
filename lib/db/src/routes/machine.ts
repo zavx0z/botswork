@@ -1,20 +1,21 @@
 import { assign, createMachine } from "xstate"
+
 export type types = {
   context: {
-    input: {}
+    input?: {}
     output: {
       path: string | undefined
       version: string | undefined
       fs: string | undefined
       size: number | undefined
     }
-    error?: {}
+    error?: ErrorMachine
   }
 }
 export default createMachine(
   {
+    id: "db",
     context: {
-      input: {},
       output: {
         path: undefined,
         version: undefined,
@@ -29,20 +30,23 @@ export default createMachine(
           id: "worker-import",
           src: "worker-import",
           onDone: { target: "db-worker-active", actions: "ctx_output" },
-          onError: { target: "error", actions: "error_ctx" },
+          onError: { target: "error", actions: "ctx_error" },
         },
       },
       "db-worker-active": {
         invoke: { src: "msg" },
+        type: "final"
       },
-      error: {},
+      error: {
+        type: "final",
+      },
     },
     types: {} as types,
   },
   {
     actions: {
       ctx_output: assign(({ event }) => ({ output: event.output })),
-      error_ctx: assign(({ event }) => ({ error: event.data as object })),
+      ctx_error: assign(({ event }) => ({ error: event.data as ErrorMachine })),
     },
   },
 )

@@ -1,5 +1,7 @@
 declare global {
   function sqlite3InitModule(options: { print: object; printErr: object }): Promise<void>
+  type ErrorMachine = { code: number; message: string }
+
 }
 export type ColType = "string" | "number"
 

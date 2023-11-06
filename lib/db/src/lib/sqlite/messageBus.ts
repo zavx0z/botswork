@@ -1,4 +1,4 @@
-import type { WorkerMessage, WorkerMessageTypes } from "./types"
+import type { WorkerMessage, WorkerMessageTypes } from "../types"
 
 export type WorkerMsgCb = (data: WorkerMessage<unknown>) => unknown
 const cbMap = new Map<string, WorkerMsgCb>()

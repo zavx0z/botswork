@@ -8,7 +8,7 @@ import {
   type FillStorageRequestData,
   type FillStorageResponseData,
   type TableStructure,
-} from "./types"
+} from "../types"
 
 const storages = ["customers_v1", "order_details_v1"]
 

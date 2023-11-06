@@ -9,7 +9,7 @@ import {
   type QueryRequestData,
   type QueryResponseData,
   type QueryStorageRequestData,
-} from "../types"
+} from "../../types"
 import { handleQuery, handleStorageQuery } from "./handleQuery"
 import { handleCreateTable, handleFillStorage, handleTableExists } from "./storageHandlers"
 

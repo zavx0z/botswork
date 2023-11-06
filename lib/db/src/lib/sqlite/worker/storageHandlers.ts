@@ -1,4 +1,4 @@
-import type { CreateTableRequestData, CreateTableResponseData, FillStorageRequestData, FillStorageResponseData, TableExistsResponseData, WorkerMessage } from "../types"
+import type { CreateTableRequestData, CreateTableResponseData, FillStorageRequestData, FillStorageResponseData, TableExistsResponseData, WorkerMessage } from "../../types"
 import genInsertSql from "./util/genInsertSql"
 import genTabSrc from "./util/genTabSrc"
 import getBindObject from "./util/getBindObject"
