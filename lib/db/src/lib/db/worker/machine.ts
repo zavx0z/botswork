@@ -1,23 +1,24 @@
-import { assign, createMachine, not, pure } from "xstate"
-type types = {
-  context: {
-    input: {
-      path: string
-    }
-    output: {
-      version: string | null
-      fs: string | null
-      size: number | undefined
-    }
-    error?: ErrorMachine
-  }
-  input: {
-    path: string
-  }
-}
+import { assign, createMachine, not } from "xstate"
+
 export default createMachine(
   {
-    id: "db",
+    id: "sqlite",
+    types: {} as {
+      context: {
+        input: {
+          path: string
+        }
+        output: {
+          version: string | null
+          fs: string | null
+          size: number | undefined
+        }
+        error?: ErrorMachine
+      }
+      input: {
+        path: string
+      }
+    },
     context: ({ input }) => ({
       input: {
         path: input.path,
@@ -34,8 +35,8 @@ export default createMachine(
         invoke: {
           id: "db-init",
           src: "db-init",
-          onDone: { target: "#db.fs-check", actions: "ctx_version" },
-          onError: { target: "#db.error", actions: "ctx_error" },
+          onDone: { target: "#sqlite.fs-check", actions: "ctx_version" },
+          onError: { target: "#sqlite.error", actions: "ctx_error" },
         },
       },
       "fs-check": {
@@ -61,7 +62,6 @@ export default createMachine(
       },
       error: {},
     },
-    types: {} as types,
   },
   {
     guards: {

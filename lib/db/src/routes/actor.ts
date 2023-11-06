@@ -4,11 +4,8 @@ import machine from "./machine"
 
 let worker: Worker
 
-const workerProvider = machine.provide({
+const provider = machine.provide({
   actors: {
-    msg: fromCallback(() => {
-      worker.addEventListener("message", (message) => console.log(message))
-    }),
     "worker-import": fromPromise(function () {
       return new Promise(async (resolve, reject) => {
         try {
@@ -29,7 +26,7 @@ const workerProvider = machine.provide({
   },
 })
 
-const actor = createActor(workerProvider, {
+const actor = createActor(provider, {
   input: {
     tables: [
       {
