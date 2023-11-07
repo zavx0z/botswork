@@ -2,9 +2,9 @@
   import OpfsExplorer from "$lib/components/OpfsExplorer.svelte"
   import { getContext } from "svelte"
   import { useSelector } from "@xstate/svelte"
-  import type { main } from "./actor"
+  import type { actor } from "../lib/client/actor"
 
-  const db = getContext<typeof main>("db")
+  const db = getContext<typeof actor>("db")
   const activateActor = db.getSnapshot().children["activate"]
   const state = useSelector(activateActor, (state) => state)
 </script>

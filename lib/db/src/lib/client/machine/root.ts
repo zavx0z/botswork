@@ -1,6 +1,6 @@
-import { assign, createMachine, sendTo } from "xstate"
+import { createMachine } from "xstate"
 
-export default createMachine({
+export const machine = createMachine({
   id: "sqlite3",
   initial: "activate",
   states: {

@@ -11,7 +11,7 @@ type contextType = {
   error?: ErrorMachine
 }
 
-export default createMachine(
+export const machine = createMachine(
   {
     id: "db",
     types: {} as { context: contextType },

@@ -1,6 +1,6 @@
 import { createMachine, sendTo } from "xstate"
 
-export default createMachine({
+export const machine = createMachine({
   id: "query",
   types: {} as {
     context: {

@@ -1,12 +1,10 @@
 import "@lib/theme/app.css"
 import { createActor, fromCallback, fromPromise } from "xstate"
-import machine from "./machine"
-import queryMachine from "$lib/client/machine/queryMachine"
-import activateMachine from "$lib/client/machine/activateMachine"
+import { rootMachine, activateMachine, queryMachine } from "./machine"
 
 let worker: Worker
 
-const mainProvider = machine.provide({
+const provider = rootMachine.provide({
   actors: {
     activate: activateMachine.provide({
       actors: {
@@ -53,5 +51,4 @@ const mainProvider = machine.provide({
     }),
   },
 })
-export const main = createActor(mainProvider)
-main.subscribe((state) => console.log("⚒️", state.value, state.context))
+export const actor = createActor(provider)
