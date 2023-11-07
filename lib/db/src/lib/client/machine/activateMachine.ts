@@ -1,20 +1,20 @@
 import { assign, createMachine, sendTo } from "xstate"
 
+type contextType = {
+  input?: {}
+  output: {
+    path: string | undefined
+    version: string | undefined
+    fs: string | undefined
+    size: number | undefined
+  }
+  error?: ErrorMachine
+}
+
 export default createMachine(
   {
     id: "db",
-    types: {} as {
-      context: {
-        input?: {}
-        output: {
-          path: string | undefined
-          version: string | undefined
-          fs: string | undefined
-          size: number | undefined
-        }
-        error?: ErrorMachine
-      }
-    },
+    types: {} as { context: contextType },
     context: {
       output: {
         path: undefined,
@@ -35,12 +35,12 @@ export default createMachine(
       },
       active: {
         type: "final",
-        output: ({ context }) => context.output,
       },
       error: {
         type: "final",
       },
     },
+    output: ({ context }) => context.output,
   },
   {
     actions: {

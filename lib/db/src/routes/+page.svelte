@@ -2,10 +2,11 @@
   import OpfsExplorer from "$lib/components/OpfsExplorer.svelte"
   import { getContext } from "svelte"
   import { useSelector } from "@xstate/svelte"
-  import type { dbType } from "./actor"
+  import type { main } from "./actor"
 
-  const db = getContext<dbType>("db")
-  const state = useSelector(db, (state) => state)
+  const db = getContext<typeof main>("db")
+  const activateActor = db.getSnapshot().children["activate"]
+  const state = useSelector(activateActor, (state) => state)
 </script>
 
 <span class="text-2xl font-semibold text-white">sqlite wasm</span>
@@ -22,4 +23,3 @@
 <div class="bg-slate-500">
   <OpfsExplorer />
 </div>
-  

@@ -58,9 +58,10 @@ export default createMachine(
       },
       active: {
         entry: ["optimize", "send_ctx", "addEventListener"],
+      },
+      error: {
         type: "final",
       },
-      error: {},
     },
   },
   {
