@@ -9,7 +9,7 @@ type contextType = {
   }
   error?: ErrorMachine
 }
-type eventsType = { type: "file.create"; params: { fileName: string } }
+type eventsType = { type: "file.create"; params: { fileName: string; content: string } }
 export const machine = createMachine({
   id: "opfs",
   types: {} as { context: contextType },
@@ -41,8 +41,8 @@ export const machine = createMachine({
     "file-create": {
       invoke: {
         src: "fileCreate",
-        input: ({ event }) => ({ fileName: event.params.fileName }),
-        onDone: {},
+        input: ({ event }) => event.params,
+        onDone: { target: "idle" },
         onError: { actions: "ctx_error" },
       },
     },
@@ -67,12 +67,13 @@ const provider = machine.provide({
       })
     }),
     fileCreate: fromPromise(function ({ input }) {
-      console.log(input)
       return new Promise(async (resolve, reject) => {
         try {
           const fileHandle = await opfsRoot.getFileHandle(input.fileName, { create: true })
-          console.log(fileHandle)
-          resolve({})
+          const writable = await fileHandle.createWritable()
+          await writable.write(input.content)
+          await writable.close()
+          resolve({ success: "ok" })
         } catch (err) {
           reject(JSON.stringify(err))
         }
