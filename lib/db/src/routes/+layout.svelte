@@ -2,9 +2,11 @@
   import client from "$lib/client"
   import "@lib/theme/app.css"
   import { onMount, setContext } from "svelte"
+  import { actor } from "./opfsMachine"
 
   onMount(async () => {
     client.start()
+    actor.start()
   })
   setContext("db", client)
 </script>

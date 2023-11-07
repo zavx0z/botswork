@@ -4,12 +4,25 @@ export const machine = createMachine({
   id: "query",
   types: {} as {
     context: {
+      input: {
+        table: string | undefined
+        column: string | undefined
+        row: string | undefined
+      }
       error?: ErrorMachine
     }
   },
-  context: {},
+  context: {
+    input: {
+      table: undefined,
+      column: undefined,
+      row: undefined,
+    },
+  },
   on: {
-    put: ".put",
+    create: ".create",
+    update: ".update",
+    delete: ".delete",
   },
   invoke: {
     systemId: "message-listener",
@@ -19,11 +32,17 @@ export const machine = createMachine({
   initial: "idle",
   states: {
     idle: {},
-    put: {
-      entry: sendTo("message-listener", { type: "put" }),
+    create: {
+      entry: sendTo("message-listener", { type: "create" }),
+      after: { 0: "idle" },
     },
-    update: {},
-    delete: {},
-    error: {},
+    update: {
+      entry: sendTo("message-listener", { type: "update" }),
+      after: { 0: "idle" },
+    },
+    delete: {
+      entry: sendTo("message-listener", { type: "delete" }),
+      after: { 0: "idle" },
+    },
   },
 })
