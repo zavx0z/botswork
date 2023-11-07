@@ -9,7 +9,7 @@ type contextType = {
   }
   error?: ErrorMachine
 }
-
+type eventsType = { type: "file.create"; params: { fileName: string } }
 export const machine = createMachine({
   id: "opfs",
   types: {} as { context: contextType },
@@ -21,38 +21,58 @@ export const machine = createMachine({
       },
     },
   },
-  initial: "idle",
+  initial: "activate",
   states: {
-    idle: {
-      always: { target: "rootDir" },
-    },
-    rootDir: {
+    activate: {
       invoke: {
         src: "rootGetter",
         onDone: {
-          target: "next",
+          target: "idle",
           actions: "ctx_rootFileSystemDirectoryHandle",
         },
         onError: { actions: "ctx_error" },
       },
     },
-    next: {},
+    idle: {
+      on: {
+        "file.create": { target: "file-create" },
+      },
+    },
+    "file-create": {
+      invoke: {
+        src: "fileCreate",
+        input: ({ event }) => ({ fileName: event.params.fileName }),
+        onDone: {},
+        onError: { actions: "ctx_error" },
+      },
+    },
   },
 })
-let fileHandle: FileSystemDirectoryHandle
+let opfsRoot: FileSystemDirectoryHandle
 
 const provider = machine.provide({
   actions: {
     ctx_rootFileSystemDirectoryHandle: assign(({ event }) => ({ output: { rootFileSystemDirectoryHandle: event.output } })),
-    ctx_error: assign(({ event }) => ({ error: event.data })),
+    ctx_error: assign(({ event }) => ({ error: event.data as ErrorMachine })),
   },
   actors: {
     rootGetter: fromPromise(function () {
       return new Promise(async (resolve, reject) => {
         try {
-          const opfsRoot = await navigator.storage.getDirectory()
-          fileHandle = opfsRoot
+          opfsRoot = await navigator.storage.getDirectory()
           resolve({ kind: opfsRoot.kind, name: opfsRoot.name })
+        } catch (err) {
+          reject(JSON.stringify(err))
+        }
+      })
+    }),
+    fileCreate: fromPromise(function ({ input }) {
+      console.log(input)
+      return new Promise(async (resolve, reject) => {
+        try {
+          const fileHandle = await opfsRoot.getFileHandle(input.fileName, { create: true })
+          console.log(fileHandle)
+          resolve({})
         } catch (err) {
           reject(JSON.stringify(err))
         }
@@ -60,7 +80,11 @@ const provider = machine.provide({
     }),
   },
 })
-export const actor = createActor(provider)
+export const actor = createActor(provider, {
+  //   inspect(inspectionEvent) {
+  //     console.log(inspectionEvent.event)
+  //   },
+})
 actor.subscribe((state) => {
   console.log("💾", state.value, state.context)
 })
