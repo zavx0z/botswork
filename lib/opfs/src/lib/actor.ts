@@ -4,10 +4,6 @@ import { machine } from "./machine"
 let opfsRoot: FileSystemDirectoryHandle
 
 const provider = machine.provide({
-  actions: {
-    ctx_rootFileSystemDirectoryHandle: assign(({ event }) => ({ output: { rootFileSystemDirectoryHandle: event.output } })),
-    ctx_error: assign(({ event }) => ({ error: event.data as ErrorMachine })),
-  },
   actors: {
     rootGetter: fromPromise(function () {
       return new Promise(async (resolve, reject) => {
