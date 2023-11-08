@@ -1,12 +1,15 @@
 <script lang="ts">
-  import OpfsExplorer from "$lib/components/OpfsExplorer.svelte"
-  import { getContext } from "svelte"
+  import { getContext, onMount } from "svelte"
   import { useSelector } from "@xstate/svelte"
   import type { actor } from "../lib/client/actor"
+  import { loadFileFromDevice, OPFSExplorer, opfs } from "@lib/opfs"
 
   const db = getContext<typeof actor>("db")
   const activateActor = db.getSnapshot().children["activate"]
   const state = useSelector(activateActor, (state) => state)
+  onMount(() => {
+    opfs.start()
+  })
 </script>
 
 <span class="text-2xl font-semibold text-white">sqlite wasm</span>
@@ -20,4 +23,5 @@
     {/each}
   </tbody>
 </table>
-<OpfsExplorer />
+<button class="p-4" on:click={loadFileFromDevice}> Загрузить файл базы данных </button>
+<OPFSExplorer />

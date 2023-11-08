@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte"
-  import opfs, { OPFSExplorer, loadFileFromDevice } from "$lib"
+  import { onDestroy, onMount } from "svelte"
+  import { opfs, OPFSExplorer, loadFileFromDevice } from "$lib"
 
-  onMount(async () => {
-    opfs.start()
-  })
+  onMount(() => opfs.start())
+  onDestroy(() => opfs.stop())
 </script>
 
 <button class="p-4" on:click={loadFileFromDevice}> Загрузить файл базы данных </button>
