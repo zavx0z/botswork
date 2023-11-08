@@ -82,7 +82,7 @@ const provider = machine.provide({
     fileFromDevice: fromPromise(function ({ input }) {
       return new Promise(async (resolve, reject) => {
         const file = await input.handle.getFile()
-        const contents = await file.text()
+        const contents = await file.arrayBuffer()
         const fileHandle = await opfsRoot.getFileHandle(input.handle.name, { create: true })
         const writable = await fileHandle.createWritable()
         await writable.write(contents)

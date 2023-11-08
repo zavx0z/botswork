@@ -38,7 +38,7 @@ const provider = machine.provide({
   },
 })
 
-const actor = createActor(provider, { input: { path: "file:///offline-db.sqlite" } })
+const actor = createActor(provider, { input: { path: "file:///db.sqlite" } })
 actor.subscribe((state) => console.log("💽", state.value, state.context))
 actor.start()
 export default actor
