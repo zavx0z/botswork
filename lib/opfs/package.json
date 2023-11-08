@@ -1,8 +1,8 @@
 {
-  "name": "@lib/db",
+  "name": "@lib/opfs",
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite dev --host 0.0.0.0",
+    "dev": "vite dev --host",
     "build": "vite build && npm run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
@@ -14,8 +14,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
-    },
-    "./worker.ts": "./src/lib/sqlite/worker/worker.ts"
+    }
   },
   "files": [
     "dist",
@@ -31,7 +30,6 @@
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@sveltejs/package": "^2.0.0",
-    "@types/better-sqlite3": "^7.6.6",
     "@types/wicg-file-system-access": "^2023.10.3",
     "publint": "^0.1.9",
     "svelte": "^4.0.5",
@@ -41,10 +39,10 @@
     "vite": "^4.4.2",
     "vite-plugin-mkcert": "^1.16.0"
   },
-  "svelte": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
   "dependencies": {
     "xstate": "beta"
-  }
+  },
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module"
 }
