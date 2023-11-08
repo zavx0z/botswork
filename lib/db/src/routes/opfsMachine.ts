@@ -1,3 +1,7 @@
+// https://web.dev/articles/origin-private-file-system?hl=ru
+// https://blog.stranianelli.com/js-wasm-sqlite3-01/
+// https://blog.stranianelli.com/js-wasm-sqlite3-02/
+// https://blog.stranianelli.com/js-wasm-sqlite3-03/
 import { fromPromise, assign, createMachine, createActor } from "xstate"
 
 type contextType = {
@@ -9,7 +13,7 @@ type contextType = {
   }
   error?: ErrorMachine
 }
-type eventsType = { type: "file.create"; params: { fileName: string; content: string } }
+type eventsType = { type: "file.create"; params: { fileName: string; content: string } } | { type: "file.from.device"; params: { handle: FileSystemFileHandle } }
 export const machine = createMachine({
   id: "opfs",
   types: {} as { context: contextType },
@@ -36,11 +40,20 @@ export const machine = createMachine({
     idle: {
       on: {
         "file.create": { target: "file-create" },
+        "file.from.device": { target: "file-from-device" },
       },
     },
     "file-create": {
       invoke: {
         src: "fileCreate",
+        input: ({ event }) => event.params,
+        onDone: { target: "idle" },
+        onError: { actions: "ctx_error" },
+      },
+    },
+    "file-from-device": {
+      invoke: {
+        src: "fileFromDevice",
         input: ({ event }) => event.params,
         onDone: { target: "idle" },
         onError: { actions: "ctx_error" },
@@ -66,6 +79,17 @@ const provider = machine.provide({
         }
       })
     }),
+    fileFromDevice: fromPromise(function ({ input }) {
+      return new Promise(async (resolve, reject) => {
+        const file = await input.handle.getFile()
+        const contents = await file.text()
+        const fileHandle = await opfsRoot.getFileHandle(input.handle.name, { create: true })
+        const writable = await fileHandle.createWritable()
+        await writable.write(contents)
+        await writable.close()
+        resolve({ status: "success" })
+      })
+    }),
     fileCreate: fromPromise(function ({ input }) {
       return new Promise(async (resolve, reject) => {
         try {
@@ -73,7 +97,7 @@ const provider = machine.provide({
           const writable = await fileHandle.createWritable()
           await writable.write(input.content)
           await writable.close()
-          resolve({ success: "ok" })
+          resolve({ status: "success" })
         } catch (err) {
           reject(JSON.stringify(err))
         }

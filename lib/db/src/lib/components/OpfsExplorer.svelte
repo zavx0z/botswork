@@ -138,7 +138,7 @@
 
 <div>
   <div class="flex items-center justify-between">
-    <h2 class="block font-semibold text-gray-900">OPFS Explorer</h2>
+    <h2 class="block font-semibold text-primary-500">OPFS Explorer</h2>
     <div>
       <button class=" rounded-md border border-slate-300 px-2 py-1 hover:bg-slate-100 focus:border-pink-300 focus:outline-none" title="Refresh" on:click={getDirectoryStructure}>
         <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4">
@@ -178,16 +178,16 @@
           <table class="min-w-full divide-y divide-gray-300">
             <thead>
               <tr>
-                <th class="py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Path</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold text-gray-900">Size</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold text-gray-900">Last Modified</th>
-                <th class="px-3 py-2 text-left text-sm font-semibold text-gray-900">Actions</th>
+                <th class="py-2 pl-4 pr-3 text-left text-sm font-semibold text-secondary-500 sm:pl-0">Path</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-secondary-500">Size</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-secondary-500">Last Modified</th>
+                <th class="px-3 py-2 text-left text-sm font-semibold text-secondary-500">Actions</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
               {#each fileList as file}
                 <tr>
-                  <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{file.relativePath}</td>
+                  <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-secondary-500 sm:pl-0">{file.relativePath}</td>
                   <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500">{file.size}</td>
                   <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500">{new Date(file.lastModified).toLocaleString()}</td>
                   <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
