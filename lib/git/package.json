@@ -39,5 +39,12 @@
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "events": "^3.3.0",
+    "isomorphic-git": "^1.25.0",
+    "memfs": "^4.6.0",
+    "path": "^0.12.7",
+    "util": "^0.12.5"
+  }
 }
