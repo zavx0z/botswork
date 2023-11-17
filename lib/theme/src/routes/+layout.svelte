@@ -1,8 +1,8 @@
 <script>
   import "../lib/app.css"
-  import { Activity, Button } from "@lib/ui/activity"
-  import { BotikIcon } from "@lib/icons"
-  import { page } from "$app/stores"
+  // import { Activity, Button } from "@lib/ui/activity"
+  // import { BotikIcon } from "@lib/icons"
+  // import { page } from "$app/stores"
   const menuItems = [
     { title: "главная", link: "/" },
     { title: "библиотека", link: "/lib" },
@@ -14,7 +14,7 @@
 <svelte:head>
   <title>@lib/viz</title>
 </svelte:head>
-<Activity>
+<!-- <Activity>
   <div>
     <Button href="/" label="главная" active={$page.url.pathname === "/"}>
       <BotikIcon />
@@ -55,7 +55,7 @@
       >
     </Button>
   </div>
-</Activity>
+</Activity> -->
 <div class="ml-12">
   <slot />
 </div>

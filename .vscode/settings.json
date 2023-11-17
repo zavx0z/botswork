@@ -45,7 +45,7 @@
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[svelte]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "svelte.svelte-vscode"
     },
     "editor.fontFamily": "JetBrains Mono",
     "editor.fontLigatures": true,

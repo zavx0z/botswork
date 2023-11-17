@@ -5,9 +5,6 @@
   "devDependencies": {
     "bun-types": "latest"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
     "input": "^1.0.1",
     "prompts": "^2.4.2",

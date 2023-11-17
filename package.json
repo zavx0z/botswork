@@ -1,16 +1,8 @@
 {
   "name": "botswork",
   "type": "module",
-  "devDependencies": {
-    "@happy-dom/global-registrator": "^12.9.1",
-    "@xstate/inspect": "^0.8.0",
-    "bun-types": "^1.0.6",
-    "prettier": "^3.0.3",
-    "prettier-plugin-svelte": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.5",
-    "svelte-adapter-bun": "^0.5.0"
-  },
   "workspaces": [
+    "core/*",
     "lib/*",
     "server/*",
     "module/*",
@@ -19,12 +11,5 @@
     "service/*",
     "workflow/*",
     "nodes/*"
-  ],
-  "dependencies": {
-    "@theatre/studio": "^0.7.0",
-    "@xstate/graph": "beta",
-    "happy-dom": "^12.9.1",
-    "prismjs": "^1.29.0",
-    "xstate": "5.0.0-beta.40"
-  }
+  ]
 }

@@ -6,9 +6,6 @@
     "bun-types": "latest",
     "@service/google-spreadsheet": "workspace:*"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
     "xstate": "beta"
   }
