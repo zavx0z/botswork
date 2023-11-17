@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { useSelector } from "@xstate/svelte"
   import { Preview, Title, Body, Input, Output } from "./index"
   import { InputBoolean } from "./input"
   import { OutputText } from "./output"
   import InputText from "./input/InputText.svelte"
-  import type { AnyActor } from "xstate"
 
-  let { thing }: { thing: AnyActor } = $props()
-  const uri = useSelector(thing, (state) => state.context.uri)
+  let { thing } = $props<{ thing: { uri: string } }>()
+  console.log(thing)
 
   type InOut = { [key: string]: { title: string; type: "Boolean" | "Text"; default: unknown } }
+  
   interface metaInterface {
     tag: string
     title: string
@@ -19,7 +18,7 @@
   let meta: metaInterface | undefined = $state()
 
   $effect(() => {
-    import(/* @vite-ignore */ $uri).then((module) => (meta = module.meta))
+    import(/* @vite-ignore */ thing.uri).then((module) => (meta = module.meta))
   })
 
   const makePersistentState = (node: any) => {

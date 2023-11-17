@@ -24,7 +24,7 @@
   "devDependencies": {
     "@metafor/code-viewer": "workspace:*",
     "@lib/db": "workspace:*",
-    "@lib/everything": "workspace:*",
+    "@core/thing": "workspace:*",
     "@lib/dev": "workspace:*",
     "@lib/code": "workspace:*",
     "@lib/editor": "workspace:*",

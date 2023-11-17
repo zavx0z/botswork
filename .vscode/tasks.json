@@ -142,11 +142,11 @@
             },
         },
         {
-            "label": "@lib/everything:dev",
+            "label": "@core/thing:dev",
             "type": "shell",
             "command": "bun vite dev --host 0.0.0.0",
             "options": {
-                "cwd": "${workspaceFolder}/lib/everything"
+                "cwd": "${workspaceFolder}/core/thing"
             },
             "isBackground": true,
             "problemMatcher": {
@@ -167,11 +167,11 @@
             },
         },
         {
-            "label": "@lib/everything:watch",
+            "label": "@core/thing:watch",
             "type": "shell",
             "command": "bunx --bun svelte-package --watch",
             "options": {
-                "cwd": "${workspaceFolder}/lib/everything"
+                "cwd": "${workspaceFolder}/core/thing"
             },
             "isBackground": true,
             "problemMatcher": {
@@ -192,11 +192,11 @@
             },
         },
         {
-            "label": "@lib/everything:build",
+            "label": "@core/thing:build",
             "type": "shell",
             "command": "bunx --bun vite build && bunx svelte-kit sync && bunx svelte-package && bunx publint",
             "options": {
-                "cwd": "${workspaceFolder}/lib/everything"
+                "cwd": "${workspaceFolder}/core/thing"
             },
             "isBackground": false,
             "problemMatcher": {
