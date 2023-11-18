@@ -2,31 +2,50 @@
   //@ts-ignore
   // import("https://esm.veryfront.com/@metafor/code-viewer@latest/dist/CodeViewer.js")
   import("../dist/CodeViewer.js").then((module) => {
-    console.log(module)
+    // console.log(module)
   })
 
-  let code = `<span class="token keyword">const</span>  customElement<span class="token operator">=</span><span class="token punctuation">{</span>
-    <span class="token literal-property property">tag</span><span class="token operator">:</span> <span class="token string">"code-viewer"</span><span class="token punctuation">,</span>
-<details open=""><summary>    <span class="token literal-property property"></span><span class="fl"><span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><span class="token punctuation"></span></summary><span class="token punctuation"></span>
-<details open=""><summary>      <span class="token literal-property property"></span><span class="fl"><span class="token literal-property property">hi</span><span class="token operator">:</span> <span class="token punctuation">{</span></span><span class="token punctuation"></span></summary><span class="token punctuation"></span>
-        <span class="token literal-property property">reflect</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">"String"</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">attribute</span><span class="token operator">:</span> <span class="token string">"name-attr"</span><span class="token punctuation">,</span>
-</details><span class="ll">      </span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-</details><span class="ll">    </span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">}</span>`
+  let src = `export let meta = {
+    tag: "metafor-code-viewer",
+    title: "Подсветка синтаксиса кода",
+    input: {
+      src: {
+        title: "Код",
+        type: "Text",
+        default: "",
+      },
+      fold: {
+        title: "Свертки строк",
+        type: "Boolean",
+        default: false,
+      },
+      lineno: {
+        title: "Номера строк",
+        type: "Boolean",
+        default: true,
+      },
+    },
+    output: {
+      code: {
+        title: "Код",
+        type: "Text",
+      },
+    },
+  }`
 
   const useNode = (node: HTMLElement) => {
-    console.dir(node)
-    node.setAttribute("input-html-code", code)
-    node.addEventListener("prototype", (e) => {
-      console.log(e)
-    })
+    const messageHandler = ({ detail }: any) => console.log("receive data")
+    node.addEventListener("message", messageHandler)
+    return {
+      destroy() {
+        node.removeEventListener("message", messageHandler)
+      },
+    }
   }
 </script>
 
 <main>
-  <metafor-code-viewer use:useNode> </metafor-code-viewer>
+  <metafor-code-viewer {src} use:useNode> </metafor-code-viewer>
 </main>
 
 <style>

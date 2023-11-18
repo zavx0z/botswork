@@ -39,17 +39,17 @@ pre[class*="language-"] {
   overflow: auto;
 }
 
-:not(pre) > code[class*="language-"],
+// :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
   background: #111b27;
 }
 
-/* Inline code */
-:not(pre) > code[class*="language-"] {
-  padding: 0.1em 0.3em;
-  border-radius: 0.3em;
-  white-space: normal;
-}
+// /* Inline code */
+// :not(pre) > code[class*="language-"] {
+//   padding: 0.1em 0.3em;
+//   border-radius: 0.3em;
+//   white-space: normal;
+// }
 
 .token.comment,
 .token.prolog,
@@ -194,7 +194,7 @@ pre[class*="language-"] {
 /* overrides color-values for the Show Invisibles plugin
   * https://prismjs.com/plugins/show-invisibles/
   */
-.token.token.tab:not(:empty):before,
+// .token.token.tab:not(:empty):before,
 .token.token.cr:before,
 .token.token.lf:before,
 .token.token.space:before {
@@ -287,15 +287,15 @@ pre[id].linkable-line-numbers.linkable-line-numbers span.line-numbers-rows > spa
 /* overrides color-values for the Diff Highlight plugin
   * https://prismjs.com/plugins/diff-highlight/
   */
-pre.diff-highlight > code .token.token.deleted:not(.prefix),
-pre > code.diff-highlight .token.token.deleted:not(.prefix) {
-  background-color: #cd66601f;
-}
+// pre.diff-highlight > code .token.token.deleted:not(.prefix),
+// pre > code.diff-highlight .token.token.deleted:not(.prefix) {
+//   background-color: #cd66601f;
+// }
 
-pre.diff-highlight > code .token.token.inserted:not(.prefix),
-pre > code.diff-highlight .token.token.inserted:not(.prefix) {
-  background-color: #91d0761f;
-}
+// pre.diff-highlight > code .token.token.inserted:not(.prefix),
+// pre > code.diff-highlight .token.token.inserted:not(.prefix) {
+//   background-color: #91d0761f;
+// }
 
 /* overrides color-values for the Command Line plugin
   * https://prismjs.com/plugins/command-line/
