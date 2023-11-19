@@ -40,12 +40,12 @@
     "@types/prismjs": "^1.26.2",
     "bun-types": "latest",
     "publint": "^0.1.9",
-    "svelte": "^5.0.0-next.6",
+    "svelte": "^5.0.0-next.7",
     "svelte-check": "^3.6.0",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
     "happy-dom": "^12.9.1",
-    "vite": "^4.4.2"
+    "vite": "^5.0.0"
   },
   "dependencies": {
     "@xstate/svelte": "^2.1.0",
