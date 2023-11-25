@@ -9,8 +9,7 @@
     "web/*",
     "desktop/*",
     "service/*",
-    "workflow/*",
-    "nodes/*"
+    "workflow/*"
   ],
   "devDependencies": {
     "prettier": "^3.1.0",

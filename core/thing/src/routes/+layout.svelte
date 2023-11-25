@@ -1,10 +1,10 @@
 <script lang="ts">
   import "@lib/theme/app.css"
-  import { devTools } from "@lib/dev"
+  // import { devTools } from "@lib/dev"
 </script>
 
 <svelte:head>
   <title>@core/thing</title>
 </svelte:head>
-<div use:devTools />
+<!-- <div use:devTools /> -->
 <slot />
