@@ -1,50 +1,94 @@
 <script lang="ts">
-  import { browser } from "$app/environment"
-  //@ts-ignore
-  import proc from "process/browser"
-  import { Buffer } from "buffer"
-  if (browser) {
-    ;(window as any).process = proc
-    ;(window as any).Buffer = Buffer
-  }
+  import GitWorker from "$lib/worker?worker"
 
-  import git from "isomorphic-git"
-  import type * as fsa from "memfs/lib/fsa/types"
-  import { FsaNodeFs, FsaNodeSyncAdapterWorker } from "memfs/lib/fsa-to-node"
-  import { onMount } from "svelte"
+  let repo: HTMLInputElement
+  let value = $state("https://github.com/zavx0z/code-viewer.git")
 
-  onMount(async () => {
-    console.log("!!!!!!!!!!!!")
-    const dir = navigator.storage.getDirectory() as unknown as Promise<fsa.IFileSystemDirectoryHandle>
-    const fs = ((<any>window).fs = new FsaNodeFs(dir))
-    try {
-      const url = new URL("../lib/worker.ts", import.meta.url)
-      console.log(url)
-      const adapter = await FsaNodeSyncAdapterWorker.start(url, dir)
-      fs.syncAdapter = adapter
-      console.log('Create "/repo" folder')
-      await fs.promises.mkdir("/repo")
-      console.log("Init git repo")
-      await git.init({ fs, dir: "repo" })
-      console.log("Create README file")
-      await fs.promises.writeFile("/repo/README.md", "Hello World\n")
-      console.log("Stage README file")
-      await git.add({ fs, dir: "/repo", filepath: "README.md" })
-      console.log("Commit README file")
-      await git.commit({
-        fs,
-        dir: "/repo",
-        author: { name: "zavx0z", email: "metaversebdfl@gmail.com" },
-        message: "fea: initial commit",
+  let button: HTMLButtonElement
+  let log: HTMLElement
+
+  $effect(() => {
+    // repo.value = "https://github.com/zavx0z/code-viewer.git"
+    const worker = new GitWorker()
+
+    function clone() {
+      log.textContent = "CLONE:\n"
+      worker.postMessage({
+        type: "clone",
+        param: { corsProxy: "https://cors.isomorphic-git.org", url: repo.value, dir: "/" },
       })
-    } catch (error) {
-      console.log(error)
-      console.log((<any>error).name)
+    }
+
+    worker.addEventListener("message", ({ data: { value, context } }) => {
+      console.log("💫", { value, context })
+      switch (value) {
+        case "idle":
+          log.textContent += "ready\n"
+          repo.addEventListener("keydown", (e) => e.key === "Enter" && clone())
+          button.addEventListener("click", clone)
+          break
+        case "cloned":
+          break
+        default:
+          break
+      }
+    })
+    return () => {
+      button.removeEventListener("click", clone)
     }
   })
+  // worker.postMessage({ type: "init", param: { url: "https://github.com/zavx0z/code-viewer.git" } })
+
+  //   async print(message) {
+  //     let text = $("log").textContent
+  //     if (message.endsWith("\r")) {
+  //       // overwrite last line
+  //       text = text.trim().replace(/.+$/, "")
+  //     }
+  //     text += message + "\n"
+  //     $("log").textContent = text
+  //   },
+  //   async progress(evt) {
+  //     $("progress-txt").textContent = evt.phase
+  //     $("progress").value = evt.total ? evt.loaded / evt.total : 0.5
+  //     return
+  //   },
+  //   async fill(url) {
+  //     let username = window.prompt("Username:")
+  //     let password = window.prompt("Password:")
+  //     return { username, password }
+  //   },
+  //   async rejected({ url, auth }) {
+  //     window.alert("Authentication rejected")
+  //     return
+  //   },
+
+  // async function doCloneAndStuff() {
+
+  //   await workerThread.clone({
+  //     corsProxy: "https://cors.isomorphic-git.org",
+  //     url: $("repository").value,
+  //   })
+
+  //   let branches = await workerThread.listBranches({ remote: "origin" })
+  //   $("log").textContent += "BRANCHES:\n" + branches.map((b) => `  ${b}`).join("\n") + "\n"
+
+  //   let files = await workerThread.listFiles({})
+  //   $("log").textContent += "FILES:\n" + files.map((b) => `  ${b}`).join("\n") + "\n"
+
+  //   let commits = await workerThread.log({})
+  //   $("log").textContent +=
+  //     "LOG:\n" + commits.map((c) => `  ${c.oid.slice(0, 7)}: ${c.commit.message}`).join("\n") + "\n"
+  // }
 </script>
 
-<ul>
-  <li>isomorphic-git</li>
-  <li></li>
-</ul>
+<dev-tools mobile></dev-tools>
+<div>
+  <input bind:this={repo} bind:value type="text" class="w-1/2 bg-surface-700" title="Tip: enter a private repo URL to see the credentialManager plugin prompt for a password." />
+  <button bind:this={button} type="button" id="cloneButton">Clone</button>
+</div>
+<div>
+  <progress class="w-1/2" value="0"></progress>
+  <span id="progress-txt" style="font-family: monospace"></span>
+</div>
+<output bind:this={log} style="white-space: pre; font-family: monospace"></output>

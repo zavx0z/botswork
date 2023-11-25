@@ -1,6 +1,9 @@
 {
   "name": "@lib/git",
   "version": "0.0.1",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "dev": "vite dev --host 0.0.0.0",
     "build": "vite build && npm run package",
@@ -34,14 +37,9 @@
     "vite": "^5.0.0",
     "vite-plugin-mkcert": "^1.16.0"
   },
-  "svelte": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
   "dependencies": {
-    "events": "^3.3.0",
+    "@isomorphic-git/lightning-fs": "^4.6.0",
     "isomorphic-git": "^1.25.0",
-    "memfs": "^4.6.0",
-    "path": "^0.12.7",
-    "util": "^0.12.5"
+    "xstate": "^5.0.0-beta.47"
   }
 }
