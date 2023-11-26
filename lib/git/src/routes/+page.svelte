@@ -15,12 +15,17 @@
       log.textContent = "CLONE:\n"
       worker.postMessage({
         type: "clone",
-        param: { corsProxy: "https://cors.isomorphic-git.org", url: repo.value, dir: "/" },
+        param: {
+          // corsProxy: "https://cors.isomorphic-git.org",
+          corsProxy: "http://localhost:3000",
+          url: repo.value,
+          dir: "/",
+        },
       })
     }
 
     worker.addEventListener("message", ({ data: { value, context } }) => {
-      console.log("💫", { value, context })
+      console.log("[@lib/git]", "💫", JSON.stringify(value), { ...context })
       switch (value) {
         case "idle":
           log.textContent += "ready\n"

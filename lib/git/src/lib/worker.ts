@@ -1,25 +1,31 @@
 import { createMachine, createActor, assign, type StateValue, fromCallback, setup } from "xstate"
 import git from "isomorphic-git"
 import http from "isomorphic-git/http/web"
-import FS from "@isomorphic-git/lightning-fs"
+import LightningFS from "@isomorphic-git/lightning-fs"
+import { Buffer } from "buffer"
 
-const fs = new FS("fs")
+self.Buffer = Buffer
+
 const machine = setup({
   actions: {
     dir_ctx: assign(({ event, context }) => ({ input: { ...context.input, dir: event.param.dir } })),
     corsProxy_ctx: assign(({ event, context }) => ({ input: { ...context.input, corsProxy: event.param.corsProxy } })),
     url_ctx: assign(({ event, context }) => ({ input: { ...context.input, url: event.param.url } })),
+    progress_loaded: assign(({ event, context }) => ({ progress: { ...context.progress, ...event.param } })),
   },
 }).createMachine({
   id: "git",
   context: {
     input: {
-      dir: undefined,
+      dir: "/",
       corsProxy: undefined,
       url: undefined,
     },
-    output: {
-      progress: "",
+    output: {},
+    property: {},
+    progress: {
+      loaded: undefined,
+      total: undefined,
     },
   },
   initial: "idle",
@@ -35,26 +41,38 @@ const machine = setup({
         src: "gitClone",
         input: ({ context }) => context.input,
       },
-      initial: "clone.start",
+      initial: "process",
       states: {
-        "clone.start": {
-          entry: [() => console.log("iiiiiii")],
+        process: {
+          initial: "started",
+          states: {
+            started: {
+              on: { "objects.counting": { target: "counting" } },
+            },
+            counting: {},
+          },
         },
-        "clone.progress": {},
-        "clone.auth": {},
-        "clone.message": {},
-        "clone.auth.failure": {},
-        "clone.auth.success": {},
+        auth: {
+          initial: "idle",
+          states: {
+            idle: {},
+            process: {},
+            success: {},
+            failure: {},
+          },
+        },
+        message: {},
       },
     },
+    ready: {},
   },
 })
 const actor = createActor(
   machine.provide({
     actors: {
-      gitClone: fromCallback(({ input }: { input: { dir: string; url: string; corsProxy: string } }) => {
+      gitClone: fromCallback(({ input, sendBack }) => {
         const { dir, url, corsProxy } = input
-        console.log(dir, url, corsProxy)
+        const fs = new LightningFS("fs")
         git
           .clone({
             fs,
@@ -62,9 +80,19 @@ const actor = createActor(
             dir,
             url,
             corsProxy,
-            onProgress: (evt) => {
-              console.log(evt)
-              // mainThread.progress(evt)
+            onProgress: (event) => {
+              switch (event.phase) {
+                case "Counting objects":
+                  const { loaded, total } = event
+                  sendBack({ type: "objects.counting", param: { loaded, total } })
+                  break
+                case "Analyzing workdir":
+                  console.log(event)
+                  break
+                default:
+                  console.log(event)
+                  break
+              }
             },
             onMessage: (msg) => {
               console.log(msg)
@@ -79,8 +107,8 @@ const actor = createActor(
               // return mainThread.rejected({ url, auth })
             },
           })
-          .then((repo) => {})
-          .catch((err) => {})
+          .then((repo) => console.log(repo))
+          .catch((err) => console.log(err))
       }),
     },
   }),
@@ -95,7 +123,7 @@ actor.subscribe((state) => {
 })
 actor.start()
 addEventListener("message", ({ data: { type, param } }) => {
-  console.log("⚒️", { type, param })
+  console.log("[@lib/git]", "✨", JSON.stringify(type), { param })
   actor.send({ type, param })
 })
 //   listBranches: (args) => git.listBranches({ ...args, fs, dir }),
