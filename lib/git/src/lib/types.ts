@@ -3,7 +3,7 @@ export type Progress = {
   total: number
 }
 export type Complete = {
-  status: "success" | "error"
+  status: "success" | "error" | "process"
   message: string
 }
 export interface Context {

@@ -6,7 +6,14 @@ import { Buffer } from "buffer"
 import cloneMachine from "./machine/clone"
 
 self.Buffer = Buffer
-
+type Input = {
+  dir: string
+  url: string
+  corsProxy: string
+}
+export interface Context {
+  input: Input
+}
 const machine = setup({
   actions: {
     dir_ctx: assign(({ event, context }) => ({ input: { ...context.input, dir: event.params.dir } })),
@@ -15,6 +22,7 @@ const machine = setup({
   },
 }).createMachine({
   id: "git",
+  types: {} as {},
   context: {
     input: {
       dir: "/",
@@ -48,33 +56,49 @@ const actor = createActor(
     actors: {
       gitClone: cloneMachine.provide({
         actors: {
-          "git-clone": fromCallback(({ input, sendBack }) => {
-            const { dir, url, corsProxy } = input
-            const fs = new LightningFS("fs")
+          "git-clone": fromCallback(({ input, sendBack, system }) => {
+            const { dir, url, corsProxy, parent } = input
             git
               .clone({
-                fs,
+                fs: new LightningFS("fs"),
                 http,
                 dir,
                 url,
                 corsProxy,
                 onProgress: (event) => {
-                  switch (event.phase) {
-                    case "Counting objects":
-                      const { loaded, total } = event
-                      sendBack({ type: "objects.counting", params: { loaded, total } })
-                      break
-                    case "Analyzing workdir":
-                      console.log(event)
-                      break
-                    default:
-                      console.log(event)
-                      break
-                  }
+                  const parentState = parent.getSnapshot().value
+                  const params = { completed: event.loaded, total: event.total }
+                  const eventType = typeof parentState === "object" ? Object.values(parentState)[0] : parentState
+
+                  if (eventType !== event.phase) console.log(event.phase, event)
+
+                  sendBack({ type: eventType !== event.phase ? "next" : "progress.update", params })
                 },
-                onMessage: (msg) => {
-                  console.log(msg)
-                  // mainThread.print(msg)
+                onMessage: (message) => {
+                  if (message.startsWith("Counting objects:")) return
+                  // const regex = /Counting objects:.*?\(\d+\/(\d+)\)/
+                  else if (message.startsWith("Enumerating objects:")) {
+                    const regex = /Enumerating objects: (\d+), done\./
+                    const match = message.match(regex)
+                    const total = match ? parseInt(match[1]) : undefined
+                    sendBack({
+                      type: "clone",
+                      params: { total, completed: 0, message, status: "process" },
+                    })
+                  } else if (message.startsWith("Compressing objects:")) {
+                    const regex = /Compressing objects:.*?\(\d+\/(\d+)\)/
+                    const match = message.match(regex)
+                    const total = match ? parseInt(match[1]) : undefined
+                    sendBack({
+                      type: "compress",
+                      params: { total, completed: 0, message, status: "process" },
+                    })
+                  } else if (message.startsWith("Total"))
+                    sendBack({
+                      type: "update",
+                      params: { completed: 0, message, status: "process" },
+                    })
+                  else console.log(message)
                 },
                 onAuth: (url) => {
                   console.log(url)
@@ -83,6 +107,9 @@ const actor = createActor(
                 onAuthFailure: (url, auth) => {
                   console.log(url, auth)
                   // return mainThread.rejected({ url, auth })
+                },
+                onAuthSuccess: (url, auth) => {
+                  console.log(url, auth)
                 },
               })
               .then(() => sendBack({ type: "complete.success", params: { message: "cloned" } }))
@@ -108,8 +135,7 @@ actor.subscribe((state) => {
         },
       })
       actorClone.subscribe((stateClone) => {
-        console.log(stateClone)
-        console.log(state)
+        postMessage({ value: [value, stateClone.value], context: stateClone.context })
       })
     default:
       postMessage({ value, context })

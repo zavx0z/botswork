@@ -7,6 +7,9 @@
   let button: HTMLButtonElement
   let log: HTMLElement
 
+  let completeStatus = $state("")
+  let completeMessage = $state("")
+  let context: any = $state({})
   $effect(() => {
     // repo.value = "https://github.com/zavx0z/code-viewer.git"
     const worker = new GitWorker()
@@ -24,17 +27,25 @@
       })
     }
 
-    worker.addEventListener("message", ({ data: { value, context } }) => {
-      console.log("[@lib/git]", "💫", JSON.stringify(value), { ...context })
+    worker.addEventListener("message", ({ data: { value }, data }) => {
+      context = data.context
+      const { complete } = context
+      if (complete) {
+        completeStatus = complete.status
+        completeMessage = complete.message
+      }
+
       switch (value) {
         case "idle":
           log.textContent += "ready\n"
           repo.addEventListener("keydown", (e) => e.key === "Enter" && clone())
           button.addEventListener("click", clone)
-          break
-        case "cloned":
+          console.log("[@lib/git]", "💫", JSON.stringify(value), { ...context })
+        case "clone.progress":
+          // console.log("[@lib/git]", "💫", JSON.stringify(value), { ...context })
           break
         default:
+          console.log("[@lib/git]", "💫", JSON.stringify(value), { ...context })
           break
       }
     })
