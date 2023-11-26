@@ -15,7 +15,7 @@
       log.textContent = "CLONE:\n"
       worker.postMessage({
         type: "clone",
-        param: {
+        params: {
           // corsProxy: "https://cors.isomorphic-git.org",
           corsProxy: "http://localhost:3000",
           url: repo.value,
