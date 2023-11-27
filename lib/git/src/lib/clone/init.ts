@@ -1,43 +1,40 @@
-import { assign, createMachine, setup } from "xstate"
+import { assign, createMachine, sendParent, setup } from "xstate"
 
-const countingMachine = createMachine(
-  {
-    context: { progress: { completed: 0, total: 0 } },
-    initial: "processing",
-    types: {} as {
-      events: { type: "progress.update"; params: { completed: number; total: number } }
+const countingMachine = setup({
+  actions: {
+    progress_update: assign(({ event }) => ({ progress: { total: event.params.total, completed: event.params.completed } })),
+  },
+  guards: {
+    isComplete: ({ context }) => {
+      if (context.progress.completed && context.progress.total) {
+        return context.progress.completed === context.progress.total
+      }
+      return false
     },
-    states: {
-      processing: {
-        always: { target: "completed", guard: "isComplete" },
-        on: {
-          "progress.update": {
-            actions: [
-              "progress_update",
-              ({ event, self }) => {
-                console.log(self.id, event)
-              },
-            ],
-          },
+  },
+}).createMachine({
+  context: { progress: { completed: 0, total: 0 } },
+  initial: "processing",
+  types: {} as {
+    events: { type: "progress.update"; params: { completed: number; total: number } }
+  },
+  states: {
+    processing: {
+      always: { target: "completed", guard: "isComplete" },
+      on: {
+        "progress.update": {
+          actions: [
+            "progress_update",
+            ({ event, self, system }) => {
+              console.log(self.id, event)
+            },
+          ],
         },
       },
-      completed: { type: "final" },
     },
+    completed: { type: "final" },
   },
-  {
-    actions: {
-      progress_update: assign(({ event }) => ({ progress: { total: event.params.total, completed: event.params.completed } })),
-    },
-    guards: {
-      isComplete: ({ context }) => {
-        if (context.progress.completed && context.progress.total) {
-          return context.progress.completed === context.progress.total
-        }
-        return false
-      },
-    },
-  },
-)
+})
 
 export default setup({
   actors: {

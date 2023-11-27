@@ -143,12 +143,15 @@ actor.subscribe((state) => {
     case "clone":
       const actorClone = state.children["clone"]
       actorClone.subscribe({
-        complete() {
+        error: (error) => {
+          console.log("error", error)
+        },
+        next: (data) => {
+          postMessage({ value: [value, data.value], context: data.context })
+        },
+        complete: () => {
           console.log("complete", actorClone.getSnapshot().output)
         },
-      })
-      actorClone.subscribe((stateClone) => {
-        postMessage({ value: [value, stateClone.value], context: stateClone.context })
       })
     default:
       postMessage({ value, context })
