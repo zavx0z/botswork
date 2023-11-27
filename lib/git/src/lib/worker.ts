@@ -142,42 +142,42 @@ let prevState: StateValue
 const channel = new BroadcastChannel("git-clone-init-counting")
 actor.system.inspect({
   next: (value) => {
+    // @ts-ignore
+    const systemId = value.actorRef?.options?.systemId
     switch (value.type) {
       case "@xstate.event":
-        console.log("[event]", value.actorRef?.options?.systemId, value.event, value)
+        console.log("[event]", systemId, value.event, value)
         break
       case "@xstate.snapshot":
         switch (value.event.type) {
           case "progress.update":
-            // @ts-ignore
-            const systemId = value.actorRef?.options?.systemId
             switch (systemId) {
               case "git-clone-init-counting":
                 channel.postMessage({ event: value.event.type, context: value.snapshot.context })
                 break
               default:
-                console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+                console.log("[snapshot]", systemId, value.event, value)
                 break
             }
             break
           case "clone":
-            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            console.log("[snapshot]", systemId, value.event, value)
             break
           case "compress":
-            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            console.log("[snapshot]", systemId, value.event, value)
             break
           case "update":
-            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            console.log("[snapshot]", systemId, value.event, value)
             break
           case "complete.success":
-            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            console.log("[snapshot]", systemId, value.event, value)
             break
           default:
-            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            console.log("[snapshot]", systemId, value.event, value)
         }
         break
       case "@xstate.actor":
-        console.log("[actor]", value.actorRef?.options?.systemId, value.actorRef, value)
+        console.log("[actor]", systemId, value.actorRef, value)
         break
       default:
         console.log(`[sys: ${value.type}]`, value)

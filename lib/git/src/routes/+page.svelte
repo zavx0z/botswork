@@ -11,9 +11,8 @@
   let completeMessage = $state("")
   let context: any = $state({})
 
-  
   const logMessage = ({ target, data }: { target: any; data: any }) => {
-    console.log(target.name, "💫", { ...data.context })
+    console.log("💫", target.name, { ...data.context })
   }
 
   const channel = new BroadcastChannel("git-clone-init-counting")
