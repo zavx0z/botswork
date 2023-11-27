@@ -1,10 +1,10 @@
-import { createMachine, createActor, assign, type StateValue, fromCallback, setup, raise } from "xstate"
+import { sendTo, createActor, assign, type StateValue, fromCallback, setup, raise } from "xstate"
 import git from "isomorphic-git"
 import http from "isomorphic-git/http/web"
 import LightningFS from "@isomorphic-git/lightning-fs"
 import { Buffer } from "buffer"
-import cloneMachine from "./machine/clone"
-
+import cloneMachine from "./clone/clone"
+import gitInitMachine from "./clone/init"
 self.Buffer = Buffer
 type Input = {
   dir: string
@@ -44,8 +44,8 @@ const machine = setup({
         id: "clone",
         src: "gitClone",
         input: ({ context }) => ({ dir: context.input.dir, url: context.input.url, corsProxy: context.input.corsProxy }),
-        onDone: { target: "idle" },
-        onError: { target: "idle" },
+        onDone: { target: "idle", actions: () => console.log("done clone!!!!!!!!!!!!!") },
+        onError: { target: "idle", actions: () => console.log("done clone") },
       },
     },
     ready: {},
@@ -56,6 +56,7 @@ const actor = createActor(
     actors: {
       gitClone: cloneMachine.provide({
         actors: {
+          "git-clone-init": gitInitMachine,
           "git-clone": fromCallback(({ input, sendBack, system }) => {
             const { dir, url, corsProxy, parent } = input
             git
@@ -66,13 +67,24 @@ const actor = createActor(
                 url,
                 corsProxy,
                 onProgress: (event) => {
-                  const parentState = parent.getSnapshot().value
-                  const params = { completed: event.loaded, total: event.total }
-                  const eventType = typeof parentState === "object" ? Object.values(parentState)[0] : parentState
-
-                  if (eventType !== event.phase) console.log(event.phase, event)
-
-                  sendBack({ type: eventType !== event.phase ? "next" : "progress.update", params })
+                  const params: { completed: number; total: number } = { completed: event.loaded, total: event.total }
+                  let targetActor
+                  switch (event.phase) {
+                    case "Counting objects":
+                      targetActor = system.get("git-clone-init-counting")
+                      if (targetActor) targetActor.send({ type: "progress.update", params })
+                      break
+                    case "Compressing objects":
+                      targetActor = system.get("git-clone-init-compressing")
+                      if (targetActor) targetActor.send({ type: "progress.update", params })
+                      break
+                    default:
+                      // const parentState = parent.getSnapshot().value
+                      // const eventType = typeof parentState === "object" ? Object.values(parentState)[0] : parentState
+                      // if (eventType !== event.phase) console.log(event.phase, event)
+                      // sendBack({ type: eventType !== event.phase ? "next" : "progress.update", params })
+                      break
+                  }
                 },
                 onMessage: (message) => {
                   if (message.startsWith("Counting objects:")) return
@@ -86,13 +98,14 @@ const actor = createActor(
                       params: { total, completed: 0, message, status: "process" },
                     })
                   } else if (message.startsWith("Compressing objects:")) {
-                    const regex = /Compressing objects:.*?\(\d+\/(\d+)\)/
-                    const match = message.match(regex)
-                    const total = match ? parseInt(match[1]) : undefined
-                    sendBack({
-                      type: "compress",
-                      params: { total, completed: 0, message, status: "process" },
-                    })
+                    return
+                    //   const regex = /Compressing objects:.*?\(\d+\/(\d+)\)/
+                    //   const match = message.match(regex)
+                    //   const total = match ? parseInt(match[1]) : undefined
+                    //   sendBack({
+                    //     type: "compress",
+                    //     params: { total, completed: 0, message, status: "process" },
+                    //   })
                   } else if (message.startsWith("Total"))
                     sendBack({
                       type: "update",
