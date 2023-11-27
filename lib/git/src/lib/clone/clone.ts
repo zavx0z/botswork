@@ -12,10 +12,9 @@ export interface Context {
   progress?: Progress
   complete?: Complete
 }
-
 export default createMachine(
   {
-    id: "git-clone",
+    id: "git-clone[machine]",
     types: {} as {
       context: Context
       input: Input
@@ -23,20 +22,9 @@ export default createMachine(
     },
     context: ({ input }) => ({ input }),
     invoke: {
-      src: "git-clone",
+      src: "git-clone[callback]",
+      systemId: "git-clone[callback]",
       input: ({ context, self }) => ({ ...context.input, parent: self }),
-    },
-    on: {
-      // "complete.success": { target: ".complete", actions: ["complete_success_ctx"] },
-      // "complete.error": { target: ".complete", actions: ["complete_error_ctx"] },
-      // "Analyzing workdir": { target: ".Analyzing workdir", actions: ["progress_ctx"] },
-      // "Compressing objects": { target: ".Compressing objects", actions: ["progress_ctx"] },
-      // "Counting objects": { target: ".Counting objects", actions: ["progress_ctx"] },
-      // "Updating workdir": { target: ".Updating workdir", actions: ["progress_ctx"] },
-      // "Resolving deltas": { target: ".Resolving deltas", actions: ["progress_ctx"] },
-      // "Receiving objects": { target: ".Receiving objects", actions: ["progress_ctx"] },
-      // "*": { target: ".other", actions: ["progress_ctx"] },
-      // "progress.update": { actions: ["progress_ctx"] },
     },
     initial: "check",
     states: {
@@ -64,10 +52,10 @@ export default createMachine(
         invoke: {
           src: "git-clone-init",
           systemId: "git-clone-init",
-          onDone: { target: "completed", actions: () => console.log("done init!!!!!!!!!!!!!") },
+          onDone: { target: "complete", actions: () => console.log("done init!!!!!!!!!!!!!") },
         },
       },
-      completed: { type: "final" },
+      complete: { type: "final" },
       other: {
         entry: ({ event }) => console.log(event),
       },
@@ -77,12 +65,7 @@ export default createMachine(
       "Updating workdir": {},
       "Compressing objects": {},
       "Analyzing workdir": {},
-      // complete: {
-      //   entry: "progress_delete",
-      //   type: "final",
-      // },
     },
-    // output: ({ context }) => context.complete,
   },
   {
     actions: {
@@ -94,3 +77,14 @@ export default createMachine(
     },
   },
 )
+
+// "complete.success": { target: ".complete", actions: ["complete_success_ctx"] },
+// "complete.error": { target: ".complete", actions: ["complete_error_ctx"] },
+// "Analyzing workdir": { target: ".Analyzing workdir", actions: ["progress_ctx"] },
+// "Compressing objects": { target: ".Compressing objects", actions: ["progress_ctx"] },
+// "Counting objects": { target: ".Counting objects", actions: ["progress_ctx"] },
+// "Updating workdir": { target: ".Updating workdir", actions: ["progress_ctx"] },
+// "Resolving deltas": { target: ".Resolving deltas", actions: ["progress_ctx"] },
+// "Receiving objects": { target: ".Receiving objects", actions: ["progress_ctx"] },
+// "*": { target: ".other", actions: ["progress_ctx"] },
+// "progress.update": { actions: ["progress_ctx"] },

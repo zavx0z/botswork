@@ -10,6 +10,15 @@
   let completeStatus = $state("")
   let completeMessage = $state("")
   let context: any = $state({})
+
+  
+  const logMessage = ({ target, data }: { target: any; data: any }) => {
+    console.log(target.name, "💫", { ...data.context })
+  }
+
+  const channel = new BroadcastChannel("git-clone-init-counting")
+  channel.addEventListener("message", logMessage)
+
   $effect(() => {
     // repo.value = "https://github.com/zavx0z/code-viewer.git"
     const worker = new GitWorker()

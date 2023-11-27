@@ -20,7 +20,7 @@ const countingMachine = setup({
   },
   states: {
     processing: {
-      always: { target: "completed", guard: "isComplete" },
+      always: { target: "complete", guard: "isComplete" },
       on: {
         "progress.update": {
           actions: [
@@ -32,7 +32,7 @@ const countingMachine = setup({
         },
       },
     },
-    completed: { type: "final" },
+    complete: { type: "final" },
   },
 })
 
@@ -55,10 +55,10 @@ export default setup({
               invoke: {
                 src: "git-clone-init-counting",
                 systemId: "git-clone-init-counting",
-                onDone: { target: "completed" },
+                onDone: { target: "complete" },
               },
             },
-            completed: { type: "final" },
+            complete: { type: "final" },
           },
         },
         compressing: {
@@ -68,16 +68,16 @@ export default setup({
               invoke: {
                 src: "git-clone-init-compressing",
                 systemId: "git-clone-init-compressing",
-                onDone: { target: "completed" },
+                onDone: { target: "complete" },
               },
             },
-            completed: { type: "final" },
+            complete: { type: "final" },
           },
         },
       },
-      onDone: { target: "completed" },
+      onDone: { target: "complete" },
     },
-    completed: {
+    complete: {
       entry: () => console.log("entry"),
       type: "final",
     },

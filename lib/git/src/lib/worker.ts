@@ -41,8 +41,8 @@ const machine = setup({
     },
     clone: {
       invoke: {
-        id: "clone",
-        src: "gitClone",
+        systemId: "git-clone[machine]",
+        src: "git-clone[machine]",
         input: ({ context }) => ({ dir: context.input.dir, url: context.input.url, corsProxy: context.input.corsProxy }),
         onDone: { target: "idle", actions: () => console.log("done clone!!!!!!!!!!!!!") },
         onError: { target: "idle", actions: () => console.log("done clone") },
@@ -54,10 +54,9 @@ const machine = setup({
 const actor = createActor(
   machine.provide({
     actors: {
-      gitClone: cloneMachine.provide({
+      "git-clone[machine]": cloneMachine.provide({
         actors: {
-          "git-clone-init": gitInitMachine,
-          "git-clone": fromCallback(({ input, sendBack, system }) => {
+          "git-clone[callback]": fromCallback(({ input, sendBack, system }) => {
             const { dir, url, corsProxy, parent } = input
             git
               .clone({
@@ -128,31 +127,83 @@ const actor = createActor(
               .then(() => sendBack({ type: "complete.success", params: { message: "cloned" } }))
               .catch((err) => sendBack({ type: "complete.success", params: { message: JSON.stringify(err) } }))
           }),
+          "git-clone-init": gitInitMachine,
         },
       }),
     },
   }),
 )
+const actors = {
+  gitCloneInitCounting: "git-clone-init-counting",
+}
+
 // Message TO main thread
 let prevState: StateValue
+const channel = new BroadcastChannel("git-clone-init-counting")
+actor.system.inspect({
+  next: (value) => {
+    switch (value.type) {
+      case "@xstate.event":
+        console.log("[event]", value.actorRef?.options?.systemId, value.event, value)
+        break
+      case "@xstate.snapshot":
+        switch (value.event.type) {
+          case "progress.update":
+            // @ts-ignore
+            const systemId = value.actorRef?.options?.systemId
+            switch (systemId) {
+              case "git-clone-init-counting":
+                channel.postMessage({ event: value.event.type, context: value.snapshot.context })
+                break
+              default:
+                console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+                break
+            }
+            break
+          case "clone":
+            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            break
+          case "compress":
+            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            break
+          case "update":
+            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            break
+          case "complete.success":
+            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+            break
+          default:
+            console.log("[snapshot]", value.actorRef?.options?.systemId, value.event, value)
+        }
+        break
+      case "@xstate.actor":
+        console.log("[actor]", value.actorRef?.options?.systemId, value.actorRef, value)
+        break
+      default:
+        console.log(`[sys: ${value.type}]`, value)
+        break
+    }
+    // console.log("sys", value.event?.type, value)
+  },
+})
 actor.subscribe((state) => {
   const { value, context } = state
   // if (prevState !== value) {
   // prevState = value
   switch (value) {
     case "clone":
-      const actorClone = state.children["clone"]
-      actorClone.subscribe({
-        error: (error) => {
-          console.log("error", error)
-        },
-        next: (data) => {
-          postMessage({ value: [value, data.value], context: data.context })
-        },
-        complete: () => {
-          console.log("complete", actorClone.getSnapshot().output)
-        },
-      })
+    // const actorClone = state.children["clone"]
+    // actorClone.subscribe({
+    //   error: (error) => {
+    //     console.log("error", error)
+    //   },
+    //   next: (data) => {
+    //     postMessage({ value: [value, data.value], context: data.context })
+    //   },
+    //   complete: () => {
+    //     console.log("complete", actorClone.getSnapshot().output)
+    //   },
+    // })
     default:
       postMessage({ value, context })
       break
