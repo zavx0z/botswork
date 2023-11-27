@@ -1,27 +1,29 @@
 <script lang="ts">
-  import type { AnyActor, AnyState, AnyStateNode } from "xstate"
+  import type { AnyActor, AnyMachineSnapshot, AnyState, AnyStateNode } from "xstate"
   import { mockActorContext } from "./utils"
   import { useSelector } from "@xstate/svelte"
   import { rect } from "./getRect"
   import { getContext } from "svelte"
 
-  export let stateNode: AnyStateNode
-  export let parent: StateNodeDef | undefined = undefined
+  type Props = { stateNode: AnyStateNode; parent: StateNodeDef | undefined }
+  const { stateNode, parent } = $props<Props>()
   let entry: ActionsWithType
   let exit: ActionsWithType
-  $: {
+  $effect(() => {
     entry = stateNode.entry as ActionsWithType
     exit = stateNode.exit as ActionsWithType
-  }
+  })
   const service: AnyActor = getContext("service")
   let active: Boolean
   const machineState = useSelector(service, (state) => state.context.state)
-  $: active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === stateNode.id))
+  $effect(() => {
+    active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === stateNode.id))
+  })
 
   let preview = useSelector(service, (state) => {
     const { previewEvent, machine, state: machineState } = state.context
     if (!previewEvent) return false
-    const previewState: AnyState = machine.transition(machineState, { type: previewEvent }, mockActorContext)
+    const previewState: AnyMachineSnapshot = machine.transition(machineState, { type: previewEvent }, mockActorContext)
     return Boolean(previewState.configuration.find(({ id }) => id === stateNode.id))
   })
 

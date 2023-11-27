@@ -1,2 +1,2 @@
 export { renderCode, CodeRenderer } from "./main"
-export { default as SvelteCodeRenderer } from "./SvelteCodeRenderer.svelte"
+// export { default as SvelteCodeRenderer } from "./SvelteCodeRenderer.svelte"

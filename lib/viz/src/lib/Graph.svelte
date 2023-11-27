@@ -7,13 +7,13 @@
   import MachineViz from "./graph/MachineViz.svelte"
   import { getAllEdges } from "./graph/utils"
 
-  export let digraph: DirectedGraphNode
+  let { digraph } = $props<{ digraph: DirectedGraphNode }>()
   const elkActor = createActor(elkMachine, { input: { digraph } }).start()
-  const state = useSelector(elkActor, (state) => state)
+  const stateActor = useSelector(elkActor, (state) => state)
   const edges = useSelector(elkActor, (state) => getAllEdges(state.context.digraph))
 </script>
 
-{#if $state.matches("success")}
+{#if $stateActor.matches("success")}
   <GraphNode {elkActor} edges={$edges} />
 {:else}
   <MachineViz stateNode={digraph.stateNode} edges={$edges} />
