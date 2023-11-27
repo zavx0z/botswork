@@ -10,8 +10,7 @@
     return id
   }
   const isUnnamed = (id: string): boolean => /:invocation\[/.test(id)
-  export let eventType: string
-  //   console.log("event", eventType)
+  let {eventType} = $props<{eventType:string}>()
 </script>
 
 {#if eventType.startsWith("done.state.")}

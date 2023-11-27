@@ -8,8 +8,9 @@
   import { useSelector } from "@xstate/svelte"
   import ArrowMarker from "./ArrowMarker.svelte"
 
-  export let service: AnyActor
-  export let edge: Edge<any, any, any>
+  type Props = { service: AnyActor; edge: Edge<any, any, any> }
+  let { service, edge } = $props<Props>()
+
   let path: SvgPath | undefined
   let isActive = useSelector(service, (state) => state.context.state.configuration.includes(edge.source) || undefined)
   onMount(() => {
@@ -21,7 +22,7 @@
       targetRect = readRect(`${edge.target.id}`)
       if (edgeRect && targetRect) {
         const edgeCenterY = edgeRect.top + edgeRect.height / 2
-        path = getPath(edgeRect, targetRect)
+        // path = getPath(edgeRect, targetRect)
       }
     }
     updatePath()

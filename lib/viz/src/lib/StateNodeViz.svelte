@@ -1,30 +1,27 @@
 <script lang="ts">
-  import type { AnyActor, AnyMachineSnapshot, AnyState, AnyStateNode } from "xstate"
+  import type { AnyActor, AnyMachineSnapshot, AnyStateNode } from "xstate"
   import { mockActorContext } from "./utils"
   import { useSelector } from "@xstate/svelte"
   import { rect } from "./getRect"
   import { getContext } from "svelte"
 
-  type Props = { stateNode: AnyStateNode; parent: StateNodeDef | undefined }
+  type Props = { stateNode: AnyStateNode; parent?: StateNodeDef }
   const { stateNode, parent } = $props<Props>()
-  let entry: ActionsWithType
-  let exit: ActionsWithType
-  $effect(() => {
-    entry = stateNode.entry as ActionsWithType
-    exit = stateNode.exit as ActionsWithType
-  })
+
   const service: AnyActor = getContext("service")
   let active: Boolean
   const machineState = useSelector(service, (state) => state.context.state)
   $effect(() => {
-    active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === stateNode.id))
+    // active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === stateNode.id))
+    active = false
   })
 
   let preview = useSelector(service, (state) => {
     const { previewEvent, machine, state: machineState } = state.context
     if (!previewEvent) return false
     const previewState: AnyMachineSnapshot = machine.transition(machineState, { type: previewEvent }, mockActorContext)
-    return Boolean(previewState.configuration.find(({ id }) => id === stateNode.id))
+    return false
+    // return Boolean(previewState.configuration.find(({ id }) => id === stateNode.id))
   })
 
   const groupPosition = (node: HTMLElement) => {
@@ -72,12 +69,12 @@
         {/each}
       </div>
       <div data-type="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each entry as action}
+        {#each stateNode.entry as  action}
           <div>{action.type}</div>
         {/each}
       </div>
       <div data-type="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each exit as action}
+        {#each stateNode.exit as  action}
           <div>{action.type}</div>
         {/each}
       </div>

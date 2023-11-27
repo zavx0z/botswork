@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { AnyActor, AnyStateNode } from "xstate"
-  import TransitionViz from "../TransitionViz.svelte"
+  // import TransitionViz from "../TransitionViz.svelte"
   import { useSelector } from "@xstate/svelte"
   import StateNodeViz from "../StateNodeViz.svelte"
   import type { DirectedGraphEdge } from "@xstate/graph"
@@ -13,6 +13,6 @@
 {#if $stateNode}
   <StateNodeViz stateNode={$stateNode} />
 {/if}
-{#each edges as edge, idx (idx)}
-  <!-- <TransitionViz {edge} /> -->
-{/each}
+<!-- {#each edges as edge, idx (idx)}
+  <TransitionViz {edge} />
+{/each} -->
