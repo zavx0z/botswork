@@ -1,22 +1,40 @@
 <script lang="ts">
   import GitWorker from "$lib/worker?worker"
+  import { createActor, createMachine } from "xstate"
 
   let repo: HTMLInputElement
   let value = $state("https://github.com/zavx0z/code-viewer.git")
-
   let button: HTMLButtonElement
   let log: HTMLElement
 
-  let completeStatus = $state("")
-  let completeMessage = $state("")
-  let context: any = $state({})
+  let machine
+  let actor
 
-  const logMessage = ({ target, data }: { target: any; data: any }) => {
-    console.log("💫", target.name, { ...data.context })
-  }
 
-  const channel = new BroadcastChannel("git-clone-init-counting")
-  channel.addEventListener("message", logMessage)
+  const entanglement = new BroadcastChannel("git")
+  
+  
+  entanglement.addEventListener("message", ({ data }) => {
+    switch (data.type) {
+      case "event.init":
+        const { logic, options } = JSON.parse(data.params)
+        console.log("💫", data.type, options.systemId || logic.id)
+        machine = createMachine(logic)
+        actor = createActor(machine, options)
+        actor.subscribe((state) => {
+          // console.log("actor.subscribe", state)
+        })
+        actor.start()
+        break
+      case "snapshot.init":
+        const { state } = JSON.parse(data.params)
+        console.log("💫", data.type, state)
+        break
+      default:
+        console.log("💫", data)
+        break
+    }
+  })
 
   $effect(() => {
     // repo.value = "https://github.com/zavx0z/code-viewer.git"
@@ -36,24 +54,17 @@
     }
 
     worker.addEventListener("message", ({ data: { value }, data }) => {
-      context = data.context
-      const { complete } = context
-      if (complete) {
-        completeStatus = complete.status
-        completeMessage = complete.message
-      }
-
       switch (value) {
         case "idle":
           log.textContent += "ready\n"
           repo.addEventListener("keydown", (e) => e.key === "Enter" && clone())
           button.addEventListener("click", clone)
-          console.log("[@lib/git]", "💫", JSON.stringify(value), { ...context })
+          console.log("[@lib/git]", "💫", JSON.stringify(value), { ...data.context })
         case "clone.progress":
           // console.log("[@lib/git]", "💫", JSON.stringify(value), { ...context })
           break
         default:
-          console.log("[@lib/git]", "💫", JSON.stringify(value), { ...context })
+          console.log("[@lib/git]", "💫", JSON.stringify(value), { ...data.context })
           break
       }
     })

@@ -22,7 +22,6 @@ const machine = setup({
   },
 }).createMachine({
   id: "git",
-  types: {} as {},
   context: {
     input: {
       dir: "/",
@@ -132,55 +131,64 @@ const actor = createActor(
       }),
     },
   }),
+  {
+    systemId: "git",
+    state: {
+      status: "active",
+      value: "idle",
+      historyValue: {},
+      context: {
+        input: {
+          dir: "/",
+        },
+        output: {},
+        property: {},
+      },
+      children: {},
+    },
+  },
 )
-const actors = {
-  gitCloneInitCounting: "git-clone-init-counting",
-}
 
-// Message TO main thread
-let prevState: StateValue
-const channel = new BroadcastChannel("git-clone-init-counting")
+const entanglement = new BroadcastChannel("git")
 actor.system.inspect({
   next: (value) => {
     // @ts-ignore
     const systemId = value.actorRef?.options?.systemId
     switch (value.type) {
       case "@xstate.event":
-        console.log("[event]", systemId, value.event, value)
+        switch (value.event.type) {
+          case "xstate.init":
+            // console.log("[event]", value)
+            entanglement.postMessage({
+              type: "event.init",
+              // @ts-ignore
+              params: JSON.stringify({ logic: value.actorRef.logic.config, options: value.actorRef.options }),
+            })
+            break
+          default:
+            console.log("[event]", value)
+            break
+        }
         break
       case "@xstate.snapshot":
         switch (value.event.type) {
-          case "progress.update":
-            switch (systemId) {
-              case "git-clone-init-counting":
-                channel.postMessage({ event: value.event.type, context: value.snapshot.context })
-                break
-              default:
-                console.log("[snapshot]", systemId, value.event, value)
-                break
-            }
-            break
-          case "clone":
-            console.log("[snapshot]", systemId, value.event, value)
-            break
-          case "compress":
-            console.log("[snapshot]", systemId, value.event, value)
-            break
-          case "update":
-            console.log("[snapshot]", systemId, value.event, value)
-            break
-          case "complete.success":
-            console.log("[snapshot]", systemId, value.event, value)
+          case "xstate.init":
+            // console.log("[snapshot]", value)
+            entanglement.postMessage({
+              type: "snapshot.init",
+              // @ts-ignore
+              params: JSON.stringify({ state: actor.getPersistedState() }),
+            })
             break
           default:
-            console.log("[snapshot]", systemId, value.event, value)
+            // console.log("[snapshot]", value)
+            break
         }
-        break
       case "@xstate.actor":
-        console.log("[actor]", systemId, value.actorRef, value)
+        // console.log("[actor]", value)
         break
       default:
-        console.log(`[sys: ${value.type}]`, value)
+        // console.log(`[sys: ${value.type}]`, value)
         break
     }
     // console.log("sys", value.event?.type, value)
