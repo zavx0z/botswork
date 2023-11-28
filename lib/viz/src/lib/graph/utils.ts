@@ -76,9 +76,7 @@ export const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMa
 export function getElkChild(node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): StateElkNode {
   const nodeRect = getRect(node.id)
   const contentRect = readRect(`${node.id}:content`)
-  // fixme тут облава 5
-  //@ts-ignore
-  const edges = rMap[0].get(node.data) || []
+  const edges = rMap[0].get(node.stateNode) || []
   return {
     id: node.id,
     ...(!node.children.length ? { width: nodeRect?.width, height: nodeRect?.height } : undefined),
