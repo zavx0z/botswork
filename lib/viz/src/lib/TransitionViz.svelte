@@ -26,7 +26,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-  use:rect={edge.id}
+  use:rect={edge}
   use:setPosition={position}
   data-active={active}
   class="fixed"
