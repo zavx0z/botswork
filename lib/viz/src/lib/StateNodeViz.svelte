@@ -32,7 +32,7 @@
   }
   const nodeSize = (node: HTMLElement) => {
     if (stateNode.meta) {
-      // console.log(stateNode)
+      console.log(stateNode)
       node.style.width = `${stateNode.meta.layout.width}px`
       node.style.height = `${stateNode.meta.layout.height}px`
     }
@@ -70,13 +70,13 @@
         {/each}
       </div>
       <div data-type="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each stateNode.entry as action}
-          <div>{action.type}</div>
+        {#each stateNode.entry as entry}
+          <div>{entry}</div>
         {/each}
       </div>
       <div data-type="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each stateNode.exit as action}
-          <div>{action.type}</div>
+        {#each stateNode.exit as exit}
+          <div>{exit}</div>
         {/each}
       </div>
     </div>
