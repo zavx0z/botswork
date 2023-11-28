@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { StateNode } from "xstate"
+  import type { AnyStateNode, StateNode } from "xstate"
   import StateNodeViz from "../StateNodeViz.svelte"
-  import type { DirectedGraphEdge, AnyStateNode } from "@xstate/graph"
   import TransitionViz from "$lib/TransitionViz.svelte"
+  import type { DirectedGraphEdge } from "./directedGraph"
 
   let { edges, stateNode } = $props<{ edges: DirectedGraphEdge[]; stateNode: AnyStateNode }>()
   const stateNodeFixedType = stateNode as unknown as StateNode<any, any>

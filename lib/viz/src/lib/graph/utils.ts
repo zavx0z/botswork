@@ -1,8 +1,8 @@
 import { getRect, readRect } from "$lib/getRect"
-import type { DirectedGraphEdge, DirectedGraphNode } from "@xstate/graph"
 import type { ElkNode } from "elkjs"
 import type { StateNode } from "xstate"
 import type { RelativeNodeEdgeMap, StateElkNode } from "./types"
+import type { DirectedGraphEdge, DirectedGraphNode } from "./directedGraph"
 
 export function getAllEdges(digraph: DirectedGraphNode): DirectedGraphEdge[] {
   const edges: DirectedGraphEdge[] = []

@@ -1,10 +1,10 @@
 import { onRect } from "$lib/getRect"
-import type { DirectedGraphNode } from "@xstate/graph"
 import type { ElkEdgeSection, ElkNode, LayoutOptions } from "elkjs"
 import ELK from "elkjs"
 import type { StateNode } from "xstate"
 import type { StateElkEdge, StateElkNode } from "./types"
 import { getElkChild, getElkEdge, getRelativeNodeEdgeMap } from "./utils"
+import type { DirectedGraphNode } from "./directedGraph"
 
 const elk = new ELK({ defaultLayoutOptions: {} })
 const rootLayoutOptions: LayoutOptions = {

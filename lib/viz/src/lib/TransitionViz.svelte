@@ -6,15 +6,16 @@
   import type { Point } from "./pathUtils"
   import type { DirectedGraphEdge } from "./graph/directedGraph"
 
-  export let edge: DirectedGraphEdge
+  let { edge } = $props<{ edge: DirectedGraphEdge }>()
+  const service: SimulationActor = getContext("service")
+
   let definition = edge.transition
   let position: Point | undefined = edge.label ? { x: edge.label.x, y: edge.label.y } : undefined
   let active = false
-  const service: SimulationActor = getContext("service")
   let guard = (definition.guard || null) as { name: string } | null
   const setPosition = (node: HTMLElement, position: Point | undefined) => {
     if (position) {
-      console.log(position)
+      // console.log(position)
       node.style.left = `${position.x}px`
       node.style.top = `${position.y}px`
     }

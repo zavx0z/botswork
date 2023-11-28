@@ -7,19 +7,19 @@
 
   const { stateNode, parent } = $props<{ stateNode: AnyStateNode; parent?: StateNodeDef }>()
   const service: AnyActor = getContext("service")
-  let active: Boolean
+  let active: Boolean = false
   const machineState = useSelector(service, (state) => state.context.state)
 
-  $effect(() => {
-    // active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === stateNode.id))
-    active = false
-  })
+  // $effect(() => {
+  //   // active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === stateNode.id))
+  //   active = false
+  // })
 
   let preview = useSelector(service, (state) => {
     const { previewEvent, machine, state: machineState } = state.context
     if (!previewEvent) return false
     const previewState: AnyMachineSnapshot = machine.transition(machineState, { type: previewEvent }, mockActorContext)
-    console.log(previewState)
+    // console.log(previewState)
     return false
     // return Boolean(previewState.configuration.find(({ id }) => id === stateNode.id))
   })
@@ -32,7 +32,7 @@
   }
   const nodeSize = (node: HTMLElement) => {
     if (stateNode.meta) {
-      console.log(stateNode)
+      // console.log(stateNode)
       node.style.width = `${stateNode.meta.layout.width}px`
       node.style.height = `${stateNode.meta.layout.height}px`
     }

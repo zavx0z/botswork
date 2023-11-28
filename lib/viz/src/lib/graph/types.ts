@@ -1,7 +1,8 @@
 import type { Point } from "$lib/pathUtils"
-import type { DirectedGraphEdge, DirectedGraphNode } from "@xstate/graph"
+
 import type { ElkExtendedEdge, ElkNode } from "elkjs"
 import type { StateNode } from "xstate"
+import type { DirectedGraphEdge, DirectedGraphNode } from "./directedGraph"
 
 export type RelativeNodeEdgeMap = [Map<StateNode | undefined, DirectedGraphEdge[]>, Map<string, StateNode | undefined>]
 

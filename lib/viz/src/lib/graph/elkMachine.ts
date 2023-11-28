@@ -1,7 +1,7 @@
-import type { DirectedGraphNode } from "@xstate/graph"
 import { assign, createMachine, fromPromise } from "xstate"
 import { getElkGraph } from "./elk"
 import type { StateElkNode } from "./types"
+import type { DirectedGraphNode } from "./directedGraph"
 
 export default createMachine(
   {
