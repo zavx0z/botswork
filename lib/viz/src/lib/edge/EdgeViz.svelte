@@ -2,7 +2,7 @@
   import type { SvgPath } from "./pathUtils"
   import { getRect, onRect, readRect } from "../getRect"
   import { getPath, pathToD } from "./pathUtils"
-  import { getContext, onMount } from "svelte"
+  import { getContext } from "svelte"
   import type { AnyActor } from "xstate"
   import { useSelector } from "@xstate/svelte"
   import ArrowMarker from "../ArrowMarker.svelte"
@@ -14,22 +14,17 @@
   const service: AnyActor = getContext("service")
   let isActive = useSelector(service, (state) => state.context.state._nodes.includes(edge.source) || undefined)
 
-  onMount(() => {
-    let sourceRect = getRect(`${edge.source.id}`)
-    let edgeRect = getRect(edge.id)
-    let targetRect = getRect(`${edge.target.id}`)
+  $effect(() => {
     const updatePath = () => {
-      console.log("updating path")
-      sourceRect = getRect(`${edge.source.id}`)
-      edgeRect = getRect(edge.id)
-      targetRect = readRect(`${edge.target.id}`)
+      let sourceRect = getRect(`${edge.source.id}`)
+      let edgeRect = getRect(edge.id)
+      let targetRect = getRect(`${edge.target.id}`)
       if (edgeRect && targetRect && sourceRect) {
         const edgeCenterY = edgeRect.top + edgeRect.height / 2
         path = getPath(sourceRect, edgeRect, targetRect)
       }
     }
     updatePath()
-    // setInterval(updatePath, 1000)
     const edgeRectSub = onRect(`${edge.id}`, updatePath)
     return () => {
       edgeRectSub.unsubscribe()

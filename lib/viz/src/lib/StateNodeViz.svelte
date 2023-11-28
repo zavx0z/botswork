@@ -1,87 +1,73 @@
 <script lang="ts">
-  import type { AnyActor, AnyMachineSnapshot, AnyStateNode } from "xstate"
+  import type { AnyActor, AnyStateNode } from "xstate"
   import { mockActorContext } from "./utils"
-  import { useSelector } from "@xstate/svelte"
-  import { rect } from "./getRect"
+  import { deleteRect, setRect } from "./getRect"
   import { getContext } from "svelte"
 
   const { stateNode, parent } = $props<{ stateNode: AnyStateNode; parent?: StateNodeDef }>()
   const service: AnyActor = getContext("service")
 
-  let active: Boolean = $state(false)
-  const machineState = useSelector(service, (state) => state.context.state)
-  $effect(() => {
-    active = Boolean($machineState._nodes.find(({ id }: { id: string }) => id === stateNode.id))
+  let activeIds = $state(service.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
+  let previewIds: string[] = $state([])
+
+  service.subscribe((state) => {
+    activeIds = state.context.state._nodes.map((i: AnyStateNode) => i.id)
+    previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent }, mockActorContext)._nodes.map((i: AnyStateNode) => i.id) : []
   })
 
-  let preview = useSelector(service, (state) => {
-    const { previewEvent, machine, state: machineState } = state.context
-    if (!previewEvent) return false
-    const previewState: AnyMachineSnapshot = machine.transition(machineState, { type: previewEvent }, mockActorContext)
-    return Boolean(previewState._nodes.find(({ id }) => id === stateNode.id))
-  })
-
-  const groupPosition = (node: HTMLElement) => {
-    if (stateNode.meta) {
-      node.style.left = `${stateNode.meta.layout.x}px`
-      node.style.top = `${stateNode.meta.layout.y}px`
-    }
-  }
-  const nodeSize = (node: HTMLElement) => {
-    if (stateNode.meta) {
-      node.style.width = `${stateNode.meta.layout.width}px`
-      node.style.height = `${stateNode.meta.layout.height}px`
+  const size = (element: HTMLElement, node: AnyStateNode) => {
+    if (node.meta) {
+      element.style.left = `${node.meta.layout.x}px`
+      element.style.top = `${node.meta.layout.y}px`
+      element.style.width = `${node.meta.layout.width}px`
+      element.style.height = `${node.meta.layout.height}px`
+    } else setRect(element, node.id)
+    return {
+      destroy() {
+        deleteRect(node.id)
+      },
     }
   }
 </script>
 
-<!-- Группа stateNodeGroup -->
-<div class="absolute" use:groupPosition>
-  <!-- Нода stateNode-->
-  <div
-    use:rect={stateNode.id}
-    use:nodeSize
-    data-viz-parent-type={parent?.type}
-    data-active={active}
-    data-previewed={$preview}
-    title={`#${stateNode.id}`}
-    class="delay-400 self-start overflow-hidden rounded border-2 border-solid border-surface-700 text-primary-50 transition-colors data-[active=true]:border-primary-500 data-[previewed=true]:border-primary-500 data-[active=false]:opacity-60"
-  >
-    <!-- Контент stateNode-content-->
-    <div data-rect={`${stateNode.id}:content`} class="bg-surface-700 p-2 empty:hidden">
-      <!-- Заголовок ноды stateNode-header -->
-      <div class="bg-surface-700">
-        {#if ["history", "final"].includes(stateNode.type)}
-          <div
-            data-node-type={stateNode.type}
-            class="flex h-8 w-8 items-center justify-center rounded-md bg-tertiary-700 before:block before:font-bold data-[node-type=final]:before:content-['F'] data-[node-type=history]:before:content-['H']"
-          />
-        {/if}
-        <!-- Имя ноды stateNode-key -->
-        <div class="py-2 font-bold">{stateNode.key}</div>
+{#snippet state_(node)}
+  <div class="absolute text-primary-50" use:size={node}>
+    <div
+      title="#{node.id}"
+      data-active={activeIds.includes(node.id)}
+      data-preview={previewIds.includes(node.id)}
+      class="delay-400 h-full w-full self-start overflow-hidden rounded-lg border-2 border-solid border-surface-700 transition-colors data-[active=true]:border-primary-500 data-[preview=true]:border-primary-500 data-[active=false]:opacity-60"
+    >
+      <div data-rect={`${node.id}:content`} class="bg-surface-700 p-2 empty:hidden">
+        <div class="bg-surface-700">
+          {#if ["history", "final"].includes(node.type)}
+            <div
+              data-node-type={node.type}
+              class="flex h-8 w-8 items-center justify-center rounded-md bg-tertiary-700 before:block before:font-bold data-[node-type=final]:before:content-['F'] data-[node-type=history]:before:content-['H']"
+            />
+          {/if}
+          <div class="py-2 font-bold">{node.key}</div>
+        </div>
+        <div data-type="invoke" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
+          {#each node.invoke as invoke}
+            <div>{invoke.id}</div>
+          {/each}
+        </div>
+        <div data-type="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
+          {#each node.entry as entry}
+            <div>{entry}</div>
+          {/each}
+        </div>
+        <div data-type="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
+          {#each node.exit as exit}
+            <div>{exit}</div>
+          {/each}
+        </div>
       </div>
-      <div data-type="invoke" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each stateNode.invoke as invocation}
-          <div>{invocation.id}</div>
-        {/each}
-      </div>
-      <div data-type="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each stateNode.entry as entry}
-          <div>{entry}</div>
-        {/each}
-      </div>
-      <div data-type="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each stateNode.exit as exit}
-          <div>{exit}</div>
-        {/each}
-      </div>
+      {#each Object.entries(node.states) as [key, value] (key)}
+        {@render state_(value)}
+      {/each}
     </div>
-    {#if "states" in stateNode}
-      <div class="absolute left-0 top-0 flex flex-wrap gap-4 p-4 empty:hidden">
-        {#each Object.entries(stateNode.states) as [key, value] (key)}
-          <svelte:self parent={stateNode} stateNode={value} />
-        {/each}
-      </div>
-    {/if}
   </div>
-</div>
+{/snippet}
+{@render state_(stateNode)}

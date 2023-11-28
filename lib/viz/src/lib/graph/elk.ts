@@ -39,7 +39,8 @@ export async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> 
     const elkLca = lca && stateNodeToElkNodeMap.get(lca)!
 
     //@ts-ignore
-    const translatedSections: ElkEdgeSection[] = elkLca ? edge.sections.map((section) => ({
+    const translatedSections: ElkEdgeSection[] = elkLca
+      ? edge.sections.map((section) => ({
           ...section,
           startPoint: {
             x: section.startPoint.x + elkLca.absolutePosition.x,
@@ -64,7 +65,6 @@ export async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> 
   }
 
   const setLayout = (elkNode: StateElkNode, parent: StateElkNode | undefined) => {
-    //@ts-ignore
     stateNodeToElkNodeMap.set(elkNode.node.stateNode, elkNode)
     elkNode.absolutePosition = {
       x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
@@ -78,19 +78,14 @@ export async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> 
         y: elkNode.y!,
       },
     }
-
     elkNode.edges?.forEach((edge) => {
       setEdgeLayout(edge)
     })
-
     elkNode.children?.forEach((cn) => {
       setLayout(cn as StateElkNode, elkNode)
     })
   }
-
   ;(layoutElkNode.edges as StateElkEdge[])?.forEach(setEdgeLayout)
-
   setLayout(layoutElkNode.children![0] as StateElkNode, undefined)
-
   return layoutElkNode.children![0]
 }

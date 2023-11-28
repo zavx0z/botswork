@@ -28,7 +28,7 @@ export interface Edge<TContext extends MachineContext, TEvent extends AnyEventOb
 export function getChildren(stateNode: StateNode): StateNode[] {
   if (!stateNode.states) return []
   const children = Object.keys(stateNode.states).map((key) => stateNode.states[key])
-  // children.sort((a, b) => b.order - a.order)
+  children.sort((a, b) => b.order - a.order)
   return children
 }
 
