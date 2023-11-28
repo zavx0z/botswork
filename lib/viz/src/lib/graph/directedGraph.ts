@@ -4,7 +4,7 @@ export type JSONSerializable<T extends object, U> = T & {
   toJSON: () => U
 }
 
-export type DirectedGraphLabel = JSONSerializable<{ text: string }, { text: string }>
+export type DirectedGraphLabel = JSONSerializable<{ text: string; x: number; y: number }, { text: string }>
 export type DirectedGraphEdge = JSONSerializable<
   {
     id: string
@@ -38,6 +38,8 @@ export function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): D
           transition: t,
           label: {
             text: t.eventType,
+            x: 0,
+            y: 0,
             toJSON: () => ({ text: t.eventType }),
           },
           toJSON: () => {

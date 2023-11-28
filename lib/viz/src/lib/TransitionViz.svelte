@@ -3,21 +3,15 @@
   import { rect } from "./getRect"
   import EventTypeViz from "./EventTypeViz.svelte"
   import { getContext } from "svelte"
-  import type { DirectedGraphEdge } from "@xstate/graph"
   import type { Point } from "./pathUtils"
+  import type { DirectedGraphEdge } from "./graph/directedGraph"
 
   export let edge: DirectedGraphEdge
   let definition = edge.transition
-  //@ts-ignore
   let position: Point | undefined = edge.label ? { x: edge.label.x, y: edge.label.y } : undefined
-
   let active = false
-
   const service: SimulationActor = getContext("service")
-  // console.log(definition)
-  //@ts-ignore
   let guard = (definition.guard || null) as { name: string } | null
-
   const setPosition = (node: HTMLElement, position: Point | undefined) => {
     if (position) {
       console.log(position)
@@ -26,7 +20,6 @@
     }
   }
   // class="flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
-
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
