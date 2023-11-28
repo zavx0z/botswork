@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { toDirectedGraph, type DirectedGraphNode } from "@xstate/graph"
   import { Editor } from "@lib/editor"
   import { parseMachines } from "$lib/editor/parseMachine"
   import { stringify } from "javascript-stringify"
+  import { toDirectedGraph } from "$lib/graph/directedGraph.js"
 
   export let data
 

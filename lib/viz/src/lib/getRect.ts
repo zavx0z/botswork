@@ -9,7 +9,7 @@ if (browser) {
     document.querySelectorAll("[data-rect]").forEach((el) => {
       const rectId = (el as HTMLElement).dataset.rect!
       // console.log(rectId)
-      readRect(rectId)
+      // readRect(rectId)
     })
 
     requestAnimationFrame(run)
@@ -31,9 +31,11 @@ export function rectsEqual(a: DOMRect, b: DOMRect): boolean {
 export const setRect = (el: HTMLElement, id: string) => {
   const prevRect = getRect(id)
   el.dataset.rect = id
-  const rect = el.getBoundingClientRect()
-  rectMap.set(id, rect)
-  if (!prevRect || !rectsEqual(prevRect, rect)) rectListenersMap.get(id)?.forEach((listener) => listener(rect))
+  const boundingClientRect = el.getBoundingClientRect()
+  rectMap.set(id, boundingClientRect)
+  if (!prevRect || !rectsEqual(prevRect, boundingClientRect)) {
+    rectListenersMap.get(id)?.forEach((listener) => listener(boundingClientRect))
+  }
 }
 
 export const deleteRect = (id: string) => {
@@ -41,11 +43,11 @@ export const deleteRect = (id: string) => {
   rectListenersMap.get(id)?.forEach((listener) => listener(undefined))
 }
 
-export const rect = (node: HTMLElement, id: string) => {
-  setRect(node, id)
+export const rect = (node: HTMLElement, stateNode: any) => {
+  if (!stateNode.meta) setRect(node, stateNode.id)
   return {
     destroy() {
-      deleteRect(id)
+      deleteRect(stateNode.id)
     },
   }
 }

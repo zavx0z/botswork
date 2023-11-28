@@ -8,6 +8,7 @@
   import { getAllEdges } from "./graph/utils"
 
   let { digraph } = $props<{ digraph: DirectedGraphNode }>()
+  // $effect(() => console.log(digraph))
   const elkActor = createActor(elkMachine, { input: { digraph } }).start()
   const stateActor = useSelector(elkActor, (state) => state)
   const edges = useSelector(elkActor, (state) => getAllEdges(state.context.digraph))

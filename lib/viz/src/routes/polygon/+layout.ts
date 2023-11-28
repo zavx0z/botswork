@@ -1,6 +1,6 @@
 import { createMachine } from "xstate"
 import type { LayoutLoad } from "./$types"
-import { toDirectedGraph, type DirectedGraphNode } from "@xstate/graph"
+import { toDirectedGraph, type DirectedGraphNode } from "$lib/graph/directedGraph"
 
 export const load: LayoutLoad = async () => {
   const machine = createMachine(

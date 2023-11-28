@@ -1,10 +1,9 @@
 import { createMachine } from "xstate"
 import type { PageServerLoad } from "./$types"
-import { Window } from "happy-dom"
-import { toDirectedGraph, type DirectedGraphNode } from "@xstate/graph"
 import { stringify } from "javascript-stringify"
 import { img } from "./img"
 import { renderCode } from "@lib/code"
+import { toDirectedGraph, type DirectedGraphNode } from "$lib/graph/directedGraph"
 const machine = createMachine(
   {
     context: {

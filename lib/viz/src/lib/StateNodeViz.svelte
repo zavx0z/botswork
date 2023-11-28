@@ -5,12 +5,11 @@
   import { rect } from "./getRect"
   import { getContext } from "svelte"
 
-  type Props = { stateNode: AnyStateNode; parent?: StateNodeDef }
-  const { stateNode, parent } = $props<Props>()
-
+  const { stateNode, parent } = $props<{ stateNode: AnyStateNode; parent?: StateNodeDef }>()
   const service: AnyActor = getContext("service")
   let active: Boolean
   const machineState = useSelector(service, (state) => state.context.state)
+
   $effect(() => {
     // active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === stateNode.id))
     active = false
@@ -20,6 +19,7 @@
     const { previewEvent, machine, state: machineState } = state.context
     if (!previewEvent) return false
     const previewState: AnyMachineSnapshot = machine.transition(machineState, { type: previewEvent }, mockActorContext)
+    console.log(previewState)
     return false
     // return Boolean(previewState.configuration.find(({ id }) => id === stateNode.id))
   })
@@ -32,6 +32,7 @@
   }
   const nodeSize = (node: HTMLElement) => {
     if (stateNode.meta) {
+      console.log(stateNode)
       node.style.width = `${stateNode.meta.layout.width}px`
       node.style.height = `${stateNode.meta.layout.height}px`
     }
@@ -42,7 +43,7 @@
 <div class="absolute" use:groupPosition>
   <!-- Нода stateNode-->
   <div
-    use:rect={stateNode.id}
+    use:rect={stateNode}
     use:nodeSize
     data-viz-parent-type={parent?.type}
     data-active={active}
@@ -69,12 +70,12 @@
         {/each}
       </div>
       <div data-type="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each stateNode.entry as  action}
+        {#each stateNode.entry as action}
           <div>{action.type}</div>
         {/each}
       </div>
       <div data-type="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each stateNode.exit as  action}
+        {#each stateNode.exit as action}
           <div>{action.type}</div>
         {/each}
       </div>

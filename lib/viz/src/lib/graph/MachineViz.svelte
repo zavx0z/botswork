@@ -3,8 +3,7 @@
   import StateNodeViz from "../StateNodeViz.svelte"
   import type { DirectedGraphEdge, AnyStateNode } from "@xstate/graph"
 
-  type Props = { edges: DirectedGraphEdge[]; stateNode: AnyStateNode }
-  let { edges, stateNode } = $props<Props>()
+  let { edges, stateNode } = $props<{ edges: DirectedGraphEdge[]; stateNode: AnyStateNode }>()
   const stateNodeFixedType = stateNode as unknown as StateNode<any, any>
 </script>
 

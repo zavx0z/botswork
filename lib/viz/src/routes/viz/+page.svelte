@@ -4,7 +4,7 @@
   import { setContext } from "svelte"
   import { Editor } from "@lib/editor"
 
-  export let data: PageData
+  let { data } = $props<{ data: PageData }>()
   setContext("service", data.service)
   const visibleEditor = false
   let content = `const machine = createMachine(

@@ -5,8 +5,7 @@
   import StateNodeViz from "../StateNodeViz.svelte"
   import type { DirectedGraphEdge } from "@xstate/graph"
 
-  export let elkActor: AnyActor
-  export let edges: DirectedGraphEdge[]
+  let { elkActor, edges } = $props<{ elkActor: AnyActor; edges: DirectedGraphEdge[] }>()
   const stateNode = useSelector<any, AnyStateNode, any>(elkActor, (state) => state.context.elkGraph?.node?.stateNode)
 </script>
 

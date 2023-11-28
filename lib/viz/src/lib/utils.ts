@@ -1,7 +1,7 @@
-import { createEmptyActor, type AnyActorContext } from "xstate"
+import { createEmptyActor, type AnyActorScope } from "xstate"
 import type { AnyEventObject, MachineContext, StateNode, TransitionDefinition } from "xstate"
 
-export const createMockActorContext = (): AnyActorContext => {
+export const createMockActorContext = (): AnyActorScope => {
   const emptyActor = createEmptyActor()
   return {
     self: emptyActor,
@@ -13,7 +13,7 @@ export const createMockActorContext = (): AnyActorContext => {
     stopChild: () => {},
   }
 }
-export const mockActorContext: AnyActorContext = createMockActorContext()
+export const mockActorContext: AnyActorScope = createMockActorContext()
 export function flatten<T>(array: Array<T | T[]>): T[] {
   return ([] as T[]).concat(...array)
 }
@@ -28,7 +28,7 @@ export interface Edge<TContext extends MachineContext, TEvent extends AnyEventOb
 export function getChildren(stateNode: StateNode): StateNode[] {
   if (!stateNode.states) return []
   const children = Object.keys(stateNode.states).map((key) => stateNode.states[key])
-  children.sort((a, b) => b.order - a.order)
+  // children.sort((a, b) => b.order - a.order)
   return children
 }
 
@@ -45,7 +45,7 @@ export function getEdges(stateNode: StateNode): Array<Edge<any, any, any>> {
             source: stateNode,
             target,
             transition: t,
-            order
+            order,
           })
         })
       })

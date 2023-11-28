@@ -27,7 +27,7 @@ export default createMachine(
           input: ({ context }) => context.digraph,
           onDone: {
             target: "success",
-            actions: assign({ elkGraph: ({ event: { output } }: { event: { output: StateElkNode } }) => output }),
+            actions: assign({ elkGraph: ({ event: { output } }) => output }),
           },
         },
       },

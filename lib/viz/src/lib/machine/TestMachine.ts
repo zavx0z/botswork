@@ -1,5 +1,5 @@
 import { createMachine, fromCallback } from "xstate"
-type Events = { type: "INC"; value: number } | { type: "ROOT.EVENT" } | { type: "EVENT" } | { type: "NEXT" } | { type: "PREV" }
+type Events = { type: "INC"; value: number } | { type: "ROOT.EVENT" } | { type: "EVENT" } | { type: "NEXT" } | { type: "PREV" } | { type: "SELF" } | { type: "TO_PARALLEL" }
 
 export default createMachine(
   {
@@ -32,6 +32,7 @@ export default createMachine(
               return true
             },
           },
+          SELF: ".",
         },
       },
       compound: {
@@ -72,13 +73,24 @@ export default createMachine(
                 history: "deep",
               },
             },
+            on: {
+              TO_PARALLEL: "#parallel",
+            },
           },
+        },
+        on: {
+          SELF: ".",
         },
       },
       parallel: {
+        id: "parallel",
         type: "parallel",
         states: {
-          three: {},
+          three: {
+            on: {
+              SELF: ".",
+            },
+          },
           four: {},
           five: {},
         },
