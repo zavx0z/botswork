@@ -1,6 +1,9 @@
 <script lang="ts">
-  export const toDelayString = (delay: string | number): string => (typeof delay === "number" || !isNaN(+delay) ? `${delay}ms` : delay)
-  export const formatInvocationId = (id: string): string => {
+  let { eventType } = $props<{ eventType: string }>()
+
+  const toDelayString = (delay: string | number): string => (typeof delay === "number" || !isNaN(+delay) ? `${delay}ms` : delay)
+  const isUnnamed = (id: string): boolean => /:invocation\[/.test(id)
+  const formatInvocationId = (id: string): string => {
     if (isUnnamed(id)) {
       const match = id.match(/:invocation\[(\d+)\]$/)
       if (!match) return id
@@ -9,8 +12,6 @@
     }
     return id
   }
-  const isUnnamed = (id: string): boolean => /:invocation\[/.test(id)
-  let {eventType} = $props<{eventType:string}>()
 </script>
 
 {#if eventType.startsWith("done.state.")}
