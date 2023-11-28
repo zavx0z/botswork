@@ -1,5 +1,5 @@
 import { browser } from "$app/environment"
-import type { AnyStateNode } from "xstate"
+import type { DirectedGraphEdge } from "./graph/directedGraph"
 
 export const rectMap: Map<string, DOMRect> = new Map()
 type RectListener = (rect: DOMRect | undefined) => void
@@ -44,7 +44,7 @@ export const deleteRect = (id: string) => {
   rectListenersMap.get(id)?.forEach((listener) => listener(undefined))
 }
 
-export const rect = (node: HTMLElement, stateNode: AnyStateNode) => {
+export const rect = (node: HTMLElement, stateNode: DirectedGraphEdge) => {
   if (!stateNode.meta) setRect(node, stateNode.id)
   return {
     destroy() {
