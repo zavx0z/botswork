@@ -39,9 +39,7 @@ export function getRelativeNodeEdgeMap(digraph: DirectedGraphNode): RelativeNode
   edges.forEach((edge) => {
     //@ts-ignore
     const lca = getLCA(edge.source, edge.target)
-
     if (!map.has(lca)) map.set(lca, [])
-
     map.get(lca)!.push(edge)
     edgeMap.set(edge.id, lca)
   })
@@ -71,7 +69,11 @@ export function getElkEdge(edge: DirectedGraphEdge) {
   }
 }
 
-export const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode) => getElkChild(childNode, rMap))
+export const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => {
+  return node.children.map((childNode) => {
+    return getElkChild(childNode, rMap)
+  })
+}
 
 export function getElkChild(node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): StateElkNode {
   const nodeRect = getRect(node.id)

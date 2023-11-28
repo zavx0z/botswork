@@ -59,9 +59,7 @@ export async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> 
       : edge.sections
     //@ts-ignore
     edge.edge.sections = translatedSections
-    //@ts-ignore
     edge.edge.label.x = (edge.labels?.[0].x || 0) + (elkLca?.absolutePosition.x || 0)
-    //@ts-ignore
     edge.edge.label.y = (edge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
   }
 

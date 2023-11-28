@@ -7,21 +7,18 @@
 
   const { stateNode, parent } = $props<{ stateNode: AnyStateNode; parent?: StateNodeDef }>()
   const service: AnyActor = getContext("service")
-  let active: Boolean = false
-  const machineState = useSelector(service, (state) => state.context.state)
 
-  // $effect(() => {
-  //   // active = Boolean($machineState.configuration.find(({ id }: { id: string }) => id === stateNode.id))
-  //   active = false
-  // })
+  let active: Boolean = $state(false)
+  const machineState = useSelector(service, (state) => state.context.state)
+  $effect(() => {
+    active = Boolean($machineState._nodes.find(({ id }: { id: string }) => id === stateNode.id))
+  })
 
   let preview = useSelector(service, (state) => {
     const { previewEvent, machine, state: machineState } = state.context
     if (!previewEvent) return false
     const previewState: AnyMachineSnapshot = machine.transition(machineState, { type: previewEvent }, mockActorContext)
-    // console.log(previewState)
-    return false
-    // return Boolean(previewState.configuration.find(({ id }) => id === stateNode.id))
+    return Boolean(previewState._nodes.find(({ id }) => id === stateNode.id))
   })
 
   const groupPosition = (node: HTMLElement) => {
@@ -32,7 +29,6 @@
   }
   const nodeSize = (node: HTMLElement) => {
     if (stateNode.meta) {
-      console.log(stateNode)
       node.style.width = `${stateNode.meta.layout.width}px`
       node.style.height = `${stateNode.meta.layout.height}px`
     }
@@ -43,7 +39,7 @@
 <div class="absolute" use:groupPosition>
   <!-- Нода stateNode-->
   <div
-    use:rect={stateNode}
+    use:rect={stateNode.id}
     use:nodeSize
     data-viz-parent-type={parent?.type}
     data-active={active}
@@ -62,7 +58,7 @@
           />
         {/if}
         <!-- Имя ноды stateNode-key -->
-        <div class="p-2 font-bold">{stateNode.key}</div>
+        <div class="py-2 font-bold">{stateNode.key}</div>
       </div>
       <div data-type="invoke" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
         {#each stateNode.invoke as invocation}

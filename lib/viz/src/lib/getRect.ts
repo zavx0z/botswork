@@ -1,18 +1,17 @@
 import { browser } from "$app/environment"
-import type { DirectedGraphEdge } from "./graph/directedGraph"
 
 export const rectMap: Map<string, DOMRect> = new Map()
 type RectListener = (rect: DOMRect | undefined) => void
 const rectListenersMap = new Map<string, Set<RectListener>>()
 if (browser) {
   ;(window as any).rectMap = rectMap
+
   const run = () => {
     document.querySelectorAll("[data-rect]").forEach((el) => {
       const rectId = (el as HTMLElement).dataset.rect!
       // console.log(rectId)
       // readRect(rectId)
     })
-
     requestAnimationFrame(run)
   }
   requestAnimationFrame(run)
@@ -44,11 +43,11 @@ export const deleteRect = (id: string) => {
   rectListenersMap.get(id)?.forEach((listener) => listener(undefined))
 }
 
-export const rect = (node: HTMLElement, stateNode: DirectedGraphEdge) => {
-  if (!stateNode.meta) setRect(node, stateNode.id)
+export const rect = (node: HTMLElement, id: string) => {
+  setRect(node, id)
   return {
     destroy() {
-      deleteRect(stateNode.id)
+      deleteRect(id)
     },
   }
 }

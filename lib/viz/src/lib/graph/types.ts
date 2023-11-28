@@ -1,4 +1,4 @@
-import type { Point } from "$lib/pathUtils"
+import type { Point } from "$lib/edge/pathUtils"
 
 import type { ElkExtendedEdge, ElkNode } from "elkjs"
 import type { StateNode } from "xstate"
