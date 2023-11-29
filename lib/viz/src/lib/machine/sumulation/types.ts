@@ -1,7 +1,7 @@
-import type { Actor, ActorLogic, AnyStateMachine, AnyStateNodeConfig, AnyTransitionDefinition } from "xstate"
+import type { Actor, ActorLogic, AnyStateMachine, AnyStateNodeConfig, AnyTransitionDefinition, EventDescriptor } from "xstate"
 
 export type SimulationEvents =
-  | { type: "EVENT"; event: AnyTransitionDefinition }
+  | { type: "EVENT"; event: EventDescriptor<any>  }
   | { type: "EVENT.PREVIEW"; eventType: AnyTransitionDefinition }
   | { type: "STATE.UPDATE"; state: AnyStateNodeConfig }
   | { type: "MACHINE.UPDATE"; machine: AnyStateMachine }
