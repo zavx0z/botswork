@@ -9,6 +9,8 @@
   import TransitionViz from "./event/TransitionViz.svelte"
   import EdgeViz from "./edge/EdgeViz.svelte"
 
+  const service: AnyActor = getContext("service")
+  const machine = service.getSnapshot().context.machine.root
   let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
   let nodes = $state<{ [key: string]: AnyStateNode }>({})
 
@@ -60,18 +62,7 @@
       sections: [],
     }
   }
-  function getAllEdges(digraph: DirectedGraphNode): DirectedGraphEdge[] {
-    const edges: DirectedGraphEdge[] = []
-    const getEdgesRecursive = (dnode: DirectedGraphNode) => {
-      // dnode.edges.forEach((i) => console.log(i.label))
-      edges.push(...dnode.edges)
-      dnode.children.forEach(getEdgesRecursive)
-    }
-    getEdgesRecursive(digraph)
-    return edges
-  }
   function getRelativeNodeEdgeMap(digraph: DirectedGraphNode): RelativeNodeEdgeMap {
-    const edges = getAllEdges(digraph)
     const map: RelativeNodeEdgeMap[0] = new Map()
     const edgeMap: RelativeNodeEdgeMap[1] = new Map()
     const getLCA = (a: StateNode, b: StateNode): StateNode | undefined => {
@@ -90,7 +81,8 @@
       //@ts-ignore
       return a.machine // root
     }
-    edges.forEach((edge) => {
+
+    Object.values(edges).forEach((edge) => {
       //@ts-ignore
       const lca = getLCA(edge.source, edge.target)
       if (!map.has(lca)) map.set(lca, [])
@@ -102,6 +94,7 @@
   async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> {
     const rMap = getRelativeNodeEdgeMap(digraph)
     const rootEdges = rMap[0].get(undefined) || []
+
     const elkNode: ElkNode = {
       id: "root",
       edges: rootEdges.map(getElkEdge),
@@ -113,6 +106,7 @@
       },
     }
     const layoutElkNode = await elk.layout(elkNode)
+
     const stateNodeToElkNodeMap = new Map<StateNode, StateElkNode>()
     const setEdgeLayout = (edge: StateElkEdge) => {
       const lca = rMap[1].get(edge.id)
@@ -181,9 +175,6 @@
     setLayout(layoutElkNode.children![0] as StateElkNode, undefined)
     return layoutElkNode.children![0]
   }
-
-  const service: AnyActor = getContext("service")
-  const machine = service.getSnapshot().context.machine.root
 
   export function flatten<T>(array: Array<T | T[]>): T[] {
     return ([] as T[]).concat(...array)
