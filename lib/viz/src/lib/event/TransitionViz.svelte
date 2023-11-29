@@ -10,7 +10,9 @@
   let definition = edge.transition
   let active = false
   let guard = (definition.guard || null) as { name: string } | null
-
+  $effect(() => {
+    console.log(edge.label)
+  })
   const setPosition = (element: HTMLElement, edge: DirectedGraphEdge) => {
     const { width, height } = element.getBoundingClientRect()
     edge.label.width = width

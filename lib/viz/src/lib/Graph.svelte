@@ -9,6 +9,8 @@
   import { getRect, readRect } from "./getRect"
   import TransitionViz from "./event/TransitionViz.svelte"
 
+  let edges = $state<DirectedGraphEdge[]>([])
+
   const elk = new ELK({ defaultLayoutOptions: {} })
 
   const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => {
@@ -114,7 +116,13 @@
     const stateNodeToElkNodeMap = new Map<StateNode, StateElkNode>()
     const setEdgeLayout = (edge: StateElkEdge) => {
       const lca = rMap[1].get(edge.id)
+
       const elkLca = lca && stateNodeToElkNodeMap.get(lca)!
+      const targetEdge = edges.find((i) => i.id === edge.id)
+      if (targetEdge && elkLca) {
+        targetEdge.label.x = elkLca.x || 0
+        targetEdge.label.y = elkLca.y || 0
+      }
       //@ts-ignore
       const translatedSections: ElkEdgeSection[] = elkLca
         ? //@ts-ignore
@@ -171,7 +179,6 @@
 
   const service: AnyActor = getContext("service")
   const machine = service.getSnapshot().context.machine.root
-  let edges = $state<DirectedGraphEdge[]>([])
   let node = $state<AnyStateNode>()
 
   export function flatten<T>(array: Array<T | T[]>): T[] {
