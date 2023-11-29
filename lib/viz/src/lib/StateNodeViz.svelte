@@ -23,6 +23,12 @@
       element.style.height = `${node.meta.layout.height}px`
     } else setRect(element, node.id)
     return {
+      update(node: AnyStateNode) {
+        element.style.left = `${node.meta.layout.x}px`
+        element.style.top = `${node.meta.layout.y}px`
+        element.style.width = `${node.meta.layout.width}px`
+        element.style.height = `${node.meta.layout.height}px`
+      },
       destroy() {
         deleteRect(node.id)
       },

@@ -218,16 +218,15 @@
   })
 </script>
 
+<StateNodeViz stateNode={node ? node : machine} {edges} />
 {#if node}
   {#each edges as edge (edge.id)}
     <TransitionViz {edge} />
   {/each}
-  <StateNodeViz stateNode={node} {edges} />
 {:else}
   {#each edges as edge (edge.id)}
     <TransitionViz {edge} />
   {/each}
-  <StateNodeViz stateNode={machine} {edges} />
 {/if}
 <!-- <svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
     {#each edges as edge, order (edge.id)}
