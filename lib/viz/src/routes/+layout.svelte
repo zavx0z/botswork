@@ -9,7 +9,7 @@
 <svelte:head>
   <title>@lib/viz</title>
 </svelte:head>
-<Activity>
+<!-- <Activity>
   <div>
     <Button href="/" label="главная" active={$page.url.pathname === "/"}>
       <BotikIcon />
@@ -38,6 +38,6 @@
     </Button>
   </div>
 </Activity>
-<div class="ml-12">
+<div class="ml-12"> -->
   <slot />
-</div>
+<!-- </div> -->
