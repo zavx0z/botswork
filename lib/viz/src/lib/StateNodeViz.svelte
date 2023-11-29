@@ -3,16 +3,11 @@
   import { mockActorContext } from "./utils"
   import { deleteRect, setRect } from "./getRect"
   import { getContext } from "svelte"
-  import { toDirectedGraph, type DirectedGraphEdge } from "./graph/directedGraph"
-  import { getAllEdges } from "./graph/utils"
+  import type { DirectedGraphEdge } from "./graph/directedGraph"
   import TransitionViz from "./event/TransitionViz.svelte"
 
-  const { stateNode, edges } = $props<{ stateNode: AnyStateNode; edges:  DirectedGraphEdge[]  }>()
+  const { stateNode, edges } = $props<{ stateNode: AnyStateNode; edges: DirectedGraphEdge[] }>()
   const service: AnyActor = getContext("service")
-
-  const { context } = service.getSnapshot()
-  let digraph = toDirectedGraph(context.machine.root)
-  // const edges = getAllEdges(digraph)
 
   let activeIds = $state(service.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
   let previewIds: string[] = $state([])
@@ -36,6 +31,7 @@
     }
   }
 </script>
+
 {#each edges as edge (edge.id)}
   <TransitionViz {edge} />
 {/each}

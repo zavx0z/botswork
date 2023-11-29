@@ -1,5 +1,5 @@
-import { createEmptyActor, type AnyActorScope } from "xstate"
-import type { AnyEventObject, MachineContext, StateNode, TransitionDefinition } from "xstate"
+import { createEmptyActor } from "xstate"
+import type { AnyEventObject, AnyActorScope, MachineContext, StateNode, TransitionDefinition } from "xstate"
 
 export const createMockActorContext = (): AnyActorScope => {
   const emptyActor = createEmptyActor()
@@ -14,9 +14,7 @@ export const createMockActorContext = (): AnyActorScope => {
   }
 }
 export const mockActorContext: AnyActorScope = createMockActorContext()
-export function flatten<T>(array: Array<T | T[]>): T[] {
-  return ([] as T[]).concat(...array)
-}
+
 export interface Edge<TContext extends MachineContext, TEvent extends AnyEventObject, TEventType extends TEvent["type"] = string> {
   event: TEventType
   source: StateNode<TContext, TEvent>

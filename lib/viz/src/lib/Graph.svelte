@@ -1,12 +1,42 @@
 <script lang="ts">
-  import type { AnyActor, AnyStateNode } from "xstate"
-  import { toDirectedGraph, type DirectedGraphNode, type DirectedGraphEdge } from "./graph/directedGraph"
+  import { StateMachine, type AnyActor, type AnyStateNode, type AnyStateMachine } from "xstate"
+  import type { DirectedGraphNode, DirectedGraphEdge } from "./graph/directedGraph"
   import StateNodeViz from "./StateNodeViz.svelte"
   import { getContext, onMount } from "svelte"
   import { getElkGraph } from "./graph/elk"
+  import { getChildren } from "./utils"
 
   const service: AnyActor = getContext("service")
   let digraph = toDirectedGraph(service.getSnapshot().context.machine.root)
+  export function flatten<T>(array: Array<T | T[]>): T[] {
+    return ([] as T[]).concat(...array)
+  }
+  export function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): DirectedGraphNode {
+    const stateNode = stateMachine instanceof StateMachine ? stateMachine.root : stateMachine
+    const edges: DirectedGraphEdge[] = flatten(
+      [...stateNode.transitions.values(), stateNode.always ? stateNode.always : []].flat().map((t, transitionIndex) => {
+        const targets = t.target ? t.target : [stateNode]
+
+        return targets.map((target, targetIndex) => {
+          const edge: DirectedGraphEdge = {
+            id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
+            source: stateNode as AnyStateNode,
+            target: target as AnyStateNode,
+            transition: t,
+            label: { text: t.eventType, x: 0, y: 0 },
+          }
+          return edge
+        })
+      }),
+    )
+    const graph: DirectedGraphNode = {
+      id: stateNode.id,
+      stateNode: stateNode as AnyStateNode,
+      children: getChildren(stateNode as AnyStateNode).map(toDirectedGraph),
+      edges,
+    }
+    return graph
+  }
 
   let edges = $state<DirectedGraphEdge[]>([])
   onMount(async () => {
@@ -18,7 +48,6 @@
     getEdgesRecursive(digraph)
     edges = egs
   })
-
 
   let node = $state<AnyStateNode>()
   $effect(() => {
