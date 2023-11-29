@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let id: string
+  let { id } = $props<{ id: string }>()
 </script>
 
 <marker {id} viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="0" refY="5" markerUnits="strokeWidth" orient="auto">

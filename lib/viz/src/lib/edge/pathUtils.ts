@@ -1,4 +1,7 @@
-import type { Point } from "$lib/types"
+export interface Point {
+  x: number
+  y: number
+}
 
 enum Sides {
   Top = "top",
@@ -273,9 +276,7 @@ export function getPath(sourceRect: DOMRect, labelRect: DOMRect, targetRect: DOM
   return preSvgPath.concat(svgPath)
 }
 
-export function pathToD(path: SvgPath): string {
-  return path.map(([cmd, ...points]) => [cmd, ...points.map((point: Point) => `${point.x},${point.y}`)].join(" ")).join(" ")
-}
+export const pathToD = (path: SvgPath): string => path.map(([cmd, ...points]) => [cmd, ...points.map((point: Point) => `${point.x},${point.y}`)].join(" ")).join(" ")
 
 type RectIntersection = {
   point: Point

@@ -7,6 +7,7 @@
   import type { StateNode, AnyActor, AnyStateNode, AnyStateMachine } from "xstate"
   import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "./types"
   import TransitionViz from "./event/TransitionViz.svelte"
+  import EdgeViz from "./edge/EdgeViz.svelte"
 
   let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
   let nodes = $state<{ [key: string]: AnyStateNode }>({})
@@ -233,8 +234,9 @@
 {#each Object.entries(edges) as [id, edge] (id)}
   <TransitionViz {edge} />
 {/each}
-<!-- <svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
-    {#each edges as edge, order (edge.id)}
-      <EdgeViz {edge} {order} />
-    {/each}
-  </svg> -->
+
+<svg class="pointer-events-none fixed left-0 top-0 z-50 h-screen w-screen overflow-visible">
+  {#each Object.entries(edges) as [id, edge], order (id)}
+    <EdgeViz {edge} {order} {nodes} />
+  {/each}
+</svg>
