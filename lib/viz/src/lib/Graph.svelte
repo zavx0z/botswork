@@ -1,13 +1,14 @@
 <script lang="ts">
-  import type { AnyStateNode } from "xstate"
+  import type { AnyActor, AnyStateNode } from "xstate"
   import { getAllEdges } from "./graph/utils"
-  import type { DirectedGraphNode } from "./graph/directedGraph"
+  import { toDirectedGraph } from "./graph/directedGraph"
   import StateNodeViz from "./StateNodeViz.svelte"
-  import { onMount } from "svelte"
+  import { getContext, onMount } from "svelte"
   import { getElkGraph } from "./graph/elk"
 
-  let { digraph } = $props<{ digraph: DirectedGraphNode }>()
-  const edges = getAllEdges(digraph)
+  const service: AnyActor = getContext("service")
+  let digraph = toDirectedGraph(service.getSnapshot().context.machine.root)
+  let edges = getAllEdges(digraph)
   let node = $state<AnyStateNode>()
 
   onMount(async () => {
