@@ -43,15 +43,6 @@ export const deleteRect = (id: string) => {
   rectListenersMap.get(id)?.forEach((listener) => listener(undefined))
 }
 
-export const rect = (node: HTMLElement, id: string) => {
-  setRect(node, id)
-  return {
-    destroy() {
-      deleteRect(id)
-    },
-  }
-}
-
 export const onRect = (id: string, listener: RectListener) => {
   let set = rectListenersMap.get(id)
   if (!set) {

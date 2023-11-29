@@ -36,7 +36,7 @@
   }
 
   function getElkEdge(edge: DirectedGraphEdge) {
-    const edgeRect = readRect(edge.id)
+    // const edgeRect = readRect(edge.id)
     return {
       id: edge.id,
       sources: [edge.source.id],
@@ -44,8 +44,8 @@
       labels: [
         {
           id: edge.id + "--label",
-          width: edgeRect?.width ?? 0,
-          height: edgeRect?.height ?? 100,
+          width: edge.label.width,
+          height: edge.label.height,
           text: edge.label.text || "always",
           layoutOptions: {
             "edgeLabels.inline": "true",
@@ -60,6 +60,7 @@
   function getAllEdges(digraph: DirectedGraphNode): DirectedGraphEdge[] {
     const edges: DirectedGraphEdge[] = []
     const getEdgesRecursive = (dnode: DirectedGraphNode) => {
+      // dnode.edges.forEach((i) => console.log(i.label))
       edges.push(...dnode.edges)
       dnode.children.forEach(getEdgesRecursive)
     }
@@ -95,6 +96,7 @@
     })
     return [map, edgeMap]
   }
+  let posEdges = $state([])
   async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> {
     const rMap = getRelativeNodeEdgeMap(digraph)
     const rootEdges = rMap[0].get(undefined) || []
@@ -154,6 +156,8 @@
         },
       }
       elkNode.edges?.forEach((edge) => {
+        //@ts-ignore
+        posEdges.push(edge.edge)
         setEdgeLayout(edge)
       })
       elkNode.children?.forEach((cn) => {
@@ -194,7 +198,7 @@
               source: stateNode as AnyStateNode,
               target: target as AnyStateNode,
               transition: t,
-              label: { text: t.eventType, x: 0, y: 0 },
+              label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
             }
             return edge
           })
@@ -211,23 +215,19 @@
     }
     let digraph = toDirectedGraph(machine)
     edges = egs
-
     await tick()
     //@ts-ignore
-    getElkGraph(digraph).then((result) => (node = result.node.stateNode))
+    getElkGraph(digraph)
+      //@ts-ignore
+      .then((result) => (node = result.node.stateNode))
+      .then(() => (edges = posEdges))
   })
 </script>
 
 <StateNodeViz stateNode={node ? node : machine} {edges} />
-{#if node}
-  {#each edges as edge (edge.id)}
-    <TransitionViz {edge} />
-  {/each}
-{:else}
-  {#each edges as edge (edge.id)}
-    <TransitionViz {edge} />
-  {/each}
-{/if}
+{#each edges as edge (edge.id)}
+  <TransitionViz {edge} />
+{/each}
 <!-- <svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
     {#each edges as edge, order (edge.id)}
       <EdgeViz {edge} {order} />

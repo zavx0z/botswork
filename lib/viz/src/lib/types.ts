@@ -1,7 +1,13 @@
 import type { ElkExtendedEdge, ElkNode } from "elkjs"
 import type { AnyStateNode, TransitionDefinition, StateNode } from "xstate"
 
-export type DirectedGraphLabel = { text: string; x: number; y: number }
+export type DirectedGraphLabel = {
+  text: string
+  x: number
+  y: number
+  width: number
+  height: number
+}
 export type DirectedGraphEdge = {
   id: string
   source: AnyStateNode

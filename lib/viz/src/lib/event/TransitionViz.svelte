@@ -1,21 +1,25 @@
 <script lang="ts">
-  import { rect } from "../getRect"
   import EventTypeViz from "./EventTypeViz.svelte"
   import { getContext } from "svelte"
-  import type { DirectedGraphEdge, Point } from "$lib/types"
+  import type { DirectedGraphEdge } from "$lib/types"
   import type { SimulationActor } from "$lib/machine/sumulation/types"
 
   let { edge } = $props<{ edge: DirectedGraphEdge }>()
   const service: SimulationActor = getContext("service")
 
   let definition = edge.transition
-  let position: Point | undefined = edge.label ? { x: edge.label.x, y: edge.label.y } : undefined
   let active = false
   let guard = (definition.guard || null) as { name: string } | null
-  const setPosition = (node: HTMLElement, position: Point | undefined) => {
-    if (position) {
-      node.style.left = `${position.x}px`
-      node.style.top = `${position.y}px`
+
+  const setPosition = (element: HTMLElement, edge: DirectedGraphEdge) => {
+    const { width, height } = element.getBoundingClientRect()
+    edge.label.width = width
+    edge.label.height = height
+    return {
+      update(edge: DirectedGraphEdge) {
+        element.style.left = `${edge.label.x}px`
+        element.style.top = `${edge.label.y}px`
+      },
     }
   }
 </script>
@@ -23,8 +27,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-  use:rect={edge.id}
-  use:setPosition={position}
+  use:setPosition={edge}
   data-active={active}
   class="fixed z-40 flex cursor-pointer items-center rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
   on:mouseenter={() => service.send({ type: "EVENT.PREVIEW", eventType: definition.eventType })}

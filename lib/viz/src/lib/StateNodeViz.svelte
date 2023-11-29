@@ -4,7 +4,7 @@
   import { getContext } from "svelte"
   import type { DirectedGraphEdge } from "./types"
 
-  const { stateNode, edges } = $props<{ stateNode: AnyStateNode; edges: DirectedGraphEdge[] }>()
+  const { stateNode } = $props<{ stateNode: AnyStateNode; edges: DirectedGraphEdge[] }>()
   const service: AnyActor = getContext("service")
 
   let activeIds = $state(service.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
@@ -16,12 +16,7 @@
   })
 
   const size = (element: HTMLElement, node: AnyStateNode) => {
-    if (node.meta) {
-      element.style.left = `${node.meta.layout.x}px`
-      element.style.top = `${node.meta.layout.y}px`
-      element.style.width = `${node.meta.layout.width}px`
-      element.style.height = `${node.meta.layout.height}px`
-    } else setRect(element, node.id)
+    setRect(element, node.id)
     return {
       update(node: AnyStateNode) {
         element.style.left = `${node.meta.layout.x}px`
