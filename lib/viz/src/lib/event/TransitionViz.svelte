@@ -3,12 +3,15 @@
   import { getContext } from "svelte"
   import type { DirectedGraphEdge } from "$lib/types"
   import type { SimulationActor } from "$lib/machine/sumulation/types"
+  import { useSelector } from "@xstate/svelte"
+  import type { AnyStateNode } from "xstate"
 
   let { edge } = $props<{ edge: DirectedGraphEdge }>()
   const service: SimulationActor = getContext("service")
 
   let definition = edge.transition
-  let active = false
+  let active = useSelector(service, (state) => Boolean(state.context.state._nodes.find((node: AnyStateNode) => node.id === edge.source.id)))
+
   let guard = (definition.guard || null) as { name: string } | null
 
   const setSize = (element: HTMLElement, edge: DirectedGraphEdge) => {
@@ -24,13 +27,13 @@
   style:left="{edge.label.x}px"
   style:top="{edge.label.y}px"
   use:setSize={edge}
-  data-active={active}
-  class="fixed bg-surface-800 z-40 flex cursor-pointer items-center rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
+  data-active={$active}
+  class="fixed z-40 flex cursor-pointer items-center rounded-2xl border-2 border-solid border-tertiary-900 bg-surface-800 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
   onmouseenter={() => service.send({ type: "EVENT.PREVIEW", eventType: definition.eventType })}
   onmouseleave={() => service.send({ type: "PREVIEW.CLEAR" })}
   onclick={() => service.send({ type: "EVENT", event: { type: definition.eventType } })}
 >
-  <div data-active={active} class:rounded-l-2xl={guard} class:rounded-2xl={!guard} class="bg-tertiary-900 px-2 py-1 data-[active=true]:bg-primary-500">
+  <div data-active={$active} class:rounded-l-2xl={guard} class:rounded-2xl={!guard} class="bg-tertiary-900 px-2 py-1 data-[active=true]:bg-primary-500">
     <EventTypeViz eventType={definition.eventType} />
   </div>
   {#if guard}
