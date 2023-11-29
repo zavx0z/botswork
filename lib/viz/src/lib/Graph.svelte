@@ -98,7 +98,6 @@
     })
     return [map, edgeMap]
   }
-  let posEdges = $state([])
   async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> {
     const rMap = getRelativeNodeEdgeMap(digraph)
     const rootEdges = rMap[0].get(undefined) || []
@@ -122,6 +121,8 @@
       if (targetEdge && elkLca) {
         targetEdge.label.x = elkLca.x || 0
         targetEdge.label.y = elkLca.y || 0
+        // @ts-ignore
+        edges[edge.id] = targetEdge
       }
       //@ts-ignore
       const translatedSections: ElkEdgeSection[] = elkLca
@@ -164,8 +165,6 @@
         },
       }
       elkNode.edges?.forEach((edge) => {
-        //@ts-ignore
-        posEdges.push(edge.edge)
         setEdgeLayout(edge)
       })
       elkNode.children?.forEach((cn) => {
@@ -227,11 +226,10 @@
     getElkGraph(digraph)
       //@ts-ignore
       .then((result) => (node = result.node.stateNode))
-      .then(() => (edges = posEdges))
   })
 </script>
 
-<StateNodeViz stateNode={node ? node : machine} {edges} />
+<StateNodeViz stateNode={node ? node : machine}/>
 {#each edges as edge (edge.id)}
   <TransitionViz {edge} />
 {/each}

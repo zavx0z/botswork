@@ -2,9 +2,8 @@
   import type { AnyActor, AnyStateNode } from "xstate"
   import { deleteRect, setRect } from "./getRect"
   import { getContext } from "svelte"
-  import type { DirectedGraphEdge } from "./types"
 
-  const { stateNode } = $props<{ stateNode: AnyStateNode; edges: DirectedGraphEdge[] }>()
+  const { stateNode } = $props<{ stateNode: AnyStateNode }>()
   const service: AnyActor = getContext("service")
 
   let activeIds = $state(service.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
