@@ -9,7 +9,7 @@
   import { getRect, readRect } from "./getRect"
   import TransitionViz from "./event/TransitionViz.svelte"
 
-  let edges = $state<DirectedGraphEdge[]>([])
+  let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
 
   const elk = new ELK({ defaultLayoutOptions: {} })
 
@@ -117,13 +117,9 @@
       const lca = rMap[1].get(edge.id)
 
       const elkLca = lca && stateNodeToElkNodeMap.get(lca)!
-      const targetEdge = edges.find((i) => i.id === edge.id)
-      if (targetEdge && elkLca) {
-        targetEdge.label.x = elkLca.x || 0
-        targetEdge.label.y = elkLca.y || 0
-        // @ts-ignore
-        edges[edge.id] = targetEdge
-      }
+      edges[edge.id].label.x = elkLca?.x || 0
+      edges[edge.id].label.y = elkLca?.y || 0
+
       //@ts-ignore
       const translatedSections: ElkEdgeSection[] = elkLca
         ? //@ts-ignore
@@ -191,7 +187,7 @@
     return children
   }
   onMount(async () => {
-    let egs: DirectedGraphEdge[] = []
+    let egs: { [key: string]: DirectedGraphEdge } = {}
     function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): DirectedGraphNode {
       const stateNode = stateMachine instanceof StateMachine ? stateMachine.root : stateMachine
       const edges: DirectedGraphEdge[] = flatten(
@@ -206,11 +202,11 @@
               transition: t,
               label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
             }
+            egs[edge.id] = edge
             return edge
           })
         }),
       )
-      egs.push(...edges)
       const graph: DirectedGraphNode = {
         id: stateNode.id,
         stateNode: stateNode as AnyStateNode,
@@ -229,8 +225,8 @@
   })
 </script>
 
-<StateNodeViz stateNode={node ? node : machine}/>
-{#each edges as edge (edge.id)}
+<StateNodeViz stateNode={node ? node : machine} />
+{#each Object.entries(edges) as [id, edge] (id)}
   <TransitionViz {edge} />
 {/each}
 <!-- <svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
