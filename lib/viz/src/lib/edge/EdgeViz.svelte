@@ -1,63 +1,55 @@
 <script lang="ts">
   import type { LPathParam, SvgPath } from "./pathUtils"
-  import { getPath, pathToD } from "./pathUtils"
-  import { getContext } from "svelte"
-  import type { AnyActor, AnyStateNode } from "xstate"
-  import { useSelector } from "@xstate/svelte"
+  import { getPath, getRect, pathToD } from "./pathUtils"
+  import type { AnyStateNode } from "xstate"
   import type { DirectedGraphEdge, Point } from "$lib/types"
 
-  let { edge, order, nodes } = $props<{ edge: DirectedGraphEdge; order: number; nodes: { [key: string]: AnyStateNode } }>()
+  let { edges, nodes, activeIds } = $props<{
+    edges: { [key: string]: DirectedGraphEdge }
+    nodes: { [key: string]: AnyStateNode }
+    activeIds: string[]
+  }>()
 
-  let path: SvgPath | undefined = $state(undefined)
-
-  const service: AnyActor = getContext("service")
-  let isActive = useSelector(service, (state) => state.context.state._nodes.includes(edge.source) || undefined)
-
-  const getRect = (rect: DOMRect): DOMRect => ({
-    x: rect.x,
-    y: rect.y,
-    width: rect.width,
-    height: rect.height,
-    top: rect.y,
-    bottom: rect.y + rect.height,
-    left: rect.x,
-    right: rect.x + rect.width,
-    toJSON() {
-      return ""
-    },
-  })
-
-  $effect(() => {
-    const sourceRect = nodes[edge.source.id].meta?.layout
-    const edgeRect = edge.label as unknown as DOMRect
-    const targetRect = nodes[edge.target.id].meta?.layout
-    if (sourceRect && edgeRect && targetRect) {
-      if (edge.sections?.length) {
-        const section = edge.sections[0]
-        path = [["M", section.startPoint], ...(section.bendPoints?.map((point: Point) => ["L", point] as LPathParam) || [])]
-        const preLastPoint = path[path.length - 1][1]!
-        const xSign = Math.sign(section.endPoint.x - preLastPoint.x)
-        const ySign = Math.sign(section.endPoint.y - preLastPoint.y)
-        const endPoint = {
-          x: section.endPoint.x - 5 * xSign,
-          y: section.endPoint.y - 5 * ySign,
+  const svgPath = (element: SVGPathElement, edge: DirectedGraphEdge) => {
+    return {
+      update(edge: DirectedGraphEdge) {
+        const sourceRect = nodes[edge.source.id].meta?.layout
+        const edgeRect = edge.label as unknown as DOMRect
+        const targetRect = nodes[edge.target.id].meta?.layout
+        if (sourceRect && edgeRect && targetRect) {
+          let path: SvgPath | undefined
+          if (edge.sections?.length) {
+            const section = edge.sections[0]
+            path = [["M", section.startPoint], ...(section.bendPoints?.map((point: Point) => ["L", point] as LPathParam) || [])]
+            const preLastPoint = path[path.length - 1][1]!
+            const xSign = Math.sign(section.endPoint.x - preLastPoint.x)
+            const ySign = Math.sign(section.endPoint.y - preLastPoint.y)
+            const endPoint = { x: section.endPoint.x - 5 * xSign, y: section.endPoint.y - 5 * ySign }
+            path.push(["L", endPoint])
+          } else path = getPath(getRect(sourceRect), getRect(edgeRect), getRect(targetRect))
+          if (path) {
+            element.setAttribute("d", pathToD(path))
+            element.setAttribute("opacity", "1")
+          }
         }
-        path.push(["L", endPoint])
-      } else {
-        path = getPath(getRect(sourceRect), getRect(edgeRect), getRect(targetRect))
-      }
+      },
     }
-  })
-  const markerId = `${edge.source.order}-${order}`
+  }
 </script>
 
-<g data-active={$isActive} stroke={"#fff"} class="fill-tertiary-900 stroke-tertiary-900 data-[active=true]:fill-primary-500 data-[active=true]:stroke-primary-500">
-  {#if path}
+<svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
+  {#each Object.entries(edges) as [id, edge], order (id)}
+    {@render path_({ edge, order })}
+  {/each}
+</svg>
+
+{#snippet path_({ edge, order })}
+  <g data-active={activeIds.includes(edge.source.id)} stroke={"#fff"} class="fill-tertiary-900 stroke-tertiary-900 data-[active=true]:fill-primary-500 data-[active=true]:stroke-primary-500">
     <defs>
-      <marker id={markerId} viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="0" refY="5" markerUnits="strokeWidth" orient="auto">
+      <marker id="{edge.source.order}-{order}" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="0" refY="5" markerUnits="strokeWidth" orient="auto">
         <path d="M0,0 L0,10 L10,5 z" />
       </marker>
     </defs>
-    <path stroke-width={2} fill="none" d={pathToD(path)} marker-end={`url(#${markerId})`}></path>
-  {/if}
-</g>
+    <path use:svgPath={edge} stroke-width={2} fill="none" marker-end="url(#{edge.source.order}-{order})" opacity="0" class="transition-colors"></path>
+  </g>
+{/snippet}

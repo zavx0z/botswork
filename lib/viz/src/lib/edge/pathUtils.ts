@@ -164,7 +164,19 @@ export const roundOneCorner = (p1: Point, corner: Point, p2: Point, radius: numb
   }
   return path
 }
-
+export const getRect = (rect: DOMRect): DOMRect => ({
+  x: rect.x,
+  y: rect.y,
+  width: rect.width,
+  height: rect.height,
+  top: rect.y,
+  bottom: rect.y + rect.height,
+  left: rect.x,
+  right: rect.x + rect.width,
+  toJSON() {
+    return ""
+  },
+})
 export function getPath(sourceRect: DOMRect, labelRect: DOMRect, targetRect: DOMRect, targetPoint?: Point): SvgPath | undefined {
   // const sourcePoint = r.point('right', 'center');
   const edgeEntryPoint = {

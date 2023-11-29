@@ -15,16 +15,9 @@
   let nodes = $state<{ [key: string]: AnyStateNode }>({})
 
   const elk = new ELK({ defaultLayoutOptions: {} })
-
-  const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => {
-    return node.children.map((childNode) => {
-      return getElkChild(childNode, rMap)
-    })
-  }
-
+  const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode) => getElkChild(childNode, rMap))
   function getElkChild(node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): StateElkNode {
     const layout = nodes[node.id].meta.layout
-    // const contentRect = readRect(`${node.id}:content`)
     const edges = rMap[0].get(node.stateNode) || []
     return {
       id: node.id,
@@ -39,29 +32,25 @@
       },
     }
   }
-
-  function getElkEdge(edge: DirectedGraphEdge) {
-    // const edgeRect = readRect(edge.id)
-    return {
-      id: edge.id,
-      sources: [edge.source.id],
-      targets: [edge.target.id],
-      labels: [
-        {
-          id: edge.id + "--label",
-          width: edges[edge.id].label.width,
-          height: edges[edge.id].label.height,
-          text: edge.label.text || "always",
-          layoutOptions: {
-            "edgeLabels.inline": "true",
-            "edgeLabels.placement": "CENTER",
-          },
+  const getElkEdge = (edge: DirectedGraphEdge) => ({
+    id: edge.id,
+    sources: [edge.source.id],
+    targets: [edge.target.id],
+    labels: [
+      {
+        id: edge.id + "--label",
+        width: edges[edge.id].label.width,
+        height: edges[edge.id].label.height,
+        text: edge.label.text || "always",
+        layoutOptions: {
+          "edgeLabels.inline": "true",
+          "edgeLabels.placement": "CENTER",
         },
-      ],
-      edge,
-      sections: [],
-    }
-  }
+      },
+    ],
+    edge,
+    sections: [],
+  })
   function getRelativeNodeEdgeMap(digraph: DirectedGraphNode): RelativeNodeEdgeMap {
     const map: RelativeNodeEdgeMap[0] = new Map()
     const edgeMap: RelativeNodeEdgeMap[1] = new Map()
@@ -81,9 +70,7 @@
       //@ts-ignore
       return a.machine // root
     }
-
     Object.values(edges).forEach((edge) => {
-      //@ts-ignore
       const lca = getLCA(edge.source, edge.target)
       if (!map.has(lca)) map.set(lca, [])
       map.get(lca)!.push(edge)
@@ -94,7 +81,6 @@
   async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> {
     const rMap = getRelativeNodeEdgeMap(digraph)
     const rootEdges = rMap[0].get(undefined) || []
-
     const elkNode: ElkNode = {
       id: "root",
       edges: rootEdges.map(getElkEdge),
@@ -220,15 +206,20 @@
     await tick()
     getElkGraph(digraph)
   })
+
+  let activeIds = $state(service.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
+  let previewIds: string[] = $state([])
+  onMount(() => {
+    const { unsubscribe } = service.subscribe((state) => {
+      previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent })._nodes.map((i: AnyStateNode) => i.id) : []
+      activeIds = state.context.state._nodes.map((i: AnyStateNode) => i.id)
+    })
+    return () => {
+      unsubscribe()
+    }
+  })
 </script>
 
-<StateNodeViz {nodes} />
-{#each Object.entries(edges) as [id, edge] (id)}
-  <TransitionViz {edge} />
-{/each}
-
-<svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
-  {#each Object.entries(edges) as [id, edge], order (id)}
-    <EdgeViz {edge} {order} {nodes} />
-  {/each}
-</svg>
+<StateNodeViz {nodes} {activeIds} {previewIds} />
+<EdgeViz {edges} {nodes} {activeIds} />
+<TransitionViz {edges} {activeIds} />
