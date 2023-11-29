@@ -235,7 +235,7 @@
   <TransitionViz {edge} />
 {/each}
 
-<svg class="pointer-events-none fixed left-0 top-0 z-50 h-screen w-screen overflow-visible">
+<svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
   {#each Object.entries(edges) as [id, edge], order (id)}
     <EdgeViz {edge} {order} {nodes} />
   {/each}

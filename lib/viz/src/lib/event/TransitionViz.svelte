@@ -25,7 +25,7 @@
   style:top="{edge.label.y}px"
   use:setSize={edge}
   data-active={active}
-  class="fixed z-40 flex cursor-pointer items-center rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
+  class="fixed bg-surface-800 z-40 flex cursor-pointer items-center rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
   onmouseenter={() => service.send({ type: "EVENT.PREVIEW", eventType: definition.eventType })}
   onmouseleave={() => service.send({ type: "PREVIEW.CLEAR" })}
   onclick={() => service.send({ type: "EVENT", event: { type: definition.eventType } })}
@@ -34,7 +34,7 @@
     <EventTypeViz eventType={definition.eventType} />
   </div>
   {#if guard}
-    <div class="bg-transparent px-2 text-primary-100 before:content-['['] after:content-[']']">
+    <div class="px-2 text-primary-100 before:content-['['] after:content-[']']">
       {guard.name}
     </div>
   {/if}

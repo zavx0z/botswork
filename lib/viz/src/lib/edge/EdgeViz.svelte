@@ -1,11 +1,10 @@
 <script lang="ts">
-  import type { SvgPath } from "./pathUtils"
+  import type { LPathParam, SvgPath } from "./pathUtils"
   import { getPath, pathToD } from "./pathUtils"
   import { getContext } from "svelte"
   import type { AnyActor, AnyStateNode } from "xstate"
   import { useSelector } from "@xstate/svelte"
-  import ArrowMarker from "./ArrowMarker.svelte"
-  import type { DirectedGraphEdge } from "$lib/types"
+  import type { DirectedGraphEdge, Point } from "$lib/types"
 
   let { edge, order, nodes } = $props<{ edge: DirectedGraphEdge; order: number; nodes: { [key: string]: AnyStateNode } }>()
 
@@ -32,7 +31,22 @@
     const sourceRect = nodes[edge.source.id].meta?.layout
     const edgeRect = edge.label as unknown as DOMRect
     const targetRect = nodes[edge.target.id].meta?.layout
-    if (sourceRect && edgeRect && targetRect) path = getPath(getRect(sourceRect), getRect(edgeRect), getRect(targetRect))
+    if (sourceRect && edgeRect && targetRect) {
+      if (edge.sections?.length) {
+        const section = edge.sections[0]
+        path = [["M", section.startPoint], ...(section.bendPoints?.map((point: Point) => ["L", point] as LPathParam) || [])]
+        const preLastPoint = path[path.length - 1][1]!
+        const xSign = Math.sign(section.endPoint.x - preLastPoint.x)
+        const ySign = Math.sign(section.endPoint.y - preLastPoint.y)
+        const endPoint = {
+          x: section.endPoint.x - 5 * xSign,
+          y: section.endPoint.y - 5 * ySign,
+        }
+        path.push(["L", endPoint])
+      } else {
+        path = getPath(getRect(sourceRect), getRect(edgeRect), getRect(targetRect))
+      }
+    }
   })
   const markerId = `${edge.source.order}-${order}`
 </script>
@@ -40,7 +54,9 @@
 <g data-active={$isActive} stroke={"#fff"} class="fill-tertiary-900 stroke-tertiary-900 data-[active=true]:fill-primary-500 data-[active=true]:stroke-primary-500">
   {#if path}
     <defs>
-      <ArrowMarker id={markerId} />
+      <marker id={markerId} viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="0" refY="5" markerUnits="strokeWidth" orient="auto">
+        <path d="M0,0 L0,10 L10,5 z" />
+      </marker>
     </defs>
     <path stroke-width={2} fill="none" d={pathToD(path)} marker-end={`url(#${markerId})`}></path>
   {/if}
