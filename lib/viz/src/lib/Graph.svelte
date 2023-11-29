@@ -6,7 +6,6 @@
   import type { ElkEdgeSection, ElkNode } from "elkjs"
   import type { StateNode, AnyActor, AnyStateNode, AnyStateMachine } from "xstate"
   import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "./types"
-  import { getRect, readRect } from "./getRect"
   import TransitionViz from "./event/TransitionViz.svelte"
 
   let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
@@ -21,18 +20,18 @@
   }
 
   function getElkChild(node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): StateElkNode {
-    const nodeRect = getRect(node.id)
-    const contentRect = readRect(`${node.id}:content`)
+    const layout = nodes[node.id].meta.layout
+    // const contentRect = readRect(`${node.id}:content`)
     const edges = rMap[0].get(node.stateNode) || []
     return {
       id: node.id,
-      ...(!node.children.length ? { width: nodeRect?.width, height: nodeRect?.height } : undefined),
+      ...(!node.children.length ? { width: layout.width, height: layout.height } : undefined),
       node,
       ...(node.children.length ? { children: getElkChildren(node, rMap) } : undefined),
       absolutePosition: { x: 0, y: 0 },
       edges: edges.map(getElkEdge),
       layoutOptions: {
-        "elk.padding": `[top=${(contentRect?.height || 0) + 30}, left=30, right=30, bottom=30]`,
+        "elk.padding": `[top=${(layout.height || 0) + 30}, left=30, right=30, bottom=30]`,
         hierarchyHandling: "INCLUDE_CHILDREN",
       },
     }
@@ -184,7 +183,6 @@
 
   const service: AnyActor = getContext("service")
   const machine = service.getSnapshot().context.machine.root
-  let node = $state<AnyStateNode>()
 
   export function flatten<T>(array: Array<T | T[]>): T[] {
     return ([] as T[]).concat(...array)

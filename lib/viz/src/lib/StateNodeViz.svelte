@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { AnyActor, AnyStateNode } from "xstate"
-  import { deleteRect, setRect } from "./getRect"
   import { getContext } from "svelte"
 
   const { nodes } = $props<{ nodes: { [key: string]: AnyStateNode } }>()
@@ -15,16 +14,14 @@
   })
 
   const size = (element: HTMLElement, node: AnyStateNode) => {
-    setRect(element, node.id)
+    const { width, height } = element.getBoundingClientRect()
+    node.meta = { ...node.meta, layout: { width, height } }
     return {
       update(node: AnyStateNode) {
         element.style.left = `${node.meta.layout.x}px`
         element.style.top = `${node.meta.layout.y}px`
         element.style.width = `${node.meta.layout.width}px`
         element.style.height = `${node.meta.layout.height}px`
-      },
-      destroy() {
-        deleteRect(node.id)
       },
     }
   }
