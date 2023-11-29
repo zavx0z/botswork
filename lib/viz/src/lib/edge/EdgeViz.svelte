@@ -5,8 +5,8 @@
   import { getContext } from "svelte"
   import type { AnyActor } from "xstate"
   import { useSelector } from "@xstate/svelte"
-  import ArrowMarker from "../ArrowMarker.svelte"
-  import type { DirectedGraphEdge } from "$lib/graph/directedGraph"
+  import ArrowMarker from "./ArrowMarker.svelte"
+  import type { DirectedGraphEdge } from "$lib/types"
 
   let { edge, order } = $props<{ edge: DirectedGraphEdge; order: number }>()
   let path: SvgPath | undefined = $state(undefined)

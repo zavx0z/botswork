@@ -1,6 +1,6 @@
 <script lang="ts">
   import Graph from "./Graph.svelte"
-  import CanvasContainer from "./canvas/CanvasContainer.svelte"
+  import CanvasContainer from "./CanvasContainer.svelte"
 </script>
 
 <CanvasContainer>

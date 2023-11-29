@@ -1,3 +1,4 @@
+import type { ElkExtendedEdge, ElkNode } from "elkjs"
 import type { AnyStateNode, TransitionDefinition, StateNode } from "xstate"
 
 export type DirectedGraphLabel = { text: string; x: number; y: number }
@@ -13,4 +14,19 @@ export type DirectedGraphNode = {
   stateNode: StateNode
   children: DirectedGraphNode[]
   edges: DirectedGraphEdge[]
+}
+
+export type RelativeNodeEdgeMap = [Map<StateNode | undefined, DirectedGraphEdge[]>, Map<string, StateNode | undefined>]
+
+export interface StateElkEdge extends ElkExtendedEdge {
+  edge: DirectedGraphEdge
+}
+export interface StateElkNode extends ElkNode {
+  node: DirectedGraphNode
+  absolutePosition: Point
+  edges: StateElkEdge[]
+}
+export interface Point {
+  x: number
+  y: number
 }

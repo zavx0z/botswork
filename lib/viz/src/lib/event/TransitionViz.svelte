@@ -1,10 +1,9 @@
 <script lang="ts">
-  import type { SimulationActor } from "../machine/sumulation/types/Events"
   import { rect } from "../getRect"
   import EventTypeViz from "./EventTypeViz.svelte"
   import { getContext } from "svelte"
-  import type { Point } from "../edge/pathUtils"
-  import type { DirectedGraphEdge } from "../graph/directedGraph"
+  import type { DirectedGraphEdge, Point } from "$lib/types"
+  import type { SimulationActor } from "$lib/machine/sumulation/types"
 
   let { edge } = $props<{ edge: DirectedGraphEdge }>()
   const service: SimulationActor = getContext("service")
@@ -27,10 +26,13 @@
   use:rect={edge.id}
   use:setPosition={position}
   data-active={active}
-  class="fixed flex cursor-pointer items-center rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
+  class="fixed z-40 flex cursor-pointer items-center rounded-2xl border-2 border-solid border-tertiary-900 text-xs font-bold text-primary-100 data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
   on:mouseenter={() => service.send({ type: "EVENT.PREVIEW", eventType: definition.eventType })}
   on:mouseleave={() => service.send({ type: "PREVIEW.CLEAR" })}
-  on:click={() => service.send({ type: "EVENT", event: { type: definition.eventType } })}
+  on:click={() => {
+    //@ts-ignore
+    service.send({ type: "EVENT", event: { type: definition.eventType } })
+  }}
 >
   <div data-active={active} class:rounded-l-2xl={guard} class:rounded-2xl={!guard} class="bg-tertiary-900 px-2 py-1 data-[active=true]:bg-primary-500">
     <EventTypeViz eventType={definition.eventType} />

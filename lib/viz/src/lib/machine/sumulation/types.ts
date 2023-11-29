@@ -1,4 +1,4 @@
-import type { AnyStateMachine } from "xstate"
+import type { Actor, ActorLogic, AnyStateMachine, AnyStateNodeConfig, AnyTransitionDefinition } from "xstate"
 
 export type SimulationEvents =
   | { type: "EVENT"; event: AnyTransitionDefinition }
@@ -6,4 +6,4 @@ export type SimulationEvents =
   | { type: "STATE.UPDATE"; state: AnyStateNodeConfig }
   | { type: "MACHINE.UPDATE"; machine: AnyStateMachine }
   | { type: "PREVIEW.CLEAR" }
-export type SimulationActor = Actor<ActorLogic<any, SimulationEvents, any, any, any>>
+export type SimulationActor = Actor<ActorLogic<any, SimulationEvents, any, any>>

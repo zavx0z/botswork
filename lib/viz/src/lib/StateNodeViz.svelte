@@ -1,10 +1,8 @@
 <script lang="ts">
   import type { AnyActor, AnyStateNode } from "xstate"
-  import { mockActorContext } from "./utils"
   import { deleteRect, setRect } from "./getRect"
   import { getContext } from "svelte"
-  import type { DirectedGraphEdge } from "./graph/directedGraph"
-  import TransitionViz from "./event/TransitionViz.svelte"
+  import type { DirectedGraphEdge } from "./types"
 
   const { stateNode, edges } = $props<{ stateNode: AnyStateNode; edges: DirectedGraphEdge[] }>()
   const service: AnyActor = getContext("service")
@@ -14,7 +12,7 @@
 
   service.subscribe((state) => {
     activeIds = state.context.state._nodes.map((i: AnyStateNode) => i.id)
-    previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent }, mockActorContext)._nodes.map((i: AnyStateNode) => i.id) : []
+    previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent })._nodes.map((i: AnyStateNode) => i.id) : []
   })
 
   const size = (element: HTMLElement, node: AnyStateNode) => {
@@ -32,9 +30,6 @@
   }
 </script>
 
-{#each edges as edge (edge.id)}
-  <TransitionViz {edge} />
-{/each}
 {#snippet state_(node)}
   <div class="absolute text-primary-50" use:size={node}>
     <div

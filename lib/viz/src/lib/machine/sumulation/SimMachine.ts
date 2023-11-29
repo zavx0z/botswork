@@ -1,5 +1,5 @@
 import { assign, createActor, createMachine, fromCallback, sendTo, type AnyStateMachine, type AnyStateNodeConfig } from "xstate"
-import type { SimulationEvents } from "./types/Events"
+import type { SimulationEvents } from "./types"
 
 export const SimulationMachine = createMachine({
   id: "simService",
@@ -69,7 +69,7 @@ export const SimulationMachine = createMachine({
           actions: assign({ machine: ({ event }) => event.machine }),
         },
         "EVENT.PREVIEW": {
-          actions: assign({ previewEvent: ({ event }) => event.eventType }),
+          actions: assign({ previewEvent: ({ event }) => event.eventType as unknown as string }),
         },
         "PREVIEW.CLEAR": {
           actions: assign({ previewEvent: undefined }),
