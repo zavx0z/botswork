@@ -40,7 +40,8 @@ export async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> 
 
     //@ts-ignore
     const translatedSections: ElkEdgeSection[] = elkLca
-      ? edge.sections.map((section) => ({
+      ? //@ts-ignore
+        edge.sections.map((section) => ({
           ...section,
           startPoint: {
             x: section.startPoint.x + elkLca.absolutePosition.x,
