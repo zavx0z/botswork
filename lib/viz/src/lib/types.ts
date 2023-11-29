@@ -1,4 +1,4 @@
-import type { ElkExtendedEdge, ElkNode } from "elkjs"
+import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
 import type { AnyStateNode, TransitionDefinition, StateNode } from "xstate"
 
 export type DirectedGraphLabel = {
@@ -14,6 +14,7 @@ export type DirectedGraphEdge = {
   target: AnyStateNode
   label: DirectedGraphLabel
   transition: TransitionDefinition<any, any>
+  sections: ElkEdgeSection[]
 }
 export type DirectedGraphNode = {
   id: string

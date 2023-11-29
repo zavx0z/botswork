@@ -208,6 +208,7 @@
               source: stateNode as AnyStateNode,
               target: target as AnyStateNode,
               transition: t,
+              sections: [],
               label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
             }
             edges[edge.id] = edge
