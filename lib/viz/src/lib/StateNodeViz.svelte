@@ -3,7 +3,7 @@
   import { deleteRect, setRect } from "./getRect"
   import { getContext } from "svelte"
 
-  const { stateNode } = $props<{ stateNode: AnyStateNode }>()
+  const { nodes } = $props<{ nodes: { [key: string]: AnyStateNode } }>()
   const service: AnyActor = getContext("service")
 
   let activeIds = $state(service.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
@@ -64,10 +64,12 @@
           {/each}
         </div>
       </div>
-      {#each Object.entries(node.states) as [key, value] (key)}
+      <!-- {#each Object.entries(node.states) as [key, value] (key)}
         {@render state_(value)}
-      {/each}
+      {/each} -->
     </div>
   </div>
 {/snippet}
-{@render state_(stateNode)}
+{#each Object.entries(nodes) as [id, node] (id)}
+  {@render state_(node)}
+{/each}

@@ -10,6 +10,7 @@
   import TransitionViz from "./event/TransitionViz.svelte"
 
   let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
+  let nodes = $state<{ [key: string]: AnyStateNode }>({})
 
   const elk = new ELK({ defaultLayoutOptions: {} })
 
@@ -46,8 +47,8 @@
       labels: [
         {
           id: edge.id + "--label",
-          width: edge.label.width,
-          height: edge.label.height,
+          width: edges[edge.id].label.width,
+          height: edges[edge.id].label.height,
           text: edge.label.text || "always",
           layoutOptions: {
             "edgeLabels.inline": "true",
@@ -160,6 +161,15 @@
           y: elkNode.y!,
         },
       }
+      nodes[elkNode.id].meta = {
+        layout: {
+          width: elkNode.width!,
+          height: elkNode.height!,
+          x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
+          y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
+        },
+      }
+
       elkNode.edges?.forEach((edge) => {
         setEdgeLayout(edge)
       })
@@ -187,10 +197,9 @@
     return children
   }
   onMount(async () => {
-    let egs: { [key: string]: DirectedGraphEdge } = {}
     function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): DirectedGraphNode {
       const stateNode = stateMachine instanceof StateMachine ? stateMachine.root : stateMachine
-      const edges: DirectedGraphEdge[] = flatten(
+      const egs: DirectedGraphEdge[] = flatten(
         [...stateNode.transitions.values(), stateNode.always ? stateNode.always : []].flat().map((t, transitionIndex) => {
           const targets = t.target ? t.target : [stateNode]
 
@@ -202,7 +211,7 @@
               transition: t,
               label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
             }
-            egs[edge.id] = edge
+            edges[edge.id] = edge
             return edge
           })
         }),
@@ -211,21 +220,18 @@
         id: stateNode.id,
         stateNode: stateNode as AnyStateNode,
         children: getChildren(stateNode as AnyStateNode).map(toDirectedGraph),
-        edges,
+        edges: egs,
       }
+      nodes[graph.id] = graph.stateNode
       return graph
     }
     let digraph = toDirectedGraph(machine)
-    edges = egs
     await tick()
-    //@ts-ignore
     getElkGraph(digraph)
-      //@ts-ignore
-      .then((result) => (node = result.node.stateNode))
   })
 </script>
 
-<StateNodeViz stateNode={node ? node : machine} />
+<StateNodeViz {nodes} />
 {#each Object.entries(edges) as [id, edge] (id)}
   <TransitionViz {edge} />
 {/each}
