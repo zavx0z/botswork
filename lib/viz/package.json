@@ -42,6 +42,6 @@
   },
   "dependencies": {
     "elkjs": "^0.8.2",
-    "xstate": "^5.0.0-beta.50"
+    "xstate": "^5.0.0-beta.51"
   }
 }

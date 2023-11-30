@@ -30,6 +30,6 @@
     "@threlte/extras": "^7.5.3",
     "svelte-ripple-action": "^1.0.4",
     "three": "^0.158.0",
-    "xstate": "^5.0.0-beta.50"
+    "xstate": "^5.0.0-beta.51"
   }
 }
