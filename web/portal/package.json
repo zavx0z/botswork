@@ -13,7 +13,6 @@
     "@sveltejs/adapter-auto": "^2.1.1",
     "@sveltejs/kit": "^1.27.6",
     "@sveltejs/package": "^2.2.3",
-    "@types/three": "^0.158.3",
     "publint": "^0.2.5",
     "svelte": "^5.0.0-next.15",
     "svelte-check": "^3.6.2",
@@ -26,10 +25,7 @@
     "@lib/ui": "workspace:*"
   },
   "dependencies": {
-    "@threlte/core": "^7.0.2",
-    "@threlte/extras": "^7.5.3",
     "svelte-ripple-action": "^1.0.4",
-    "three": "^0.158.0",
     "xstate": "^5.0.0-beta.51"
   }
 }
