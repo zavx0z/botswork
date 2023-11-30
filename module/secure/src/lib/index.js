@@ -1,4 +1,4 @@
-export { default as AuthMachine } from './machine/AuthMachine'
+export { default as AuthMachine } from './machine/services'
 export { default as AuthLayout } from './AuthLayout.svelte'
 export { default as Join } from './Join.svelte'
 export { default as Login } from './Login.svelte'

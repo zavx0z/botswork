@@ -3,19 +3,19 @@
 	import { BotsIcon, BotikIcon, GroupsIcon, HumansIcon, SettingsIcon, SidebarCloseIcon } from '@lib/icons'
 	import { Activity, Button } from '@lib/ui/activity'
 
-	import stateMachine from '../../../xstate/stateMachine'
+	// import stateMachine from '../../../xstate/stateMachine'
 
-	const routeRoot = stateMachine.children.get('route-root')
-	const layoutCanvas = stateMachine.children.get('canvas')
+	// const routeRoot = stateMachine.children.get('route-root')
+	// const layoutCanvas = stateMachine.children.get('canvas')
 
-	const sideBarLeft = $routeRoot.children['sideBar-left']
-	const sideBarRight = $routeRoot.children['sideBar-right']
+	// const sideBarLeft = $routeRoot.children['sideBar-left']
+	// const sideBarRight = $routeRoot.children['sideBar-right']
 
-	sideBarLeft?.send('OPEN')
-	sideBarRight?.send('OPEN')
+	// sideBarLeft?.send('OPEN')
+	// sideBarRight?.send('OPEN')
 </script>
 
-{#if $sideBarLeft.matches('opened')}
+<!-- {#if $sideBarLeft.matches('opened')} -->
 	<Activity>
 		<div>
 			<Button href='/' label='Главная страница' active={$page.url.pathname === '/'}>
@@ -48,5 +48,5 @@
 			</Button>
 		</div>
 	</Activity>
-{/if}
+<!-- {/if} -->
 <slot />

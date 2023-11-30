@@ -11,27 +11,27 @@ const rootMachine = createMachine(
         type: "parallel",
         states: {
           sideBarLeft: {
-            invoke: { id: "sideBar-left", src: "sideBarLeft" }
+            invoke: { id: "sideBar-left", src: "sideBarLeft" },
           },
           sideBarRight: {
-            invoke: { id: "sideBar-right", src: "sideBarRight" }
-          }
-        }
+            invoke: { id: "sideBar-right", src: "sideBarRight" },
+          },
+        },
       },
       view: {
-        invoke: [{ id: "canvas", src: "layoutCanvas" }]
+        invoke: [{ id: "canvas", src: "layoutCanvas" }],
       },
       page: {
         initial: "root",
         on: {
           NAVIGATE: [
-            { target: "page.root", cond: "root" },
-            { target: "page.humans", cond: "humans" },
-            { target: "page.bots", cond: "bots" },
-            { target: "page.groups", cond: "groups" },
-            { target: "page.profile", cond: "profile" },
-            { target: "page.settings", cond: "settings" }
-          ]
+            { target: "page.root", guard: "root" },
+            { target: "page.humans", guard: "humans" },
+            { target: "page.bots", guard: "bots" },
+            { target: "page.groups", guard: "groups" },
+            { target: "page.profile", guard: "profile" },
+            { target: "page.settings", guard: "settings" },
+          ],
         },
         states: {
           root: { invoke: [] },
@@ -39,31 +39,28 @@ const rootMachine = createMachine(
           bots: { invoke: [] },
           groups: { invoke: [] },
           profile: { invoke: [] },
-          settings: { invoke: [] }
-        }
-      }
+          settings: { invoke: [] },
+        },
+      },
     },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-    schema: {
-      events: {} as { type: "NAVIGATE"; pathname: string }
+    types: {} as {
+      events: { type: "NAVIGATE"; pathname: string }
     },
-    tsTypes: {} as import("./rootMachine.typegen").Typegen0
   },
   {
     guards: {
-      root: (_, event) => event.pathname === "/",
-      humans: (_, event) => event.pathname.includes("humans"),
-      bots: (_, event) => event.pathname.includes("bots"),
-      groups: (_, event) => event.pathname.includes("groups"),
-      profile: (_, event) => event.pathname.includes("profile"),
-      settings: (_, event) => event.pathname.includes("settings")
+      root: ({ event }) => event.pathname === "/",
+      humans: ({ event }) => event.pathname.includes("humans"),
+      bots: ({ event }) => event.pathname.includes("bots"),
+      groups: ({ event }) => event.pathname.includes("groups"),
+      profile: ({ event }) => event.pathname.includes("profile"),
+      settings: ({ event }) => event.pathname.includes("settings"),
     },
-    services: {
+    actors: {
       layoutCanvas: layoutMachineFabric("layoutCanvas", "0"),
-      sideBarLeft: sideBar("left").withContext({ zIndex: 20 }),
-      sideBarRight: sideBar("right").withContext({ zIndex: 20 })
-    }
-  }
+      sideBarLeft: sideBar("left"),
+      sideBarRight: sideBar("right"),
+    },
+  },
 )
 export default rootMachine

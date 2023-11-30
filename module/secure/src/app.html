@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script module>
+    await new Promise((res) => import("https://zavx0z.github.io/dev-tools/index.js").then(() => setTimeout(res, 200)))
+  </script>
   <meta charset="utf-8" />
   <link rel="icon" href="%sveltekit.assets%/security.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   %sveltekit.head%
 </head>
+<dev-tools mobile></dev-tools>
 <body data-sveltekit-preload-data="hover">
 <div>%sveltekit.body%</div>
 </body>

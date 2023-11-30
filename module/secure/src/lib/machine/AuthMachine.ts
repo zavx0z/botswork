@@ -1,22 +1,12 @@
 import { assign, createMachine } from "xstate"
-import type { Events, Context, Services } from "./types"
-import { join, login, refresh, reset, verify } from "./services"
 
-const ACCESS_TOKEN = "at",
-  REFRESH_TOKEN = "rt"
+const ACCESS_TOKEN = "at"
+const REFRESH_TOKEN = "rt"
 
 export default createMachine(
   {
     id: "auth",
     initial: "identification",
-    context: {
-      id: null,
-      username: null,
-      accessToken: null,
-      refreshToken: null,
-      error: null,
-      host: "",
-    },
     entry: [
       "atStoreCtx", // установить токен доступа в контекст из хранилища браузера
       "rtStoreCtx", // установить токен обновления в контекст из хранилища браузера
@@ -32,12 +22,12 @@ export default createMachine(
               {
                 description: "Токен доступа отсутствует",
                 target: "#auth.unauthorized",
-                cond: "atNotExist",
+                guard: "atNotExist",
               },
               {
                 description: "Токен доступа присутствует",
                 target: "checkRefreshToken",
-                cond: "atExist",
+                guard: "atExist",
               },
             ],
           },
@@ -47,12 +37,12 @@ export default createMachine(
               {
                 description: "Токен обновления отсутствует",
                 target: "#auth.unauthorized",
-                cond: "rtNotExist",
+                guard: "rtNotExist",
               },
               {
                 description: "Токен обновления присутствует",
                 target: "checkUserId",
-                cond: "rtExist",
+                guard: "rtExist",
               },
             ],
           },
@@ -62,12 +52,12 @@ export default createMachine(
               {
                 description: "id присутствует",
                 target: "#auth.authorized",
-                cond: "idExist",
+                guard: "idExist",
               },
               {
                 description: "id отсутствует",
                 target: "verify",
-                cond: "idNotExist",
+                guard: "idNotExist",
               },
             ],
           },
@@ -76,11 +66,11 @@ export default createMachine(
           //     always: [
           //         {
           //             description: 'Срок действия истек',
-          //             target: '#auth.authorized', cond: 'atExpired'
+          //             target: '#auth.authorized', guard: 'atExpired'
           //         },
           //         {
           //             description: 'Срок действия не истек',
-          //             target: 'verify', cond: 'atNotExpired'
+          //             target: 'verify', guard: 'atNotExpired'
           //         }
           //     ]
           // },
@@ -89,7 +79,7 @@ export default createMachine(
             invoke: {
               id: "verify",
               src: "verify",
-              description: "Токен доступа верифицирован",
+              // description: "Токен доступа верифицирован",
               onDone: {
                 description: "Успешная верификация",
                 target: "#auth.authorized",
@@ -99,7 +89,7 @@ export default createMachine(
                 {
                   description: "Время токена истекло",
                   target: "#auth.authorized.refreshed",
-                  cond: "tokenHasExpired",
+                  guard: "tokenHasExpired",
                 },
                 {
                   description: "Ошибка верификации",
@@ -153,6 +143,7 @@ export default createMachine(
             invoke: {
               id: "login",
               src: "login",
+
               onDone: {
                 description: "Успешная авторизация",
                 target: "#auth.authorized",
@@ -177,6 +168,7 @@ export default createMachine(
             invoke: {
               id: "join",
               src: "join",
+              input: ({ context }) => ({ username: context.username, password: context.password }),
               onDone: {
                 description: "Зарегистрирован",
                 target: "#auth.identification",
@@ -263,52 +255,41 @@ export default createMachine(
         },
       },
     },
-    predictableActionArguments: true,
-    schema: { services: {} as Services, context: {} as Context, events: {} as Events },
-    tsTypes: {} as import("./AuthMachine.typegen.d.ts").Typegen0,
+    // types:{}as { services:  Services, context:  Context, events:  Events },
   },
   {
     guards: {
       // USER
-      idExist: (context) => Boolean(context.id && context.username),
-      idNotExist: (context) => !Boolean(context.id || context.username),
+      idExist: ({ context }) => Boolean(context.id && context.username),
+      idNotExist: ({ context }) => !Boolean(context.id || context.username),
       // ACCESS_TOKEN
-      atExist: (context) => Boolean(context.accessToken),
-      atNotExist: (context) => !Boolean(context.accessToken),
+      atExist: ({ context }) => Boolean(context.accessToken),
+      atNotExist: ({ context }) => !Boolean(context.accessToken),
       // REFRESH_TOKEN
-      rtExist: (context) => Boolean(context.refreshToken),
-      rtNotExist: (context) => !Boolean(context.refreshToken),
+      rtExist: ({ context }) => Boolean(context.refreshToken),
+      rtNotExist: ({ context }) => !Boolean(context.refreshToken),
       // CHECK ERRORS
-      tokenHasExpired: (_, { data: { code } }) => code === 422,
+      tokenHasExpired: ({ event }) => event.data.code === 422,
     },
     actions: {
       // ERROR
-      errRM: assign((context) => ({ ...context, error: null })),
-      errFetchCtx: assign((context, { data: { error } }) => ({ ...context, error: error })),
+      errRM: assign(({ context }) => ({ ...context, error: null })),
+      errFetchCtx: assign(({ context, event }) => ({ ...context, error: event.data.error })),
       // USER
-      idFetchCtx: assign((context, { data: { id, username } }) => ({ ...context, id, username })),
-      idRM: assign((context) => ({ ...context, id: null, username: null })),
+      idFetchCtx: assign(({ context, event }) => ({ ...context, id: event.data.id, username: event.data.username })),
+      idRM: assign(({ context }) => ({ ...context, id: null, username: null })),
       // ACCESS_TOKEN
-      atStoreCtx: assign((context) => ({ ...context, accessToken: localStorage.getItem(ACCESS_TOKEN) })),
-      atFetchCtx: assign((context, { data: { accessToken } }) => ({ ...context, accessToken })),
-      atRMctx: assign((context) => ({ ...context, accessToken: null })),
-      atFetchStore: (_, { data: { accessToken } }) => localStorage.setItem(ACCESS_TOKEN, accessToken),
+      atStoreCtx: assign(({ context }) => ({ ...context, accessToken: localStorage.getItem(ACCESS_TOKEN) })),
+      atFetchCtx: assign(({ context, event }) => ({ ...context, accessToken: event.data.accessToken })),
+      atRMctx: assign(({ context }) => ({ ...context, accessToken: null })),
+      atFetchStore: ({ event }) => localStorage.setItem(ACCESS_TOKEN, event.data.accessToken),
       atRMStore: () => localStorage.removeItem(ACCESS_TOKEN),
       // REFRESH_TOKEN
-      rtStoreCtx: assign((context) => ({ ...context, refreshToken: localStorage.getItem(REFRESH_TOKEN) })),
-      rtFetchCtx: assign((context, { data: { refreshToken } }) => ({ ...context, refreshToken })),
-      rtRMctx: assign((context) => ({ ...context, refreshToken: null })),
-      rtFetchStore: (_, { data: { refreshToken } }) => localStorage.setItem(REFRESH_TOKEN, refreshToken),
+      rtStoreCtx: assign(({ context }) => ({ ...context, refreshToken: localStorage.getItem(REFRESH_TOKEN) })),
+      rtFetchCtx: assign(({ context, event }) => ({ ...context, refreshToken: event.data.refreshToken })),
+      rtRMctx: assign(({ context }) => ({ ...context, refreshToken: null })),
+      rtFetchStore: ({ event }) => localStorage.setItem(REFRESH_TOKEN, event.data.refreshToken),
       rtRMStore: () => localStorage.removeItem(REFRESH_TOKEN),
     },
-    services: {
-      join: (_, { username, password }) => join({ username, password }),
-      login: (_, { username, password }) => login({ username, password }),
-      reset: (_, { username }) => reset(username),
-      refresh: ({ refreshToken }) =>
-        refreshToken ? refresh(refreshToken) : Promise.reject({ code: 0, error: "Отсутствует токен" }),
-      verify: ({ accessToken }) =>
-        accessToken ? verify(accessToken) : Promise.reject({ code: 0, error: "Отсутствует токен" }),
-    },
-  }
+  },
 )

@@ -29,7 +29,7 @@
     "@sveltejs/kit": "^1.27.4",
     "@sveltejs/package": "^2.0.0",
     "publint": "^0.1.9",
-    "svelte": "^5.0.0-next.13",
+    "svelte": "^5.0.0-next.15",
     "svelte-check": "^3.6.0",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
@@ -40,6 +40,6 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "dependencies": {
-    "xstate": "5.0.0-beta.44"
+    "xstate": "^5.0.0-beta.50"
   }
 }

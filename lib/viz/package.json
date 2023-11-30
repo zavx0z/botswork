@@ -34,20 +34,14 @@
     "@sveltejs/package": "^2.2.3",
     "bun-types": "^1.0.14",
     "publint": "^0.2.5",
-    "svelte": "^5.0.0-next.13",
+    "svelte": "^5.0.0-next.15",
     "svelte-check": "^3.6.2",
     "tslib": "^2.6.2",
     "typescript": "^5.3.2",
     "vite": "^5.0.2"
   },
   "dependencies": {
-    "@xstate/svelte": "^2.1.0",
     "elkjs": "^0.8.2",
-    "javascript-stringify": "^2.1.0",
-    "prism-svelte": "^0.5.0",
-    "prism-themes": "^1.9.0",
-    "prismjs": "^1.29.0",
-    "web-worker": "^1.2.0",
-    "xstate": "^5.0.0-beta.48"
+    "xstate": "^5.0.0-beta.50"
   }
 }

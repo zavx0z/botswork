@@ -1,10 +1,10 @@
-import { AuthMachine } from '@module/secure'
+import { AuthMachine } from "@module/secure"
 
 export let ssr = false
 export let prerender = false
-import { interpret } from 'xstate'
+import { createActor } from "xstate"
 
-export const load = (() => {
-	const auth = interpret(AuthMachine).start()
-	return { auth }
-})
+export const load = () => {
+  const auth = createActor(AuthMachine).start()
+  return { auth }
+}
