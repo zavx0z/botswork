@@ -1,7 +1,16 @@
-import { assign, createActor, createMachine, fromCallback, sendTo, type AnyStateMachine, type AnyStateNodeConfig } from "xstate"
-import type { SimulationEvents } from "./types"
+import type { Actor, ActorLogic, AnyStateMachine, AnyStateNodeConfig, AnyTransitionDefinition, EventDescriptor } from "xstate"
 
-export const SimulationMachine = createMachine({
+import { assign, createActor, createMachine, fromCallback, sendTo } from "xstate"
+
+export type SimulatorEvents =
+  | { type: "EVENT"; event: EventDescriptor<any> }
+  | { type: "EVENT.PREVIEW"; eventType: AnyTransitionDefinition }
+  | { type: "STATE.UPDATE"; state: AnyStateNodeConfig }
+  | { type: "MACHINE.UPDATE"; machine: AnyStateMachine }
+  | { type: "PREVIEW.CLEAR" }
+export type SimulatorActorType = Actor<ActorLogic<any, SimulatorEvents, any, any>>
+
+export const simulatorMachine = createMachine({
   id: "simService",
   types: {} as {
     context: {
@@ -9,7 +18,7 @@ export const SimulationMachine = createMachine({
       state: AnyStateNodeConfig
       previewEvent?: string
     }
-    events: SimulationEvents
+    events: SimulatorEvents
     input: {
       machine: AnyStateMachine
       state: AnyStateNodeConfig
@@ -28,15 +37,7 @@ export const SimulationMachine = createMachine({
     },
     EVENT: {
       actions: sendTo("machine", ({ event }) => {
-        // const eventSchema = context.machine.schema?.events?.[event.event.type]
         const eventToSend = { ...event.event }
-        // if (eventSchema) {
-        //   Object.keys(eventSchema.properties).forEach((prop) => {
-        //     const value = prompt(`Enter value for "${prop}" (${eventSchema.properties[prop].type}):`)
-        //     console.log("prompt value", value)
-        //     eventToSend[prop] = value
-        //   })
-        // }
         return eventToSend
       }),
     },

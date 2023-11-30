@@ -1,7 +1,13 @@
 <script lang="ts">
+  import type { Point } from "$lib/types"
+  import type { SimulatorActorType } from "./simulator"
+
   import { createActor, assign, createMachine } from "xstate"
   import { useSelector } from "@xstate/svelte"
-  import type { Point } from "$lib/types"
+  import Graph from "./Graph.svelte"
+
+  let { actor } = $props<{ actor: SimulatorActorType }>()
+
   const canvasActor = createActor(
     createMachine({
       id: "canvasMachine",
@@ -47,6 +53,6 @@
     <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.IN" })}>+</button>
   </div>
   <div style="transform: scale({$zoom}) translate({$dx}px, {$dy}px)" class="transition-transform duration-200 ease-in-out">
-    <slot />
+    <Graph {actor} />
   </div>
 </div>

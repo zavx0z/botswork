@@ -1,16 +1,20 @@
 <script lang="ts">
+  import type { ElkEdgeSection, ElkNode } from "elkjs"
+  import type { StateNode, AnyStateNode, AnyStateMachine } from "xstate"
+  import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "./types"
+
   import ELK from "elkjs"
   import { StateMachine } from "xstate"
-  import StateNodeViz from "./StateNodeViz.svelte"
-  import { getContext, onMount, tick } from "svelte"
-  import type { ElkEdgeSection, ElkNode } from "elkjs"
-  import type { StateNode, AnyActor, AnyStateNode, AnyStateMachine } from "xstate"
-  import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "./types"
-  import TransitionViz from "./event/TransitionViz.svelte"
-  import EdgeViz from "./edge/EdgeViz.svelte"
+  import { onMount, tick } from "svelte"
 
-  const service: AnyActor = getContext("service")
-  const machine = service.getSnapshot().context.machine.root
+  import State from "./State.svelte"
+  import Edge from "./Edge.svelte"
+  import Transition from "./Transition.svelte"
+  import type { SimulatorActorType } from "./simulator"
+
+  let { actor } = $props<{ actor: SimulatorActorType }>()
+
+  const machine = actor.getSnapshot().context.machine.root
   let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
   let nodes = $state<{ [key: string]: AnyStateNode }>({})
 
@@ -207,10 +211,10 @@
     getElkGraph(digraph)
   })
 
-  let activeIds = $state(service.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
+  let activeIds = $state(actor.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
   let previewIds: string[] = $state([])
   onMount(() => {
-    const { unsubscribe } = service.subscribe((state) => {
+    const { unsubscribe } = actor.subscribe((state) => {
       previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent })._nodes.map((i: AnyStateNode) => i.id) : []
       activeIds = state.context.state._nodes.map((i: AnyStateNode) => i.id)
     })
@@ -220,6 +224,6 @@
   })
 </script>
 
-<StateNodeViz {nodes} {activeIds} {previewIds} />
-<EdgeViz {edges} {nodes} {activeIds} />
-<TransitionViz {edges} {activeIds} />
+<State {nodes} {activeIds} {previewIds} />
+<Edge {edges} {nodes} {activeIds} />
+<Transition {edges} {activeIds} />

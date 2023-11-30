@@ -12,7 +12,7 @@
 		"strict": true,
 		"moduleResolution": "Bundler",
 		"types": [
-			"bun-types",
+			"bun-types"
 		]
 	}
 }

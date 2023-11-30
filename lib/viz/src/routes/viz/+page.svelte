@@ -1,47 +1,14 @@
 <script lang="ts">
-  import type { PageData } from "./$types"
-  import Canvas from "$lib/Canvas.svelte"
-  import { setContext } from "svelte"
-  import { Editor } from "@lib/editor"
+  import { createActor } from "xstate"
+  import { simulatorMachine, Simulator } from "$lib"
+  import TestMachine from "./TestMachine"
 
-  let { data } = $props<{ data: PageData }>()
-  setContext("service", data.service)
-  const visibleEditor = false
-  let content = `const machine = createMachine(
-  {
-    context: {
-      count: 0,
+  const actor = createActor(simulatorMachine, {
+    input: {
+      machine: TestMachine,
+      state: TestMachine.getInitialState(null as any),
     },
-    id: "testMachine",
-    entry: {
-      type: "rootAction1",
-    },
-    exit: {
-      type: "rootAction1",
-    },
-    initial: "final",
-    states: {
-      final: {
-        type: "final",
-      },
-      one:{
-        on: {HELLO: "two"}
-      },
-      two:{}
-    },
-  },
-  {
-    actions: { rootAction1: ({ context, event }) => {} },
-    actors: {},
-    guards: {},
-    delays: {},
-  },
-);`
+  }).start()
 </script>
 
-<Canvas />
-{#if visibleEditor}
-  <Editor {content} language="typescript" />
-{/if}
-<!-- <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => service.send({ type: "EVENT", event: { type: "NEXT" } })}> NEXT </button> -->
-<!-- <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => service.send({ type: "MACHINE.UPDATE", machine: parseMachines($content)[0] })}> MACHINE </button> -->
+<Simulator {actor} />

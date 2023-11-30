@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { LPathParam, SvgPath } from "./pathUtils"
-  import { getPath, getRect, pathToD } from "./pathUtils"
+  import type { LPathParam, SvgPath } from "./utils/edgeSVG"
+  import { getPath, getRect, pathToD } from "./utils/edgeSVG"
   import type { AnyStateNode } from "xstate"
   import type { DirectedGraphEdge, Point } from "$lib/types"
 
