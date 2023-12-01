@@ -2,7 +2,6 @@
   "name": "botswork",
   "type": "module",
   "workspaces": [
-    "core/*",
     "lib/*",
     "server/*",
     "module/*",

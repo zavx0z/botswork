@@ -3,8 +3,8 @@
   import NodeCode from "$lib/node/NodeFabric.svelte"
   import { T } from "@threlte/core"
   import { OrbitControls } from "@threlte/extras"
-  import { createEverything } from "@core/thing"
-  const { stuff, send } = createEverything()
+  // import { createEverything } from "@core/thing"
+  const { stuff, send } = {}
 
   const uuid = crypto.randomUUID()
   send({

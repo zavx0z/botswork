@@ -3,6 +3,6 @@
 </script>
 
 <svelte:head>
-  <title>@core/where</title>
+  <title>@lib/nodes</title>
 </svelte:head>
 <slot />

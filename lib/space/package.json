@@ -23,7 +23,6 @@
   ],
   "devDependencies": {
     "@lib/db": "workspace:*",
-    "@core/thing": "workspace:*",
     "@lib/dev": "workspace:*",
     "@lib/code": "workspace:*",
     "@lib/editor": "workspace:*",

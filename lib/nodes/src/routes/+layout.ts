@@ -9,13 +9,11 @@ const setPersistentState = (storeName: string, persistentState: ThingType[]) => 
 
 export const load = (async () => {
   let everything: ThingType[] = getPersistentState("everything")
-
   if (!everything.length)
     [
       {
         uuid: crypto.randomUUID(),
-        // uri: "https://esm.veryfront.com/@metafor/code-viewer@0.0.8/dist/CodeViewer.js",
-        uri: "/home/zavx0z/botswork/nodes/code-viewer/dist/CodeViewer.js",
+        uri: "https://zavx0z.github.io/skeleton-tracing/index.js",
       },
     ].forEach((thing) => import(/* @vite-ignore */ thing.uri).then((module) => everything.push({ ...thing, ...module.meta })).then(() => setPersistentState("everything", everything)))
   return { everything }

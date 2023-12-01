@@ -1,5 +1,5 @@
 {
-  "name": "@core/thing",
+  "name": "@lib/nodes",
   "version": "0.0.1",
   "scripts": {
     "dev": "vite dev --host 0.0.0.0",
@@ -21,6 +21,9 @@
     "!dist/**/*.test.*",
     "!dist/**/*.spec.*"
   ],
+  "peerDependencies": {
+    "svelte": "^5"
+  },
   "devDependencies": {
     "@lib/theme": "workspace:*",
     "@lib/ui": "workspace:*",
