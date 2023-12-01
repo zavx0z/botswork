@@ -47,7 +47,7 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "@xstate/svelte": "^2.1.0",
+    "@xstate/svelte": "^3.0.0",
     "prismjs": "^1.29.0"
   }
 }

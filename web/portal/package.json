@@ -9,6 +9,9 @@
     "build": "vite build",
     "check": "svelte-kit sync && svelte-check"
   },
+  "peerDependencies": {
+    "svelte": "^5"
+  },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.1.1",
     "@sveltejs/kit": "^1.27.6",
@@ -26,6 +29,6 @@
   },
   "dependencies": {
     "svelte-ripple-action": "^1.0.4",
-    "xstate": "^5.0.0-beta.53"
+    "xstate": "^5.0.0"
   }
 }

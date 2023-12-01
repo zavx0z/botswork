@@ -19,7 +19,7 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "xstate": "^5.0.0-beta.53",
+    "xstate": "^5.0.0",
     "svelte-ripple-action": "^1.0.4"
   }
 }
