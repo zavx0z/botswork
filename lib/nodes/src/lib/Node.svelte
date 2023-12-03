@@ -7,7 +7,8 @@
 
   let { thing } = $props<{ thing: ThingType }>()
   // import("/home/zavx0z/botswork/nodes/code-viewer/dist/CodeViewer.js")
-  console.log(thing.tag)
+
+  console.log(thing)
   let HTMLThingElement: HTMLElement | undefined = $state()
   const useNode = (node: HTMLElement) => {
     HTMLThingElement = node
