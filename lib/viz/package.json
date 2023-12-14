@@ -23,10 +23,10 @@
     "!dist/**/*.spec.*"
   ],
   "devDependencies": {
-    "@lib/dev": "workspace:*",
     "@lib/code": "workspace:*",
     "@lib/editor": "workspace:*",
     "@lib/icons": "workspace:*",
+    "@lib/machine": "workspace:*",
     "@lib/theme": "workspace:*",
     "@lib/ui": "workspace:*",
     "@sveltejs/adapter-auto": "^2.1.1",
@@ -38,10 +38,10 @@
     "svelte-check": "^3.6.2",
     "tslib": "^2.6.2",
     "typescript": "^5.3.2",
-    "vite": "^5.0.2"
+    "vite": "^5.0.2",
+    "web-worker": "^1.2.0"
   },
   "dependencies": {
-    "elkjs": "^0.8.2",
-    "xstate": "^5.0.0"
+    "elkjs": "^0.8.2"
   }
 }

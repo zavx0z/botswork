@@ -1,10 +1,11 @@
-import { createMachine, fromCallback } from "xstate"
+import { createMachine } from "@lib/machine"
 type Events = { type: "INC"; value: number } | { type: "ROOT.EVENT" } | { type: "EVENT" } | { type: "NEXT" } | { type: "PREV" } | { type: "SELF" } | { type: "TO_PARALLEL" }
 
 export default createMachine(
   {
+    predictableActionArguments: true,
     id: "testMachine",
-    types: {} as {
+    schema: {} as {
       events: Events
       context: {
         count: number
@@ -25,10 +26,10 @@ export default createMachine(
         exit: ["anotherAction", "action4"],
         on: {
           NEXT: "compound",
-          INC: [{ target: "compound", guard: ({ event }) => event.value > 10 }, { target: "final" }],
+          INC: [{ target: "compound", cond: (_, event) => event.value > 10 }, { target: "final" }],
           EVENT: {
             target: "final",
-            guard: function somethingIsTrue() {
+            cond: function somethingIsTrue() {
               return true
             },
           },
@@ -59,7 +60,7 @@ export default createMachine(
             initial: "atomic",
             always: {
               target: "one",
-              guard: function gua() {
+              cond: function gua() {
                 return true
               },
             },
@@ -110,8 +111,8 @@ export default createMachine(
       anotherAction: () => {},
       action4: () => {},
     },
-    actors: {
-      fooSrc: fromCallback(() => {}),
+    services: {
+      fooSrc: () => () => {},
     },
   },
 )

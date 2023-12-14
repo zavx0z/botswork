@@ -1,22 +1,20 @@
 <script lang="ts">
   import type { ElkEdgeSection, ElkNode } from "elkjs"
-  import type { StateNode, AnyStateNode, AnyStateMachine } from "xstate"
+  import type { StateNode, StateMachine, AnyStateMachine, AnyStateNodeDefinition } from "@lib/machine"
   import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "./types"
 
   import ELK from "elkjs"
-  import { StateMachine } from "xstate"
   import { onMount, tick } from "svelte"
 
   import State from "./State.svelte"
   import Edge from "./Edge.svelte"
   import Transition from "./Transition.svelte"
-  import type { SimulatorActorType } from "./simulator"
 
-  let { actor } = $props<{ actor: SimulatorActorType }>()
+  let { actor } = $props<{ actor: any }>()
 
   const machine = actor.getSnapshot().context.machine.root
   let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
-  let nodes = $state<{ [key: string]: AnyStateNode }>({})
+  let nodes = $state<{ [key: string]: AnyStateNodeDefinition }>({})
 
   const elk = new ELK({ defaultLayoutOptions: {} })
   const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode) => getElkChild(childNode, rMap))
