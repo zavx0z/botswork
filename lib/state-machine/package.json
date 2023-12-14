@@ -39,7 +39,9 @@
 		"jsdom": "^14.0.0",
 		"pkg-up": "^3.1.0",
 		"rxjs": "^7.1.0",
-		"xml-js": "^1.6.11"
+		"xml-js": "^1.6.11",
+		"@lib/theme": "workspace:*",
+    "@lib/ui": "workspace:*"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",

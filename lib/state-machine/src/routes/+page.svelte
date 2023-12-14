@@ -1,33 +1,43 @@
 <script lang="ts">
   import { createMachine, interpret } from "$lib"
 
-  const machine = createMachine({
-    id: "machine",
-    initial: "idle",
-    states: {
-      idle: {
-        on: {
-          "next.state": "next",
+  const machine = createMachine(
+    {
+      id: "machine",
+      initial: "idle",
+      states: {
+        idle: {
+          on: {
+            "next.state": "next",
+          },
+        },
+        next: {
+          after: {
+            1000: { target: "invoke" },
+          },
+        },
+        invoke: {
+          invoke: {
+            src: "invoke",
+            onDone: { target: "idle" },
+          },
         },
       },
-      next: {
-        after: {
-          1000: { target: "idle" },
-        },
+      predictableActionArguments: true,
+    },
+    {
+      services: {
+        invoke: createMachine({ id: "invoke", predictableActionArguments: true }),
       },
     },
-    predictableActionArguments: true,
-  })
-  const actor = interpret(machine)
+  )
+  const actor = interpret(machine, {})
 
   actor.subscribe((state) => {
     console.log(state.value)
   })
   actor.start()
   actor.send({ type: "next.state" })
-  $effect(() => {
-    console.log($actor.value)
-  })
 </script>
 
 <h1>Welcome to your library project</h1>
