@@ -39,5 +39,14 @@
   </div>
 </Activity>
 <div class="ml-12"> -->
+<div id="root">
   <slot />
+</div>
 <!-- </div> -->
+
+<style>
+  #root {
+    height: 100svh;
+    widows: 100svw;
+  }
+</style>

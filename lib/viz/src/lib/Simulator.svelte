@@ -1,12 +1,9 @@
 <script lang="ts">
   import type { Point } from "$lib/types"
-
   import { interpret, assign, createMachine } from "@lib/machine"
-  import { useSelector } from "@xstate/svelte"
   import Graph from "./Graph.svelte"
 
-  let { actor } = $props<{ actor: any }>()
-
+  export let actor: any
   const canvasActor = interpret(
     createMachine({
       id: "canvasMachine",

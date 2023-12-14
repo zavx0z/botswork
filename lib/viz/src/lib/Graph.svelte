@@ -10,11 +10,11 @@
   import Edge from "./Edge.svelte"
   import Transition from "./Transition.svelte"
 
-  let { actor } = $props<{ actor: AnyActorRef }>()
+  export let actor: AnyActorRef
 
   const machine = actor.getSnapshot().context.machine
-  let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
-  let nodes = $state<{ [key: string]: AnyStateNode }>({})
+  const edges: { [key: string]: DirectedGraphEdge } = {}
+  const nodes: { [key: string]: AnyStateNode } = {}
 
   const elk = new ELK({ defaultLayoutOptions: {} })
   const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode) => getElkChild(childNode, rMap))
@@ -150,7 +150,6 @@
           y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
         },
       }
-
       elkNode.edges?.forEach((edge) => {
         setEdgeLayout(edge)
       })
@@ -173,44 +172,48 @@
     children.sort((a, b) => b.order - a.order)
     return children
   }
-  onMount(async () => {
-    function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): DirectedGraphNode {
-      const stateNode = stateMachine
-      const egs: DirectedGraphEdge[] = flatten(
-        [...stateNode.transitions.values()].flat().map((t, transitionIndex) => {
-          const targets = t.target ? t.target : [stateNode]
-          return targets.map((target, targetIndex) => {
-            const edge: DirectedGraphEdge = {
-              id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
-              source: stateNode as AnyStateNode,
-              target: target as AnyStateNode,
-              transition: t,
-              sections: [],
-              label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
-            }
-            edges[edge.id] = edge
-            return edge
-          })
-        }),
-      )
-      const graph: DirectedGraphNode = {
-        id: stateNode.id,
-        stateNode: stateNode as AnyStateNode,
-        children: getChildren(stateNode as AnyStateNode).map(toDirectedGraph),
-        edges: egs,
-      }
-      nodes[graph.id] = graph.stateNode
-      return graph
+
+  function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): DirectedGraphNode {
+    const stateNode = stateMachine
+    const egs: DirectedGraphEdge[] = flatten(
+      [...stateNode.transitions.values()].flat().map((t, transitionIndex) => {
+        const targets = t.target ? t.target : [stateNode]
+        return targets.map((target, targetIndex) => {
+          const edge: DirectedGraphEdge = {
+            id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
+            source: stateNode as AnyStateNode,
+            target: target as AnyStateNode,
+            transition: t,
+            sections: [],
+            label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
+          }
+          edges[edge.id] = edge
+          return edge
+        })
+      }),
+    )
+    const graph: DirectedGraphNode = {
+      id: stateNode.id,
+      stateNode: stateNode as AnyStateNode,
+      children: getChildren(stateNode as AnyStateNode).map(toDirectedGraph),
+      edges: egs,
     }
+    nodes[graph.id] = graph.stateNode
+    return graph
+  }
+
+  onMount(async () => {
     let digraph = toDirectedGraph(machine)
     await tick()
     getElkGraph(digraph)
   })
-  let activeIds = $state(actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id))
-  let previewIds: string[] = $state([])
+
+  let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)
+  let previewIds: string[] = []
   onMount(() => {
     const { unsubscribe } = actor.subscribe((state) => {
       previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent }).configuration.map((i: AnyStateNode) => i.id) : []
+      console.log(previewIds)
       activeIds = state.context.state.configuration.map((i: AnyStateNode) => i.id)
     })
     return () => {
@@ -219,6 +222,14 @@
   })
 </script>
 
-<State {nodes} {activeIds} {previewIds} />
-<Edge {edges} {nodes} {activeIds} />
-<Transition {edges} {activeIds} />
+{#each Object.entries(nodes) as [id, node] (id)}
+  <State {node} {previewIds} {activeIds} />
+{/each}
+<svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
+  {#each Object.entries(edges) as [id, edge], order (id)}
+    <Edge {edge} {nodes} {activeIds} {order} />
+  {/each}
+</svg>
+{#each Object.entries(edges) as [id, edge] (id)}
+  <Transition {edge} {activeIds} {actor} />
+{/each}

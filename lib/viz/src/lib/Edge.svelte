@@ -4,12 +4,10 @@
   import type { AnyStateNode } from "@lib/machine"
   import type { DirectedGraphEdge, Point } from "$lib/types"
 
-  let { edges, nodes, activeIds } = $props<{
-    edges: { [key: string]: DirectedGraphEdge }
-    nodes: { [key: string]: AnyStateNode }
-    activeIds: string[]
-  }>()
-
+  export let edge: DirectedGraphEdge
+  export let nodes: { [key: string]: AnyStateNode }
+  export let activeIds: string[] = []
+  export let order: number
   const svgPath = (element: SVGPathElement, edge: DirectedGraphEdge) => {
     return {
       update(edge: DirectedGraphEdge) {
@@ -37,19 +35,11 @@
   }
 </script>
 
-<svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
-  {#each Object.entries(edges) as [id, edge], order (id)}
-    {@render path_({ edge, order })}
-  {/each}
-</svg>
-
-{#snippet path_({ edge, order })}
-  <g data-active={activeIds.includes(edge.source.id)} stroke={"#fff"} class="fill-tertiary-900 stroke-tertiary-900 data-[active=true]:fill-primary-500 data-[active=true]:stroke-primary-500">
-    <defs>
-      <marker id="{edge.source.order}-{order}" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="0" refY="5" markerUnits="strokeWidth" orient="auto">
-        <path d="M0,0 L0,10 L10,5 z" />
-      </marker>
-    </defs>
-    <path use:svgPath={edge} stroke-width={2} fill="none" marker-end="url(#{edge.source.order}-{order})" opacity="0" class="transition-colors"></path>
-  </g>
-{/snippet}
+<g data-active={activeIds.includes(edge.source.id)} stroke={"#fff"} class="fill-tertiary-900 stroke-tertiary-900 data-[active=true]:fill-primary-500 data-[active=true]:stroke-primary-500">
+  <defs>
+    <marker id="{edge.source.order}-{order}" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="0" refY="5" markerUnits="strokeWidth" orient="auto">
+      <path d="M0,0 L0,10 L10,5 z" />
+    </marker>
+  </defs>
+  <path use:svgPath={edge} stroke-width={2} fill="none" marker-end="url(#{edge.source.order}-{order})" opacity="0" class="transition-colors"></path>
+</g>

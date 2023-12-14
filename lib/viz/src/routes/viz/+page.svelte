@@ -6,9 +6,6 @@
     machine: TestMachine,
     state: TestMachine.getInitialState(null as any),
   }).start()
-  $effect(() => {
-    // console.log($simulator)
-  })
 </script>
 
 <Simulator actor={simulator} />
