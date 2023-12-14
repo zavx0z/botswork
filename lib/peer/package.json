@@ -29,7 +29,7 @@
 		"@lib/theme": "workspace:*",
 		"svelte": "^5.0.0-next.16",
 		"@sveltejs/adapter-auto": "^2.0.0",
-    "@sveltejs/kit": "^1.27.4",
+    "@sveltejs/kit": "^1.27.6",
     "@sveltejs/package": "^2.0.0",
     "publint": "^0.1.9",
     "svelte-check": "^3.6.0",

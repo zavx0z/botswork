@@ -45,5 +45,5 @@ New-NetFirewallRule -Name "WSL Ports" -DisplayName "Allow WSL Ports" -Enabled Tr
 ### обновить пакеты
 
 ```shell
- bun x npm-check-updates -ui
+
 ```
