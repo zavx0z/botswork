@@ -7,8 +7,8 @@
     state: TestMachine.getInitialState(null as any),
   }).start()
   $effect(() => {
-    console.log($simulator)
+    // console.log($simulator)
   })
 </script>
 
-<!-- <Simulator actor={simulator} /> -->
+<Simulator actor={simulator} />

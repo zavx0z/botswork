@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DirectedGraphEdge } from "$lib/types"
-  import type { SimulatorActorType } from "./simulator"
+  // import type { SimulatorActorType } from "./simulator"
 
   import { getContext } from "svelte"
 
@@ -9,7 +9,7 @@
     activeIds: string[]
   }>()
 
-  const service: SimulatorActorType = getContext("service")
+  const service: any = getContext("service")
   const setSize = (element: HTMLElement, edge: DirectedGraphEdge) => {
     const { width, height } = element.getBoundingClientRect()
     edge.label.width = width
@@ -36,7 +36,7 @@
 </script>
 
 {#each Object.entries(edges) as [id, edge] (id)}
-  {@const guard = edge.transition.guard}
+  {@const guard = edge.transition.cond}
   {@const eventType = edge.transition.eventType}
   {@render transition_({ edge, guard, eventType })}
 {/each}

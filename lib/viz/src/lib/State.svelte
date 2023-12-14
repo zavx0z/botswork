@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AnyStateNode } from "xstate"
+  import type { AnyStateNode } from "@lib/machine"
 
   const { nodes, activeIds, previewIds } = $props<{
     nodes: { [key: string]: AnyStateNode }

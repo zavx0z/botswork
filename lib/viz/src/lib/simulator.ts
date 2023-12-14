@@ -1,44 +1,25 @@
-// import type {
-//   Actor,
-//   //  ActorLogic,
-//   AnyStateMachine,
-//   // AnyStateNodeConfig,
-//   //  AnyTransitionDefinition,
-//   // EventDescriptor
-// } from "@lib/machine"
-
 import { assign, interpret, createMachine, sendTo } from "@lib/machine"
-
-export type Events = { type: "EVENT"; event: any } | { type: "EVENT.PREVIEW"; eventType: string } | { type: "STATE.UPDATE"; state: any } | { type: "MACHINE.UPDATE" } | { type: "PREVIEW.CLEAR" }
-// export type SimulatorEvents =
-//   | { type: "EVENT"; event: EventDescriptor<any> }
-//   | { type: "EVENT.PREVIEW"; eventType: AnyTransitionDefinition }
-//   | { type: "STATE.UPDATE"; state: AnyStateNodeConfig }
-//   | { type: "MACHINE.UPDATE"; machine: AnyStateMachine }
-//   | { type: "PREVIEW.CLEAR" }
+import type { EventType, AnyStateMachine, EventObject, AnyState } from "@lib/machine"
+export type Events =
+  | { type: "EVENT"; event: EventObject }
+  | { type: "EVENT.PREVIEW"; eventType: EventType }
+  | { type: "STATE.UPDATE"; state: AnyState }
+  | { type: "MACHINE.UPDATE"; machine: AnyStateMachine }
+  | { type: "PREVIEW.CLEAR" }
 // export type SimulatorActorType = Actor<ActorLogic<any, SimulatorEvents, any, any>>
 type InputType = {
-  machine: any
-  state: any
-  previewEvent?: any
+  machine: AnyStateMachine
+  state: AnyState
+  previewEvent?: string
 }
-export const createSimulator = (input: InputType) => {
-  return interpret(
+export const createSimulator = (input: InputType) =>
+  interpret(
     createMachine({
       id: "simService",
-      // types: {} as {
-      //   context: {
-      //     machine: AnyStateMachine
-      //     state: AnyStateNodeConfig
-      //     previewEvent?: string
-      //   }
-      //   events: SimulatorEvents
-      //   input: {
-      //     machine: AnyStateMachine
-      //     state: AnyStateNodeConfig
-      //     previewEvent?: string
-      //   }
-      // },
+      schema: {} as {
+        events: Events
+        context: InputType
+      },
       initial: "active",
       context: () => ({
         machine: input.machine,
@@ -80,7 +61,7 @@ export const createSimulator = (input: InputType) => {
               actions: assign({ machine: (_, event) => event.machine }),
             },
             "EVENT.PREVIEW": {
-              actions: assign({ previewEvent: (_, event) => event.eventType as unknown as string }),
+              actions: assign({ previewEvent: (_, event) => event.eventType }),
             },
             "PREVIEW.CLEAR": {
               actions: assign({ previewEvent: undefined }),
@@ -91,4 +72,3 @@ export const createSimulator = (input: InputType) => {
       predictableActionArguments: true,
     }),
   )
-}

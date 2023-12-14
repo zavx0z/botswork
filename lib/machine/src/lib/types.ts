@@ -11,6 +11,7 @@ import type {
   TypegenEnabled,
 } from "./typegenTypes"
 
+export type AnyStateNode = StateNode<any, any>
 export type AnyFunction = (...args: any[]) => any
 type ReturnTypeOrValue<T> = T extends AnyFunction ? ReturnType<T> : T
 

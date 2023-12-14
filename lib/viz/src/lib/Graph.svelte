@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ElkEdgeSection, ElkNode } from "elkjs"
-  import type { StateNode, StateMachine, AnyStateMachine, AnyStateNodeDefinition } from "@lib/machine"
+  import type { StateNode, AnyStateMachine, AnyStateNode, AnyActorRef } from "@lib/machine"
   import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "./types"
 
   import ELK from "elkjs"
@@ -10,11 +10,11 @@
   import Edge from "./Edge.svelte"
   import Transition from "./Transition.svelte"
 
-  let { actor } = $props<{ actor: any }>()
+  let { actor } = $props<{ actor: AnyActorRef }>()
 
-  const machine = actor.getSnapshot().context.machine.root
+  const machine = actor.getSnapshot().context.machine
   let edges = $state<{ [key: string]: DirectedGraphEdge }>({})
-  let nodes = $state<{ [key: string]: AnyStateNodeDefinition }>({})
+  let nodes = $state<{ [key: string]: AnyStateNode }>({})
 
   const elk = new ELK({ defaultLayoutOptions: {} })
   const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode) => getElkChild(childNode, rMap))
@@ -69,8 +69,7 @@
         if (set.has(m)) return m
         m = m.parent
       }
-      //@ts-ignore
-      return a.machine // root
+      return a.machine
     }
     Object.values(edges).forEach((edge) => {
       const lca = getLCA(edge.source, edge.target)
@@ -103,29 +102,29 @@
       edges[edge.id].label.x = elkLca?.x || 0
       edges[edge.id].label.y = elkLca?.y || 0
 
-      //@ts-ignore
-      const translatedSections: ElkEdgeSection[] = elkLca
-        ? //@ts-ignore
-          edge.sections.map((section) => ({
-            ...section,
-            startPoint: {
-              x: section.startPoint.x + elkLca.absolutePosition.x,
-              y: section.startPoint.y + elkLca.absolutePosition.y,
-            },
-            endPoint: {
-              x: section.endPoint.x + elkLca.absolutePosition.x,
-              y: section.endPoint.y + elkLca.absolutePosition.y,
-            },
-            bendPoints: section.bendPoints?.map((bendPoint) => {
-              return {
-                x: bendPoint.x + elkLca.absolutePosition.x,
-                y: bendPoint.y + elkLca.absolutePosition.y,
-              }
-            }),
-          }))
-        : edge.sections
-      //@ts-ignore
-      edge.edge.sections = translatedSections
+      if (edge.sections) {
+        const translatedSections: ElkEdgeSection[] | undefined = elkLca
+          ? edge.sections.map((section) => ({
+              ...section,
+              startPoint: {
+                x: section.startPoint.x + elkLca.absolutePosition.x,
+                y: section.startPoint.y + elkLca.absolutePosition.y,
+              },
+              endPoint: {
+                x: section.endPoint.x + elkLca.absolutePosition.x,
+                y: section.endPoint.y + elkLca.absolutePosition.y,
+              },
+              bendPoints: section.bendPoints?.map((bendPoint) => {
+                return {
+                  x: bendPoint.x + elkLca.absolutePosition.x,
+                  y: bendPoint.y + elkLca.absolutePosition.y,
+                }
+              }),
+            }))
+          : edge.sections
+        if (translatedSections) edge.edge.sections = translatedSections
+      }
+
       edge.edge.label.x = (edge.labels?.[0].x || 0) + (elkLca?.absolutePosition.x || 0)
       edge.edge.label.y = (edge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
     }
@@ -176,11 +175,10 @@
   }
   onMount(async () => {
     function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): DirectedGraphNode {
-      const stateNode = stateMachine instanceof StateMachine ? stateMachine.root : stateMachine
+      const stateNode = stateMachine
       const egs: DirectedGraphEdge[] = flatten(
-        [...stateNode.transitions.values(), stateNode.always ? stateNode.always : []].flat().map((t, transitionIndex) => {
+        [...stateNode.transitions.values()].flat().map((t, transitionIndex) => {
           const targets = t.target ? t.target : [stateNode]
-
           return targets.map((target, targetIndex) => {
             const edge: DirectedGraphEdge = {
               id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
@@ -208,13 +206,12 @@
     await tick()
     getElkGraph(digraph)
   })
-
-  let activeIds = $state(actor.getSnapshot().context.state._nodes.map((i: AnyStateNode) => i.id))
+  let activeIds = $state(actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id))
   let previewIds: string[] = $state([])
   onMount(() => {
     const { unsubscribe } = actor.subscribe((state) => {
-      previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent })._nodes.map((i: AnyStateNode) => i.id) : []
-      activeIds = state.context.state._nodes.map((i: AnyStateNode) => i.id)
+      previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent }).configuration.map((i: AnyStateNode) => i.id) : []
+      activeIds = state.context.state.configuration.map((i: AnyStateNode) => i.id)
     })
     return () => {
       unsubscribe()

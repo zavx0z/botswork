@@ -1,5 +1,5 @@
 import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
-import type { AnyStateNode, TransitionDefinition, StateNode } from "xstate"
+import type { TransitionDefinition, AnyStateNode, StateNode } from "@lib/machine"
 
 export type DirectedGraphLabel = {
   text: string
