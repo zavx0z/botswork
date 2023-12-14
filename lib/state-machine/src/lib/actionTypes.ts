@@ -1,6 +1,4 @@
 import { ActionTypes } from "./types"
-
-// xstate-specific action types
 export const start = ActionTypes.Start
 export const stop = ActionTypes.Stop
 export const raise = ActionTypes.Raise

@@ -26,8 +26,8 @@ import type {
   Behavior,
   RaiseActionObject,
   SendActionObject,
-  SpecialTargets,
 } from "./types"
+import {SpecialTargets} from "./types"
 import * as actionTypes from "./actionTypes"
 import { STATE_DELIMITER, DEFAULT_GUARD_TYPE, TARGETLESS_KEY } from "./constants"
 import { IS_PRODUCTION } from "./environment"

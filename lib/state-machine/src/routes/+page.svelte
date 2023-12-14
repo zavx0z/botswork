@@ -9,11 +9,12 @@
         on: {
           "next.state": "next",
         },
-        // after: {
-        //   1000: { target: "next" },
-        // },
       },
-      next: {},
+      next: {
+        after: {
+          1000: { target: "idle" },
+        },
+      },
     },
     predictableActionArguments: true,
   })

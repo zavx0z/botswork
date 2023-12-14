@@ -1,66 +1,52 @@
-import {
-  type Action,
-  type Event,
-  type EventObject,
-  type SingleOrArray,
-  type SendAction,
-  type SendActionOptions,
-  type CancelAction,
-  type ActionObject,
-  type ActionType,
-  type Assigner,
-  type PropertyAssigner,
-  type AssignAction,
-  type ActionFunction,
-  type ActionFunctionMap,
-  type ActivityActionObject,
-  ActionTypes,
-  type ActivityDefinition,
-  type SpecialTargets,
-  type RaiseAction,
-  type RaiseActionObject,
-  type DoneEvent,
-  type ErrorPlatformEvent,
-  type DoneEventObject,
-  type SendExpr,
-  type SendActionObject,
-  type PureAction,
-  type LogExpr,
-  type LogAction,
-  type LogActionObject,
-  type DelayFunctionMap,
-  type SCXML,
-  type ExprWithMeta,
-  type ChooseCondition,
-  type ChooseAction,
-  type AnyEventObject,
-  type Expr,
-  type StopAction,
-  type StopActionObject,
-  type Cast,
-  type EventFrom,
-  type AnyActorRef,
-  type PredictableActionArgumentsExec,
-  type RaiseActionOptions,
-  type NoInfer,
-  type BaseActionObject,
-  type LowInfer,
+import type {
+  Action,
+  Event,
+  EventObject,
+  SingleOrArray,
+  SendAction,
+  SendActionOptions,
+  CancelAction,
+  ActionObject,
+  ActionType,
+  Assigner,
+  PropertyAssigner,
+  AssignAction,
+  ActionFunction,
+  ActionFunctionMap,
+  ActivityActionObject,
+  ActivityDefinition,
+  RaiseAction,
+  RaiseActionObject,
+  DoneEvent,
+  ErrorPlatformEvent,
+  DoneEventObject,
+  SendExpr,
+  SendActionObject,
+  PureAction,
+  LogExpr,
+  LogAction,
+  LogActionObject,
+  DelayFunctionMap,
+  SCXML,
+  ExprWithMeta,
+  ChooseCondition,
+  ChooseAction,
+  AnyEventObject,
+  Expr,
+  StopAction,
+  StopActionObject,
+  Cast,
+  EventFrom,
+  AnyActorRef,
+  PredictableActionArgumentsExec,
+  RaiseActionOptions,
+  NoInfer,
+  BaseActionObject,
+  LowInfer,
 } from "./types"
+import { ActionTypes, SpecialTargets } from "./types"
 import * as actionTypes from "./actionTypes"
-import {
-  getEventType,
-  isFunction,
-  isString,
-  toEventObject,
-  toSCXMLEvent,
-  flatten,
-  updateContext,
-  warn,
-  toGuard,
-  evaluateGuard,
-  toArray,
-  isArray,
-} from "./utils"
+import { getEventType, isFunction, isString, toEventObject, toSCXMLEvent, flatten, updateContext, warn, toGuard, evaluateGuard, toArray, isArray } from "./utils"
 import type { State } from "./State"
 import type { StateNode } from "./StateNode"
 import { IS_PRODUCTION } from "./environment"
@@ -71,15 +57,12 @@ export const initEvent = toSCXMLEvent({ type: actionTypes.init })
 
 export function getActionFunction<TContext, TEvent extends EventObject>(
   actionType: ActionType,
-  actionFunctionMap?: ActionFunctionMap<TContext, TEvent>
+  actionFunctionMap?: ActionFunctionMap<TContext, TEvent>,
 ): ActionObject<TContext, TEvent> | ActionFunction<TContext, TEvent> | undefined {
   return actionFunctionMap ? actionFunctionMap[actionType] || undefined : undefined
 }
 
-export function toActionObject<TContext, TEvent extends EventObject>(
-  action: Action<TContext, TEvent>,
-  actionFunctionMap?: ActionFunctionMap<TContext, TEvent>
-): ActionObject<TContext, TEvent> {
+export function toActionObject<TContext, TEvent extends EventObject>(action: Action<TContext, TEvent>, actionFunctionMap?: ActionFunctionMap<TContext, TEvent>): ActionObject<TContext, TEvent> {
   let actionObject: ActionObject<TContext, TEvent>
 
   if (isString(action) || typeof action === "number") {
@@ -124,7 +107,7 @@ export function toActionObject<TContext, TEvent extends EventObject>(
 
 export const toActionObjects = <TContext, TEvent extends EventObject>(
   action?: SingleOrArray<Action<TContext, TEvent>> | undefined,
-  actionFunctionMap?: ActionFunctionMap<TContext, TEvent>
+  actionFunctionMap?: ActionFunctionMap<TContext, TEvent>,
 ): Array<ActionObject<TContext, TEvent>> => {
   if (!action) {
     return []
@@ -135,9 +118,7 @@ export const toActionObjects = <TContext, TEvent extends EventObject>(
   return actions.map((subAction) => toActionObject(subAction, actionFunctionMap))
 }
 
-export function toActivityDefinition<TContext, TEvent extends EventObject>(
-  action: string | ActivityDefinition<TContext, TEvent>
-): ActivityDefinition<TContext, TEvent> {
+export function toActivityDefinition<TContext, TEvent extends EventObject>(action: string | ActivityDefinition<TContext, TEvent>): ActivityDefinition<TContext, TEvent> {
   const actionObject = toActionObject(action)
 
   return {
@@ -155,7 +136,7 @@ export function toActivityDefinition<TContext, TEvent extends EventObject>(
  */
 export function raise<TContext, TExpressionEvent extends EventObject, TEvent extends EventObject = TExpressionEvent>(
   event: NoInfer<Event<TEvent>> | SendExpr<TContext, TExpressionEvent, TEvent>,
-  options?: RaiseActionOptions<TContext, TExpressionEvent>
+  options?: RaiseActionOptions<TContext, TExpressionEvent>,
 ): RaiseAction<TContext, TExpressionEvent, TEvent> {
   return {
     type: actionTypes.raise,
@@ -169,7 +150,7 @@ export function resolveRaise<TContext, TEvent extends EventObject, TExpressionEv
   action: RaiseAction<TContext, TExpressionEvent, TEvent>,
   ctx: TContext,
   _event: SCXML.Event<TExpressionEvent>,
-  delaysMap?: DelayFunctionMap<TContext, TEvent>
+  delaysMap?: DelayFunctionMap<TContext, TEvent>,
 ): RaiseActionObject<TContext, TExpressionEvent, TEvent> {
   const meta = {
     _event,
@@ -205,7 +186,7 @@ export function resolveRaise<TContext, TEvent extends EventObject, TExpressionEv
  */
 export function send<TContext, TEvent extends EventObject, TSentEvent extends EventObject = AnyEventObject>(
   event: Event<AnyEventObject> | SendExpr<TContext, TEvent, AnyEventObject>,
-  options?: SendActionOptions<TContext, TEvent>
+  options?: SendActionOptions<TContext, TEvent>,
 ): SendAction<TContext, TEvent, TSentEvent> {
   return {
     to: options ? options.to : undefined,
@@ -214,12 +195,7 @@ export function send<TContext, TEvent extends EventObject, TSentEvent extends Ev
     delay: options ? options.delay : undefined,
     // TODO: don't auto-generate IDs here like that
     // there is too big chance of the ID collision
-    id:
-      options && options.id !== undefined
-        ? options.id
-        : isFunction(event)
-        ? event.name
-        : (getEventType(event) as string),
+    id: options && options.id !== undefined ? options.id : isFunction(event) ? event.name : (getEventType(event) as string),
   } as any
 }
 
@@ -227,7 +203,7 @@ export function resolveSend<TContext, TEvent extends EventObject, TSentEvent ext
   action: SendAction<TContext, TEvent, TSentEvent>,
   ctx: TContext,
   _event: SCXML.Event<TEvent>,
-  delaysMap?: DelayFunctionMap<TContext, TEvent>
+  delaysMap?: DelayFunctionMap<TContext, TEvent>,
 ): SendActionObject<TContext, TEvent, TSentEvent> {
   const meta = {
     _event,
@@ -263,7 +239,7 @@ export function resolveSend<TContext, TEvent extends EventObject, TSentEvent ext
  */
 export function sendParent<TContext, TEvent extends EventObject, TSentEvent extends EventObject = AnyEventObject>(
   event: Event<AnyEventObject> | SendExpr<TContext, TEvent, AnyEventObject>,
-  options?: SendActionOptions<TContext, TEvent>
+  options?: SendActionOptions<TContext, TEvent>,
 ): SendAction<TContext, TEvent, TSentEvent> {
   return send<TContext, TEvent, TSentEvent>(event, {
     ...options,
@@ -286,7 +262,7 @@ type InferEvent<E extends EventObject> = {
 export function sendTo<TContext, TEvent extends EventObject, TActor extends AnyActorRef>(
   actor: string | TActor | ((ctx: TContext, event: TEvent) => TActor),
   event: EventFrom<TActor> | SendExpr<TContext, TEvent, InferEvent<Cast<EventFrom<TActor>, EventObject>>>,
-  options?: SendActionOptions<TContext, TEvent>
+  options?: SendActionOptions<TContext, TEvent>,
 ): SendAction<TContext, TEvent, any> {
   return send<TContext, TEvent, any>(event, {
     ...options,
@@ -309,7 +285,7 @@ export function sendUpdate<TContext, TEvent extends EventObject>(): SendAction<T
  */
 export function respond<TContext, TEvent extends EventObject, TSentEvent extends EventObject = AnyEventObject>(
   event: Event<TEvent> | SendExpr<TContext, TEvent, TSentEvent>,
-  options?: SendActionOptions<TContext, TEvent>
+  options?: SendActionOptions<TContext, TEvent>,
 ) {
   return send<TContext, TEvent>(event, {
     ...options,
@@ -334,7 +310,7 @@ const defaultLogExpr = <TContext, TEvent extends EventObject>(context: TContext,
  */
 export function log<TContext, TExpressionEvent extends EventObject, TEvent extends EventObject = TExpressionEvent>(
   expr: string | LogExpr<TContext, TExpressionEvent> = defaultLogExpr,
-  label?: string
+  label?: string,
 ): LogAction<TContext, TExpressionEvent, TEvent> {
   return {
     type: actionTypes.log,
@@ -343,11 +319,7 @@ export function log<TContext, TExpressionEvent extends EventObject, TEvent exten
   } as any
 }
 
-export const resolveLog = <TContext, TEvent extends EventObject>(
-  action: LogAction<TContext, TEvent>,
-  ctx: TContext,
-  _event: SCXML.Event<TEvent>
-): LogActionObject<TContext, TEvent> =>
+export const resolveLog = <TContext, TEvent extends EventObject>(action: LogAction<TContext, TEvent>, ctx: TContext, _event: SCXML.Event<TEvent>): LogActionObject<TContext, TEvent> =>
   ({
     // TODO: remove .expr from resulting object
     ...action,
@@ -356,7 +328,7 @@ export const resolveLog = <TContext, TEvent extends EventObject>(
       : action.expr(ctx, _event.data, {
           _event,
         }),
-  } as any)
+  }) as any
 
 /**
  * Cancels an in-flight `send(...)` action. A canceled sent action will not
@@ -365,9 +337,7 @@ export const resolveLog = <TContext, TEvent extends EventObject>(
  *
  * @param sendId The `id` of the `send(...)` action to cancel.
  */
-export const cancel = <TContext, TExpressionEvent extends EventObject, TEvent extends EventObject>(
-  sendId: string | number
-): CancelAction<TContext, TExpressionEvent, TEvent> => {
+export const cancel = <TContext, TExpressionEvent extends EventObject, TEvent extends EventObject>(sendId: string | number): CancelAction<TContext, TExpressionEvent, TEvent> => {
   return {
     type: actionTypes.cancel,
     sendId,
@@ -379,9 +349,7 @@ export const cancel = <TContext, TExpressionEvent extends EventObject, TEvent ex
  *
  * @param activity The activity to start.
  */
-export function start<TContext, TEvent extends EventObject>(
-  activity: string | ActivityDefinition<TContext, TEvent>
-): ActivityActionObject<TContext, TEvent> {
+export function start<TContext, TEvent extends EventObject>(activity: string | ActivityDefinition<TContext, TEvent>): ActivityActionObject<TContext, TEvent> {
   const activityDef = toActivityDefinition(activity)
 
   return {
@@ -397,7 +365,7 @@ export function start<TContext, TEvent extends EventObject>(
  * @param actorRef The activity to stop.
  */
 export function stop<TContext, TExpressionEvent extends EventObject, TEvent extends EventObject = TExpressionEvent>(
-  actorRef: string | Expr<TContext, TExpressionEvent, string | { id: string }>
+  actorRef: string | Expr<TContext, TExpressionEvent, string | { id: string }>,
 ): StopAction<TContext, TExpressionEvent, TEvent> {
   const activity = isFunction(actorRef) ? actorRef : toActivityDefinition(actorRef)
 
@@ -408,11 +376,7 @@ export function stop<TContext, TExpressionEvent extends EventObject, TEvent exte
   } as any
 }
 
-export function resolveStop<TContext, TEvent extends EventObject>(
-  action: StopAction<TContext, TEvent>,
-  context: TContext,
-  _event: SCXML.Event<TEvent>
-): StopActionObject {
+export function resolveStop<TContext, TEvent extends EventObject>(action: StopAction<TContext, TEvent>, context: TContext, _event: SCXML.Event<TEvent>): StopActionObject {
   const actorRefOrString = isFunction(action.activity) ? action.activity(context, _event.data) : action.activity
   const resolvedActorRef = typeof actorRefOrString === "string" ? { id: actorRefOrString } : actorRefOrString
 
@@ -429,12 +393,8 @@ export function resolveStop<TContext, TEvent extends EventObject>(
  *
  * @param assignment An object that represents the partial context to update.
  */
-export const assign = <
-  TContext,
-  TExpressionEvent extends EventObject = EventObject,
-  TEvent extends EventObject = TExpressionEvent
->(
-  assignment: Assigner<LowInfer<TContext>, TExpressionEvent> | PropertyAssigner<LowInfer<TContext>, TExpressionEvent>
+export const assign = <TContext, TExpressionEvent extends EventObject = EventObject, TEvent extends EventObject = TExpressionEvent>(
+  assignment: Assigner<LowInfer<TContext>, TExpressionEvent> | PropertyAssigner<LowInfer<TContext>, TExpressionEvent>,
 ): AssignAction<TContext, TExpressionEvent, TEvent> => {
   return {
     type: actionTypes.assign,
@@ -442,9 +402,7 @@ export const assign = <
   } as any
 }
 
-export function isActionObject<TContext, TEvent extends EventObject>(
-  action: Action<TContext, TEvent>
-): action is ActionObject<TContext, TEvent> {
+export function isActionObject<TContext, TEvent extends EventObject>(action: Action<TContext, TEvent>): action is ActionObject<TContext, TEvent> {
   return typeof action === "object" && "type" in action
 }
 
@@ -512,15 +470,8 @@ export function error(id: string, data?: any): ErrorPlatformEvent & string {
 export function pure<TContext, TExpressionEvent extends EventObject, TEvent extends EventObject = TExpressionEvent>(
   getActions: (
     context: TContext,
-    event: TExpressionEvent
-  ) =>
-    | SingleOrArray<
-        | BaseActionObject
-        | BaseActionObject["type"]
-        | ActionObject<TContext, TExpressionEvent, TEvent>
-        | ActionFunction<TContext, TExpressionEvent>
-      >
-    | undefined
+    event: TExpressionEvent,
+  ) => SingleOrArray<BaseActionObject | BaseActionObject["type"] | ActionObject<TContext, TExpressionEvent, TEvent> | ActionFunction<TContext, TExpressionEvent>> | undefined,
 ): PureAction<TContext, TExpressionEvent, TEvent> {
   return {
     type: ActionTypes.Pure,
@@ -536,7 +487,7 @@ export function pure<TContext, TExpressionEvent extends EventObject, TEvent exte
  */
 export function forwardTo<TContext, TEvent extends EventObject>(
   target: Required<SendActionOptions<TContext, TEvent>>["to"],
-  options?: SendActionOptions<TContext, TEvent>
+  options?: SendActionOptions<TContext, TEvent>,
 ): SendAction<TContext, TEvent, any> {
   if (!IS_PRODUCTION && (!target || typeof target === "function")) {
     const originalTarget = target
@@ -563,7 +514,7 @@ export function forwardTo<TContext, TEvent extends EventObject>(
  */
 export function escalate<TContext, TEvent extends EventObject, TErrorData = any>(
   errorData: TErrorData | ExprWithMeta<TContext, TEvent, TErrorData>,
-  options?: SendActionOptions<TContext, TEvent>
+  options?: SendActionOptions<TContext, TEvent>,
 ): SendAction<TContext, TEvent, any> {
   return sendParent<TContext, TEvent>(
     (context, event, meta) => {
@@ -575,12 +526,12 @@ export function escalate<TContext, TEvent extends EventObject, TErrorData = any>
     {
       ...options,
       to: SpecialTargets.Parent,
-    }
+    },
   )
 }
 
 export function choose<TContext, TExpressionEvent extends EventObject, TEvent extends EventObject = TExpressionEvent>(
-  conds: Array<ChooseCondition<TContext, TExpressionEvent, TEvent>>
+  conds: Array<ChooseCondition<TContext, TExpressionEvent, TEvent>>,
 ): ChooseAction<TContext, TExpressionEvent, TEvent> {
   return {
     type: ActionTypes.Choose,
@@ -592,7 +543,7 @@ const pluckAssigns = <TContext, TEvent extends EventObject>(
   actionBlocks: Array<{
     type: string
     actions: Array<ActionObject<TContext, TEvent>>
-  }>
+  }>,
 ): AssignAction<TContext, TEvent>[] => {
   const assignActions: AssignAction<TContext, TEvent>[] = []
 
@@ -621,13 +572,11 @@ export function resolveActions<TContext, TEvent extends EventObject>(
     actions: Array<ActionObject<TContext, TEvent>>
   }>,
   predictableExec?: PredictableActionArgumentsExec,
-  preserveActionOrder: boolean = false
+  preserveActionOrder: boolean = false,
 ): [Array<ActionObject<TContext, TEvent>>, TContext] {
   const assignActions = preserveActionOrder ? [] : pluckAssigns(actionBlocks)
 
-  let updatedContext = assignActions.length
-    ? updateContext(currentContext, _event, assignActions, currentState)
-    : currentContext
+  let updatedContext = assignActions.length ? updateContext(currentContext, _event, assignActions, currentState) : currentContext
 
   const preservedContexts: TContext[] | undefined = preserveActionOrder ? [currentContext] : undefined
 
@@ -636,24 +585,14 @@ export function resolveActions<TContext, TEvent extends EventObject>(
   function handleAction(blockType: string, actionObject: ActionObject<TContext, TEvent>) {
     switch (actionObject.type) {
       case actionTypes.raise: {
-        const raisedAction = resolveRaise(
-          actionObject as RaiseAction<TContext, TEvent>,
-          updatedContext,
-          _event,
-          machine.options.delays as any
-        )
+        const raisedAction = resolveRaise(actionObject as RaiseAction<TContext, TEvent>, updatedContext, _event, machine.options.delays as any)
         if (predictableExec && typeof raisedAction.delay === "number") {
           predictableExec(raisedAction as any, updatedContext, _event)
         }
         return raisedAction
       }
       case actionTypes.send:
-        const sendAction = resolveSend(
-          actionObject as SendAction<TContext, TEvent, any>,
-          updatedContext,
-          _event,
-          machine.options.delays as any
-        ) as SendActionObject<TContext, TEvent> // TODO: fix ActionTypes.Init
+        const sendAction = resolveSend(actionObject as SendAction<TContext, TEvent, any>, updatedContext, _event, machine.options.delays as any) as SendActionObject<TContext, TEvent> // TODO: fix ActionTypes.Init
 
         if (!IS_PRODUCTION) {
           const configuredDelay = (actionObject as SendAction<TContext, TEvent, any>).delay
@@ -661,7 +600,7 @@ export function resolveActions<TContext, TEvent extends EventObject>(
           warn(
             !isString(configuredDelay) || typeof sendAction.delay === "number",
             // tslint:disable-next-line:max-line-length
-            `No delay reference for delay expression '${configuredDelay}' was found on machine '${machine.id}'`
+            `No delay reference for delay expression '${configuredDelay}' was found on machine '${machine.id}'`,
           )
         }
 
@@ -683,10 +622,7 @@ export function resolveActions<TContext, TEvent extends EventObject>(
         const chooseAction = actionObject as ChooseAction<TContext, TEvent>
         const matchedActions = chooseAction.conds.find((condition) => {
           const guard = toGuard(condition.cond, machine.options.guards as any)
-          return (
-            !guard ||
-            evaluateGuard(machine, guard, updatedContext, _event, (!predictableExec ? currentState : undefined) as any)
-          )
+          return !guard || evaluateGuard(machine, guard, updatedContext, _event, (!predictableExec ? currentState : undefined) as any)
         })?.actions
 
         if (!matchedActions) {
@@ -705,7 +641,7 @@ export function resolveActions<TContext, TEvent extends EventObject>(
             },
           ],
           predictableExec,
-          preserveActionOrder
+          preserveActionOrder,
         )
         updatedContext = resolvedContextFromChoose
         preservedContexts?.push(updatedContext)
@@ -728,7 +664,7 @@ export function resolveActions<TContext, TEvent extends EventObject>(
             },
           ],
           predictableExec,
-          preserveActionOrder
+          preserveActionOrder,
         )
         updatedContext = resolvedContext
         preservedContexts?.push(updatedContext)
@@ -741,12 +677,7 @@ export function resolveActions<TContext, TEvent extends EventObject>(
         return resolved
       }
       case actionTypes.assign: {
-        updatedContext = updateContext(
-          updatedContext,
-          _event,
-          [actionObject as AssignAction<TContext, TEvent>],
-          !predictableExec ? currentState : undefined
-        )
+        updatedContext = updateContext(updatedContext, _event, [actionObject as AssignAction<TContext, TEvent>], !predictableExec ? currentState : undefined)
         preservedContexts?.push(updatedContext)
         break
       }
