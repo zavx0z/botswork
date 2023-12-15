@@ -6,8 +6,8 @@
   import type { ElkEdgeSection } from "elkjs"
 
   export let edge: DirectedGraphEdge
-  const sourceID: string = edge.source.id
-  const targetID: string = edge.target.id
+  const sourceID: string = edge.source
+  const targetID: string = edge.target
 
   let label: DOMRect = edge.label as unknown as DOMRect
   $: label = edge.label as unknown as DOMRect

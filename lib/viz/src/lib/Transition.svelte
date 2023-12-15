@@ -4,7 +4,7 @@
 
   
   export let edge: DirectedGraphEdge
-  const sourceID: string = edge.source.id
+  const sourceID: string = edge.source
   const guard = edge.transition.cond?.name
   const eventType = edge.transition.eventType
 

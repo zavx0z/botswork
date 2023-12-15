@@ -29,16 +29,16 @@
     states: {
       one: {
         // id: "customId",
-        on: { 
+        on: {
           "go.two": "two",
-          "go.nested": "two.two-nested",
+          "go.nested": "two.nested",
         },
       },
       two: {
         on: { "go.one": "one" },
-        initial: "two-nested",
+        initial: "nested",
         states: {
-          "two-nested": {
+          "nested": {
             on: { "go.one": "#rootMachine.one" },
           },
         },
@@ -60,5 +60,7 @@
 </script>
 
 <Simulator>
-  <Graph actor={simulator} />
+  {#if nodes && edges}
+    <Graph actor={simulator}/>
+  {/if}
 </Simulator>

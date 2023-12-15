@@ -13,7 +13,7 @@
   export let actor: AnyInterpreter
 
   const machine = actor.getSnapshot().context.machine
-  
+
   export let edges: { [key: string]: DirectedGraphEdge } = {}
   export let nodes: { [key: string]: AnyStateNode } = {}
 
@@ -37,8 +37,8 @@
   }
   const getElkEdge = (edge: DirectedGraphEdge) => ({
     id: edge.id,
-    sources: [edge.source.id],
-    targets: [edge.target.id],
+    sources: [edge.source],
+    targets: [edge.target],
     labels: [
       {
         id: edge.id + "--label",
@@ -73,9 +73,10 @@
       return a.machine
     }
     Object.values(edges).forEach((edge) => {
-      // const source = edges[edge.source.id]
-      // const target = edges[edge.target.id]
-      const lca = getLCA(edge.source, edge.target)
+      const source = nodes[edge.source]
+      console.log(source)
+      const target = nodes[edge.target]
+      const lca = getLCA(source, target)
       if (!map.has(lca)) map.set(lca, [])
       map.get(lca)!.push(edge)
       edgeMap.set(edge.id, lca)
@@ -184,8 +185,8 @@
         return targets.map((target, targetIndex) => {
           const edge: DirectedGraphEdge = {
             id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
-            source: stateNode as AnyStateNode,
-            target: target as AnyStateNode,
+            source: stateNode.id,
+            target: target.id,
             transition: t,
             sections: [],
             label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
@@ -218,7 +219,6 @@
   let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)
   let previewIds: string[] = []
   onMount(() => {
-
     const { unsubscribe } = actor.subscribe((state) => {
       if (state.changed) {
         previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent }).configuration.map((i: AnyStateNode) => i.id) : []
