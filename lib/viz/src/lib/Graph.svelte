@@ -16,7 +16,7 @@
 
   export let edges: { [key: string]: DirectedGraphEdge } = {}
   export let nodes: { [key: string]: AnyStateNode } = {}
-
+  export let digraph: DirectedGraphNode
   const elk = new ELK({ defaultLayoutOptions: {} })
   const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode) => getElkChild(childNode, rMap))
   function getElkChild(node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): StateElkNode {
@@ -74,7 +74,6 @@
     }
     Object.values(edges).forEach((edge) => {
       const source = nodes[edge.source]
-      console.log(source)
       const target = nodes[edge.target]
       const lca = getLCA(source, target)
       if (!map.has(lca)) map.set(lca, [])
@@ -191,7 +190,7 @@
             sections: [],
             label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
           }
-          edges[edge.id] = edge
+          // edges[edge.id] = edge
           // console.log(edge)
           return edge
         })
@@ -208,11 +207,11 @@
   }
 
   onMount(async () => {
-    let digraph = toDirectedGraph(machine)
+    let d = toDirectedGraph(machine)
     await tick()
-    console.log(edges)
+    // console.log(digraph)
     console.log(nodes)
-    const elkg = await getElkGraph(digraph)
+    const elkg = await getElkGraph(d)
     // console.log(elkg)
   })
 

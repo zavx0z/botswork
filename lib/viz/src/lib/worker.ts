@@ -4,15 +4,18 @@ import { createMachine, interpret } from "@lib/machine"
 import { convertToGraph } from "./utils/directedGraph"
 
 onmessage = ({ data }) => {
-  const machine = JSON.parse(data.machine)
-  const actor = interpret(createMachine(machine)).start()
+  const machineObj = JSON.parse(data.machine)
+
+  const machine = createMachine(machineObj)
+  // console.log(machine)
+  const actor = interpret(machine).start()
   actor.onTransition((state, transition) => {
-    console.log(state, transition)
+    // console.log(state, transition)
   })
   actor.send({ type: "go.two" })
-  const channel = new BroadcastChannel(machine.id)
-  console.log(machine)
-  const { edges, nodes, digraph } = convertToGraph(machine)
+  
+  const channel = new BroadcastChannel(machineObj.id)
+  const { edges, nodes, digraph } = convertToGraph(machineObj)
   channel.postMessage({ edges, nodes, digraph })
 }
 

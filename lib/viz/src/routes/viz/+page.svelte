@@ -18,7 +18,7 @@
       edges = data.edges
       nodes = data.nodes
       digraph = data.digraph
-      console.log(edges)
+      console.log(nodes)
     }
     // console.log(JSON.stringify(TestMachine.toJSON()))
   })
@@ -61,6 +61,6 @@
 
 <Simulator>
   {#if nodes && edges}
-    <Graph actor={simulator}/>
+    <Graph actor={simulator} {edges} {digraph}/>
   {/if}
 </Simulator>
