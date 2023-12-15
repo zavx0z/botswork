@@ -11,6 +11,7 @@
   let nodes: { [key: string]: AnyStateNode }
   let digraph: DirectedGraphNode
   onMount(() => {
+    // const machine = TestMachine
     const actor = new ActorWorker()
     const channel = new BroadcastChannel(machine.id)
     actor.postMessage({ machine: JSON.stringify(machine.toJSON()) })
@@ -28,6 +29,7 @@
     initial: "one",
     states: {
       one: {
+        onEntry: "entryAction",
         // id: "customId",
         on: {
           "go.two": "two",
@@ -39,6 +41,7 @@
         initial: "nested",
         states: {
           "nested": {
+            onExit: "exitAction",
             on: { "go.one": "#rootMachine.one" },
           },
         },
