@@ -1,11 +1,10 @@
 <script lang="ts">
   import type { Point } from "$lib/types"
   import { interpret, assign, createMachine } from "@lib/machine"
-  import Graph from "./Graph.svelte"
-
-  export let actor: any
+  
   const canvasActor = interpret(
     createMachine({
+      predictableActionArguments: true,
       id: "canvasMachine",
       context: {
         zoom: 1,
@@ -40,12 +39,12 @@
   ).start()
 </script>
 
-<div on:wheel={(e) => canvasActor.send({ type: "PAN", dx: e.deltaX, dy: e.deltaY })}>
+<div class="h-screen" on:wheel={(e) => canvasActor.send({ type: "PAN", dx: e.deltaX, dy: e.deltaY })}>
   <div class="flex gap-2">
     <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.OUT" })}>-</button>
     <button class="min-w-[50px] rounded-sm bg-primary-500 px-2 text-surface-900" on:click={() => canvasActor.send({ type: "ZOOM.IN" })}>+</button>
   </div>
-  <div style="transform: scale({$canvasActor.context.zoom}) translate({$canvasActor.context.pan.dx}px, {$canvasActor.context.pan.dy}px)" class="transition-transform duration-200 ease-in-out">
-    <Graph {actor} />
+  <div style="transform: scale({$canvasActor.context.zoom}) translate({$canvasActor.context.pan.dx}px, {$canvasActor.context.pan.dy}px)" class="h-full transition-transform duration-200 ease-in-out">
+    <slot />
   </div>
 </div>

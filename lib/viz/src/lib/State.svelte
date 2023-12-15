@@ -22,7 +22,7 @@
   }
 </script>
 
-<div class="absolute text-primary-50 opacity-0 transition-opacity" use:getRect={node} use:init={node}>
+<div class="absolute text-primary-50 opacity-1 transition-opacity" use:getRect={node} use:init={node}>
   <!-- title="#{node.id}" -->
   <div
     data-active={activeIds.includes(node.id)}
@@ -39,21 +39,21 @@
         {/if}
         <div class="py-2 font-bold">{node.key}</div>
       </div>
-      <div data-type="invoke" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
+      <!-- <div data-type="invoke" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
         {#each node.invoke as invoke}
           <div>{invoke.id}</div>
         {/each}
       </div>
       <div data-type="entry" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each node.onEntry as entry}
+        {#each node.entry as entry}
           <div>{entry.type}</div>
         {/each}
       </div>
       <div data-type="exit" class="mb-2 before:text-xs before:font-bold before:uppercase before:opacity-50 before:content-[attr(data-type)'\a0/'] empty:hidden">
-        {#each node.onExit as exit}
+        {#each node.exit as exit}
           <div>{exit.type}</div>
         {/each}
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

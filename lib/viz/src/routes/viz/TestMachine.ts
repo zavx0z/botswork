@@ -102,17 +102,17 @@ export default createMachine(
       failure: {},
     },
   },
-  {
-    actions: {
-      rootAction1: () => {},
-      action1: () => {},
-      "really long action": () => {},
-      action3: () => {},
-      anotherAction: () => {},
-      action4: () => {},
-    },
-    services: {
-      fooSrc: () => () => {},
-    },
-  },
+  // {
+  //   actions: {
+  //     rootAction1: () => {},
+  //     action1: () => {},
+  //     "really long action": () => {},
+  //     action3: () => {},
+  //     anotherAction: () => {},
+  //     action4: () => {},
+  //   },
+  //   services: {
+  //     fooSrc: () => () => {},
+  //   },
+  // },
 )

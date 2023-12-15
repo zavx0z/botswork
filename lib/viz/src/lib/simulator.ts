@@ -15,6 +15,7 @@ type InputType = {
 export const createSimulator = (input: InputType) =>
   interpret(
     createMachine({
+      predictableActionArguments: true,
       id: "simService",
       schema: {} as {
         events: Events
@@ -69,6 +70,5 @@ export const createSimulator = (input: InputType) =>
           },
         },
       },
-      predictableActionArguments: true,
     }),
   )

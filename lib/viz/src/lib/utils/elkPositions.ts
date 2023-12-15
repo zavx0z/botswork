@@ -1,24 +1,12 @@
-<script lang="ts">
-  import type { ElkEdgeSection, ElkNode } from "elkjs"
-  import type { StateNode, AnyStateMachine, AnyStateNode, AnyInterpreter } from "@lib/machine"
-  import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "./types"
+import ELK from "elkjs"
+import type { ElkEdgeSection, ElkNode } from "elkjs"
+import type { StateNode, AnyStateMachine, AnyStateNode, AnyActorRef } from "@lib/machine"
+import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "../types"
 
-  import ELK from "elkjs"
-  import { onMount, tick } from "svelte"
+const elk = new ELK({ defaultLayoutOptions: {} })
 
-  import State from "./State.svelte"
-  import Edge from "./Edge.svelte"
-  import Transition from "./Transition.svelte"
-
-  export let actor: AnyInterpreter
-
-  const machine = actor.getSnapshot().context.machine
-  
-  export let edges: { [key: string]: DirectedGraphEdge } = {}
-  export let nodes: { [key: string]: AnyStateNode } = {}
-
-  const elk = new ELK({ defaultLayoutOptions: {} })
-  const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode) => getElkChild(childNode, rMap))
+export default function setInitialPositions(digraph: DirectedGraphNode, nodes: { [key: string]: AnyStateNode }, edges: { [key: string]: DirectedGraphEdge }) {
+  const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode: DirectedGraphNode) => getElkChild(childNode, rMap))
   function getElkChild(node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): StateElkNode {
     const layout = nodes[node.id].meta.layout
     const edges = rMap[0].get(node.stateNode) || []
@@ -162,78 +150,5 @@
     setLayout(layoutElkNode.children![0] as StateElkNode, undefined)
     return layoutElkNode.children![0]
   }
-
-  export function flatten<T>(array: Array<T | T[]>): T[] {
-    return ([] as T[]).concat(...array)
-  }
-
-  function getChildren(stateNode: StateNode): StateNode[] {
-    if (!stateNode.states) return []
-    const children = Object.keys(stateNode.states).map((key) => stateNode.states[key])
-    children.sort((a, b) => b.order - a.order)
-    return children
-  }
-
-  function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): DirectedGraphNode {
-    const stateNode = stateMachine
-    const egs: DirectedGraphEdge[] = flatten(
-      [...stateNode.transitions.values()].flat().map((t, transitionIndex) => {
-        const targets = t.target ? t.target : [stateNode]
-        return targets.map((target, targetIndex) => {
-          const edge: DirectedGraphEdge = {
-            id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
-            source: stateNode as AnyStateNode,
-            target: target as AnyStateNode,
-            transition: t,
-            sections: [],
-            label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
-          }
-          edges[edge.id] = edge
-          return edge
-        })
-      }),
-    )
-    const graph: DirectedGraphNode = {
-      id: stateNode.id,
-      stateNode: stateNode as AnyStateNode,
-      children: getChildren(stateNode as AnyStateNode).map(toDirectedGraph),
-      edges: egs,
-    }
-    nodes[graph.id] = graph.stateNode
-    return graph
-  }
-
-  onMount(async () => {
-    let digraph = toDirectedGraph(machine)
-    await tick()
-    const elkg = await getElkGraph(digraph)
-    console.log(elkg)
-  })
-
-  let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)
-  let previewIds: string[] = []
-  onMount(() => {
-
-    const { unsubscribe } = actor.subscribe((state) => {
-      if (state.changed) {
-        previewIds = state.context.previewEvent ? state.context.machine.transition(state.context.state, { type: state.context.previewEvent }).configuration.map((i: AnyStateNode) => i.id) : []
-        activeIds = state.context.state.configuration.map((i: AnyStateNode) => i.id)
-      }
-    })
-    return () => {
-      unsubscribe()
-    }
-  })
-</script>
-
-{#each Object.entries(nodes) as [id, node] (id)}
-  <State {node} {previewIds} {activeIds} />
-{/each}
-<svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
-  {#each Object.entries(edges) as [id, edge], order (id)}
-    <Edge {edge} {nodes} {activeIds} {order} />
-  {/each}
-</svg>
-{#each Object.entries(edges) as [id, edge] (id)}
-  <Transition {edge} {activeIds} {actor} />
-{/each}
+  getElkGraph(digraph)
+}
