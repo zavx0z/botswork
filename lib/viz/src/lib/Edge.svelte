@@ -9,7 +9,8 @@
   const sourceID: string = edge.source.id
   const targetID: string = edge.target.id
 
-  const label: DOMRect = edge.label as unknown as DOMRect
+  let label: DOMRect = edge.label as unknown as DOMRect
+  $: label = edge.label as unknown as DOMRect
 
   let sourceOrder = edge.source.order
   $: sourceOrder = edge.source.order
@@ -20,7 +21,7 @@
   export let nodes: { [key: string]: AnyStateNode }
   export let activeIds: string[] = []
   export let order: number
-  
+
   const svgPath = (element: SVGPathElement, sections: ElkEdgeSection[]) => {
     return {
       update(sections: ElkEdgeSection[]) {

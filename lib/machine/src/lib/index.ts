@@ -1,5 +1,5 @@
 import * as actions from "./actions"
-import {type Actor, toActorRef } from "./Actor"
+import { type Actor, toActorRef } from "./Actor"
 import { interpret, Interpreter, InterpreterStatus, spawn } from "./interpreter"
 import { createMachine, Machine } from "./Machine"
 import { mapState } from "./mapState"
@@ -7,6 +7,7 @@ import { matchState } from "./match"
 import { createSchema, t } from "./schema"
 import { State } from "./State"
 import { StateNode } from "./StateNode"
+import type { AnyEventObject, StateNodeDefinition } from "./types"
 export { spawnBehavior } from "./behaviors"
 export type { XStateDevInterface } from "./devTools"
 export * from "./typegenTypes"
@@ -43,8 +44,9 @@ export {
   t,
 }
 
-const { assign, cancel, send, sendTo, sendParent, sendUpdate, forwardTo, doneInvoke, raise, log, pure, choose, stop } =
-  actions
+export type StateNodeJSON = StateNodeDefinition<unknown, any, AnyEventObject> // TODO: check exist type
+
+const { assign, cancel, send, sendTo, sendParent, sendUpdate, forwardTo, doneInvoke, raise, log, pure, choose, stop } = actions
 
 declare global {
   interface SymbolConstructor {

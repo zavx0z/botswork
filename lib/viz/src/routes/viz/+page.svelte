@@ -7,29 +7,42 @@
   import { createMachine, type AnyStateNode } from "@lib/machine"
   import Graph from "$lib/Graph.svelte"
 
-  // let edges: { [key: string]: DirectedGraphEdge }
-  // let nodes: { [key: string]: AnyStateNode }
-  // let digraph: DirectedGraphNode
-  // onMount(() => {
-  //   const actor = new ActorWorker()
-  //   const channel = new BroadcastChannel(TestMachine.id)
-  //   actor.postMessage({ machine: JSON.stringify(TestMachine.toJSON()) })
-  //   channel.onmessage = ({ data }) => {
-  //     edges = data.edges
-  //     nodes = data.nodes
-  //     digraph = data.digraph
-  //     // console.log(nodes)
-  //   }
-  //   // console.log(JSON.stringify(TestMachine.toJSON()))
-  // })
+  let edges: { [key: string]: DirectedGraphEdge }
+  let nodes: { [key: string]: AnyStateNode }
+  let digraph: DirectedGraphNode
+  onMount(() => {
+    const actor = new ActorWorker()
+    const channel = new BroadcastChannel(machine.id)
+    actor.postMessage({ machine: JSON.stringify(machine.toJSON()) })
+    channel.onmessage = ({ data }) => {
+      edges = data.edges
+      nodes = data.nodes
+      digraph = data.digraph
+      console.log(edges)
+    }
+    // console.log(JSON.stringify(TestMachine.toJSON()))
+  })
   const machine = createMachine({
+    predictableActionArguments: true,
     id: "rootMachine",
     initial: "one",
     states: {
       one: {
-        on: { "go.two": "two" },
+        // id: "customId",
+        on: { 
+          "go.two": "two",
+          "go.nested": "two.two-nested",
+        },
       },
-      two: {},
+      two: {
+        on: { "go.one": "one" },
+        initial: "two-nested",
+        states: {
+          "two-nested": {
+            on: { "go.one": "#rootMachine.one" },
+          },
+        },
+      },
     },
   })
 

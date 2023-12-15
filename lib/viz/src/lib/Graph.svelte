@@ -73,6 +73,8 @@
       return a.machine
     }
     Object.values(edges).forEach((edge) => {
+      // const source = edges[edge.source.id]
+      // const target = edges[edge.target.id]
       const lca = getLCA(edge.source, edge.target)
       if (!map.has(lca)) map.set(lca, [])
       map.get(lca)!.push(edge)
@@ -174,11 +176,11 @@
     return children
   }
 
-  function toDirectedGraph(stateMachine: AnyStateNode | AnyStateMachine): DirectedGraphNode {
-    const stateNode = stateMachine
+  function toDirectedGraph(stateNode: AnyStateNode | AnyStateMachine): DirectedGraphNode {
     const egs: DirectedGraphEdge[] = flatten(
-      [...stateNode.transitions.values()].flat().map((t, transitionIndex) => {
+      stateNode.transitions.map((t, transitionIndex) => {
         const targets = t.target ? t.target : [stateNode]
+        // console.log(t, targets)
         return targets.map((target, targetIndex) => {
           const edge: DirectedGraphEdge = {
             id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
@@ -189,6 +191,7 @@
             label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
           }
           edges[edge.id] = edge
+          // console.log(edge)
           return edge
         })
       }),
@@ -206,8 +209,10 @@
   onMount(async () => {
     let digraph = toDirectedGraph(machine)
     await tick()
+    console.log(edges)
+    console.log(nodes)
     const elkg = await getElkGraph(digraph)
-    console.log(elkg)
+    // console.log(elkg)
   })
 
   let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)

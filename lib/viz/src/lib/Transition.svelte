@@ -2,12 +2,17 @@
   import type { DirectedGraphEdge } from "$lib/types"
   import type { AnyActorRef, EventType } from "@lib/machine"
 
-  export let activeIds: string[] = []
+  
   export let edge: DirectedGraphEdge
-  export let actor: AnyActorRef
-
+  const sourceID: string = edge.source.id
   const guard = edge.transition.cond?.name
   const eventType = edge.transition.eventType
+
+  export let activeIds: string[] = []
+  let active = activeIds.includes(sourceID)
+  $: active = activeIds.includes(sourceID)
+
+  export let actor: AnyActorRef
 
   const setSize = (element: HTMLElement, edge: DirectedGraphEdge) => {
     const { width, height } = element.getBoundingClientRect()
@@ -36,13 +41,13 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   use:setSize={edge}
-  data-active={activeIds.includes(edge.source.id)}
+  data-active={active}
   class="fixed z-40 flex cursor-pointer items-center rounded-2xl border-2 border-solid border-tertiary-900 bg-surface-800 text-xs font-bold text-primary-100 opacity-0 transition-colors data-[active=true]:border-primary-500 data-[active=true]:text-surface-500"
   on:mouseenter={() => actor.send({ type: "EVENT.PREVIEW", eventType })}
   on:mouseleave={() => actor.send({ type: "PREVIEW.CLEAR" })}
   on:click={() => actor.send({ type: "EVENT", event: { type: eventType } })}
 >
-  <div data-active={activeIds.includes(edge.source.id)} class:rounded-l-2xl={guard} class:rounded-2xl={!guard} class="bg-tertiary-900 px-2 py-1 data-[active=true]:bg-primary-500">
+  <div data-active={active} class:rounded-l-2xl={guard} class:rounded-2xl={!guard} class="bg-tertiary-900 px-2 py-1 data-[active=true]:bg-primary-500">
     {#if eventType.startsWith("done.state.")}
       <div data-viz-keyword="done">
         <em>onDone</em>
