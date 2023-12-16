@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ElkEdgeSection, ElkNode } from "elkjs"
   import type { StateNode, AnyStateMachine, AnyStateNode, AnyInterpreter } from "@lib/machine"
-  import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "./types"
+  import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge } from "./types"
 
   import ELK from "elkjs"
   import { onMount, tick } from "svelte"
@@ -64,6 +64,8 @@
     sections: [], // Пока не задаем секции дуги (могут быть добавлены позже)
   })
 
+  type RelativeNodeEdgeMap = [Map<StateNode | undefined, DirectedGraphEdge[]>, Map<string, StateNode | undefined>]
+
   function getRelativeNodeEdgeMap(): RelativeNodeEdgeMap {
     // Создаем две пустые карты: карту узлов и карту дуг
     const map: RelativeNodeEdgeMap[0] = new Map()
@@ -77,12 +79,12 @@
       let node
       node = source.parent
       while (node) {
-        set.add(node)
+        set.add(node.id)
         node = node.parent
       }
       node = target // Поиск ближайшего общего предка
       while (node) {
-        if (set.has(node)) return node // Если предок второго узла найден в множестве, возвращаем его
+        if (set.has(node.id)) return node // Если предок второго узла найден в множестве, возвращаем его
         node = node.parent // Переходим к следующему предку узла назначения
       }
       // 3. Корневая нода
