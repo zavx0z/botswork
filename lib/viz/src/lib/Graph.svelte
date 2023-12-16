@@ -30,7 +30,7 @@
       // Устанавливаем ширину и высоту узла, если у него нет детей
       ...(node.children.length ? undefined : { width: layout.width, height: layout.height }),
       children: node.children.map((childNode) => getElkChild(childNode, rMap)),
-      edges: edges.map(getElkEdge),
+      edges: edges.map((edge) => getElkEdge(edge.id)),
       layoutOptions: {
         "elk.padding": `[top=${(layout.height || 0) + 30}, left=30, right=30, bottom=30]`, // Добавляем отступы вокруг узла
         hierarchyHandling: "INCLUDE_CHILDREN", // Включаем дочерние узлы в иерархию
@@ -40,29 +40,32 @@
     }
   }
   /** Elk-объект грани
-   * @param {DirectedGraphEdge} edge
+   * @param {string} edgeID
    */
-  const getElkEdge = (edge: DirectedGraphEdge) => ({
-    id: edge.id,
-    // Устанавливаем источник и цель дуги
-    sources: [edge.source],
-    targets: [edge.target],
-    // Добавляем метку на дугу с параметрами разметки
-    labels: [
-      {
-        id: edge.id + "--label", // Уникальный ID метки
-        width: edges[edge.id].label.width, // Ширина метки
-        height: edges[edge.id].label.height, // Высота метки
-        text: edge.label.text || "always", // Текст метки
-        layoutOptions: {
-          "edgeLabels.inline": "true", // встроенная метка
-          "edgeLabels.placement": "CENTER", // расположение по центру
+  const getElkEdge = (edgeID: string) => {
+    const edge = edges[edgeID]
+    return {
+      id: edgeID,
+      // Устанавливаем источник и цель дуги
+      sources: [edge.source],
+      targets: [edge.target],
+      // Добавляем метку на дугу с параметрами разметки
+      labels: [
+        {
+          id: edgeID + "--label", // Уникальный ID метки
+          width: edge.label.width, // Ширина метки
+          height: edge.label.height, // Высота метки
+          text: edge.label.text || "always", // Текст метки
+          layoutOptions: {
+            "edgeLabels.inline": "true", // встроенная метка
+            "edgeLabels.placement": "CENTER", // расположение по центру
+          },
         },
-      },
-    ],
-    edge, // Сохраняем ссылку на исходную дугу
-    sections: [], // Пока не задаем секции дуги (могут быть добавлены позже)
-  })
+      ],
+      edge, // Сохраняем ссылку на исходную дугу
+      sections: [], // Пока не задаем секции дуги (могут быть добавлены позже)
+    }
+  }
 
   type RelativeNodeEdgeMap = [Map<StateNode | undefined, DirectedGraphEdge[]>, Map<string, StateNode | undefined>]
 
@@ -105,7 +108,7 @@
     const rootEdges = rMap[0].get(undefined) || []
     const elkNode: ElkNode = {
       id: "root",
-      edges: rootEdges.map(getElkEdge), // Само-переходы машины
+      edges: rootEdges.map((edge) => getElkEdge(edge.id)), // Само-переходы машины
       children: [getElkChild(digraph, rMap)],
       layoutOptions: {
         "elk.hierarchyHandling": "INCLUDE_CHILDREN",
