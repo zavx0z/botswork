@@ -27,6 +27,10 @@
     predictableActionArguments: true,
     id: "rootMachine",
     initial: "one",
+    on: {
+      "root.go.one": "one",
+      "root.go.root": "#rootMachine",
+    },
     states: {
       one: {
         onEntry: "entryAction",
@@ -40,9 +44,9 @@
         on: { "go.one": "one" },
         initial: "nested",
         states: {
-          "nested": {
+          nested: {
             onExit: "exitAction",
-            on: { "go.one": "#rootMachine.one" },
+            on: { "go.one": "#rootMachine.one", "go.parent": "#rootMachine.two" },
           },
         },
       },
@@ -64,6 +68,6 @@
 
 <Simulator>
   {#if nodes && edges}
-    <Graph actor={simulator} {edges} {digraph}/>
+    <Graph actor={simulator} {edges} {digraph} />
   {/if}
 </Simulator>

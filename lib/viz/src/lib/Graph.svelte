@@ -12,82 +12,98 @@
 
   export let actor: AnyInterpreter
 
-  const machine = actor.getSnapshot().context.machine
-
   export let edges: { [key: string]: DirectedGraphEdge } = {}
   export let nodes: { [key: string]: AnyStateNode } = {}
   export let digraph: DirectedGraphNode
+
   const elk = new ELK({ defaultLayoutOptions: {} })
-  const getElkChildren = (node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): ElkNode[] => node.children.map((childNode) => getElkChild(childNode, rMap))
+  /** Elk-объект узла https://eclipse.dev/elk/documentation/tooldevelopers/graphdatastructure/jsonformat.html
+   * @param {DirectedGraphNode} node
+   * @param {RelativeNodeEdgeMap} rMap
+   * @returns {StateElkNode}
+   */
   function getElkChild(node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): StateElkNode {
-    const layout = nodes[node.id].meta.layout
-    const edges = rMap[0].get(node.stateNode) || []
+    const layout = nodes[node.id].meta.layout // Достаем информацию о разметке текущего узла
+    const edges = rMap[0].get(node.stateNode) || [] // Получаем исходящие грани текущего узла из карты относительных граней
     return {
       id: node.id,
-      ...(!node.children.length ? { width: layout.width, height: layout.height } : undefined),
-      node,
-      ...(node.children.length ? { children: getElkChildren(node, rMap) } : undefined),
-      absolutePosition: { x: 0, y: 0 },
+      // Устанавливаем ширину и высоту узла, если у него нет детей
+      ...(node.children.length ? undefined : { width: layout.width, height: layout.height }),
+      children: node.children.map((childNode) => getElkChild(childNode, rMap)),
       edges: edges.map(getElkEdge),
       layoutOptions: {
-        "elk.padding": `[top=${(layout.height || 0) + 30}, left=30, right=30, bottom=30]`,
-        hierarchyHandling: "INCLUDE_CHILDREN",
+        "elk.padding": `[top=${(layout.height || 0) + 30}, left=30, right=30, bottom=30]`, // Добавляем отступы вокруг узла
+        hierarchyHandling: "INCLUDE_CHILDREN", // Включаем дочерние узлы в иерархию
       },
+      node, // Сохраняем ссылку на исходный узел
+      // absolutePosition: { x: 0, y: 0 }, Задаем начальную абсолютную позицию узла (относительно родителя)
     }
   }
+  /** Elk-объект грани
+   * @param {DirectedGraphEdge} edge
+   */
   const getElkEdge = (edge: DirectedGraphEdge) => ({
     id: edge.id,
+    // Устанавливаем источник и цель дуги
     sources: [edge.source],
     targets: [edge.target],
+    // Добавляем метку на дугу с параметрами разметки
     labels: [
       {
-        id: edge.id + "--label",
-        width: edges[edge.id].label.width,
-        height: edges[edge.id].label.height,
-        text: edge.label.text || "always",
+        id: edge.id + "--label", // Уникальный ID метки
+        width: edges[edge.id].label.width, // Ширина метки
+        height: edges[edge.id].label.height, // Высота метки
+        text: edge.label.text || "always", // Текст метки
         layoutOptions: {
-          "edgeLabels.inline": "true",
-          "edgeLabels.placement": "CENTER",
+          "edgeLabels.inline": "true", // встроенная метка
+          "edgeLabels.placement": "CENTER", // расположение по центру
         },
       },
     ],
-    edge,
-    sections: [],
+    edge, // Сохраняем ссылку на исходную дугу
+    sections: [], // Пока не задаем секции дуги (могут быть добавлены позже)
   })
-  function getRelativeNodeEdgeMap(digraph: DirectedGraphNode): RelativeNodeEdgeMap {
+
+  function getRelativeNodeEdgeMap(): RelativeNodeEdgeMap {
+    // Создаем две пустые карты: карту узлов и карту дуг
     const map: RelativeNodeEdgeMap[0] = new Map()
     const edgeMap: RelativeNodeEdgeMap[1] = new Map()
-    const getLCA = (a: StateNode, b: StateNode): StateNode | undefined => {
-      if (a === b) return a.parent
-      const set = new Set()
-      let m = a.parent
-      while (m) {
-        set.add(m)
-        m = m.parent
+    // Функция для поиска наименьшего общего предка (НСП) двух узлов
+    const getLCA = (source: StateNode, target: StateNode): StateNode | undefined => {
+      // 1. Само-переход. Если узлы совпадают, возвращаем их родителя
+      if (source === target) return source.parent
+      // 2. Общий предок
+      const set = new Set() // Сбор всех предков узла источника
+      let node
+      node = source.parent
+      while (node) {
+        set.add(node)
+        node = node.parent
       }
-      m = b
-      while (m) {
-        if (set.has(m)) return m
-        m = m.parent
+      node = target // Поиск ближайшего общего предка
+      while (node) {
+        if (set.has(node)) return node // Если предок второго узла найден в множестве, возвращаем его
+        node = node.parent // Переходим к следующему предку узла назначения
       }
-      return a.machine
+      // 3. Корневая нода
+      return source
     }
+    // Проходимся по всем дугам и записываем их в карты
     Object.values(edges).forEach((edge) => {
-      const source = nodes[edge.source]
-      const target = nodes[edge.target]
-      const lca = getLCA(source, target)
-      if (!map.has(lca)) map.set(lca, [])
-      map.get(lca)!.push(edge)
-      edgeMap.set(edge.id, lca)
+      const lca = getLCA(nodes[edge.source], nodes[edge.target]) // Находим ближайшего общего предка узлов источника перехода
+      if (!map.has(lca)) map.set(lca, []) // Если общего предка нет в карте, добавляем в виде ключа ноду и в виде значения пустой массив
+      map.get(lca)!.push(edge) // Добавляем переход в список ноды предка
+      edgeMap.set(edge.id, lca) // Записываем связь между идентификатором перехода и предка
     })
     return [map, edgeMap]
   }
+
   async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> {
-    const rMap = getRelativeNodeEdgeMap(digraph)
+    const rMap = getRelativeNodeEdgeMap()
     const rootEdges = rMap[0].get(undefined) || []
     const elkNode: ElkNode = {
       id: "root",
-      edges: rootEdges.map(getElkEdge),
+      edges: rootEdges.map(getElkEdge), // Само-переходы машины
       children: [getElkChild(digraph, rMap)],
       layoutOptions: {
         "elk.hierarchyHandling": "INCLUDE_CHILDREN",
@@ -96,8 +112,8 @@
       },
     }
     const layoutElkNode = await elk.layout(elkNode)
-
     const stateNodeToElkNodeMap = new Map<StateNode, StateElkNode>()
+
     const setEdgeLayout = (edge: StateElkEdge) => {
       const lca = rMap[1].get(edge.id)
 
@@ -203,15 +219,18 @@
       edges: egs,
     }
     nodes[graph.id] = graph.stateNode
+    // console.log(graph.stateNode)
     return graph
   }
 
   onMount(async () => {
+    const machine = actor.getSnapshot().context.machine
     let d = toDirectedGraph(machine)
     await tick()
     // console.log(digraph)
-    console.log(nodes)
+    // console.log(nodes)
     const elkg = await getElkGraph(d)
+    // const elkg = await getElkGraph(digraph)
     // console.log(elkg)
   })
 

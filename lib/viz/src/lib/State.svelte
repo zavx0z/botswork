@@ -5,6 +5,10 @@
   const nodeType = node.type
   const nodeID = node.id
   const nodeKey = node.key
+
+  // const entryTypes = node.entry.map((entry) => entry.type)
+  // const exitTypes = node.exit.map((exit) => exit.type)
+
   const entryTypes = node.onEntry.map((entry) => entry.type)
   const exitTypes = node.onExit.map((exit) => exit.type)
   const invokeIDs = node.invoke.map((invoke) => invoke.id)
