@@ -2,7 +2,7 @@ import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
 import type { TransitionDefinition, AnyStateNode, StateNode } from "@lib/machine"
 import type { StateNodeDefinition } from "@lib/machine"
 
-export type MachineJSON = StateNodeDefinition<any, any, any>
+export type MachineJSON = StateNodeDefinition<any, any, any> & { transition: string[] }
 
 export type RelativeNodeEdgeMap = [Map<string | undefined, string[]>, Map<string, string | undefined>]
 export type NodeState = {

@@ -1,3 +1,9 @@
+type GraphLayout = {
+  width: number
+  height: number
+  x: number
+  y: number
+}
 type NodeState = {
   id: string
   entry: string[]
@@ -8,15 +14,18 @@ type NodeState = {
   key: string
   type: string
   meta: {
-    layout: {
-      width: number
-      height: number
-      x: number
-      y: number
-    }
+    layout: GraphLayout
   }
   order: number
   parent: string | undefined
   tags: string[]
   children: string[]
+}
+type EdgeTransition = {
+  id: string
+  source: string
+  target: string
+  label: GraphLayout & { text: string }
+  transition: import("@lib/machine").TransitionDefinition<any, any>
+  sections: import("elkjs").ElkEdgeSection[]
 }
