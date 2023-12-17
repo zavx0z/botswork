@@ -42,7 +42,7 @@
   /** Elk-объект грани
    * @param {string} edgeID
    */
-  const getElkEdge = (edgeID: string): ElkExtendedEdge & { edge: GraphEdge } => {
+  const getElkEdge = (edgeID: string): ElkExtendedEdge => {
     const edge = edges[edgeID]
     return {
       id: edgeID,
@@ -60,7 +60,6 @@
           },
         },
       ],
-      edge, // Сохраняем ссылку на исходную дугу
       sections: [], // Пока не задаем секции дуги (могут быть добавлены позже)
     }
   }
@@ -116,9 +115,8 @@
     const stateNodeToElkNodeMap = new Map<string, StateElkNode>()
     const setEdgeLayout = (edge: StateElkEdge) => {
       const lca = rMap[1].get(edge.id)
-      const elkLca = lca && stateNodeToElkNodeMap.get(lca)!
-      edges[edge.id].label.x = elkLca?.x || 0
-      edges[edge.id].label.y = elkLca?.y || 0
+      // if (!lca) return
+      const elkLca = stateNodeToElkNodeMap.get(lca)!
       if (edge.sections) {
         const translatedSections: ElkEdgeSection[] = elkLca
           ? edge.sections.map((section) => ({
@@ -139,10 +137,10 @@
               }),
             }))
           : edge.sections
-        if (translatedSections) edge.edge.sections = translatedSections
+        if (translatedSections) edges[edge.id].sections = translatedSections
       }
-      edge.edge.label.x = (edge.labels?.[0].x || 0) + (elkLca?.absolutePosition.x || 0)
-      edge.edge.label.y = (edge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
+      edges[edge.id].label.x = (edge.labels?.[0].x || 0) + (elkLca?.absolutePosition.x || 0)
+      edges[edge.id].label.y = (edge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
     }
     const setLayout = (elkNode: StateElkNode, parent: StateElkNode | undefined) => {
       stateNodeToElkNodeMap.set(elkNode.id, elkNode)
@@ -158,7 +156,7 @@
           y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
         },
       }
-      elkNode.edges?.forEach(setEdgeLayout)
+      elkNode.edges.forEach(setEdgeLayout)
       elkNode.children?.forEach((cn) => setLayout(cn as StateElkNode, elkNode))
     }
     layoutElkNode.edges.forEach(setEdgeLayout)
