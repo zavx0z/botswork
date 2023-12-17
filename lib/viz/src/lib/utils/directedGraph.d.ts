@@ -4,6 +4,8 @@ type GraphLayout = {
   x: number
   y: number
 }
+
+type NodesState = Map<string, NodeState>
 type NodeState = {
   id: string
   entry: string[]
@@ -21,6 +23,7 @@ type NodeState = {
   tags: string[]
   children: string[]
 }
+type EdgesTransition = Map<string, EdgeTransition>
 type EdgeTransition = {
   id: string
   source: string

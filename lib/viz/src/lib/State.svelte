@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { NodeState } from "./types"
   export let node: NodeState
   const nodeType = node.type
   const nodeID = node.id

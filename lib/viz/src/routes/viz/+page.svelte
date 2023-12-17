@@ -3,12 +3,11 @@
   import TestMachine from "./TestMachine"
   import ActorWorker from "$lib/worker.ts?worker"
   import { onMount } from "svelte"
-  import type { DirectedGraphEdge, NodeState } from "$lib/types"
   import { createMachine } from "@lib/machine"
   import Graph from "$lib/Graph.svelte"
 
-  let edges: { [key: string]: DirectedGraphEdge }
-  let nodes: { [key: string]: NodeState }
+  let edges: EdgesTransition
+  let nodes: NodesState
 
   onMount(() => {
     // const machine = TestMachine
