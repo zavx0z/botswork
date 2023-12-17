@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { DirectedGraphEdge } from "$lib/types"
-  import type { AnyActorRef, EventType } from "@lib/machine"
+  import type { GraphEdge } from "$lib/types"
+  import type { AnyActorRef } from "@lib/machine"
 
-  
-  export let edge: DirectedGraphEdge
+  export let edge: GraphEdge
   const sourceID: string = edge.source
   const guard = edge.transition.cond?.name
   const eventType = edge.transition.eventType
@@ -14,12 +13,12 @@
 
   export let actor: AnyActorRef
 
-  const setSize = (element: HTMLElement, edge: DirectedGraphEdge) => {
+  const setSize = (element: HTMLElement, edge: GraphEdge) => {
     const { width, height } = element.getBoundingClientRect()
     edge.label.width = width
     edge.label.height = height
     return {
-      update(edge: DirectedGraphEdge) {
+      update(edge: GraphEdge) {
         element.style.opacity = "1"
         element.style.left = `${edge.label.x}px`
         element.style.top = `${edge.label.y}px`

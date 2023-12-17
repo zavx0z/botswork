@@ -42,7 +42,15 @@ export type NodeState = {
     source: string
     target: string[]
   }[]
-  states: { [key: string]: Node }
+  states: { [key: string]: NodeState }
+}
+export type GraphEdge = {
+  id: string
+  source: string
+  target: string
+  label: DirectedGraphLabel
+  transition: TransitionDefinition<any, any>
+  sections: ElkEdgeSection[]
 }
 
 export type DirectedGraphLabel = {
@@ -68,10 +76,10 @@ export type DirectedGraphNode = {
 }
 
 export interface StateElkEdge extends ElkExtendedEdge {
-  edge: DirectedGraphEdge
+  edge: GraphEdge
 }
 export interface StateElkNode extends ElkNode {
-  node: AnyStateNode
+  node: NodeState
   absolutePosition: Point
   edges: StateElkEdge[]
 }

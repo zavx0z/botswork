@@ -18,7 +18,8 @@
 
   const init = (element: HTMLElement, node: NodeState) => {
     const { width, height } = element.getBoundingClientRect()
-    node.meta = { ...node.meta, layout: { width, height } }
+    node.meta.layout.width = width
+    node.meta.layout.height = height
     return {
       update(node: NodeState) {
         element.style.left = `${node.meta.layout.x}px`

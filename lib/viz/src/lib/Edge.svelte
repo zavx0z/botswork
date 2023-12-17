@@ -1,26 +1,23 @@
 <script lang="ts">
   import type { LPathParam, SvgPath } from "./utils/edgeSVG"
   import { getPath, getRect, pathToD } from "./utils/edgeSVG"
-  import type { DirectedGraphEdge, NodeState, Point } from "$lib/types"
+  import type { GraphEdge, NodeState, Point } from "$lib/types"
   import type { ElkEdgeSection } from "elkjs"
 
-  export let edge: DirectedGraphEdge
-  
+  export let edge: GraphEdge
+
+  const edgeID:string = edge.id
   const sourceID: string = edge.source
   const targetID: string = edge.target
 
   let label: DOMRect = edge.label as unknown as DOMRect
   $: label = edge.label as unknown as DOMRect
 
-  let sourceOrder = edge.source.order
-  $: sourceOrder = edge.source.order
-
   let sections: ElkEdgeSection[] = edge.sections
   $: sections = edge.sections
 
   export let nodes: { [key: string]: NodeState }
   export let activeIds: string[] = []
-  export let order: number
 
   const svgPath = (element: SVGPathElement, sections: ElkEdgeSection[]) => {
     return {
@@ -51,9 +48,9 @@
 
 <g data-active={activeIds.includes(sourceID)} stroke={"#fff"} class="fill-tertiary-900 stroke-tertiary-900 data-[active=true]:fill-primary-500 data-[active=true]:stroke-primary-500">
   <defs>
-    <marker id="{sourceOrder}-{order}" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="0" refY="5" markerUnits="strokeWidth" orient="auto">
+    <marker id={edgeID} viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="0" refY="5" markerUnits="strokeWidth" orient="auto">
       <path d="M0,0 L0,10 L10,5 z" />
     </marker>
   </defs>
-  <path use:svgPath={sections} stroke-width={2} fill="none" marker-end="url(#{sourceOrder}-{order})" opacity="0" class="transition-colors"></path>
+  <path use:svgPath={sections} stroke-width={2} fill="none" marker-end="url(#{edgeID})" opacity="0" class="transition-colors"></path>
 </g>

@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
-  import type { StateNode, AnyStateNode, AnyInterpreter, TransitionDefinition } from "@lib/machine"
-  import type { StateElkNode, StateElkEdge, DirectedGraphLabel, NodeState, RelativeNodeEdgeMap } from "./types"
-
+  import type { AnyStateNode, AnyInterpreter } from "@lib/machine"
+  import type { StateElkNode, StateElkEdge, NodeState, RelativeNodeEdgeMap, GraphEdge } from "./types"
   import ELK from "elkjs"
   import { onMount, tick } from "svelte"
 
@@ -12,27 +11,11 @@
 
   export let actor: AnyInterpreter
 
-  type GraphEdge = {
-    id: string
-    source: string
-    target: string
-    label: DirectedGraphLabel
-    transition: TransitionDefinition<any, any>
-    sections: ElkEdgeSection[]
-  }
-
   export let edges: { [key: string]: GraphEdge } = {}
   export let nodes: { [key: string]: NodeState } = {}
   export let rootID: string
 
-  function getChildren(stateNode: NodeState): NodeState[] {
-    if (!stateNode.states) return []
-    const children = Object.keys(stateNode.states).map((key) => stateNode.states[key])
-    children.sort((a, b) => b.order - a.order)
-    return children
-  }
-
-  const elk = new ELK({ defaultLayoutOptions: {} })
+  const elk = new ELK()
   /** Elk-объект узла https://eclipse.dev/elk/documentation/tooldevelopers/graphdatastructure/jsonformat.html
    * @param {string} nodeID
    * @param {RelativeNodeEdgeMap} rMap
@@ -42,16 +25,17 @@
     const node = nodes[nodeID]
     const layout = node.meta.layout // Достаем информацию о разметке текущего узла
     const rEdges = rMap[0].get(nodeID) || [] // Получаем исходящие грани текущего узла из карты относительных граней
-    const children = getChildren(node)
+    const states = Object.values(node.states).toSorted((a, b) => b.order - a.order)
     return {
       id: nodeID,
-      ...(children.length ? undefined : { width: layout.width, height: layout.height }),
-      children: children.map((childNode) => getElkChild(childNode.id, rMap)),
+      ...(states.length ? undefined : { width: layout.width, height: layout.height }),
+      children: states.map((childNode) => getElkChild(childNode.id, rMap)),
       edges: rEdges.map((edgeID) => getElkEdge(edgeID)),
       layoutOptions: {
         "elk.padding": `[top=${(layout.height || 0) + 30}, left=30, right=30, bottom=30]`, // Добавляем отступы вокруг узла
         hierarchyHandling: "INCLUDE_CHILDREN", // Включаем дочерние узлы в иерархию
       },
+      absolutePosition: { x: 0, y: 0 },
       node, // Сохраняем ссылку на исходный узел
     }
   }
@@ -89,9 +73,7 @@
     /**Поиск наименьшего общего предка*/
     const getLCA = (sourceID: string, targetID: string): string | undefined => {
       // 1. Само-переход. Если узлы совпадают, возвращаем их родителя
-      if (sourceID === targetID) {
-        return nodes[sourceID].parent
-      }
+      if (sourceID === targetID) return nodes[sourceID].parent
       // 2. Общий предок
       const set = new Set() // Сбор всех предков узла источника
       let node
@@ -118,10 +100,10 @@
     return [map, edgeMap]
   }
 
-  async function getElkGraph(rootID: string): Promise<ElkNode> {
+  async function getElkGraph(rootID: string): Promise<void> {
     const rMap = getRelativeNodeEdgeMap()
     const rootEdges = rMap[0].get(undefined) || []
-    const elkNode: ElkNode = {
+    const layoutElkNode = await elk.layout({
       id: "root",
       edges: rootEdges.map((edgeID) => getElkEdge(edgeID)), // Само-переходы машины
       children: [getElkChild(rootID, rMap)],
@@ -130,19 +112,15 @@
         "elk.algorithm": "layered",
         "elk.layered.crossingMinimization.semiInteractive": "true",
       },
-    }
-    const layoutElkNode = await elk.layout(elkNode)
+    })
     const stateNodeToElkNodeMap = new Map<string, StateElkNode>()
-
     const setEdgeLayout = (edge: StateElkEdge) => {
       const lca = rMap[1].get(edge.id)
-
       const elkLca = lca && stateNodeToElkNodeMap.get(lca)!
       edges[edge.id].label.x = elkLca?.x || 0
       edges[edge.id].label.y = elkLca?.y || 0
-
       if (edge.sections) {
-        const translatedSections: ElkEdgeSection[] | undefined = elkLca
+        const translatedSections: ElkEdgeSection[] = elkLca
           ? edge.sections.map((section) => ({
               ...section,
               startPoint: {
@@ -163,7 +141,6 @@
           : edge.sections
         if (translatedSections) edge.edge.sections = translatedSections
       }
-
       edge.edge.label.x = (edge.labels?.[0].x || 0) + (elkLca?.absolutePosition.x || 0)
       edge.edge.label.y = (edge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
     }
@@ -173,14 +150,6 @@
         x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
         y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
       }
-      elkNode.node.meta = {
-        layout: {
-          width: elkNode.width!,
-          height: elkNode.height!,
-          x: elkNode.x!,
-          y: elkNode.y!,
-        },
-      }
       nodes[elkNode.id].meta = {
         layout: {
           width: elkNode.width!,
@@ -189,29 +158,18 @@
           y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
         },
       }
-      elkNode.edges?.forEach((edge) => {
-        setEdgeLayout(edge)
-      })
-      elkNode.children?.forEach((cn) => {
-        setLayout(cn as StateElkNode, elkNode)
-      })
+      elkNode.edges?.forEach(setEdgeLayout)
+      elkNode.children?.forEach((cn) => setLayout(cn as StateElkNode, elkNode))
     }
-    ;(layoutElkNode.edges as StateElkEdge[])?.forEach(setEdgeLayout)
+    layoutElkNode.edges.forEach(setEdgeLayout)
     setLayout(layoutElkNode.children![0] as StateElkNode, undefined)
-    return layoutElkNode.children![0]
-  }
-
-  export function flatten<T>(array: Array<T | T[]>): T[] {
-    return ([] as T[]).concat(...array)
   }
   onMount(async () => {
     await tick()
-    const result = await getElkGraph(rootID)
-    // console.log(result)
+    await getElkGraph(rootID)
   })
-
-  let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)
   let previewIds: string[] = []
+  let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)
   onMount(() => {
     const { unsubscribe } = actor.subscribe((state) => {
       if (state.changed) {
@@ -228,11 +186,11 @@
 {#each Object.entries(nodes) as [id, node] (id)}
   <State {node} {previewIds} {activeIds} />
 {/each}
-<svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
-  {#each Object.entries(edges) as [id, edge], order (id)}
-    <Edge {edge} {nodes} {activeIds} {order} />
-  {/each}
-</svg>
 {#each Object.entries(edges) as [id, edge] (id)}
   <Transition {edge} {activeIds} {actor} />
 {/each}
+<svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
+  {#each Object.entries(edges) as [id, edge] (id)}
+    <Edge {edge} {nodes} {activeIds} />
+  {/each}
+</svg>
