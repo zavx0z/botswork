@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { LPathParam, SvgPath } from "./utils/edgeSVG"
   import { getPath, getRect, pathToD } from "./utils/edgeSVG"
-  import type { AnyStateNode } from "@lib/machine"
-  import type { DirectedGraphEdge, Point } from "$lib/types"
+  import type { DirectedGraphEdge, NodeState, Point } from "$lib/types"
   import type { ElkEdgeSection } from "elkjs"
 
   export let edge: DirectedGraphEdge
+  
   const sourceID: string = edge.source
   const targetID: string = edge.target
 
@@ -18,7 +18,7 @@
   let sections: ElkEdgeSection[] = edge.sections
   $: sections = edge.sections
 
-  export let nodes: { [key: string]: AnyStateNode }
+  export let nodes: { [key: string]: NodeState }
   export let activeIds: string[] = []
   export let order: number
 

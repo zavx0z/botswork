@@ -1,17 +1,12 @@
 <script lang="ts">
-  import type { AnyStateNode } from "@lib/machine"
-
-  export let node: AnyStateNode
+  import type { NodeState } from "./types"
+  export let node: NodeState
   const nodeType = node.type
   const nodeID = node.id
   const nodeKey = node.key
-
-  // const entryTypes = node.entry.map((entry) => entry.type)
-  // const exitTypes = node.exit.map((exit) => exit.type)
-
-  const entryTypes = node.onEntry.map((entry) => entry.type)
-  const exitTypes = node.onExit.map((exit) => exit.type)
-  const invokeIDs = node.invoke.map((invoke) => invoke.id)
+  const entryTypes = node.entry
+  const exitTypes = node.exit
+  const invokeIDs = node.invoke
 
   export let activeIds: string[] = []
   let active = activeIds.includes(nodeID)
@@ -21,11 +16,11 @@
   let preview = previewIds.includes(nodeID)
   $: preview = previewIds.includes(nodeID)
 
-  const init = (element: HTMLElement, node: AnyStateNode) => {
+  const init = (element: HTMLElement, node: NodeState) => {
     const { width, height } = element.getBoundingClientRect()
     node.meta = { ...node.meta, layout: { width, height } }
     return {
-      update(node: AnyStateNode) {
+      update(node: NodeState) {
         element.style.left = `${node.meta.layout.x}px`
         element.style.top = `${node.meta.layout.y}px`
         element.style.width = `${node.meta.layout.width}px`

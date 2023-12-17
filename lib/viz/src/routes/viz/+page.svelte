@@ -3,16 +3,16 @@
   import TestMachine from "./TestMachine"
   import ActorWorker from "$lib/worker.ts?worker"
   import { onMount } from "svelte"
-  import type { DirectedGraphEdge, DirectedGraphNode } from "$lib/types"
-  import { createMachine, type AnyStateNode } from "@lib/machine"
+  import type { DirectedGraphEdge, NodeState } from "$lib/types"
+  import { createMachine } from "@lib/machine"
   import Graph from "$lib/Graph.svelte"
 
   let edges: { [key: string]: DirectedGraphEdge }
-  let nodes: { [key: string]: AnyStateNode }
+  let nodes: { [key: string]: NodeState }
   let digraph: string
-  
+
   onMount(() => {
-    // const machine = TestMachine
+    const machine = TestMachine
     const actor = new ActorWorker()
     const channel = new BroadcastChannel(machine.id)
     actor.postMessage({ machine: JSON.stringify(machine.toJSON()) })
@@ -54,14 +54,14 @@
     },
   })
 
-  const simulator = createSimulator({
-    machine,
-    state: machine.initialState,
-  }).start()
   // const simulator = createSimulator({
-  //   machine: TestMachine,
-  //   state: TestMachine.initialState,
+  //   machine,
+  //   state: machine.initialState,
   // }).start()
+  const simulator = createSimulator({
+    machine: TestMachine,
+    state: TestMachine.initialState,
+  }).start()
   simulator.onTransition((st, pt) => {
     // console.log("st!!", st, pt)
   })
@@ -69,6 +69,6 @@
 
 <Simulator>
   {#if nodes && edges}
-    <Graph actor={simulator} {edges} rootID={digraph} />
+    <Graph actor={simulator} {edges} rootID={digraph} {nodes}/>
   {/if}
 </Simulator>

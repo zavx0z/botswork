@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
-  import type { StateNode, AnyStateMachine, AnyStateNode, AnyInterpreter, TransitionDefinition } from "@lib/machine"
-  import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, DirectedGraphLabel } from "./types"
+  import type { StateNode, AnyStateNode, AnyInterpreter, TransitionDefinition } from "@lib/machine"
+  import type { StateElkNode, StateElkEdge, DirectedGraphLabel, NodeState, RelativeNodeEdgeMap } from "./types"
 
   import ELK from "elkjs"
   import { onMount, tick } from "svelte"
@@ -22,10 +22,10 @@
   }
 
   export let edges: { [key: string]: GraphEdge } = {}
-  export let nodes: { [key: string]: AnyStateNode } = {}
+  export let nodes: { [key: string]: NodeState } = {}
   export let rootID: string
 
-  function getChildren(stateNode: StateNode): StateNode[] {
+  function getChildren(stateNode: NodeState): NodeState[] {
     if (!stateNode.states) return []
     const children = Object.keys(stateNode.states).map((key) => stateNode.states[key])
     children.sort((a, b) => b.order - a.order)
@@ -41,13 +41,13 @@
   function getElkChild(nodeID: string, rMap: RelativeNodeEdgeMap): StateElkNode {
     const node = nodes[nodeID]
     const layout = node.meta.layout // Достаем информацию о разметке текущего узла
-    const edges = rMap[0].get(node) || [] // Получаем исходящие грани текущего узла из карты относительных граней
+    const rEdges = rMap[0].get(nodeID) || [] // Получаем исходящие грани текущего узла из карты относительных граней
     const children = getChildren(node)
     return {
-      id: node.id,
+      id: nodeID,
       ...(children.length ? undefined : { width: layout.width, height: layout.height }),
       children: children.map((childNode) => getElkChild(childNode.id, rMap)),
-      edges: edges.map((edge) => getElkEdge(edge.id)),
+      edges: rEdges.map((edgeID) => getElkEdge(edgeID)),
       layoutOptions: {
         "elk.padding": `[top=${(layout.height || 0) + 30}, left=30, right=30, bottom=30]`, // Добавляем отступы вокруг узла
         hierarchyHandling: "INCLUDE_CHILDREN", // Включаем дочерние узлы в иерархию
@@ -80,7 +80,6 @@
       sections: [], // Пока не задаем секции дуги (могут быть добавлены позже)
     }
   }
-  type RelativeNodeEdgeMap = [Map<StateNode | undefined, DirectedGraphEdge[]>, Map<string, StateNode | undefined>]
 
   function getRelativeNodeEdgeMap(): RelativeNodeEdgeMap {
     // Создаем две пустые карты: карту узлов и карту дуг
@@ -88,30 +87,32 @@
     const edgeMap: RelativeNodeEdgeMap[1] = new Map()
 
     /**Поиск наименьшего общего предка*/
-    const getLCA = (source: StateNode, target: StateNode): StateNode | undefined => {
+    const getLCA = (sourceID: string, targetID: string): string | undefined => {
       // 1. Само-переход. Если узлы совпадают, возвращаем их родителя
-      if (source === target) return source.parent
+      if (sourceID === targetID) {
+        return nodes[sourceID].parent
+      }
       // 2. Общий предок
       const set = new Set() // Сбор всех предков узла источника
       let node
-      node = source.parent
+      node = nodes[sourceID].parent
       while (node) {
-        set.add(node.id)
-        node = node.parent
+        set.add(node)
+        node = nodes[node].parent
       }
-      node = target // Поиск ближайшего общего предка
+      node = targetID // Поиск ближайшего общего предка
       while (node) {
-        if (set.has(node.id)) return node // Если предок второго узла найден в множестве, возвращаем его
-        node = node.parent // Переходим к следующему предку узла назначения
+        if (set.has(node)) return node // Если предок второго узла найден в множестве, возвращаем его
+        node = nodes[node].parent // Переходим к следующему предку узла назначения
       }
       // 3. Корневая нода
-      return source
+      return sourceID
     }
     // Проходимся по всем дугам и записываем их в карты
     Object.values(edges).forEach((edge) => {
-      const lca = getLCA(nodes[edge.source], nodes[edge.target]) // Находим ближайшего общего предка узлов источника перехода
+      const lca = getLCA(edge.source, edge.target) // Находим ближайшего общего предка узлов источника перехода
       if (!map.has(lca)) map.set(lca, []) // Если общего предка нет в карте, добавляем в виде ключа ноду и в виде значения пустой массив
-      map.get(lca)!.push(edge) // Добавляем переход в список ноды предка
+      map.get(lca)!.push(edge.id) // Добавляем переход в список ноды предка
       edgeMap.set(edge.id, lca) // Записываем связь между идентификатором перехода и предка
     })
     return [map, edgeMap]
@@ -122,7 +123,7 @@
     const rootEdges = rMap[0].get(undefined) || []
     const elkNode: ElkNode = {
       id: "root",
-      edges: rootEdges.map((edge) => getElkEdge(edge.id)), // Само-переходы машины
+      edges: rootEdges.map((edgeID) => getElkEdge(edgeID)), // Само-переходы машины
       children: [getElkChild(rootID, rMap)],
       layoutOptions: {
         "elk.hierarchyHandling": "INCLUDE_CHILDREN",
@@ -131,7 +132,7 @@
       },
     }
     const layoutElkNode = await elk.layout(elkNode)
-    const stateNodeToElkNodeMap = new Map<StateNode, StateElkNode>()
+    const stateNodeToElkNodeMap = new Map<string, StateElkNode>()
 
     const setEdgeLayout = (edge: StateElkEdge) => {
       const lca = rMap[1].get(edge.id)
@@ -167,7 +168,7 @@
       edge.edge.label.y = (edge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
     }
     const setLayout = (elkNode: StateElkNode, parent: StateElkNode | undefined) => {
-      stateNodeToElkNodeMap.set(elkNode.node, elkNode)
+      stateNodeToElkNodeMap.set(elkNode.id, elkNode)
       elkNode.absolutePosition = {
         x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
         y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
@@ -203,21 +204,10 @@
   export function flatten<T>(array: Array<T | T[]>): T[] {
     return ([] as T[]).concat(...array)
   }
-
-  function toDirectedGraph(stateNode: AnyStateNode | AnyStateMachine): DirectedGraphNode {
-    Object.values(stateNode.states).map(toDirectedGraph)
-    nodes[stateNode.id] = stateNode
-    return stateNode.id
-  }
-
   onMount(async () => {
-    const machine = actor.getSnapshot().context.machine
-    let d = toDirectedGraph(machine)
     await tick()
-    // console.log(digraph)
-    // console.log(nodes)
-    const elkg = await getElkGraph(rootID)
-    // console.log(elkg)
+    const result = await getElkGraph(rootID)
+    // console.log(result)
   })
 
   let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)

@@ -1,6 +1,50 @@
 import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
 import type { TransitionDefinition, AnyStateNode, StateNode } from "@lib/machine"
 
+export type RelativeNodeEdgeMap = [Map<string | undefined, string[]>, Map<string, string | undefined>]
+export type NodeState = {
+  id: string
+  activates: []
+  entry: string[]
+  exit: string[]
+  invoke: string[]
+  history: boolean
+  initial: string
+  key: string
+  type: string
+  meta: {
+    layout: {
+      width: number
+      height: number
+      x: number
+      y: number
+    }
+  }
+  on: {
+    [key: string]: {
+      actions: []
+      event: string
+      eventType: string
+      internal: boolean
+      source: string
+      target: string[]
+    }[]
+  }
+  order: number
+  parent: string
+  predictableActionArguments?: boolean
+  tags: string[]
+  transitions: {
+    actions: []
+    event: string
+    eventType: string
+    internal: boolean
+    source: string
+    target: string[]
+  }[]
+  states: { [key: string]: Node }
+}
+
 export type DirectedGraphLabel = {
   text: string
   x: number
@@ -22,8 +66,6 @@ export type DirectedGraphNode = {
   children: DirectedGraphNode[]
   edges: DirectedGraphEdge[]
 }
-
-export type RelativeNodeEdgeMap = [Map<StateNode | undefined, DirectedGraphEdge[]>, Map<string, StateNode | undefined>]
 
 export interface StateElkEdge extends ElkExtendedEdge {
   edge: DirectedGraphEdge
