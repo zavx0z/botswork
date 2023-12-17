@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { ElkEdgeSection, ElkNode } from "elkjs"
-  import type { StateNode, AnyStateMachine, AnyStateNode, AnyInterpreter } from "@lib/machine"
-  import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge } from "./types"
+  import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
+  import type { StateNode, AnyStateMachine, AnyStateNode, AnyInterpreter, TransitionDefinition } from "@lib/machine"
+  import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, DirectedGraphLabel } from "./types"
 
   import ELK from "elkjs"
   import { onMount, tick } from "svelte"
@@ -12,24 +12,42 @@
 
   export let actor: AnyInterpreter
 
-  export let edges: { [key: string]: DirectedGraphEdge } = {}
+  type GraphEdge = {
+    id: string
+    source: string
+    target: string
+    label: DirectedGraphLabel
+    transition: TransitionDefinition<any, any>
+    sections: ElkEdgeSection[]
+  }
+
+  export let edges: { [key: string]: GraphEdge } = {}
   export let nodes: { [key: string]: AnyStateNode } = {}
   export let digraph: DirectedGraphNode
 
+  function getChildren(stateNode: StateNode): StateNode[] {
+    if (!stateNode.states) return []
+    const children = Object.keys(stateNode.states).map((key) => stateNode.states[key])
+    children.sort((a, b) => b.order - a.order)
+    return children
+  }
+
   const elk = new ELK({ defaultLayoutOptions: {} })
   /** Elk-объект узла https://eclipse.dev/elk/documentation/tooldevelopers/graphdatastructure/jsonformat.html
-   * @param {DirectedGraphNode} node
+   * @param {string} nodeID
    * @param {RelativeNodeEdgeMap} rMap
    * @returns {StateElkNode}
    */
-  function getElkChild(node: DirectedGraphNode, rMap: RelativeNodeEdgeMap): StateElkNode {
-    const layout = nodes[node.id].meta.layout // Достаем информацию о разметке текущего узла
-    const edges = rMap[0].get(node.stateNode) || [] // Получаем исходящие грани текущего узла из карты относительных граней
+  function getElkChild(nodeID: string, rMap: RelativeNodeEdgeMap): StateElkNode {
+    const node = nodes[nodeID]
+    const layout = node.meta.layout // Достаем информацию о разметке текущего узла
+    const edges = rMap[0].get(node) || [] // Получаем исходящие грани текущего узла из карты относительных граней
+    const children = getChildren(node)
     return {
       id: node.id,
       // Устанавливаем ширину и высоту узла, если у него нет детей
-      ...(node.children.length ? undefined : { width: layout.width, height: layout.height }),
-      children: node.children.map((childNode) => getElkChild(childNode, rMap)),
+      ...(children.length ? undefined : { width: layout.width, height: layout.height }),
+      children: children.map((childNode) => getElkChild(childNode.id, rMap)),
       edges: edges.map((edge) => getElkEdge(edge.id)),
       layoutOptions: {
         "elk.padding": `[top=${(layout.height || 0) + 30}, left=30, right=30, bottom=30]`, // Добавляем отступы вокруг узла
@@ -42,7 +60,7 @@
   /** Elk-объект грани
    * @param {string} edgeID
    */
-  const getElkEdge = (edgeID: string) => {
+  const getElkEdge = (edgeID: string): ElkExtendedEdge & { edge: GraphEdge } => {
     const edge = edges[edgeID]
     return {
       id: edgeID,
@@ -103,13 +121,13 @@
     return [map, edgeMap]
   }
 
-  async function getElkGraph(digraph: DirectedGraphNode): Promise<ElkNode> {
+  async function getElkGraph(rootID: string): Promise<ElkNode> {
     const rMap = getRelativeNodeEdgeMap()
     const rootEdges = rMap[0].get(undefined) || []
     const elkNode: ElkNode = {
       id: "root",
       edges: rootEdges.map((edge) => getElkEdge(edge.id)), // Само-переходы машины
-      children: [getElkChild(digraph, rMap)],
+      children: [getElkChild(rootID, rMap)],
       layoutOptions: {
         "elk.hierarchyHandling": "INCLUDE_CHILDREN",
         "elk.algorithm": "layered",
@@ -153,12 +171,12 @@
       edge.edge.label.y = (edge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
     }
     const setLayout = (elkNode: StateElkNode, parent: StateElkNode | undefined) => {
-      stateNodeToElkNodeMap.set(elkNode.node.stateNode, elkNode)
+      stateNodeToElkNodeMap.set(elkNode.node, elkNode)
       elkNode.absolutePosition = {
         x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
         y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
       }
-      elkNode.node.stateNode.meta = {
+      elkNode.node.meta = {
         layout: {
           width: elkNode.width!,
           height: elkNode.height!,
@@ -190,42 +208,36 @@
     return ([] as T[]).concat(...array)
   }
 
-  function getChildren(stateNode: StateNode): StateNode[] {
-    if (!stateNode.states) return []
-    const children = Object.keys(stateNode.states).map((key) => stateNode.states[key])
-    children.sort((a, b) => b.order - a.order)
-    return children
-  }
-
   function toDirectedGraph(stateNode: AnyStateNode | AnyStateMachine): DirectedGraphNode {
-    const egs: DirectedGraphEdge[] = flatten(
-      stateNode.transitions.map((t, transitionIndex) => {
-        const targets = t.target ? t.target : [stateNode]
-        // console.log(t, targets)
-        return targets.map((target, targetIndex) => {
-          const edge: DirectedGraphEdge = {
-            id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
-            source: stateNode.id,
-            target: target.id,
-            transition: t,
-            sections: [],
-            label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
-          }
-          // edges[edge.id] = edge
-          // console.log(edge)
-          return edge
-        })
-      }),
-    )
-    const graph: DirectedGraphNode = {
-      id: stateNode.id,
-      stateNode: stateNode as AnyStateNode,
-      children: getChildren(stateNode as AnyStateNode).map(toDirectedGraph),
-      edges: egs,
-    }
-    nodes[graph.id] = graph.stateNode
+    // const egs: DirectedGraphEdge[] = flatten(
+    //   stateNode.transitions.map((t, transitionIndex) => {
+    //     const targets = t.target ? t.target : [stateNode]
+    //     // console.log(t, targets)
+    //     return targets.map((target, targetIndex) => {
+    //       const edge: DirectedGraphEdge = {
+    //         id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
+    //         source: stateNode.id,
+    //         target: target.id,
+    //         transition: t,
+    //         sections: [],
+    //         label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
+    //       }
+    //       // edges[edge.id] = edge
+    //       // console.log(edge)
+    //       return edge
+    //     })
+    //   }),
+    // )
+    // const graph: DirectedGraphNode = {
+    // id: stateNode.id,
+    // stateNode: stateNode as AnyStateNode,
+    // children: getChildren(stateNode as AnyStateNode).map(toDirectedGraph),
+    // edges: egs,
+    // }
+    Object.values(stateNode.states).map(toDirectedGraph)
+    nodes[stateNode.id] = stateNode
     // console.log(graph.stateNode)
-    return graph
+    return stateNode.id
   }
 
   onMount(async () => {

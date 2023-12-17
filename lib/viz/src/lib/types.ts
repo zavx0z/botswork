@@ -29,7 +29,7 @@ export interface StateElkEdge extends ElkExtendedEdge {
   edge: DirectedGraphEdge
 }
 export interface StateElkNode extends ElkNode {
-  node: DirectedGraphNode
+  node: AnyStateNode
   absolutePosition: Point
   edges: StateElkEdge[]
 }
