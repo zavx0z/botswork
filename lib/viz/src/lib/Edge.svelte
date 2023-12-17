@@ -22,9 +22,9 @@
   const svgPath = (element: SVGPathElement, sections: ElkEdgeSection[]) => {
     return {
       update(sections: ElkEdgeSection[]) {
-        const sourceRect = nodes[sourceID].meta?.layout
+        const sourceRect = nodes[sourceID].meta.layout as DOMRect
         const edgeRect = label as unknown as DOMRect
-        const targetRect = nodes[targetID].meta?.layout
+        const targetRect = nodes[targetID].meta.layout as DOMRect
         if (sourceRect && edgeRect && targetRect) {
           let path: SvgPath | undefined
           if (sections?.length) {
