@@ -1,11 +1,10 @@
 type NodeState = {
   id: string
-  activates: []
   entry: string[]
   exit: string[]
   invoke: string[]
-  history: boolean
-  initial: string
+  history: string | boolean | undefined
+  initial: string | number | symbol | undefined
   key: string
   type: string
   meta: {
@@ -17,7 +16,7 @@ type NodeState = {
     }
   }
   order: number
-  parent: string
+  parent: string | undefined
   tags: string[]
   children: string[]
 }

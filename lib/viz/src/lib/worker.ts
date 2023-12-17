@@ -4,6 +4,7 @@ import { createMachine, interpret } from "@lib/machine"
 import { convertToGraph } from "./utils/directedGraph"
 
 onmessage = ({ data }) => {
+  /**@param {import("$lib/types").MachineJSON} */
   const machineObj = JSON.parse(data.machine)
   machineObj["predictableActionArguments"] = true // TODO: predictableActionArguments set default true
   const machine = createMachine(machineObj)
