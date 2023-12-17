@@ -36,7 +36,6 @@
         hierarchyHandling: "INCLUDE_CHILDREN", // Включаем дочерние узлы в иерархию
       },
       absolutePosition: { x: 0, y: 0 },
-      node, // Сохраняем ссылку на исходный узел
     }
   }
   /** Elk-объект грани

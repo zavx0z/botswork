@@ -44,6 +44,7 @@ export type NodeState = {
   }[]
   states: { [key: string]: NodeState }
 }
+
 export type GraphEdge = {
   id: string
   source: string
@@ -81,7 +82,7 @@ export interface StateElkEdge extends ElkExtendedEdge {
 export interface StateElkNode extends ElkNode {
   node: NodeState
   absolutePosition: Point
-  edges: StateElkEdge[]
+  edges: ElkExtendedEdge[]
 }
 export interface Point {
   x: number
