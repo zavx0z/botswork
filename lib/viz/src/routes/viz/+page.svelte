@@ -9,7 +9,8 @@
 
   let edges: { [key: string]: DirectedGraphEdge }
   let nodes: { [key: string]: AnyStateNode }
-  let digraph: DirectedGraphNode
+  let digraph: string
+  
   onMount(() => {
     // const machine = TestMachine
     const actor = new ActorWorker()
@@ -68,6 +69,6 @@
 
 <Simulator>
   {#if nodes && edges}
-    <Graph actor={simulator} {edges} {digraph} />
+    <Graph actor={simulator} {edges} rootID={digraph} />
   {/if}
 </Simulator>

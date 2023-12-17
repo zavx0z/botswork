@@ -23,7 +23,7 @@
 
   export let edges: { [key: string]: GraphEdge } = {}
   export let nodes: { [key: string]: AnyStateNode } = {}
-  export let digraph: DirectedGraphNode
+  export let rootID: string
 
   function getChildren(stateNode: StateNode): StateNode[] {
     if (!stateNode.states) return []
@@ -45,7 +45,6 @@
     const children = getChildren(node)
     return {
       id: node.id,
-      // Устанавливаем ширину и высоту узла, если у него нет детей
       ...(children.length ? undefined : { width: layout.width, height: layout.height }),
       children: children.map((childNode) => getElkChild(childNode.id, rMap)),
       edges: edges.map((edge) => getElkEdge(edge.id)),
@@ -54,7 +53,6 @@
         hierarchyHandling: "INCLUDE_CHILDREN", // Включаем дочерние узлы в иерархию
       },
       node, // Сохраняем ссылку на исходный узел
-      // absolutePosition: { x: 0, y: 0 }, Задаем начальную абсолютную позицию узла (относительно родителя)
     }
   }
   /** Elk-объект грани
@@ -64,16 +62,14 @@
     const edge = edges[edgeID]
     return {
       id: edgeID,
-      // Устанавливаем источник и цель дуги
       sources: [edge.source],
       targets: [edge.target],
-      // Добавляем метку на дугу с параметрами разметки
       labels: [
         {
-          id: edgeID + "--label", // Уникальный ID метки
-          width: edge.label.width, // Ширина метки
-          height: edge.label.height, // Высота метки
-          text: edge.label.text || "always", // Текст метки
+          id: edgeID + "--label",
+          width: edge.label.width,
+          height: edge.label.height,
+          text: edge.label.text || "always",
           layoutOptions: {
             "edgeLabels.inline": "true", // встроенная метка
             "edgeLabels.placement": "CENTER", // расположение по центру
@@ -84,14 +80,14 @@
       sections: [], // Пока не задаем секции дуги (могут быть добавлены позже)
     }
   }
-
   type RelativeNodeEdgeMap = [Map<StateNode | undefined, DirectedGraphEdge[]>, Map<string, StateNode | undefined>]
 
   function getRelativeNodeEdgeMap(): RelativeNodeEdgeMap {
     // Создаем две пустые карты: карту узлов и карту дуг
     const map: RelativeNodeEdgeMap[0] = new Map()
     const edgeMap: RelativeNodeEdgeMap[1] = new Map()
-    // Функция для поиска наименьшего общего предка (НСП) двух узлов
+
+    /**Поиск наименьшего общего предка*/
     const getLCA = (source: StateNode, target: StateNode): StateNode | undefined => {
       // 1. Само-переход. Если узлы совпадают, возвращаем их родителя
       if (source === target) return source.parent
@@ -209,34 +205,8 @@
   }
 
   function toDirectedGraph(stateNode: AnyStateNode | AnyStateMachine): DirectedGraphNode {
-    // const egs: DirectedGraphEdge[] = flatten(
-    //   stateNode.transitions.map((t, transitionIndex) => {
-    //     const targets = t.target ? t.target : [stateNode]
-    //     // console.log(t, targets)
-    //     return targets.map((target, targetIndex) => {
-    //       const edge: DirectedGraphEdge = {
-    //         id: `${stateNode.id}:${transitionIndex}:${targetIndex}`,
-    //         source: stateNode.id,
-    //         target: target.id,
-    //         transition: t,
-    //         sections: [],
-    //         label: { text: t.eventType, x: 0, y: 0, width: 0, height: 0 },
-    //       }
-    //       // edges[edge.id] = edge
-    //       // console.log(edge)
-    //       return edge
-    //     })
-    //   }),
-    // )
-    // const graph: DirectedGraphNode = {
-    // id: stateNode.id,
-    // stateNode: stateNode as AnyStateNode,
-    // children: getChildren(stateNode as AnyStateNode).map(toDirectedGraph),
-    // edges: egs,
-    // }
     Object.values(stateNode.states).map(toDirectedGraph)
     nodes[stateNode.id] = stateNode
-    // console.log(graph.stateNode)
     return stateNode.id
   }
 
@@ -246,8 +216,7 @@
     await tick()
     // console.log(digraph)
     // console.log(nodes)
-    const elkg = await getElkGraph(d)
-    // const elkg = await getElkGraph(digraph)
+    const elkg = await getElkGraph(rootID)
     // console.log(elkg)
   })
 
