@@ -13,7 +13,6 @@
 
   export let edges: { [key: string]: GraphEdge } = {}
   export let nodes: { [key: string]: NodeState } = {}
-  export let rootID: string
 
   const elk = new ELK()
   /** Elk-объект узла https://eclipse.dev/elk/documentation/tooldevelopers/graphdatastructure/jsonformat.html
@@ -160,7 +159,8 @@
   }
   onMount(async () => {
     await tick()
-    await getElkGraph(rootID)
+    const root = Object.values(nodes).find((node) => !node.parent)
+    if (root) await getElkGraph(root.id)
   })
   let previewIds: string[] = []
   let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)

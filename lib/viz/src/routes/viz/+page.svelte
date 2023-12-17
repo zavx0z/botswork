@@ -9,7 +9,6 @@
 
   let edges: { [key: string]: DirectedGraphEdge }
   let nodes: { [key: string]: NodeState }
-  let digraph: string
 
   onMount(() => {
     // const machine = TestMachine
@@ -19,8 +18,6 @@
     channel.onmessage = ({ data }) => {
       edges = data.edges
       nodes = data.nodes
-      digraph = data.digraph
-      console.log(nodes)
     }
     // console.log(JSON.stringify(TestMachine.toJSON()))
   })
@@ -69,6 +66,6 @@
 
 <Simulator>
   {#if nodes && edges}
-    <Graph actor={simulator} {edges} rootID={digraph} {nodes}/>
+    <Graph actor={simulator} {edges} {nodes} />
   {/if}
 </Simulator>

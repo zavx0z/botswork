@@ -15,8 +15,8 @@ onmessage = ({ data }) => {
   actor.send({ type: "go.two" })
 
   const channel = new BroadcastChannel(machineObj.id)
-  const { edges, nodes, digraph } = convertToGraph(machineObj)
-  channel.postMessage({ edges, nodes, digraph })
+  const { edges, nodes } = convertToGraph(machineObj)
+  channel.postMessage({ edges, nodes })
 }
 
 // const simulator = createSimulator({
