@@ -80,7 +80,6 @@ export interface StateElkEdge extends ElkExtendedEdge {
   edge: GraphEdge
 }
 export interface StateElkNode extends ElkNode {
-  node: NodeState
   absolutePosition: Point
   edges: ElkExtendedEdge[]
 }
