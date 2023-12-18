@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
-  import type { AnyStateNode, AnyInterpreter } from "@lib/machine"
+  import type { AnyStateNode, AnyInterpreter } from "@metafor/machine"
   import type { StateElkNode, StateElkEdge, RelativeNodeEdgeMap, GraphEdge } from "./types"
   import ELK from "elkjs"
   import { onMount, tick } from "svelte"
@@ -160,7 +160,7 @@
       element.style.width = `${node.meta.layout.width}px`
       element.style.height = `${node.meta.layout.height}px`
       element.style.opacity = "1"
-      
+
       elkNode.edges.forEach(setEdgeLayout)
       elkNode.children?.forEach((cn) => setLayout(cn as StateElkNode, elkNode))
     }

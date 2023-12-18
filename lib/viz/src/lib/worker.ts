@@ -1,6 +1,6 @@
 // import { createSimulator } from "./simulator"
 
-import { createMachine, interpret } from "@lib/machine"
+import { createMachine, interpret } from "@metafor/machine"
 import { convertToGraph } from "./utils/directedGraph"
 
 onmessage = ({ data }) => {

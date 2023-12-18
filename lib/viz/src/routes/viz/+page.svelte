@@ -3,7 +3,7 @@
   import TestMachine from "./TestMachine"
   import ActorWorker from "$lib/worker.ts?worker"
   import { onMount } from "svelte"
-  import { createMachine } from "@lib/machine"
+  import { createMachine } from "@metafor/machine"
   import Graph from "$lib/Graph.svelte"
 
   let edges: EdgesTransition

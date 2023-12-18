@@ -1,6 +1,6 @@
 import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
-import type { TransitionDefinition, AnyStateNode, StateNode } from "@lib/machine"
-import type { StateNodeDefinition } from "@lib/machine"
+import type { TransitionDefinition, AnyStateNode, StateNode } from "@metafor/machine"
+import type { StateNodeDefinition } from "@metafor/machine"
 
 // export type NodeState = {
 //   id: string
@@ -24,7 +24,7 @@ import type { StateNodeDefinition } from "@lib/machine"
 //   source: string
 //   target: string
 //   label: GraphLayout & { text: string }
-//   transition: import("@lib/machine").TransitionDefinition<any, any>
+//   transition: import("@metafor/machine").TransitionDefinition<any, any>
 //   sections: import("elkjs").ElkEdgeSection[]
 // }
 export type MachineJSON = StateNodeDefinition<any, any, any> & { transition: string[] }

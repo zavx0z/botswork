@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GraphEdge } from "$lib/types"
-  import type { AnyActorRef } from "@lib/machine"
+  import type { AnyActorRef } from "@metafor/machine"
 
   export let edge: GraphEdge
   const sourceID: string = edge.source

@@ -29,6 +29,6 @@ type EdgeTransition = {
   source: string
   target: string
   label: GraphLayout & { text: string }
-  transition: import("@lib/machine").TransitionDefinition<any, any>
+  transition: import("@metafor/machine").TransitionDefinition<any, any>
   sections: import("elkjs").ElkEdgeSection[]
 }
