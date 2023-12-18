@@ -154,6 +154,13 @@
         x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
         y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
       }
+      const element = document.getElementById(elkNode.id)!
+      element.style.left = `${node.meta.layout.x}px`
+      element.style.top = `${node.meta.layout.y}px`
+      element.style.width = `${node.meta.layout.width}px`
+      element.style.height = `${node.meta.layout.height}px`
+      element.style.opacity = "1"
+      
       elkNode.edges.forEach(setEdgeLayout)
       elkNode.children?.forEach((cn) => setLayout(cn as StateElkNode, elkNode))
     }
