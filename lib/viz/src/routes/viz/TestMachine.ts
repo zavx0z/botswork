@@ -1,4 +1,4 @@
-import { createMachine } from "@lib/machine"
+import { createMachine } from "@metafor/machine"
 type Events = { type: "INC"; value: number } | { type: "ROOT.EVENT" } | { type: "EVENT" } | { type: "NEXT" } | { type: "PREV" } | { type: "SELF" } | { type: "TO_PARALLEL" }
 
 export default createMachine(

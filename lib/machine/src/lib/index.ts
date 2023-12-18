@@ -13,6 +13,7 @@ export type { XStateDevInterface } from "./devTools"
 export * from "./typegenTypes"
 export * from "./types"
 export { matchesState, toEventObject, toObserver, toSCXMLEvent } from "./utils"
+export { toMachine } from "./scxml"
 export {
   type Actor,
   toActorRef,

@@ -1,5 +1,5 @@
-import { assign, interpret, createMachine, sendTo } from "@lib/machine"
-import type { EventType, AnyStateMachine, EventObject, AnyState } from "@lib/machine"
+import { assign, interpret, createMachine, sendTo } from "@metafor/machine"
+import type { EventType, AnyStateMachine, EventObject, AnyState } from "@metafor/machine"
 export type Events =
   | { type: "EVENT"; event: EventObject }
   | { type: "EVENT.PREVIEW"; eventType: EventType }

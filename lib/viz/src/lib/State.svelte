@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { NodeState } from "./types"
   export let node: NodeState
   const nodeType = node.type
   const nodeID = node.id
@@ -32,7 +31,7 @@
   }
 </script>
 
-<div class="opacity-1 absolute text-primary-50 transition-opacity" use:init={node}>
+<div id={nodeID} class="opacity-1 absolute text-primary-50 transition-opacity" use:init={node}>
   <!-- title="#{node.id}" -->
   <div
     data-active={active}

@@ -1,53 +1,35 @@
 import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
-import type { TransitionDefinition, AnyStateNode, StateNode } from "@lib/machine"
-import type { StateNodeDefinition } from "@lib/machine"
+import type { TransitionDefinition, AnyStateNode, StateNode } from "@metafor/machine"
+import type { StateNodeDefinition } from "@metafor/machine"
 
+// export type NodeState = {
+//   id: string
+//   entry: string[]
+//   exit: string[]
+//   invoke: string[]
+//   history: string | boolean | undefined
+//   initial: string | number | symbol | undefined
+//   key: string
+//   type: string
+//   meta: {
+//     layout: GraphLayout
+//   }
+//   order: number
+//   parent: string | undefined
+//   tags: string[]
+//   children: string[]
+// }
+// export type EdgeTransition = {
+//   id: string
+//   source: string
+//   target: string
+//   label: GraphLayout & { text: string }
+//   transition: import("@metafor/machine").TransitionDefinition<any, any>
+//   sections: import("elkjs").ElkEdgeSection[]
+// }
 export type MachineJSON = StateNodeDefinition<any, any, any> & { transition: string[] }
 
 export type RelativeNodeEdgeMap = [Map<string | undefined, string[]>, Map<string, string | undefined>]
-export type NodeState = {
-  id: string
-  activates: []
-  entry: string[]
-  exit: string[]
-  invoke: string[]
-  history: boolean
-  initial: string
-  key: string
-  type: string
-  meta: {
-    layout: {
-      width: number
-      height: number
-      x: number
-      y: number
-    }
-  }
-  on: {
-    [key: string]: {
-      actions: []
-      event: string
-      eventType: string
-      internal: boolean
-      source: string
-      target: string[]
-    }[]
-  }
-  order: number
-  parent: string
-  predictableActionArguments?: boolean
-  tags: string[]
-  transitions: {
-    actions: []
-    event: string
-    eventType: string
-    internal: boolean
-    source: string
-    target: string[]
-  }[]
-  states: { [key: string]: NodeState }
-}
-
 export type GraphEdge = {
   id: string
   source: string

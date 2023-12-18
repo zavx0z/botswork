@@ -1,6 +1,6 @@
 import ELK from "elkjs"
 import type { ElkEdgeSection, ElkNode } from "elkjs"
-import type { StateNode, AnyStateMachine, AnyStateNode, AnyActorRef } from "@lib/machine"
+import type { StateNode, AnyStateMachine, AnyStateNode, AnyActorRef } from "@metafor/machine"
 import type { StateElkNode, StateElkEdge, DirectedGraphNode, DirectedGraphEdge, RelativeNodeEdgeMap } from "../types"
 
 const elk = new ELK({ defaultLayoutOptions: {} })

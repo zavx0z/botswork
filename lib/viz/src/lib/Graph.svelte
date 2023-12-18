@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ElkEdgeSection, ElkExtendedEdge, ElkNode } from "elkjs"
-  import type { AnyStateNode, AnyInterpreter } from "@lib/machine"
-  import type { StateElkNode, StateElkEdge, NodeState, RelativeNodeEdgeMap, GraphEdge } from "./types"
+  import type { AnyStateNode, AnyInterpreter } from "@metafor/machine"
+  import type { StateElkNode, StateElkEdge, RelativeNodeEdgeMap, GraphEdge } from "./types"
   import ELK from "elkjs"
   import { onMount, tick } from "svelte"
 
@@ -11,8 +11,8 @@
 
   export let actor: AnyInterpreter
 
-  export let edges: { [key: string]: GraphEdge } = {}
-  export let nodes: { [key: string]: NodeState } = {}
+  export let edges: EdgesTransition
+  export let nodes: NodesState
 
   const elk = new ELK()
   /** Elk-объект узла https://eclipse.dev/elk/documentation/tooldevelopers/graphdatastructure/jsonformat.html
@@ -21,7 +21,7 @@
    * @returns {StateElkNode}
    */
   function getElkChild(nodeID: string, rMap: RelativeNodeEdgeMap): StateElkNode {
-    const node = nodes[nodeID]
+    const node = nodes.get(nodeID)!
     const layout = node.meta.layout // Достаем информацию о разметке текущего узла
     const rEdges = rMap[0].get(nodeID) || [] // Получаем исходящие грани текущего узла из карты относительных граней
     return {
@@ -29,7 +29,7 @@
       width: layout.width,
       height: layout.height,
       children: node.children.map((childID) => getElkChild(childID, rMap)),
-      edges: rEdges.map((edgeID) => getElkEdge(edges[edgeID])),
+      edges: rEdges.map((edgeID) => getElkEdge(edges.get(edgeID)!)),
       layoutOptions: {
         "elk.padding": `[top=${(layout.height || 0) + 30}, left=30, right=30, bottom=30]`, // Добавляем отступы вокруг узла
         hierarchyHandling: "INCLUDE_CHILDREN", // Включаем дочерние узлы в иерархию
@@ -66,31 +66,32 @@
 
     /**Поиск наименьшего общего предка*/
     const getLCA = (sourceID: string, targetID: string): string | undefined => {
+      const parent = nodes.get(sourceID)!.parent
       // 1. Само-переход. Если узлы совпадают, возвращаем их родителя
-      if (sourceID === targetID) return nodes[sourceID].parent
+      if (sourceID === targetID) return parent
       // 2. Общий предок
       const set = new Set() // Сбор всех предков узла источника
       let node
-      node = nodes[sourceID].parent
+      node = parent
       while (node) {
         set.add(node)
-        node = nodes[node].parent
+        node = nodes.get(node)!.parent
       }
       node = targetID // Поиск ближайшего общего предка
       while (node) {
         if (set.has(node)) return node // Если предок второго узла найден в множестве, возвращаем его
-        node = nodes[node].parent // Переходим к следующему предку узла назначения
+        node = nodes.get(node)!.parent // Переходим к следующему предку узла назначения
       }
       // 3. Корневая нода
       return sourceID
     }
     // Проходимся по всем дугам и записываем их в карты
-    Object.values(edges).forEach((edge) => {
+    for (let [edgeID, edge] of edges) {
       const lca = getLCA(edge.source, edge.target) // Находим ближайшего общего предка узлов источника перехода
       if (!map.has(lca)) map.set(lca, []) // Если общего предка нет в карте, добавляем в виде ключа ноду и в виде значения пустой массив
-      map.get(lca)!.push(edge.id) // Добавляем переход в список ноды предка
-      edgeMap.set(edge.id, lca) // Записываем связь между идентификатором перехода и предка
-    })
+      map.get(lca)!.push(edgeID) // Добавляем переход в список ноды предка
+      edgeMap.set(edgeID, lca) // Записываем связь между идентификатором перехода и предка
+    }
     return [map, edgeMap]
   }
 
@@ -99,7 +100,7 @@
     const rootEdges = rMap[0].get(undefined) || []
     const layoutElkNode = await elk.layout({
       id: "root",
-      edges: rootEdges.map((edgeID) => getElkEdge(edges[edgeID])), // Само-переходы машины
+      edges: rootEdges.map((edgeID) => getElkEdge(edges.get(edgeID)!)), // Само-переходы машины
       children: [getElkChild(rootID, rMap)],
       layoutOptions: {
         "elk.hierarchyHandling": "INCLUDE_CHILDREN",
@@ -108,13 +109,15 @@
       },
     })
     const stateNodeToElkNodeMap = new Map<string, StateElkNode>()
-    const setEdgeLayout = (edge: StateElkEdge) => {
-      const lca = rMap[1].get(edge.id)
+
+    const setEdgeLayout = (elkEdge: StateElkEdge) => {
+      const lca = rMap[1].get(elkEdge.id)
       // if (!lca) return
       const elkLca = stateNodeToElkNodeMap.get(lca)!
-      if (edge.sections) {
+      const edge = edges.get(elkEdge.id)!
+      if (elkEdge.sections) {
         const translatedSections: ElkEdgeSection[] = elkLca
-          ? edge.sections.map((section) => ({
+          ? elkEdge.sections.map((section) => ({
               ...section,
               startPoint: {
                 x: section.startPoint.x + elkLca.absolutePosition.x,
@@ -131,26 +134,33 @@
                 }
               }),
             }))
-          : edge.sections
-        if (translatedSections) edges[edge.id].sections = translatedSections
+          : elkEdge.sections
+        if (translatedSections) edge.sections = translatedSections
       }
-      edges[edge.id].label.x = (edge.labels?.[0].x || 0) + (elkLca?.absolutePosition.x || 0)
-      edges[edge.id].label.y = (edge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
+      edge.label.x = (elkEdge.labels?.[0].x || 0) + (elkLca?.absolutePosition.x || 0)
+      edge.label.y = (elkEdge.labels?.[0].y || 0) + (elkLca?.absolutePosition.y || 0)
     }
+
     const setLayout = (elkNode: StateElkNode, parent: StateElkNode | undefined) => {
       stateNodeToElkNodeMap.set(elkNode.id, elkNode)
       elkNode.absolutePosition = {
         x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
         y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
       }
-      nodes[elkNode.id].meta = {
-        layout: {
-          width: elkNode.width!,
-          height: elkNode.height!,
-          x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
-          y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
-        },
+      const node = nodes.get(elkNode.id)!
+      node.meta.layout = {
+        width: elkNode.width!,
+        height: elkNode.height!,
+        x: (parent?.absolutePosition.x ?? 0) + elkNode.x!,
+        y: (parent?.absolutePosition.y ?? 0) + elkNode.y!,
       }
+      const element = document.getElementById(elkNode.id)!
+      element.style.left = `${node.meta.layout.x}px`
+      element.style.top = `${node.meta.layout.y}px`
+      element.style.width = `${node.meta.layout.width}px`
+      element.style.height = `${node.meta.layout.height}px`
+      element.style.opacity = "1"
+
       elkNode.edges.forEach(setEdgeLayout)
       elkNode.children?.forEach((cn) => setLayout(cn as StateElkNode, elkNode))
     }
@@ -159,8 +169,9 @@
   }
   onMount(async () => {
     await tick()
-    const root = Object.values(nodes).find((node) => !node.parent)
-    if (root) await getElkGraph(root.id)
+    for (let [key, value] of nodes.entries()) {
+      if (!value.parent) await getElkGraph(key)
+    }
   })
   let previewIds: string[] = []
   let activeIds = actor.getSnapshot().context.state.configuration.map((i: AnyStateNode) => i.id)
@@ -177,14 +188,14 @@
   })
 </script>
 
-{#each Object.entries(nodes) as [id, node] (id)}
+{#each nodes.entries() as [id, node] (id)}
   <State {node} {previewIds} {activeIds} />
 {/each}
-{#each Object.entries(edges) as [id, edge] (id)}
+{#each edges.entries() as [id, edge] (id)}
   <Transition {edge} {activeIds} {actor} />
 {/each}
 <svg class="pointer-events-none fixed left-0 top-0 h-screen w-screen overflow-visible">
-  {#each Object.entries(edges) as [id, edge] (id)}
+  {#each edges.entries() as [id, edge] (id)}
     <Edge {edge} {nodes} {activeIds} />
   {/each}
 </svg>

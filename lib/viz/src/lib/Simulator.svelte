@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Point } from "$lib/types"
-  import { interpret, assign, createMachine } from "@lib/machine"
+  import { interpret, assign, createMachine } from "@metafor/machine"
   
   const canvasActor = interpret(
     createMachine({
