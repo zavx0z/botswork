@@ -9,6 +9,7 @@
     </datamodel>
     <state id="off">
         <transition event="turn.on" target="on" />
+        <invoke src="invoked"/>
     </state>
     <state id="on">
         <initial>

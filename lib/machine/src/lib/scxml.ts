@@ -70,12 +70,7 @@ function delayToMs(delay?: string | number): number | undefined {
   throw new Error(`Can't parse "${delay} delay."`)
 }
 
-const evaluateExecutableContent = <TContext extends object, TEvent extends EventObject>(
-  context: TContext,
-  _ev: TEvent,
-  meta: SCXMLEventMeta<TEvent>,
-  body: string
-) => {
+const evaluateExecutableContent = <TContext extends object, TEvent extends EventObject>(context: TContext, _ev: TEvent, meta: SCXMLEventMeta<TEvent>, body: string) => {
   const datamodel = context
     ? Object.keys(context)
         .map((key) => `const ${key} = context['${key}'];`)
@@ -101,9 +96,7 @@ function createCond<TContext extends object, TEvent extends EventObject = EventO
   }
 }
 
-function mapAction<TContext extends object, TEvent extends EventObject = EventObject>(
-  element: XMLElement
-): ActionObject<TContext, TEvent> {
+function mapAction<TContext extends object, TEvent extends EventObject = EventObject>(element: XMLElement): ActionObject<TContext, TEvent> {
   switch (element.name) {
     case "raise": {
       return actions.raise<TContext, TEvent, TEvent>(element.attributes!.event! as string)
@@ -172,7 +165,7 @@ function mapAction<TContext extends object, TEvent extends EventObject = EventOb
 
           return evaluateExecutableContent(context, e, meta, fnBody)
         },
-        label !== undefined ? String(label) : undefined
+        label !== undefined ? String(label) : undefined,
       )
     }
     case "if": {
@@ -214,9 +207,7 @@ function mapAction<TContext extends object, TEvent extends EventObject = EventOb
   }
 }
 
-function mapActions<TContext extends object, TEvent extends EventObject = EventObject>(
-  elements: XMLElement[]
-): Array<ActionObject<TContext, TEvent>> {
+function mapActions<TContext extends object, TEvent extends EventObject = EventObject>(elements: XMLElement[]): Array<ActionObject<TContext, TEvent>> {
   const mapped: Array<ActionObject<TContext, TEvent>> = []
 
   for (const element of elements) {
@@ -266,13 +257,7 @@ function toConfig(nodeJson: XMLElement, id: string, options: ScxmlToMachineOptio
   }
 
   if (nodeJson.elements) {
-    const stateElements = nodeJson.elements.filter(
-      (element) =>
-        element.name === "state" ||
-        element.name === "parallel" ||
-        element.name === "final" ||
-        element.name === "history"
-    )
+    const stateElements = nodeJson.elements.filter((element) => element.name === "state" || element.name === "parallel" || element.name === "final" || element.name === "history")
 
     const transitionElements = nodeJson.elements.filter((element) => element.name === "transition")
 
@@ -316,7 +301,10 @@ function toConfig(nodeJson: XMLElement, id: string, options: ScxmlToMachineOptio
 
     const invoke = invokeElements.map((element) => {
       if (!["scxml", "http://www.w3.org/TR/scxml/"].includes(element.attributes!.type as string)) {
-        throw new Error("Currently only converting invoke elements of type SCXML is supported.")
+        return {
+          src: element.attributes!.src,
+        }
+        // throw new Error("Currently only converting invoke elements of type SCXML is supported.")
       }
       const content = element.elements!.find((el) => el.name === "content") as XMLElement
 
@@ -327,11 +315,7 @@ function toConfig(nodeJson: XMLElement, id: string, options: ScxmlToMachineOptio
       id,
       ...(initial ? { initial } : undefined),
       ...(parallel ? { type: "parallel" } : undefined),
-      ...(stateElements.length
-        ? {
-            states: mapValues(states, (state, key) => toConfig(state, key, options)),
-          }
-        : undefined),
+      ...(stateElements.length ? { states: mapValues(states, (state, key) => toConfig(state, key, options)) } : undefined),
       ...(transitionElements.length ? { on } : undefined),
       ...(onEntry ? { onEntry } : undefined),
       ...(onExit ? { onExit } : undefined),
