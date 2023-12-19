@@ -47,3 +47,7 @@ New-NetFirewallRule -Name "WSL Ports" -DisplayName "Allow WSL Ports" -Enabled Tr
 ```shell
 
 ```
+
+```
+npm publish --access public
+```

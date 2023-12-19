@@ -202,6 +202,11 @@ function mapAction<TContext extends object, TEvent extends EventObject = EventOb
       conds.push(current)
       return actions.choose(conds)
     }
+    case "script": {
+      const { src } = element.attributes!
+      if (src) return actions.toActionObject(src as string)
+      else throw new Error(`Action script element is not implemented attribute src.`)
+    }
     default:
       throw new Error(`Conversion of "${element.name}" elements is not implemented yet.`)
   }

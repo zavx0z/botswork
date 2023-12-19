@@ -1,6 +1,6 @@
 {
 	"name": "@metafor/machine",
-	"version": "0.0.4",
+	"version": "0.0.6",
 	"scripts": {
 		"dev": "vite dev --host 0.0.0.0",
 		"build": "vite build && npm run package",
