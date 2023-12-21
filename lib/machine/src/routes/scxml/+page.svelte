@@ -2,7 +2,7 @@
   import { toMachine } from "$lib"
   const html = String.raw
   const scxml = html`
-    <scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" datamodel="ecmascript" initial="off">
+    <scxml name="MicroWave" xmlns="http://www.w3.org/2005/07/scxml" version="1.0" datamodel="ecmascript" initial="off">
       <datamodel>
         <data id="cook_time" expr="5" />
         <data id="door_closed" expr="true" />

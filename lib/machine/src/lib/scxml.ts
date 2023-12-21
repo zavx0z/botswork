@@ -1,6 +1,6 @@
 import { xml2js, type Element as XMLElement } from "xml-js"
 import type { EventObject, ActionObject, SCXMLEventMeta, SendExpr, DelayExpr, ChooseCondition } from "./types"
-import { type AnyStateMachine, Machine } from "./index"
+import { type AnyStateMachine, createMachine } from "./index"
 import { mapValues, isString } from "./utils"
 import * as actions from "./actions"
 
@@ -355,10 +355,12 @@ function scxmlToMachine(scxmlJson: XMLElement, options: ScxmlToMachineOptions): 
         }, {})
     : undefined
 
-  return Machine({
-    ...toConfig(machineElement, "(machine)", options),
+  const nameMachine = String(machineElement.attributes!.name || "[machine]")
+  return createMachine({
+    ...toConfig(machineElement, nameMachine, options),
     context: extState,
     delimiter: options.delimiter,
+    predictableActionArguments: true,
   })
 }
 
