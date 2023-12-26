@@ -7,14 +7,14 @@ import { matchState } from "./match"
 import { createSchema, t } from "./schema"
 import { State } from "./State"
 import { StateNode } from "./StateNode"
-import type { AnyEventObject, StateNodeDefinition } from "./types"
+import type { AnyEventObject, StateNodeDefinition, InterpreterMachine } from "./types"
 export { spawnBehavior } from "./behaviors"
 export type { XStateDevInterface } from "./devTools"
 export * from "./typegenTypes"
 export * from "./types"
 export { matchesState, toEventObject, toObserver, toSCXMLEvent } from "./utils"
-export { toMachine } from "./scxml"
 export {
+  type InterpreterMachine,
   type Actor,
   toActorRef,
   Machine,

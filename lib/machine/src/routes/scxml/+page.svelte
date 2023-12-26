@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { toMachine } from "$lib"
   const html = String.raw
   const scxml = html`
@@ -42,4 +42,4 @@
   console.log(machine)
 </script>
 
-<h1>SCXML import</h1>
+<h1>SCXML import</h1> -->
